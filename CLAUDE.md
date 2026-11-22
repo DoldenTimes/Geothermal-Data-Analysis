@@ -11,6 +11,7 @@ Any data output files should be stored in the Output folder.
 # Purpose of interpretation
 
 All data should be interpreted in order to provide the most effective information for an engineer or another agent to calibrate a geothermal reservoir model.
+Include the prompt and all steps taken in a seperate file in Output.
 
 # Timeline
 

@@ -1,0 +1,76 @@
+{
+    "lithology": {
+        "rank": [
+            0
+        ],
+        "legend": {
+            "A": "Alluvium",
+            "B": "Basement",
+            "D": "Dacite",
+            "G": "Ignimbrite 2",
+            "I": "Ignimbrite 1",
+            "N": "Andesite",
+            "R": "Rhyolite",
+            "S": "Sediments"
+        },
+        "color": {
+            "A": "#fff700",
+            "B": "#ffa500",
+            "D": "#4ccbff",
+            "G": "#a9f48c",
+            "I": "#50aa51",
+            "N": "#8968cd",
+            "R": "#1e90ff",
+            "S": "#bd834b"
+        }
+    },
+    "faults": {
+        "rank": [
+            1
+        ],
+        "legend": {
+            "0": "",
+            "A": "Fault A",
+            "B": "Fault B",
+            "C": "Fault C"
+        },
+        "direction": {
+            "A": 2,
+            "B": 2,
+            "C": 1
+        }
+    },
+    "intersections": {
+        "rank": [
+            2
+        ],
+        "legend": {
+            "0": "",
+            "C": "Intersection Fault C"
+        },
+        "direction": {
+            "AC": null,
+            "BC": null
+        }
+    },
+    "zone": {
+        "rank": [
+            3
+        ],
+        "legend": {
+            "0": "",
+            "A": "Clay cap"
+        }
+    },
+    "size": {
+        "rank": [
+            4
+        ],
+        "legend": {
+            "3": "Level 3",
+            "2": "Level 2",
+            "1": "Level 1",
+            "0": "Level 0"
+        }
+    }
+}

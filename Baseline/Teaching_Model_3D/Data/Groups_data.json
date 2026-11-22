@@ -1,0 +1,18 @@
+{
+  "Areas": {
+    "Synthetic": {
+      "All": [
+        "WELL-1",
+        "WELL-2",
+        "WELL-3",
+        "WELL-4",
+        "WELL-5",
+        "WELL-6",
+        "WELL-7",
+        "WELL-8",
+        "WELL-9",
+        "WELL-10"
+      ]
+    }
+  }
+}

@@ -1,0 +1,18 @@
+# Large output files
+
+*.LISTING
+*.SAVE
+*.HS
+*.AUTOGENERS
+run.log
+
+# Python cache
+
+__pycache__/
+*.pyc
+*pyo
+
+# Windows
+
+Thumbs.db
+desktop.ini

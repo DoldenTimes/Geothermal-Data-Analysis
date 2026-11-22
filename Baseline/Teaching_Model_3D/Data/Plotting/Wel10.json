@@ -1,0 +1,56 @@
+[
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "gener": "Pa 10", 
+                "type": "HistoryGenerSeries", 
+                "variable": "Generation rate"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Wel10_production_mass_flow.dat", 
+                "transposexy": null, 
+                "type": "HistoryFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }, 
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "gener": "Pa 10", 
+                "type": "HistoryGenerSeries", 
+                "variable": "Enthalpy"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Wel10_transient_enthalpy.dat", 
+                "transposexy": null, 
+                "type": "HistoryFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }, 
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "block": "asa54", 
+                "type": "HistoryBlockSeries", 
+                "variable": "Pressure"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Wel10_-250.0_transient_pressure.dat", 
+                "transposexy": null, 
+                "type": "HistoryFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }
+]

@@ -1,0 +1,86 @@
+[
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "gener": "Pa  2", 
+                "type": "HistoryGenerSeries", 
+                "variable": "Generation rate"
+            }, 
+            {
+                "gener": "Pb  2", 
+                "type": "HistoryGenerSeries", 
+                "variable": "Generation rate"
+            }, 
+            {
+                "gener": "Pc  2", 
+                "type": "HistoryGenerSeries", 
+                "variable": "Generation rate"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Well2_production_mass_flow.dat", 
+                "transposexy": null, 
+                "type": "HistoryFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }, 
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "gener": "Pa  2", 
+                "type": "HistoryGenerSeries", 
+                "variable": "Enthalpy"
+            }, 
+            {
+                "gener": "Pb  2", 
+                "type": "HistoryGenerSeries", 
+                "variable": "Enthalpy"
+            }, 
+            {
+                "gener": "Pc  2", 
+                "type": "HistoryGenerSeries", 
+                "variable": "Enthalpy"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Well2_transient_enthalpy.dat", 
+                "transposexy": null, 
+                "type": "HistoryFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }, 
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "block": "alc54", 
+                "type": "HistoryBlockSeries", 
+                "variable": "Pressure"
+            }, 
+            {
+                "block": "alc59", 
+                "type": "HistoryBlockSeries", 
+                "variable": "Pressure"
+            }, 
+            {
+                "block": "alc66", 
+                "type": "HistoryBlockSeries", 
+                "variable": "Pressure"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Well2_-750.0_transient_pressure.dat", 
+                "transposexy": null, 
+                "type": "HistoryFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }
+]

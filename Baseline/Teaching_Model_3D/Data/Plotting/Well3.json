@@ -1,0 +1,71 @@
+[
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "gener": "Pa  3", 
+                "type": "HistoryGenerSeries", 
+                "variable": "Generation rate"
+            }, 
+            {
+                "gener": "Pb  3", 
+                "type": "HistoryGenerSeries", 
+                "variable": "Generation rate"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Well3_production_mass_flow.dat", 
+                "transposexy": null, 
+                "type": "HistoryFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }, 
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "gener": "Pa  3", 
+                "type": "HistoryGenerSeries", 
+                "variable": "Enthalpy"
+            }, 
+            {
+                "gener": "Pb  3", 
+                "type": "HistoryGenerSeries", 
+                "variable": "Enthalpy"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Well3_transient_enthalpy.dat", 
+                "transposexy": null, 
+                "type": "HistoryFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }, 
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "block": "ahr55", 
+                "type": "HistoryBlockSeries", 
+                "variable": "Pressure"
+            }, 
+            {
+                "block": "ahr60", 
+                "type": "HistoryBlockSeries", 
+                "variable": "Pressure"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Well3_-550.0_transient_pressure.dat", 
+                "transposexy": null, 
+                "type": "HistoryFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }
+]

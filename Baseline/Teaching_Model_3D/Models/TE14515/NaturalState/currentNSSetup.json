@@ -1,0 +1,29 @@
+{
+  "setup": {
+    "teaching_mode": true,
+    "modelnum": "000",
+    "inconnum": "000",
+    "nspath": ""
+  },
+  "parameters": {
+    "tstop_insecond": 1e+16,
+    "const_timestep_insecond": 3155800000000.0,
+    "num_max_timesteps": 9999,
+    "print_interval": 300,
+    "simulator": "AUTOUGH2"
+  },
+  "plotting": {
+    "groups": {
+      "group_data_filename": "Data/Groups_data.json",
+      "area_data_filename": "",
+      "exclude_wells": [],
+      "specified_wells": "Area"
+    },
+    "compare": {
+      "ActiveCompare": true,
+      "comparison_list": [
+        "TE14515_NS_000_AUT2"
+      ]
+    }
+  }
+}

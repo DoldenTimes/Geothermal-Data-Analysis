@@ -1,0 +1,58 @@
+{
+    "setup": {
+        "project": "3D_Model",
+        "model": "TE14515",
+        "geom": "gTE14515",
+        "EoS": "EWA",
+        "EoS_upfl_code": {
+            "w": "77"
+        },
+        "projectpath": "",
+        "modelpath": "",
+        "scriptpath": "",
+        "datapath": "",
+        "AUT2path": "",
+        "AUT2exe": "AUTOUGH2_7_0.exe",
+        "bounds_filename": "boundary_conditions"
+    },
+    "plotting": {
+        "mapping": {
+            "mapList": "Mapping.json",
+            "mapRef": "NZGM",
+            "xlim_map": [
+                2815000,
+                2825000
+            ],
+            "ylim_map": [
+                6330000,
+                6340000
+            ],
+            "xticks_map": [
+                2817000,
+                2819000,
+                2821000,
+                2823000
+            ],
+            "xticklabels_map": [
+                "2817000",
+                "2819000",
+                "2821000",
+                "2823000"
+            ],
+            "yticks_map": [
+                6332500,
+                6335000,
+                6337500
+            ],
+            "yticklabels_map": [
+                "6332500",
+                "6335000",
+                "6337500"
+            ]
+        },
+        "units": {
+            "Massflow": "t/h",
+            "Permeability": "mD"
+        }
+    }
+}

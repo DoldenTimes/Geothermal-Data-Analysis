@@ -1,0 +1,192 @@
+[
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "time": null, 
+                "type": "DownholeWellSeries", 
+                "variable": "Pressure", 
+                "well": "WELL1"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Well1_downhole_pressure.dat", 
+                "transposexy": null, 
+                "type": "DownholeFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }, 
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "time": null, 
+                "type": "DownholeWellSeries", 
+                "variable": "Pressure", 
+                "well": "WELL2"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Well2_downhole_pressure.dat", 
+                "transposexy": null, 
+                "type": "DownholeFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }, 
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "time": null, 
+                "type": "DownholeWellSeries", 
+                "variable": "Pressure", 
+                "well": "WELL3"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Well3_downhole_pressure.dat", 
+                "transposexy": null, 
+                "type": "DownholeFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }, 
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "time": null, 
+                "type": "DownholeWellSeries", 
+                "variable": "Pressure", 
+                "well": "WELL4"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Well4_downhole_pressure.dat", 
+                "transposexy": null, 
+                "type": "DownholeFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }, 
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "time": null, 
+                "type": "DownholeWellSeries", 
+                "variable": "Pressure", 
+                "well": "WELL5"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Well5_downhole_pressure.dat", 
+                "transposexy": null, 
+                "type": "DownholeFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }, 
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "time": null, 
+                "type": "DownholeWellSeries", 
+                "variable": "Pressure", 
+                "well": "WELL6"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Well6_downhole_pressure.dat", 
+                "transposexy": null, 
+                "type": "DownholeFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }, 
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "time": null, 
+                "type": "DownholeWellSeries", 
+                "variable": "Pressure", 
+                "well": "WELL7"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Well7_downhole_pressure.dat", 
+                "transposexy": null, 
+                "type": "DownholeFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }, 
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "time": null, 
+                "type": "DownholeWellSeries", 
+                "variable": "Pressure", 
+                "well": "WELL8"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Well8_downhole_pressure.dat", 
+                "transposexy": null, 
+                "type": "DownholeFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }, 
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "time": null, 
+                "type": "DownholeWellSeries", 
+                "variable": "Pressure", 
+                "well": "WELL9"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Well9_downhole_pressure.dat", 
+                "transposexy": null, 
+                "type": "DownholeFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }, 
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "time": null, 
+                "type": "DownholeWellSeries", 
+                "variable": "Pressure", 
+                "well": "WEL10"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Wel10_downhole_pressure.dat", 
+                "transposexy": null, 
+                "type": "DownholeFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }
+]

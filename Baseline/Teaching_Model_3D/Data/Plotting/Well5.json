@@ -1,0 +1,48 @@
+[
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "gener": "Ra  5", 
+                "type": "HistoryGenerSeries", 
+                "variable": "Generation rate"
+            }, 
+            {
+                "gener": "Rb  5", 
+                "type": "HistoryGenerSeries", 
+                "variable": "Generation rate"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Well5_injection_mass_flow.dat", 
+                "transposexy": null, 
+                "type": "HistoryFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }, 
+    {
+        "properties": {}, 
+        "series": [
+            {
+                "gener": "Ra  5", 
+                "type": "HistoryGenerSeries", 
+                "variable": "Enthalpy"
+            }, 
+            {
+                "gener": "Rb  5", 
+                "type": "HistoryGenerSeries", 
+                "variable": "Enthalpy"
+            }, 
+            {
+                "filename": "C:/Users/acat792/Work/GEOTHERM 620/Labs/Lab 7-8/TE14515 PR Model/Data/Data_dat/Well5_injection_enthalpy.dat", 
+                "transposexy": null, 
+                "type": "HistoryFieldDataSeries"
+            }
+        ], 
+        "title": null, 
+        "xlabel": null, 
+        "ylabel": null
+    }
+]

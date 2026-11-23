@@ -4,6 +4,7 @@
 
 - **Ignore `README.md`.**
 - **`Baseline/` is read-only.** Read all input data from it. Never edit, move, rename or write anything inside it.
+- **Ignore `Logs/`.**
 - **Scripts go in `Scripts/`.** Data outputs, figures and reports go in `Output/`, with figures in `Output/figures/`.
 - **Scope is the natural state only.** Production, injection and future scenarios are out of scope.
 - **Audience.** Write every output for a reservoir engineer, or another agent, who will calibrate the natural-state model. Each finding should end in something they can act on: a target, a weight, a structural feature the model needs, or a data problem to resolve.

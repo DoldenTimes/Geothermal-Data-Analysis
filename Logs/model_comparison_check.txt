@@ -1,0 +1,55 @@
+well  zTop   zTD   Tmax@z     T_TD  minMargin@z   P-250 P-750 P-1500  maxRevers
+WELL-1      15  -1672  118.6@-1672  118.6  150.4@   15   38.6  89.0 162.0    0.0
+WELL-2     225  -2348  266.9@ -550  253.7   23.8@ -450   55.0  98.2 164.5   30.9
+WELL-3     164  -2887  261.4@ -450  188.2   12.2@ -150   55.0  97.4 163.9   86.9
+WELL-4     230   -750   29.0@ -750   29.0  113.8@  230   51.1 100.5   nan    0.0
+WELL-5      93  -2595  158.0@ -650  154.7  123.6@   93   44.9  95.4 164.0   13.3
+WELL-6     147  -2359  220.5@ -550  126.1   70.0@ -450   49.9  97.0 165.1   98.1
+WELL-7     190  -2762  176.7@ -650  144.7   97.1@  150   46.9  96.6 164.8   46.0
+WELL-8     176  -2716   93.1@-2716   93.1  104.1@  176   46.1  95.9 169.2    4.5
+WELL-9     174  -2427  217.7@ -750  161.6   87.8@ -550   49.3  97.7 163.9   57.7
+WELL-10    210   -350  268.7@ -250  268.5    2.6@ -150   56.7   nan   nan    0.2
+
+Survey vs first transient
+WELL-2 -750.0 98.2 01/01/2014 98.3
+WELL-3 -550.0 80.7 01/01/2014 80.8
+WELL-9 -675.0 91.25 01/01/2014 89.2
+WELL-10 -250.0 56.7 01/01/2020 48.7
+
+Column gradient vs sat-liquid density (only margin>5C, interval below -100)
+WELL-1     -150-> -1672  measured dP  150.1  predicted  143.6  ratio 1.045
+WELL-2     -150-> -2348  measured dP  195.2  predicted  173.5  ratio 1.125
+WELL-3     -150-> -2887  measured dP  246.3  predicted  231.2  ratio 1.065
+WELL-4     -150->  -750  measured dP   60.0  predicted   58.6  ratio 1.024
+WELL-5     -150-> -2595  measured dP  230.8  predicted  220.4  ratio 1.047
+WELL-6     -150-> -2359  measured dP  206.7  predicted  197.2  ratio 1.048
+WELL-7     -150-> -2762  measured dP  245.4  predicted  236.4  ratio 1.038
+WELL-8     -150-> -2716  measured dP  252.9  predicted  245.9  ratio 1.029
+WELL-9     -150-> -2427  measured dP  210.7  predicted  197.3  ratio 1.068
+WELL-10 n/a
+
+Shallow apparent density top->-250 or TD
+WELL-1 15->-250: 1069 kg/m3
+WELL-2 225->-250: 1159 kg/m3
+WELL-3 164->-250: 1320 kg/m3
+WELL-4 230->-250: 1034 kg/m3
+WELL-5 93->-250: 1189 kg/m3
+WELL-6 147->-250: 1230 kg/m3
+WELL-7 190->-250: 1063 kg/m3
+WELL-8 176->-250: 1060 kg/m3
+WELL-9 174->-250: 1152 kg/m3
+WELL-10 210->-250: 1234 kg/m3
+
+Collar vs model surface
+WELL-1 ['arg'] 15.0 120.0 -105.0
+WELL-2 ['ajf'] 225.0 260.0 -35.0
+WELL-3 ['asd'] 164.0 180.0 -16.0
+WELL-4 ['aop'] 340.0 340.0 0.0
+WELL-5 ['arc'] 93.0 140.0 -47.0
+WELL-6 ['aph'] 147.0 160.0 -13.0
+WELL-7 ['apk'] 190.0 240.0 -50.0
+WELL-8 ['ana'] 176.0 260.0 -84.0
+WELL-9 ['ajj'] 174.0 220.0 -46.0
+WELL-10 ['arz'] 260.0 260.0 0.0
+Fault 1 [[2819600.4, 6327104.9], [2819779.1, 6335583.0]] ... [[2819779.1, 6335583.0]]
+Fault 3 [[2812472.4, 6328812.4], [2826927.0, 6342155.1]] ... [[2826927.0, 6342155.1]]

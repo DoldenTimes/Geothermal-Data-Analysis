@@ -1,0 +1,11 @@
+well,aut2,role,x,y,wellhead_mRL,TD_mRL,deviated,column,column_surface_mRL,surface_misfit_m,Tmax_C,Tmax_elev_mRL,T_bottom_C,deep_gradient_C_per_km,est_water_level_mRL,min_boiling_margin_C,regime
+WELL-1,WELL1,monitor,2823330.0,6334011.0,15.0,-1672.0,False,arg,120.0,-105.0,118.6,-1672.0,118.6,16.5,108.0,150.4,Conductive / gently increasing - field margin
+WELL-2,WELL2,producer,2819527.0,6335494.0,225.0,-2348.0,False,ajf,260.0,-35.0,266.9,-550.0,253.7,31.4,204.0,23.8,Temperature reversal of 31 C below -550 mRL - lateral hot outflow over cooler fluid
+WELL-3,WELL3,producer,2820133.0,6334454.0,164.0,-2887.0,False,asd,180.0,-16.0,261.4,-450.0,188.2,19.7,148.0,12.2,Temperature reversal of 87 C below -450 mRL - lateral hot outflow over cooler fluid
+WELL-4,WELL4,injector,2822243.0,6337763.0,340.0,-750.0,False,aop,340.0,0.0,29.0,-750.0,29.0,nan,228.0,113.8,"Cold, near-isothermal - downflow / recharge"
+WELL-5,WELL5,injector,2822044.0,6334190.0,93.0,-2595.0,False,arc,140.0,-47.0,158.0,-650.0,154.7,21.2,127.0,123.6,"Weak reversal (13 C) below -650 mRL - distal outflow, conductive at depth"
+WELL-6,WELL6,monitor,2819841.0,6333177.0,147.0,-2359.0,False,aph,160.0,-13.0,220.5,-550.0,126.1,7.1,144.0,70.0,Temperature reversal of 98 C below -550 mRL - lateral hot outflow over cooler fluid
+WELL-7,WELL7,monitor,2820840.0,6332682.0,190.0,-2762.0,False,apk,240.0,-50.0,176.7,-650.0,144.7,25.0,153.0,80.5,Temperature reversal of 46 C below -650 mRL - lateral hot outflow over cooler fluid
+WELL-8,WELL8,injector,2818757.0,6332185.0,176.0,-2716.1,True,ana,260.0,-84.0,93.1,-2716.1,93.1,30.0,176.0,104.1,Conductive / gently increasing - field margin
+WELL-9,WELL9,producer,2820920.0,6335679.0,174.0,-2427.1,True,ajj,220.0,-46.0,217.7,-750.0,161.6,9.0,160.0,87.8,Temperature reversal of 58 C below -750 mRL - lateral hot outflow over cooler fluid
+WELL-10,WEL10,producer,2819400.0,6334900.0,260.0,-350.0,False,arz,260.0,0.0,268.7,-250.0,268.5,nan,186.0,2.6,At boiling point below -150 mRL - two-phase / steam zone (shallow upflow)

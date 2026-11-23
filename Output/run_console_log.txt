@@ -1,0 +1,69 @@
+=== Natural-state analysis ===
+Root: C:\Users\Dold718\GDA Files
+Step 1: validate saturation-temperature and density functions
+  Tsat check p=1.01325 bar: model=99.97 C, reference=99.97 C, diff=+0.00 K
+  Tsat check p=1.0 bar: model=99.61 C, reference=99.61 C, diff=-0.00 K
+  Tsat check p=10.0 bar: model=179.89 C, reference=179.88 C, diff=+0.01 K
+  Tsat check p=100.0 bar: model=311.00 C, reference=311.00 C, diff=-0.00 K
+  rho_water(20C)=998.2, rho_water(100C)=958.4, rho_water(120C)=943.1 kg/m3
+Step 2: load geometry and downhole P/T from Data_json
+  WELL-1: T n=19, P n=19, survey 29/07/2015, stable flags (True, True), feed zones=2, flow=[]
+  WELL-2: T n=33, P n=33, survey 29/07/2015, stable flags (True, True), feed zones=3, flow=['Production_Mass_Flow', 'Transient_Enthalpy', 'Transient_Pressure']
+  WELL-3: T n=30, P n=30, survey 29/07/2015, stable flags (True, True), feed zones=2, flow=['Production_Mass_Flow', 'Transient_Enthalpy', 'Transient_Pressure']
+  WELL-4: T n=22, P n=22, survey 29/07/2015, stable flags (True, True), feed zones=1, flow=['Injection_Mass_Flow', 'Injection_Enthalpy']
+  WELL-5: T n=26, P n=26, survey 29/07/2015, stable flags (True, True), feed zones=2, flow=['Injection_Mass_Flow', 'Injection_Enthalpy']
+  WELL-6: T n=28, P n=28, survey 29/07/2015, stable flags (True, True), feed zones=2, flow=[]
+  WELL-7: T n=32, P n=32, survey 29/07/2015, stable flags (True, True), feed zones=2, flow=[]
+  WELL-8: T n=29, P n=29, survey 29/07/2015, stable flags (True, True), feed zones=1, flow=['Injection_Mass_Flow', 'Injection_Enthalpy']
+  WELL-9: T n=30, P n=30, survey 29/07/2015, stable flags (True, True), feed zones=2, flow=['Production_Mass_Flow', 'Transient_Enthalpy', 'Transient_Pressure']
+  WELL-10: T n=17, P n=17, survey 29/07/2015, stable flags (True, True), feed zones=1, flow=['Production_Mass_Flow', 'Transient_Enthalpy', 'Transient_Pressure']
+Step 3: cross-check Data_dat files against Data_json
+  WELL-1 downhole_temperature: dat n=19, json n=19, matched=19, max |diff|=0.00e+00
+  WELL-1 downhole_pressure: dat n=19, json n=19, matched=19, max |diff|=0.00e+00
+  WELL-2 downhole_temperature: dat n=33, json n=33, matched=33, max |diff|=0.00e+00
+  WELL-2 downhole_pressure: dat n=33, json n=33, matched=33, max |diff|=0.00e+00
+  WELL-3 downhole_temperature: dat n=30, json n=30, matched=30, max |diff|=0.00e+00
+  WELL-3 downhole_pressure: dat n=30, json n=30, matched=30, max |diff|=0.00e+00
+  WELL-4 downhole_temperature: dat n=22, json n=22, matched=22, max |diff|=0.00e+00
+  WELL-4 downhole_pressure: dat n=22, json n=22, matched=22, max |diff|=0.00e+00
+  WELL-5 downhole_temperature: dat n=26, json n=26, matched=26, max |diff|=0.00e+00
+  WELL-5 downhole_pressure: dat n=26, json n=26, matched=26, max |diff|=0.00e+00
+  WELL-6 downhole_temperature: dat n=28, json n=28, matched=28, max |diff|=0.00e+00
+  WELL-6 downhole_pressure: dat n=28, json n=28, matched=28, max |diff|=0.00e+00
+  WELL-7 downhole_temperature: dat n=32, json n=32, matched=32, max |diff|=0.00e+00
+  WELL-7 downhole_pressure: dat n=32, json n=32, matched=32, max |diff|=0.00e+00
+  WELL-8 downhole_temperature: dat n=29, json n=29, matched=29, max |diff|=0.00e+00
+  WELL-8 downhole_pressure: dat n=29, json n=29, matched=29, max |diff|=0.00e+00
+  WELL-9 downhole_temperature: dat n=30, json n=30, matched=30, max |diff|=0.00e+00
+  WELL-9 downhole_pressure: dat n=30, json n=30, matched=30, max |diff|=0.00e+00
+  WELL-10 downhole_temperature: dat n=17, json n=17, matched=17, max |diff|=0.00e+00
+  WELL-10 downhole_pressure: dat n=17, json n=17, matched=17, max |diff|=0.00e+00
+Step 4: geometry and feed-zone consistency checks
+Step 5: build long table of T, P, Tsat margin, feed-zone flags
+Step 6: hydrostatic consistency (pressure predicted from shallowest point with well's own T profile)
+  WELL-1: anchor 15 masl P=10.80 bar; residual mean +4.23 bar, deepest +7.69 bar, max |res| 7.69 bar; column-mean density implied 1012 vs Kell 965 kg/m3 (+4.8%); median segment excess +3.7%
+  WELL-2: anchor 225 masl P=1.00 bar; residual mean +11.77 bar, deepest +31.36 bar, max |res| 31.36 bar; column-mean density implied 944 vs Kell 819 kg/m3 (+15.2%); median segment excess +11.2%
+  WELL-3: anchor 164 masl P=1.40 bar; residual mean +15.68 bar, deepest +28.98 bar, max |res| 28.98 bar; column-mean density implied 961 vs Kell 864 kg/m3 (+11.2%); median segment excess +6.9%
+  WELL-4: anchor 230 masl P=2.40 bar; residual mean +0.20 bar, deepest +2.18 bar, max |res| 2.75 bar; column-mean density implied 1021 vs Kell 998 kg/m3 (+2.3%); median segment excess +5.2%
+  WELL-5: anchor 93 masl P=4.90 bar; residual mean +9.33 bar, deepest +15.43 bar, max |res| 15.43 bar; column-mean density implied 983 vs Kell 925 kg/m3 (+6.3%); median segment excess +5.4%
+  WELL-6: anchor 147 masl P=2.00 bar; residual mean +11.12 bar, deepest +17.74 bar, max |res| 17.74 bar; column-mean density implied 988 vs Kell 916 kg/m3 (+7.9%); median segment excess +2.7%
+  WELL-7: anchor 190 masl P=1.00 bar; residual mean +5.01 bar, deepest +11.31 bar, max |res| 11.31 bar; column-mean density implied 969 vs Kell 930 kg/m3 (+4.2%); median segment excess +7.6%
+  WELL-8: anchor 176 masl P=1.80 bar; residual mean +2.96 bar, deepest +8.81 bar, max |res| 8.81 bar; column-mean density implied 1011 vs Kell 980 kg/m3 (+3.2%); median segment excess +3.1%
+  WELL-9: anchor 174 masl P=1.40 bar; residual mean +8.32 bar, deepest +18.71 bar, max |res| 18.71 bar; column-mean density implied 969 vs Kell 895 kg/m3 (+8.2%); median segment excess +3.5%
+  WELL-10: anchor 210 masl P=1.00 bar; residual mean +6.38 bar, deepest +17.59 bar, max |res| 17.59 bar; column-mean density implied 1154 vs Kell 834 kg/m3 (+38.4%); median segment excess +49.7%
+Step 7: reduce each pressure to datum 0 masl using the well's own column (cross-well consistency)
+  WELL-1: P@0masl mean 16.27 bar, sd 2.79, range 12.26-19.95, trend with z -0.498 bar/100 m
+  WELL-2: P@0masl mean 33.39 bar, sd 10.77, range 20.61-53.33, trend with z -1.340 bar/100 m
+  WELL-3: P@0masl mean 31.63 bar, sd 10.81, range 16.11-45.45, trend with z -1.029 bar/100 m
+  WELL-4: P@0masl mean 25.13 bar, sd 1.59, range 23.20-27.69, trend with z -0.478 bar/100 m
+  WELL-5: P@0masl mean 22.90 bar, sd 5.76, range 13.94-29.36, trend with z -0.638 bar/100 m
+  WELL-6: P@0masl mean 26.83 bar, sd 7.35, range 16.11-33.85, trend with z -0.790 bar/100 m
+  WELL-7: P@0masl mean 24.33 bar, sd 5.29, range 16.61-30.79, trend with z -0.521 bar/100 m
+  WELL-8: P@0masl mean 21.88 bar, sd 2.60, range 18.58-27.84, trend with z -0.316 bar/100 m
+  WELL-9: P@0masl mean 26.40 bar, sd 7.26, range 17.34-37.07, trend with z -0.873 bar/100 m
+  WELL-10: P@0masl mean 25.78 bar, sd 6.81, range 18.51-37.37, trend with z -4.066 bar/100 m
+  Spread of well-mean datum pressures (0 masl): 17.12 bar
+Step 8: feed-zone summary
+Step 9: interpolate T and P at common elevations (no extrapolation)
+Step 11: figures
+Done. Outputs written to C:\Users\Dold718\GDA Files\Output

@@ -1,0 +1,213 @@
+{
+  "WELL-1": {
+    "n_points": 19,
+    "z_top": 15.0,
+    "z_bottom": -1672.0,
+    "T_min": 32.9,
+    "T_max": 118.6,
+    "P_min": 10.8,
+    "P_max": 178.2,
+    "min_Tsat_minus_T": 150.35753590153305,
+    "mean_grad_upper_C_per_100m": 9.405555555555564,
+    "mean_grad_lower_C_per_100m": 2.0131874145006856,
+    "hydrostatic": {
+      "resid_mean_bar": 4.22697591020424,
+      "resid_max_abs_bar": 7.688354682194273,
+      "resid_at_deepest_bar": 7.688354682194273,
+      "seg_density_excess_pct_median": 3.745,
+      "column_rho_implied_kgm3": 1011.8582931387384,
+      "column_rho_kell_kgm3": 965.3856202249372,
+      "column_excess_pct": 4.8138973628976345
+    }
+  },
+  "WELL-2": {
+    "n_points": 33,
+    "z_top": 225.0,
+    "z_bottom": -2348.0,
+    "T_min": 16.5,
+    "T_max": 266.9,
+    "P_min": 1.0,
+    "P_max": 239.1,
+    "min_Tsat_minus_T": 23.75741116709247,
+    "mean_grad_upper_C_per_100m": 69.1969696969697,
+    "mean_grad_lower_C_per_100m": -0.8700280112044705,
+    "hydrostatic": {
+      "resid_mean_bar": 11.767128153865194,
+      "resid_max_abs_bar": 31.355016020160377,
+      "resid_at_deepest_bar": 31.355016020160377,
+      "seg_density_excess_pct_median": 11.245000000000001,
+      "column_rho_implied_kgm3": 943.6239032648455,
+      "column_rho_kell_kgm3": 819.3595496156413,
+      "column_excess_pct": 15.166034704483057
+    }
+  },
+  "WELL-3": {
+    "n_points": 30,
+    "z_top": 164.0,
+    "z_bottom": -2887.0,
+    "T_min": 35.1,
+    "T_max": 261.4,
+    "P_min": 1.4,
+    "P_max": 288.8,
+    "min_Tsat_minus_T": 12.178165923583549,
+    "mean_grad_upper_C_per_100m": 86.80571428571429,
+    "mean_grad_lower_C_per_100m": -4.254513961302283,
+    "hydrostatic": {
+      "resid_mean_bar": 15.67800609555614,
+      "resid_max_abs_bar": 28.975353793149452,
+      "resid_at_deepest_bar": 28.975353793149452,
+      "seg_density_excess_pct_median": 6.86,
+      "column_rho_implied_kgm3": 960.5586352338794,
+      "column_rho_kell_kgm3": 863.7161637830568,
+      "column_excess_pct": 11.212302780887518
+    }
+  },
+  "WELL-4": {
+    "n_points": 22,
+    "z_top": 230.0,
+    "z_bottom": -750.0,
+    "T_min": 12.3,
+    "T_max": 29.0,
+    "P_min": 2.4,
+    "P_max": 100.5,
+    "min_Tsat_minus_T": 113.7736777538042,
+    "mean_grad_upper_C_per_100m": 1.2142857142857137,
+    "mean_grad_lower_C_per_100m": 1.9315789473684257,
+    "hydrostatic": {
+      "resid_mean_bar": 0.1954157599313186,
+      "resid_max_abs_bar": 2.7483067396956926,
+      "resid_at_deepest_bar": 2.178898328196084,
+      "seg_density_excess_pct_median": 5.23,
+      "column_rho_implied_kgm3": 1020.7567397258649,
+      "column_rho_kell_kgm3": 998.0847198106399,
+      "column_excess_pct": 2.2715526513146678
+    }
+  },
+  "WELL-5": {
+    "n_points": 26,
+    "z_top": 93.0,
+    "z_bottom": -2595.0,
+    "T_min": 27.5,
+    "T_max": 158.0,
+    "P_min": 4.9,
+    "P_max": 264.1,
+    "min_Tsat_minus_T": 123.57663815735083,
+    "mean_grad_upper_C_per_100m": 31.04166666666667,
+    "mean_grad_lower_C_per_100m": -0.009967465246956575,
+    "hydrostatic": {
+      "resid_mean_bar": 9.32508475290251,
+      "resid_max_abs_bar": 15.427244634792459,
+      "resid_at_deepest_bar": 15.427244634792459,
+      "seg_density_excess_pct_median": 5.38,
+      "column_rho_implied_kgm3": 983.2977768001452,
+      "column_rho_kell_kgm3": 924.7731805364747,
+      "column_excess_pct": 6.3285352014338825
+    }
+  },
+  "WELL-6": {
+    "n_points": 28,
+    "z_top": 147.0,
+    "z_bottom": -2359.0,
+    "T_min": 21.8,
+    "T_max": 220.5,
+    "P_min": 2.0,
+    "P_max": 244.8,
+    "min_Tsat_minus_T": 69.9778890480134,
+    "mean_grad_upper_C_per_100m": 54.984220354808585,
+    "mean_grad_lower_C_per_100m": -2.997408802970728,
+    "hydrostatic": {
+      "resid_mean_bar": 11.122720530142063,
+      "resid_max_abs_bar": 17.74122191129365,
+      "resid_at_deepest_bar": 17.74122191129365,
+      "seg_density_excess_pct_median": 2.66,
+      "column_rho_implied_kgm3": 987.9772406665642,
+      "column_rho_kell_kgm3": 915.7864520752418,
+      "column_excess_pct": 7.8829282118918265
+    }
+  },
+  "WELL-7": {
+    "n_points": 32,
+    "z_top": 190.0,
+    "z_bottom": -2762.0,
+    "T_min": 18.6,
+    "T_max": 176.7,
+    "P_min": 1.0,
+    "P_max": 281.5,
+    "min_Tsat_minus_T": 80.49227394669778,
+    "mean_grad_upper_C_per_100m": 26.42142857142857,
+    "mean_grad_lower_C_per_100m": -1.199841269841285,
+    "hydrostatic": {
+      "resid_mean_bar": 5.010653944940628,
+      "resid_max_abs_bar": 11.314586569042376,
+      "resid_at_deepest_bar": 11.314586569042376,
+      "seg_density_excess_pct_median": 7.59,
+      "column_rho_implied_kgm3": 968.9376617219136,
+      "column_rho_kell_kgm3": 929.8534226717956,
+      "column_excess_pct": 4.203268826802331
+    }
+  },
+  "WELL-8": {
+    "n_points": 29,
+    "z_top": 176.0,
+    "z_bottom": -2716.1,
+    "T_min": 12.8,
+    "T_max": 93.1,
+    "P_min": 1.8,
+    "P_max": 288.6,
+    "min_Tsat_minus_T": 104.11240807955956,
+    "mean_grad_upper_C_per_100m": 7.351851851851851,
+    "mean_grad_lower_C_per_100m": 0.8727773393201959,
+    "hydrostatic": {
+      "resid_mean_bar": 2.956035785020582,
+      "resid_max_abs_bar": 8.81011015944756,
+      "resid_at_deepest_bar": 8.81011015944756,
+      "seg_density_excess_pct_median": 3.135,
+      "column_rho_implied_kgm3": 1011.2188716920916,
+      "column_rho_kell_kgm3": 980.1555883764725,
+      "column_excess_pct": 3.169219630433595
+    }
+  },
+  "WELL-9": {
+    "n_points": 30,
+    "z_top": 174.0,
+    "z_bottom": -2427.1,
+    "T_min": 16.9,
+    "T_max": 217.7,
+    "P_min": 1.4,
+    "P_max": 248.5,
+    "min_Tsat_minus_T": 87.77058047427272,
+    "mean_grad_upper_C_per_100m": 26.742857142857144,
+    "mean_grad_lower_C_per_100m": -4.095913587217939,
+    "hydrostatic": {
+      "resid_mean_bar": 8.321157147452213,
+      "resid_max_abs_bar": 18.71085019201942,
+      "resid_at_deepest_bar": 18.71085019201942,
+      "seg_density_excess_pct_median": 3.46,
+      "column_rho_implied_kgm3": 968.7127608582757,
+      "column_rho_kell_kgm3": 895.3601127501546,
+      "column_excess_pct": 8.192530252750906
+    }
+  },
+  "WELL-10": {
+    "n_points": 17,
+    "z_top": 210.0,
+    "z_bottom": -350.0,
+    "T_min": 24.6,
+    "T_max": 268.7,
+    "P_min": 1.0,
+    "P_max": 64.4,
+    "min_Tsat_minus_T": 2.6460707109438886,
+    "mean_grad_upper_C_per_100m": 132.20000000000002,
+    "mean_grad_lower_C_per_100m": 7.951190476190482,
+    "hydrostatic": {
+      "resid_mean_bar": 6.384094021360006,
+      "resid_max_abs_bar": 17.592835604576166,
+      "resid_at_deepest_bar": 17.592835604576166,
+      "seg_density_excess_pct_median": 49.655,
+      "column_rho_implied_kgm3": 1154.4644268357263,
+      "column_rho_kell_kgm3": 834.112646509982,
+      "column_excess_pct": 38.40629699910809
+    }
+  },
+  "_datum_spread_bar": 17.12
+}

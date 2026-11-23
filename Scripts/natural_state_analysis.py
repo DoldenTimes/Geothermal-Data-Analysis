@@ -1,479 +1,572 @@
 """
-Natural-state data analysis for the TE14515 teaching geothermal model.
+Natural-state data analysis for the Teaching_Model_3D geothermal dataset.
 
-Reads ONLY from Baseline/ (never modified). Writes tables to Output/ and figures to Output/figures/.
-Run:  python Scripts/natural_state_analysis.py
+Purpose: interpret the downhole temperature / pressure data and well geometry
+so that an engineer (or agent) can see what the natural-state calibration
+targets are, and where the data are internally consistent or inconsistent.
 
-Data used (factual):  well downhole T/P surveys, feed zones, well tracks, well-to-block mapping,
-                      geometry (layers, column vertices, surface elevations), boundary-condition
-                      file, GIS mapping (lake / rivers / faults), initial production-test values.
-Not used as fact:     the supplied natural-state model (TE14515_NS_000.*), reference only.
+Inputs  (read-only):
+    Baseline/Teaching_Model_3D/Data/Data_json/WELL-n_data.json   (geometry + downhole P/T)
+    Baseline/Teaching_Model_3D/Data/Data_dat/*.dat               (cross-check of same P/T)
+    Baseline/Teaching_Model_3D/Data/Mapping/Mapping.json         (lake / faults for maps)
+
+The model files under Baseline/.../Models are NOT used as data (per CLAUDE.md).
+
+Outputs (written to Output/):
+    well_geometry_check.csv
+    downhole_profiles_long.csv
+    hydrostatic_check.csv
+    pressure_datum_reduction.csv
+    well_pressure_consistency.csv
+    feedzones_summary.csv
+    T_P_at_common_elevations.csv
+    dat_vs_json_check.csv
+    NS_summary_stats.json
+    figures/*.png
+
+Run:  python Scripts/natural_state_analysis.py      (from the repository root)
 """
-import json, ast, os, re, glob, math
+
+import glob
+import json
+import os
+import re
+import sys
+
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-BASE = os.path.join(ROOT, "Baseline", "Teaching_Model_3D")
-DATA = os.path.join(BASE, "Data")
-MODEL = os.path.join(BASE, "Models", "TE14515")
+# ----------------------------------------------------------------------------
+# Paths
+# ----------------------------------------------------------------------------
+ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+DATA = os.path.join(ROOT, "Baseline", "Teaching_Model_3D", "Data")
+JSON_DIR = os.path.join(DATA, "Data_json")
+DAT_DIR = os.path.join(DATA, "Data_dat")
+MAPPING = os.path.join(DATA, "Mapping", "Mapping.json")
 OUT = os.path.join(ROOT, "Output")
 FIG = os.path.join(OUT, "figures")
 os.makedirs(FIG, exist_ok=True)
 
-G = 9.80665
-BAR = 1e5
-
-# ----------------------------------------------------------------------------
-# Steam-property helpers (IAPWS-IF97 region 4 saturation; simple liquid density)
-# ----------------------------------------------------------------------------
-_n = [0.11670521452767e4, -0.72421316703206e6, -0.17073846940092e2, 0.12020824702470e5,
-      -0.32325550322333e7, 0.14915108613530e2, -0.48232657361591e4, 0.40511340542057e6,
-      -0.23855557567849, 0.65017534844798e3]
+G = 9.80665          # m/s2
+COMMON_Z = [0, -250, -500, -750, -1000, -1250, -1500]   # masl, for comparison tables
+LOG = []
 
 
-def psat_bar(T):
-    """Saturation pressure (bar) at T degC (IF97 region 4)."""
-    T = np.asarray(T, float) + 273.15
-    th = T + _n[8] / (T - _n[9])
-    A = th**2 + _n[0] * th + _n[1]
-    B = _n[2] * th**2 + _n[3] * th + _n[4]
-    C = _n[5] * th**2 + _n[6] * th + _n[7]
-    p = (2 * C / (-B + np.sqrt(B * B - 4 * A * C)))**4  # MPa
-    return p * 10.0
-
-
-def tsat_c(P_bar):
-    """Saturation temperature (degC) at P bar (IF97 region 4 inverse)."""
-    P = np.asarray(P_bar, float) / 10.0  # MPa
-    b = P**0.25
-    E = b**2 + _n[2] * b + _n[5]
-    F = _n[0] * b**2 + _n[3] * b + _n[6]
-    Gc = _n[1] * b**2 + _n[4] * b + _n[7]
-    D = 2 * Gc / (-F - np.sqrt(F * F - 4 * E * Gc))
-    T = (_n[9] + D - np.sqrt((_n[9] + D)**2 - 4 * (_n[8] + _n[9] * D))) / 2
-    return T - 273.15
-
-
-# Saturated liquid enthalpy (kJ/kg), steam-table values
-_hf_T = np.array([0, 25, 50, 75, 100, 125, 150, 175, 200, 220, 240, 250, 260, 270, 280, 290, 300, 310, 320, 330, 340, 350])
-_hf_h = np.array([0.0, 104.8, 209.3, 313.9, 419.1, 525.0, 632.2, 741.1, 852.4, 943.6, 1037.6, 1085.8, 1134.9, 1185.2,
-                  1236.8, 1290.0, 1344.8, 1401.8, 1461.3, 1524.9, 1594.6, 1670.9])
-_hg_h = np.array([2501, 2547, 2592, 2635, 2676, 2714, 2746, 2773, 2793, 2802, 2803, 2801, 2796, 2790, 2780, 2766, 2749,
-                  2727, 2700, 2666, 2622, 2564], float)
-
-
-def hf(T):
-    return np.interp(T, _hf_T, _hf_h)
-
-
-def T_from_hf(h):
-    return np.interp(h, _hf_h, _hf_T)
-
-
-def rho_liq(T, P_bar):
-    """Compressed-liquid density (kg/m3): saturated-liquid correlation + constant compressibility."""
-    T = np.asarray(T, float)
-    # fit to steam-table saturated liquid densities (0-350C)
-    Tt = np.array([0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 320, 340, 350])
-    rt = np.array([999.8, 998.2, 992.2, 983.2, 971.8, 958.4, 943.1, 926.1, 907.4, 886.9, 864.7, 840.3, 813.6, 783.7,
-                   750.3, 712.1, 667.1, 610.7, 574.7])
-    r0 = np.interp(T, Tt, rt)
-    beta = (0.45e-9 + 2.5e-12 * np.clip(T, 0, 340)**1.6 / 100.0)  # 1/Pa, rough compressibility rise with T
-    beta = np.clip(beta, 0.45e-9, 3e-9)
-    return r0 * (1 + beta * np.asarray(P_bar, float) * BAR * 0.5)
+def log(msg):
+    print(msg)
+    LOG.append(msg)
 
 
 # ----------------------------------------------------------------------------
-# Load data
+# Fluid properties
 # ----------------------------------------------------------------------------
-def wnum(name):
-    return int(name.split("-")[1])
+def rho_water(T_C):
+    """Liquid water density (kg/m3), Kell (1975) polynomial. Valid ~0-150 C at
+    saturation; used here for T < 150 C, which covers all measured data."""
+    T = np.asarray(T_C, dtype=float)
+    num = (999.83952 + 16.945176 * T - 7.9870401e-3 * T**2
+           - 46.170461e-6 * T**3 + 105.56302e-9 * T**4 - 280.54253e-12 * T**5)
+    return num / (1.0 + 16.879850e-3 * T)
 
 
-wells = {}
-for f in sorted(glob.glob(os.path.join(DATA, "Data_json", "WELL-*_data.json")), key=lambda s: wnum(os.path.basename(s).split("_")[0])):
-    d = json.load(open(f))
-    nm = d["Well_Name"]
-    track = np.array([ast.literal_eval(s) for s in d["Well_Track"]["Data"]], float)
-    fz = [ast.literal_eval(s) for s in d["Feed_Zones"]["Data"]]
-    Tdat = d["Downhole_Temperature"]
-    Pdat = d["Downhole_Pressure"]
-    dates = list(Tdat.keys())
-    assert len(dates) == 1 and list(Pdat.keys()) == dates, "expected exactly one survey per well"
-    Tz = np.array(sorted(((float(k), v) for k, v in Tdat[dates[0]]["Data"].items()), reverse=True))
-    Pz = np.array(sorted(((float(k), v) for k, v in Pdat[dates[0]]["Data"].items()), reverse=True))
-    assert np.allclose(Tz[:, 0], Pz[:, 0]), f"{nm}: T and P survey elevations differ"
-    wells[nm] = dict(name=nm, aut2=d["AUT2_Name"], track=track, fz=fz, date=dates[0],
-                     z=Tz[:, 0], T=Tz[:, 1], P=Pz[:, 1], raw=d,
-                     design=[ast.literal_eval(s) for s in d["Well_Design"]["Data"]])
-    wells[nm]["x"], wells[nm]["y"] = track[0, 0], track[0, 1]
-    wells[nm]["ztop"], wells[nm]["zbot"] = track[0, 2], track[-1, 2]
-    wells[nm]["deviated"] = len(track) > 2
-
-wellnames = sorted(wells, key=wnum)
-
-wj = json.load(open(os.path.join(MODEL, "gTE14515_wells.json")))
-
-# geometry: layers + column centres + surface elevations
-lines = open(os.path.join(MODEL, "gTE14515.dat")).read().splitlines()
-iv = lines.index("VERTICES"); ic = lines.index("CONNECTIONS"); il = lines.index("LAYERS"); isf = [i for i, l in enumerate(lines) if l.startswith("SURFA")][0]
-iw = lines.index("WELLS")
-verts = {}
-ig = lines.index("GRID")
-for l in lines[iv + 1:ig]:
-    if len(l) >= 23:
-        verts[l[:3]] = (float(l[3:13]), float(l[13:23]))
-cols = {}
-i = ig + 1
-while i < len(lines) and not lines[i].startswith(("CONNECTIONS", "LAYERS")):
-    l = lines[i]
-    if len(l) > 3 and l[3:].strip():
-        nm_c = l[:3]; n = int(l[3:].split()[1]); vs = [lines[i + 1 + k][:3] for k in range(n)]
-        xy = np.array([verts[v] for v in vs]); cols[nm_c] = list(xy.mean(axis=0)); i += n + 1
-    else:
-        i += 1
-layers = []
-for l in lines[il + 1:isf]:
-    p = l.split()
-    if len(p) == 3:
-        layers.append((int(p[0]), float(p[1]), float(p[2])))
-layers = np.array(layers)  # idx, bottom, centre
-# layer tops: top of layer i = bottom of layer i-1 (layer 0 top == centre == 1000)
-ltop = np.r_[1000.0, layers[:-1, 1]]
-surf = {}
-for l in lines[isf + 1:iw]:
-    p = l.split()
-    if len(p) == 2 and len(p[0]) == 3:
-        surf[p[0]] = float(p[1])
-
-# boundary conditions
-bc = json.load(open(os.path.join(MODEL, "gTE14515_boundary_conditions.json")))
-mapping = json.load(open(os.path.join(DATA, "Mapping", "Mapping.json")))
-aux = json.load(open(os.path.join(MODEL, "gTE14515.auxjson")))
+def t_sat_C(p_bar):
+    """Saturation temperature (C) of water at pressure p_bar, IAPWS-IF97 Region 4
+    backward-form (Wagner-type) equation. Validated against tabulated values below."""
+    p = np.asarray(p_bar, dtype=float) / 10.0          # MPa
+    n1, n2, n3, n4, n5 = 0.11670521452767e4, -0.72421316703206e6, -0.17073846940092e2, 0.12020824702470e5, -0.32325550322333e7
+    n6, n7, n8, n9, n10 = 0.14915108613530e2, -0.48232657361591e4, 0.40511340542057e6, -0.23855557567849, 0.65017534844798e3
+    beta = p ** 0.25
+    E = beta**2 + n3 * beta + n6
+    F = n1 * beta**2 + n4 * beta + n7
+    Gc = n2 * beta**2 + n5 * beta + n8
+    D = 2.0 * Gc / (-F - np.sqrt(F**2 - 4.0 * E * Gc))
+    Tk = 0.5 * (n10 + D - np.sqrt((n10 + D)**2 - 4.0 * (n9 + n10 * D)))
+    return Tk - 273.15
 
 
-def layer_of_block(b):
-    return int(b[3:])
-
-
-def col_of_block(b):
-    return b[:3]
+def validate_tsat():
+    tests = {1.01325: 99.974, 1.0: 99.606, 10.0: 179.88, 100.0: 311.00}   # bar -> C (IAPWS-IF97 tables, approx.)
+    rows = []
+    for p, Tref in tests.items():
+        Tc = float(t_sat_C(p))
+        rows.append((p, Tref, Tc, Tc - Tref))
+        log(f"  Tsat check p={p} bar: model={Tc:.2f} C, reference={Tref:.2f} C, diff={Tc - Tref:+.2f} K")
+    worst = max(abs(r[3]) for r in rows)
+    if worst > 0.5:
+        raise RuntimeError(f"Tsat validation failed (max |diff| {worst:.2f} K)")
+    return rows
 
 
 # ----------------------------------------------------------------------------
-# Per-well analysis
+# Hydrostatic integration helpers
 # ----------------------------------------------------------------------------
-def interp_profile(z, v, zq):
-    """Linear interpolation on elevation (z descending)."""
-    return np.interp(zq, z[::-1], v[::-1], left=np.nan, right=np.nan)
+def column_integrate(z_from, z_to, P_from_bar, z_prof, T_prof, n_steps=None):
+    """Integrate hydrostatic pressure from z_from to z_to (masl) using the
+    well's measured temperature profile (linear interp, clamped at ends).
+    Returns pressure (bar) at z_to. Pressure increases downward."""
+    z_prof = np.asarray(z_prof, float)
+    T_prof = np.asarray(T_prof, float)
+    order = np.argsort(z_prof)
+    zp, Tp = z_prof[order], T_prof[order]
+    if abs(z_to - z_from) < 1e-9:
+        return P_from_bar
+    if n_steps is None:
+        n_steps = max(2, int(abs(z_to - z_from)) + 2)
+    zs = np.linspace(z_from, z_to, n_steps)
+    T = np.interp(zs, zp, Tp)
+    integrand = rho_water(T) * G                        # Pa/m
+    dP_Pa = np.trapezoid(integrand, zs)                 # signed
+    return P_from_bar - dP_Pa / 1e5
 
-
-rows = []
-fzrows = []
-hyd_rows = []
-pcons_rows = []
-for nm in wellnames:
-    w = wells[nm]
-    z, T, P = w["z"], w["T"], w["P"]
-    # --- water level (elevation where gauge/abs pressure first exceeds ~1.2 bar): survey P is absolute-ish (1 bar at top)
-    # pressure gradient between survey points (bar/100 m)
-    dz = -np.diff(z)
-    dPdz = np.diff(P) / dz * 100.0  # bar per 100 m (positive with depth)
-    dTdz = np.diff(T) / dz * 100.0  # degC per 100 m
-    # Boiling point with depth from measured pressure
-    Tsat = tsat_c(np.maximum(P, 0.05))
-    margin = Tsat - T  # >0 sub-boiling, ~0 boiling, <0 impossible for liquid -> steam
-    # hydrostatic from measured T: integrate rho(T,P) g dz starting from the first survey point down
-    Ph = np.zeros_like(P); Ph[0] = P[0]
-    for i in range(1, len(z)):
-        Tm = 0.5 * (T[i] + T[i - 1]); Pm = 0.5 * (P[i] + P[i - 1])
-        Ph[i] = Ph[i - 1] + rho_liq(Tm, Pm) * G * (z[i - 1] - z[i]) / BAR
-    resid = P - Ph
-    # Water level: elevation where P = 1.013 bar (extrapolated from first points)
-    # use first survey point: P0 at z0; pressure at which atmospheric; if P0 ~ 1 bar, level ~ z0
-    # Level extrapolated upward / downward assuming liquid gradient of near-surface
-    wl = z[0] - (1.013 - P[0]) * BAR / (rho_liq(T[0], 1) * G) if P[0] < 1.013 else z[0] + (P[0] - 1.013) * BAR / (rho_liq(T[0], 1) * G)
-    # temperature features
-    imax = int(np.argmax(T))
-    Tmax, zmax = T[imax], z[imax]
-    Tbot, zbot = T[-1], z[-1]
-    # inversion: temperature drop below the max by >2C deeper than the max
-    inv_drop = Tmax - T[imax:].min()
-    zinv = z[imax:][int(np.argmin(T[imax:]))]
-    # conductive/cap zone: from top down to where dT/dz drops below 5 C/100 m after exceeding it (cap base)
-    # steepest gradient
-    isteep = int(np.argmax(dTdz))
-    steep = dTdz[isteep]
-    zsteep = 0.5 * (z[isteep] + z[isteep + 1])
-    # top of >=150C, >=200C
-    def first_cross(thr):
-        idx = np.where(T >= thr)[0]
-        if len(idx) == 0:
-            return np.nan
-        i = idx[0]
-        if i == 0:
-            return z[0]
-        t0, t1 = T[i - 1], T[i]; z0, z1 = z[i - 1], z[i]
-        return z0 + (thr - t0) * (z1 - z0) / (t1 - t0)
-    z100, z150, z200 = first_cross(100), first_cross(150), first_cross(200)
-    # surface conductive gradient (uppermost 100 m of survey)
-    top_dT = (T[np.searchsorted(-z, -(z[0] - 100))] - T[0]) if True else np.nan
-    # min margin to boiling-point curve (sub-boiling margin), where P>1.5 bar
-    mask = P > 1.5
-    jm = int(np.argmin(np.where(mask, margin, 1e9)))
-    two_phase = np.where(margin < 1.0)[0]
-    rows.append(dict(well=nm, x=w["x"], y=w["y"], z_top=w["ztop"], z_bottom=w["zbot"], deviated=w["deviated"],
-                     n_pts=len(z), survey_top=z[0], survey_bottom=z[-1], survey_date=w["date"],
-                     T_top=T[0], P_top=P[0], water_level_est=round(wl, 1),
-                     Tmax=Tmax, z_Tmax=zmax, T_bottom=Tbot, P_bottom=P[-1],
-                     inversion_drop_C=round(inv_drop, 1), z_Tmin_below_max=zinv if inv_drop > 2 else np.nan,
-                     steepest_dTdz_C_per_100m=round(steep, 1), z_steepest=round(zsteep, 0),
-                     z_T100=z100, z_T150=z150, z_T200=z200,
-                     min_boiling_margin_C=round(margin[jm], 1), z_min_margin=z[jm],
-                     n_pts_within_1C_of_BPD=len(two_phase),
-                     hydrostatic_residual_bottom_bar=round(resid[-1], 2),
-                     hydrostatic_residual_max_abs_bar=round(np.abs(resid).max(), 2)))
-    for zz, t, p, ts, mg, ph, rs in zip(z, T, P, Tsat, margin, Ph, resid):
-        hyd_rows.append(dict(well=nm, elevation=zz, T=t, P=p, Tsat_at_P=round(float(ts), 1),
-                             boiling_margin=round(float(mg), 1), P_hydrostatic_from_T=round(float(ph), 2),
-                             P_resid=round(float(rs), 2)))
-    # feed zones: T,P (interpolated over the interval; mean) and block
-    mapfz = wj[nm]["Feed_Zones"]
-    for k, (ztop, zbot_, q) in enumerate([(a[0], a[1], a[2]) if len(a) > 2 else (a[0], a[1], "") for a in w["fz"]], 1):
-        zq = np.linspace(ztop, zbot_, 11)
-        Tf = np.nanmean(interp_profile(z, T, zq)); Pf = np.nanmean(interp_profile(z, P, zq))
-        blocks = [b for b in mapfz.get(f"Feed {k}", {}).keys()]
-        fzrows.append(dict(well=nm, feed=k, top=ztop, bottom=zbot_, quality=q, mid=0.5 * (ztop + zbot_),
-                           T_survey=round(float(Tf), 1), P_survey=round(float(Pf), 1),
-                           Tsat_at_P=round(float(tsat_c(Pf)), 1),
-                           blocks=";".join(blocks),
-                           liquid_h_equiv=round(float(hf(Tf)), 0)))
-
-import csv
-
-
-def write_csv(path, rs):
-    with open(path, "w", newline="") as f:
-        wr = csv.DictWriter(f, fieldnames=list(rs[0].keys())); wr.writeheader(); wr.writerows(rs)
-
-
-write_csv(os.path.join(OUT, "well_summary.csv"), rows)
-write_csv(os.path.join(OUT, "feedzones.csv"), fzrows)
-write_csv(os.path.join(OUT, "hydrostatic_check.csv"), hyd_rows)
 
 # ----------------------------------------------------------------------------
-# Production-test (initial) values vs surveys: pressure and enthalpy consistency
+# Load geometry and downhole data
 # ----------------------------------------------------------------------------
-def first_val(dct):
-    ks = sorted(dct, key=lambda s: tuple(map(int, s.split("/")))[::-1])
-    return ks[0], dct[ks[0]]
+def load_wells():
+    wells = {}
+    for f in glob.glob(os.path.join(JSON_DIR, "WELL-*_data.json")):
+        d = json.load(open(f))
+        name = d["Well_Name"]
+        n = int(re.search(r"WELL-(\d+)", name).group(1))
+        dh_T = d["Downhole_Temperature"]
+        dh_P = d["Downhole_Pressure"]
+        # Only one survey date exists per well; check and take it.
+        assert len(dh_T) == 1 and len(dh_P) == 1, f"{name}: >1 survey date"
+        date_T = list(dh_T)[0]
+        date_P = list(dh_P)[0]
+        T_rec = dh_T[date_T]
+        P_rec = dh_P[date_P]
+        z_T = np.array([float(k) for k in T_rec["Data"]])
+        T_val = np.array(list(T_rec["Data"].values()), float)
+        z_P = np.array([float(k) for k in P_rec["Data"]])
+        P_val = np.array(list(P_rec["Data"].values()), float)
+
+        # Track: list of "[x, y, z]" strings
+        track = np.array([json.loads(s.replace("'", '"')) for s in d["Well_Track"]["Data"]], float)
+        # Feed zones: "[top, bottom, 'quality']"
+        fz = []
+        for s in d["Feed_Zones"]["Data"]:
+            parts = re.findall(r"\[\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*,\s*'([^']*)'\s*\]", s)
+            top, bot, q = parts[0]
+            fz.append((float(top), float(bot), q))
+        design = []
+        for s in d["Well_Design"]["Data"]:
+            m = re.match(r"\[\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*,\s*'([^']*)'\s*,\s*(True|False)\s*,\s*'([^']*)'\s*\]", s)
+            design.append({"top": float(m.group(1)), "bottom": float(m.group(2)),
+                           "diam": m.group(3), "slotted": m.group(4) == "True", "spec": m.group(5)})
+
+        flow_keys = [k for k in ["Production_Mass_Flow", "Injection_Mass_Flow", "Transient_Enthalpy",
+                                 "Injection_Enthalpy", "Transient_Pressure"] if k in d]
+        flow_info = {}
+        for k in flow_keys:
+            dd = d[k].get("Data", {})
+            flow_info[k] = (len(dd), list(dd.keys())[0] if dd else "")
+
+        wells[name] = dict(
+            n=n, name=name, AUT2=d["AUT2_Name"], date=date_T, date_P=date_P,
+            z_T=z_T, T=T_val, z_P=z_P, P=P_val, track=track, feed=fz, design=design,
+            flow_info=flow_info, json_raw=d,
+            stable=(T_rec.get("StableFlag"), P_rec.get("StableFlag")),
+        )
+    return dict(sorted(wells.items(), key=lambda kv: kv[1]["n"]))
 
 
-for nm in wellnames:
-    r = wells[nm]["raw"]
-    if "Transient_Pressure" in r:
-        for zk, blk in r["Transient_Pressure"].items():
-            d0, p0 = first_val(blk["Data"])
-            zk = float(zk)
-            ps = float(interp_profile(wells[nm]["z"], wells[nm]["P"], np.array([zk]))[0])
-            ts = float(interp_profile(wells[nm]["z"], wells[nm]["T"], np.array([zk]))[0])
-            eh = r.get("Transient_Enthalpy", {}).get("Data", {})
-            dh, h0 = first_val(eh) if eh else ("", np.nan)
-            mf = r.get("Production_Mass_Flow", {}).get("Data", {})
-            dm, m0 = first_val(mf) if mf else ("", np.nan)
-            pcons_rows.append(dict(well=nm, gauge_elev=zk, first_pressure_date=d0, first_transient_P_bar=p0,
-                                   survey_P_at_elev_bar=round(ps, 1), diff_bar=round(p0 - ps, 1),
-                                   survey_T_at_elev=round(ts, 1), first_enthalpy_date=dh, first_enthalpy_kJkg=h0,
-                                   liquid_T_equiv_of_enthalpy=round(float(T_from_hf(h0)), 0) if h0 < 1700 else "steam/2-phase (h>hf max)",
-                                   first_massflow_date=dm, first_massflow_kgs=m0,
-                                   Tsat_at_gauge_P=round(float(tsat_c(p0)), 1)))
-write_csv(os.path.join(OUT, "pressure_consistency_check.csv"), pcons_rows)
+def well_xy_at_z(track, z):
+    """Interpolate x,y along the well track at elevation z (masl). Track points are
+    ordered top->bottom, z decreasing."""
+    zt = track[:, 2]
+    x, y = track[:, 0], track[:, 1]
+    order = np.argsort(zt)
+    zs, xs, ys = zt[order], x[order], y[order]
+    if zs[0] == zs[-1]:
+        return x[0], y[0]
+    return float(np.interp(z, zs, xs)), float(np.interp(z, zs, ys))
 
-# ----------------------------------------------------------------------------
-# Calibration targets at model-block (layer-centre) resolution
-# ----------------------------------------------------------------------------
-tgt = []
-tp_layer = []
-for nm in wellnames:
-    w = wells[nm]
-    for b in wj[nm]["Blocks"]:
-        lo = layer_of_block(b["block"])
-        zc_layer = layers[lo, 2]; zb = layers[lo, 1]; zt = ltop[lo]
-        top_i, bot_i = b["interval"]  # well intersection with block
-        zmid = 0.5 * (top_i + bot_i)
-        # average over the well's interval inside the block (limited to surveyed range)
-        zz = np.linspace(max(bot_i, w["z"][-1]), min(top_i, w["z"][0]), 9) if min(top_i, w["z"][0]) > max(bot_i, w["z"][-1]) else np.array([])
-        if len(zz) == 0:
-            Tm = Pm = np.nan
-        else:
-            Tm = float(np.nanmean(interp_profile(w["z"], w["T"], zz))); Pm = float(np.nanmean(interp_profile(w["z"], w["P"], zz)))
-        # also value at the layer-centre elevation (if surveyed)
-        Tc = float(interp_profile(w["z"], w["T"], np.array([zc_layer]))[0]); Pc = float(interp_profile(w["z"], w["P"], np.array([zc_layer]))[0])
-        tgt.append(dict(well=nm, block=b["block"], column=col_of_block(b["block"]), layer=lo,
-                        layer_top=zt, layer_centre=zc_layer, layer_bottom=zb,
-                        well_in_block_top=top_i, well_in_block_bottom=bot_i,
-                        T_mean_over_well_interval=round(Tm, 1) if not np.isnan(Tm) else "",
-                        P_mean_over_well_interval_bar=round(Pm, 1) if not np.isnan(Pm) else "",
-                        T_at_layer_centre=round(Tc, 1) if not np.isnan(Tc) else "",
-                        P_at_layer_centre_bar=round(Pc, 2) if not np.isnan(Pc) else "",
-                        feed_zone_block=any(b["block"] in str(wj[nm]["Feed_Zones"][k]) for k in wj[nm]["Feed_Zones"])))
-write_csv(os.path.join(OUT, "NS_calibration_targets.csv"), tgt)
-
-# T,P at common elevations for inter-well comparison
-common = [200, 0, -250, -500, -750, -1000, -1500, -2000, -2500]
-tp_rows = []
-for nm in wellnames:
-    w = wells[nm]
-    for zq in common:
-        t = float(interp_profile(w["z"], w["T"], np.array([zq]))[0]); p = float(interp_profile(w["z"], w["P"], np.array([zq]))[0])
-        if not (np.isnan(t) or np.isnan(p)):
-            tp_rows.append(dict(well=nm, x=w["x"], y=w["y"], elevation=zq, T=round(t, 1), P_bar=round(p, 1)))
-write_csv(os.path.join(OUT, "T_P_at_common_elevations.csv"), tp_rows)
 
 # ----------------------------------------------------------------------------
-# Terrain / geometry diagnostics
+# Main analysis
 # ----------------------------------------------------------------------------
-geo_rows = []
-cn = np.array([[cols[c][0], cols[c][1]] for c in cols]); cnames = list(cols)
-for nm in wellnames:
-    w = wells[nm]
-    d = np.hypot(cn[:, 0] - w["x"], cn[:, 1] - w["y"]); c = cnames[int(np.argmin(d))]
-    def dseg(pt, a, b):
-        a = np.array(a, float); b = np.array(b, float); pt = np.array(pt, float)
-        t = np.clip(((pt - a) @ (b - a)) / ((b - a) @ (b - a)), 0, 1); return float(np.linalg.norm(pt - (a + t * (b - a))))
+def main():
+    import csv
+    log("=== Natural-state analysis ===")
+    log(f"Root: {ROOT}")
+    log("Step 1: validate saturation-temperature and density functions")
+    validate_tsat()
+    log(f"  rho_water(20C)={float(rho_water(20)):.1f}, rho_water(100C)={float(rho_water(100)):.1f}, "
+        f"rho_water(120C)={float(rho_water(120)):.1f} kg/m3")
 
-    def dist_feature(key_filter):
-        best = 1e12
-        for k, v in mapping.items():
-            if key_filter(k):
-                dd = v["Data"]; segs = dd if isinstance(dd[0][0], list) else [dd]
-                for sg in segs:
-                    for i in range(len(sg) - 1):
-                        best = min(best, dseg((w["x"], w["y"]), sg[i], sg[i + 1]))
-        return round(best, 0)
-    geo_rows.append(dict(well=nm, nearest_column=c, dist_to_col_centre_m=round(float(d.min()), 0),
-                         dist_Fault1_m=dist_feature(lambda k: k == "Fault 1"), dist_Fault2_m=dist_feature(lambda k: k == "Fault 2"),
-                         dist_Fault3_m=dist_feature(lambda k: k == "Fault 3"),
-                         dist_rivers_m=dist_feature(lambda k: "iver" in k), dist_lake_m=dist_feature(lambda k: "Lake" in k),
-                         column_surface_elev=surf.get(c, np.nan), well_collar_elev=w["ztop"],
-                         collar_minus_surface=round(w["ztop"] - surf.get(c, np.nan), 1)))
-write_csv(os.path.join(OUT, "well_geometry_check.csv"), geo_rows)
+    log("Step 2: load geometry and downhole P/T from Data_json")
+    wells = load_wells()
+    for w in wells.values():
+        log(f"  {w['name']}: T n={len(w['z_T'])}, P n={len(w['z_P'])}, survey {w['date']}, "
+            f"stable flags {w['stable']}, feed zones={len(w['feed'])}, flow={list(w['flow_info'].keys())}")
 
-# ----------------------------------------------------------------------------
-# Plots
-# ----------------------------------------------------------------------------
-cmap = plt.get_cmap("tab10")
-col = {nm: cmap(i % 10) for i, nm in enumerate(wellnames)}
+    # ---------------- Step 3: DAT vs JSON cross-check ----------------
+    log("Step 3: cross-check Data_dat files against Data_json")
+    dat_rows = []
+    for w in wells.values():
+        prefix = "Wel10" if w["n"] == 10 else f"Well{w['n']}"
+        for kind, zkey, vkey in [("downhole_temperature", "z_T", "T"), ("downhole_pressure", "z_P", "P")]:
+            fn = os.path.join(DAT_DIR, f"{prefix}_{kind}.dat")
+            if not os.path.exists(fn):
+                dat_rows.append([w["name"], kind, "missing file", "", "", ""])
+                continue
+            arr = np.loadtxt(fn)            # columns: value, elevation
+            dat_z, dat_v = arr[:, 1], arr[:, 0]
+            jz, jv = w[zkey], w[vkey]
+            maxdiff = 0.0
+            nmatch = 0
+            for zz, vv in zip(dat_z, dat_v):
+                idx = np.where(np.isclose(jz, zz, atol=1e-6))[0]
+                if len(idx):
+                    nmatch += 1
+                    maxdiff = max(maxdiff, abs(jv[idx[0]] - vv))
+            dat_rows.append([w["name"], kind, len(dat_z), nmatch, round(maxdiff, 6),
+                             "OK" if (nmatch == len(dat_z) == len(jz) and maxdiff < 1e-6) else "CHECK"])
+            log(f"  {w['name']} {kind}: dat n={len(dat_z)}, json n={len(jz)}, matched={nmatch}, max |diff|={maxdiff:.2e}")
+    with open(os.path.join(OUT, "dat_vs_json_check.csv"), "w", newline="") as f:
+        cw = csv.writer(f)
+        cw.writerow(["well", "variable", "n_dat", "n_matched_to_json", "max_abs_diff", "status"])
+        cw.writerows(dat_rows)
 
-# 1. map
-fig, ax = plt.subplots(figsize=(9, 8))
-sx = [cols[c][0] for c in cnames]; sy = [cols[c][1] for c in cnames]; sz = [surf.get(c, np.nan) for c in cnames]
-sc = ax.scatter(sx, sy, c=sz, s=60, cmap="terrain", marker="s", alpha=.8)
-plt.colorbar(sc, label="Model surface elevation (mRL)", shrink=.8)
-for k, v in mapping.items():
-    d = v["Data"]
-    segs = d if isinstance(d[0][0], list) else [d]
-    c = "tab:blue" if "Lake" in k or "iver" in k else ("red" if "Fault" in k else "gray")
-    for j, sg in enumerate(segs):
-        p = np.array(sg)
-        ax.plot(p[:, 0], p[:, 1], lw=1.4 if "Fault" in k else 1, ls="--" if "Fault" in k else "-", color=c,
-                label=k if j == 0 else None)
-for nm in wellnames:
-    w = wells[nm]
-    ax.plot(w["track"][:, 0], w["track"][:, 1], "-", color="k", lw=1)
-    ax.plot(w["x"], w["y"], "o", color=col[nm], ms=8, mec="k")
-    ax.annotate(nm.replace("WELL-", "W"), (w["x"], w["y"]), xytext=(5, 5), textcoords="offset points", fontweight="bold")
-ax.set_xlim(2814000, 2828000); ax.set_ylim(6327000, 6340000)
-ax.set_aspect("equal"); ax.set_xlabel("NZTM Easting (m)"); ax.set_ylabel("Northing (m)"); ax.legend(loc="lower right"); ax.set_title("Well locations, model columns, lake, faults")
-fig.tight_layout(); fig.savefig(os.path.join(FIG, "01_well_map.png"), dpi=130); plt.close(fig)
+    # ---------------- Step 4: geometry checks ----------------
+    log("Step 4: geometry and feed-zone consistency checks")
+    geo_rows = []
+    for w in wells.values():
+        tr = w["track"]
+        z_head = tr[0, 2]
+        z_bot = tr[-1, 2]
+        liner = w["design"][-1]
+        zmin_meas = min(w["z_T"].min(), w["z_P"].min())
+        zmax_meas = max(w["z_T"].max(), w["z_P"].max())
+        fz_inside = all((b >= z_bot - 1e-6) and (t <= z_head + 1e-6) for t, b, _ in w["feed"])
+        fz_in_liner = all((b >= liner["bottom"] - 1e-6) and (t <= liner["top"] + 1e-6) for t, b, _ in w["feed"])
+        meas_in_track = (zmin_meas >= z_bot - 1e-6) and (zmax_meas <= z_head + 1e-6)
+        geo_rows.append([w["name"], w["AUT2"], len(tr), round(z_head, 1), round(z_bot, 1),
+                         round(zmax_meas, 1), round(zmin_meas, 1), len(w["feed"]),
+                         "; ".join(f"{t:.0f}/{b:.0f} {q}" for t, b, q in w["feed"]),
+                         "yes" if meas_in_track else "NO", "yes" if fz_inside else "NO",
+                         "yes" if fz_in_liner else "NO", w["design"][-1]["spec"],
+                         "deviated" if len(tr) > 2 else "vertical (2-pt track)"])
+        if not fz_inside:
+            log(f"  WARNING {w['name']}: feed zone outside track range")
+        if not fz_in_liner:
+            log(f"  NOTE {w['name']}: feed zone(s) outside slotted liner interval")
+    with open(os.path.join(OUT, "well_geometry_check.csv"), "w", newline="") as f:
+        cw = csv.writer(f)
+        cw.writerow(["well", "AUT2_name", "n_track_pts", "wellhead_z_masl", "TD_z_masl",
+                     "shallowest_meas_masl", "deepest_meas_masl", "n_feedzones",
+                     "feedzones_top/bottom_masl_quality", "meas_within_track", "feedzones_in_track",
+                     "feedzones_in_liner", "liner_spec", "track_type"])
+        cw.writerows(geo_rows)
 
-# 2. T and P profiles all wells
-fig, axs = plt.subplots(1, 3, figsize=(16, 7), sharey=True)
-for nm in wellnames:
-    w = wells[nm]
-    axs[0].plot(w["T"], w["z"], "-o", ms=3, color=col[nm], label=nm)
-    axs[1].plot(w["P"], w["z"], "-o", ms=3, color=col[nm], label=nm)
-    axs[2].plot(w["P"] - np.interp(w["z"], [-4000, 4000][::1], [0, 0]) , w["z"], alpha=0)  # placeholder (keeps shared y)
-# pressure minus hydrostatic reference (cold, 20C column from 1 bar at 300 m)
-zr = np.linspace(-3000, 350, 50)
-for nm in wellnames:
-    w = wells[nm]
-    ref = 1.013 + 998.0 * G * (300 - w["z"]) / BAR
-    axs[2].plot(w["P"] - ref, w["z"], "-o", ms=3, color=col[nm], label=nm)
-axs[0].set_xlabel("Temperature (degC)"); axs[1].set_xlabel("Pressure (bar)"); axs[2].set_xlabel("P - cold hydrostatic ref. (bar)")
-axs[0].set_ylabel("Elevation (mRL)")
-for a in axs: a.grid(alpha=.3)
-axs[0].legend(ncol=2, fontsize=8)
-axs[2].set_title("Excess over 20C-water column from 300 mRL")
-fig.suptitle("Downhole surveys, 29/07/2015"); fig.tight_layout(); fig.savefig(os.path.join(FIG, "02_T_P_profiles.png"), dpi=130); plt.close(fig)
+    # ---------------- Step 5: long table of profiles ----------------
+    log("Step 5: build long table of T, P, Tsat margin, feed-zone flags")
+    long_rows = []
+    # per-well profiles keyed by elevation (merged on T elevations)
+    prof = {}
+    for w in wells.values():
+        # Use the T elevations as the master list; P should share elevations.
+        zs_T = w["z_T"]
+        zs_P = w["z_P"]
+        Tmap = dict(zip(np.round(zs_T, 3), w["T"]))
+        Pmap = dict(zip(np.round(zs_P, 3), w["P"]))
+        common = sorted(set(Tmap) & set(Pmap), reverse=True)
+        z = np.array(common)
+        T = np.array([Tmap[k] for k in common])
+        P = np.array([Pmap[k] for k in common])
+        Ts = t_sat_C(P)
+        head = w["track"][0, 2]
+        # gradient to next deeper point (C/100m) and feed zone flag
+        grad = np.full_like(T, np.nan)
+        for i in range(len(z) - 1):
+            dz = z[i] - z[i + 1]                      # depth interval (>0)
+            grad[i] = (T[i + 1] - T[i]) / dz * 100.0 if dz != 0 else np.nan   # C/100m, positive = warmer with depth
+        in_fz, fq = [], []
+        for zi in z:
+            hit = [q for t, b, q in w["feed"] if b - 1e-6 <= zi <= t + 1e-6]
+            in_fz.append("yes" if hit else "no")
+            fq.append(hit[0] if hit else "")
+        for i in range(len(z)):
+            x, y = well_xy_at_z(w["track"], z[i])
+            long_rows.append([w["name"], round(z[i], 2), round(head - z[i], 2), round(x, 1), round(y, 1),
+                              round(T[i], 2), round(P[i], 3), round(float(Ts[i]), 2),
+                              round(float(Ts[i] - T[i]), 2), (round(grad[i], 2) if np.isfinite(grad[i]) else ""),
+                              in_fz[i], fq[i]])
+        prof[w["name"]] = dict(z=z, T=T, P=P, Tsat=Ts, grad=grad)
+    with open(os.path.join(OUT, "downhole_profiles_long.csv"), "w", newline="") as f:
+        cw = csv.writer(f)
+        cw.writerow(["well", "z_masl", "depth_below_wellhead_m", "x_m", "y_m", "T_C", "P_bar",
+                     "Tsat_at_P_C", "Tsat_minus_T_C", "dT_dz_to_next_C_per_100m", "in_feedzone", "feedzone_quality"])
+        cw.writerows(long_rows)
 
-# 3. per-well panels: T, BPD, feed zones, P vs hydrostatic
-fig, axs = plt.subplots(2, 5, figsize=(22, 11), sharey=True)
-for a, nm in zip(axs.ravel(), wellnames):
-    w = wells[nm]; z, T, P = w["z"], w["T"], w["P"]
-    a.plot(T, z, "r-o", ms=3, label="T survey")
-    a.plot(tsat_c(np.maximum(P, 0.05)), z, "b--", label="Tsat(P_survey) ~ BPD")
-    a.plot(P, z, "g-", label="P survey (bar)")
-    for fzr in [r for r in fzrows if r["well"] == nm]:
-        a.axhspan(fzr["bottom"], fzr["top"], color="orange", alpha=.4)
-    for rr in [r for r in pcons_rows if r["well"] == nm]:
-        a.plot(rr["first_transient_P_bar"], rr["gauge_elev"], "k*", ms=12, label="First transient P")
-    a.set_title(nm); a.grid(alpha=.3)
-axs[0, 0].legend(fontsize=7); [a.set_xlabel("degC / bar") for a in axs[1]]; [a.set_ylabel("Elevation (mRL)") for a in axs[:, 0]]
-fig.suptitle("Per-well natural-state profiles (orange = feed zones)"); fig.tight_layout(); fig.savefig(os.path.join(FIG, "03_well_panels.png"), dpi=110); plt.close(fig)
+    # ---------------- Step 6: hydrostatic check ----------------
+    log("Step 6: hydrostatic consistency (pressure predicted from shallowest point with well's own T profile)")
+    hyd_rows = []
+    hyd_summary = {}
+    for w in wells.values():
+        p = prof[w["name"]]
+        z, T, P = p["z"], p["T"], p["P"]
+        z_anchor, P_anchor = z[0], P[0]
+        resid_list = []
+        for i in range(1, len(z)):
+            P_pred = column_integrate(z_anchor, z[i], P_anchor, z, T)
+            r = P[i] - P_pred
+            resid_list.append(r)
+            # segment check: implied mean density over this interval
+            dz = z[i - 1] - z[i]
+            dP = (P[i] - P[i - 1]) * 1e5
+            rho_imp = dP / (G * dz) if dz > 0 else np.nan
+            rho_model = float(rho_water(0.5 * (T[i] + T[i - 1])))
+            hyd_rows.append([w["name"], round(z[i], 1), round(P[i], 3), round(P_pred, 3), round(r, 3),
+                             round(z[i - 1], 1), round(z[i], 1), round(rho_imp, 1), round(rho_model, 1),
+                             round(100 * (rho_imp / rho_model - 1), 2) if np.isfinite(rho_imp) else ""])
+        r = np.array(resid_list)
+        seg_vals = [row[9] for row in hyd_rows if row[0] == w["name"] and row[9] != ""]
+        rel = float(np.nanmedian(seg_vals)) if seg_vals else float("nan")
+        # whole-column comparison: implied mean density (measured dP / dz) vs Kell mean density
+        P_pred_deep = column_integrate(z_anchor, z[-1], P_anchor, z, T)
+        dz_col = z_anchor - z[-1]
+        rho_col_meas = (P[-1] - P_anchor) * 1e5 / (G * dz_col)
+        rho_col_kell = (P_pred_deep - P_anchor) * 1e5 / (G * dz_col)
+        hyd_summary[w["name"]] = dict(resid_mean_bar=float(np.mean(r)), resid_max_abs_bar=float(np.max(np.abs(r))),
+                                      resid_at_deepest_bar=float(r[-1]),
+                                      seg_density_excess_pct_median=rel,
+                                      column_rho_implied_kgm3=float(rho_col_meas),
+                                      column_rho_kell_kgm3=float(rho_col_kell),
+                                      column_excess_pct=float(100 * (rho_col_meas / rho_col_kell - 1)))
+        log(f"  {w['name']}: anchor {z_anchor:.0f} masl P={P_anchor:.2f} bar; residual mean {np.mean(r):+.2f} bar, "
+            f"deepest {r[-1]:+.2f} bar, max |res| {np.max(np.abs(r)):.2f} bar; column-mean density implied "
+            f"{rho_col_meas:.0f} vs Kell {rho_col_kell:.0f} kg/m3 ({100 * (rho_col_meas / rho_col_kell - 1):+.1f}%); "
+            f"median segment excess {rel:+.1f}%")
+    with open(os.path.join(OUT, "hydrostatic_check.csv"), "w", newline="") as f:
+        cw = csv.writer(f)
+        cw.writerow(["well", "z_masl", "P_meas_bar", "P_pred_from_shallowest_bar", "residual_bar",
+                     "z_upper_masl", "z_lower_masl", "rho_implied_kgm3", "rho_Kell_kgm3", "implied_vs_Kell_pct"])
+        cw.writerows(hyd_rows)
 
-# 4. T maps by elevation (well points) and P maps
-for var, fn, lab in (("T", "04_T_maps_by_elevation.png", "Temperature (degC)"), ("P", "05_P_maps_by_elevation.png", "Pressure (bar)")):
-    zs = [0, -500, -1000, -1500, -2000, -2500]
-    fig, axs = plt.subplots(2, 3, figsize=(17, 11), sharex=True, sharey=True)
-    allv = [r["T" if var == "T" else "P_bar"] for r in tp_rows if r["elevation"] in zs]
-    vmin, vmax = min(allv), max(allv)
-    for a, zq in zip(axs.ravel(), zs):
-        pts = [r for r in tp_rows if r["elevation"] == zq]
-        a.scatter(sx, sy, c="lightgray", s=25, marker="s")
-        s = a.scatter([r["x"] for r in pts], [r["y"] for r in pts], c=[r["T" if var == "T" else "P_bar"] for r in pts], s=260, cmap="inferno" if var == "T" else "viridis", vmin=vmin, vmax=vmax, ec="k")
-        for r in pts:
-            a.annotate(f'{r["well"].replace("WELL-", "W")}\n{r["T" if var == "T" else "P_bar"]:.0f}', (r["x"], r["y"]), xytext=(9, 4), textcoords="offset points", fontsize=8)
-        a.set_title(f"{zq} mRL"); a.set_aspect("equal")
-    fig.colorbar(s, ax=axs, label=lab, shrink=.7); fig.savefig(os.path.join(FIG, fn), dpi=120); plt.close(fig)
+    # ---------------- Step 7: pressure reduced to datum 0 masl ----------------
+    log("Step 7: reduce each pressure to datum 0 masl using the well's own column (cross-well consistency)")
+    dat0_rows = []
+    per_well_stats = []
+    for w in wells.values():
+        p = prof[w["name"]]
+        z, T, P = p["z"], p["T"], p["P"]
+        P0 = []
+        for i in range(len(z)):
+            P0_i = column_integrate(z[i], 0.0, P[i], z, T)
+            P0.append(P0_i)
+            dat0_rows.append([w["name"], round(z[i], 1), round(P[i], 3), round(P0_i, 3)])
+        P0 = np.array(P0)
+        # trend of datum pressure with depth: slope bar per 100 m
+        slope = np.polyfit(z, P0, 1)[0] * 100 if len(z) > 1 else np.nan
+        per_well_stats.append([w["name"], round(float(np.mean(P0)), 3), round(float(np.std(P0)), 3),
+                               round(float(np.min(P0)), 3), round(float(np.max(P0)), 3), round(float(slope), 3), len(z)])
+        log(f"  {w['name']}: P@0masl mean {np.mean(P0):.2f} bar, sd {np.std(P0):.2f}, range {np.min(P0):.2f}-{np.max(P0):.2f}, "
+            f"trend with z {slope:+.3f} bar/100 m")
+    with open(os.path.join(OUT, "pressure_datum_reduction.csv"), "w", newline="") as f:
+        cw = csv.writer(f)
+        cw.writerow(["well", "z_masl", "P_meas_bar", "P_at_datum0_bar"])
+        cw.writerows(dat0_rows)
+    with open(os.path.join(OUT, "well_pressure_consistency.csv"), "w", newline="") as f:
+        cw = csv.writer(f)
+        cw.writerow(["well", "P_datum0_mean_bar", "P_datum0_sd_bar", "P_datum0_min_bar", "P_datum0_max_bar",
+                     "trend_bar_per_100m_vs_z", "n_points"])
+        cw.writerows(per_well_stats)
+    datum_means = {r[0]: r[1] for r in per_well_stats}
+    spread = max(datum_means.values()) - min(datum_means.values())
+    log(f"  Spread of well-mean datum pressures (0 masl): {spread:.2f} bar")
 
-# 5. cross sections: wells projected on two lines
-def section(name, p0, p1, fn, width=1500):
-    p0 = np.array(p0, float); p1 = np.array(p1, float); u = (p1 - p0) / np.linalg.norm(p1 - p0); L = np.linalg.norm(p1 - p0)
-    fig, axs = plt.subplots(1, 2, figsize=(16, 7), sharey=True)
-    used = []
-    for nm in wellnames:
-        w = wells[nm]; q = np.array([w["x"], w["y"]]) - p0; s = q @ u; off = abs(q[0] * u[1] - q[1] * u[0])
-        if -500 <= s <= L + 500 and off <= width:
-            used.append((nm, s, off))
-            for a, v in zip(axs, ("T", "P")):
-                sc = a.scatter(np.full_like(w["z"], s), w["z"], c=w[v], s=30, cmap="inferno" if v == "T" else "viridis", vmin=10 if v == "T" else 0, vmax=300 if v == "T" else 280)
-            axs[0].annotate(nm.replace("WELL-", "W"), (s, w["ztop"] + 60), ha="center", fontweight="bold")
-    for a, lab in zip(axs, ("T (degC)", "P (bar)")):
-        a.set_xlabel("Distance along section (m)"); a.grid(alpha=.3)
-    plt.colorbar(axs[0].collections[0], ax=axs[0], label="T (degC)"); plt.colorbar(axs[1].collections[0], ax=axs[1], label="P (bar)")
-    axs[0].set_ylabel("Elevation (mRL)"); fig.suptitle(f"{name} (wells within {width} m)"); fig.tight_layout()
-    fig.savefig(os.path.join(FIG, fn), dpi=120); plt.close(fig)
-    return used
+    # ---------------- Step 8: feed zones ----------------
+    log("Step 8: feed-zone summary")
+    fz_rows = []
+    for w in wells.values():
+        p = prof[w["name"]]
+        z, T, P = p["z"], p["T"], p["P"]
+        for top, bot, q in w["feed"]:
+            # interpolate T and P at feed top and bottom (within measured range only)
+            def at(zq, arr):
+                zs = z[::-1]; a = arr[::-1]
+                if zq < zs[0] or zq > zs[-1]:
+                    return np.nan
+                return float(np.interp(zq, zs, a))
+            Tt, Tb = at(top, T), at(bot, T)
+            Pt, Pb = at(top, P), at(bot, P)
+            # local gradient of T across the zone
+            gT = (Tb - Tt) / (top - bot) * 100 if np.isfinite(Tt) and np.isfinite(Tb) and top != bot else np.nan   # C/100m, positive = warmer with depth
+            fz_rows.append([w["name"], top, bot, q, round(Tt, 2) if np.isfinite(Tt) else "", round(Tb, 2) if np.isfinite(Tb) else "",
+                            round(Pt, 2) if np.isfinite(Pt) else "", round(Pb, 2) if np.isfinite(Pb) else "",
+                            round(gT, 2) if np.isfinite(gT) else "", round(float(t_sat_C(Pt)) - Tt, 1) if np.isfinite(Pt) and np.isfinite(Tt) else ""])
+    with open(os.path.join(OUT, "feedzones_summary.csv"), "w", newline="") as f:
+        cw = csv.writer(f)
+        cw.writerow(["well", "top_masl", "bottom_masl", "quality", "T_top_C", "T_bottom_C", "P_top_bar", "P_bottom_bar",
+                     "mean_dT_dz_C_per_100m", "Tsat_minus_T_at_top_C"])
+        cw.writerows(fz_rows)
+
+    # ---------------- Step 9: common elevations ----------------
+    log("Step 9: interpolate T and P at common elevations (no extrapolation)")
+    ce_rows = []
+    for w in wells.values():
+        p = prof[w["name"]]
+        z, T, P = p["z"], p["T"], p["P"]
+        zs, Ts_, Ps_ = z[::-1], T[::-1], P[::-1]
+        row = [w["name"]]
+        for zc in COMMON_Z:
+            if zs[0] <= zc <= zs[-1]:
+                row += [round(float(np.interp(zc, zs, Ts_)), 2), round(float(np.interp(zc, zs, Ps_)), 2)]
+            else:
+                row += ["", ""]
+        ce_rows.append(row)
+    hdr = ["well"]
+    for zc in COMMON_Z:
+        hdr += [f"T_{zc}masl_C", f"P_{zc}masl_bar"]
+    with open(os.path.join(OUT, "T_P_at_common_elevations.csv"), "w", newline="") as f:
+        cw = csv.writer(f)
+        cw.writerow(hdr)
+        cw.writerows(ce_rows)
+
+    # ---------------- Step 10: summary JSON ----------------
+    summary = {}
+    for w in wells.values():
+        p = prof[w["name"]]
+        summary[w["name"]] = dict(
+            n_points=int(len(p["z"])), z_top=float(p["z"].max()), z_bottom=float(p["z"].min()),
+            T_min=float(p["T"].min()), T_max=float(p["T"].max()),
+            P_min=float(p["P"].min()), P_max=float(p["P"].max()),
+            min_Tsat_minus_T=float(np.min(p["Tsat"] - p["T"])),
+            mean_grad_upper_C_per_100m=float(np.nanmean(p["grad"][: max(1, len(p["grad"]) // 3)])),
+            mean_grad_lower_C_per_100m=float(np.nanmean(p["grad"][-max(1, len(p["grad"]) // 3):])),
+            hydrostatic=hyd_summary[w["name"]],
+        )
+    summary["_datum_spread_bar"] = float(spread)
+    json.dump(summary, open(os.path.join(OUT, "NS_summary_stats.json"), "w"), indent=2)
+
+    # ---------------- Step 11: figures ----------------
+    log("Step 11: figures")
+    colors = plt.cm.tab10(np.linspace(0, 1, 10))
+
+    # Fig 1: well map
+    fig, ax = plt.subplots(figsize=(7, 6))
+    try:
+        mp = json.load(open(MAPPING))
+        for k, v in mp.items():
+            if not (isinstance(v, dict) and isinstance(v.get("Data"), list) and v["Data"]):
+                continue
+            data = v["Data"]
+            # a single polyline is a list of [x, y]; a multi-segment item is a list of such lists
+            segs = [data] if isinstance(data[0][0], (int, float)) else data
+            for seg in segs:
+                arr = np.array(seg, float)
+                if arr.ndim == 2 and arr.shape[1] >= 2:
+                    ax.plot(arr[:, 0], arr[:, 1], color="0.6", lw=1, label=k)
+    except Exception as e:
+        log(f"  mapping overlay skipped: {e}")
+    for i, (name, w) in enumerate(wells.items()):
+        tr = w["track"]
+        ax.plot(tr[:, 0], tr[:, 1], "-", color=colors[i % 10], lw=2)
+        ax.plot(tr[0, 0], tr[0, 1], "o", color=colors[i % 10], ms=6)
+        ax.annotate(name.replace("WELL-", "W"), (tr[0, 0], tr[0, 1]), fontsize=8, xytext=(4, 4), textcoords="offset points")
+    ax.set_xlabel("Easting (m)")
+    ax.set_ylabel("Northing (m)")
+    ax.set_title("Well locations (wellhead dots; deviated tracks shown as lines)")
+    ax.ticklabel_format(useOffset=False, style="plain")
+    ax.tick_params(axis="x", rotation=30)
+    ax.set_aspect("equal", adjustable="datalim")
+    fig.tight_layout()
+    fig.savefig(os.path.join(FIG, "01_well_map.png"), dpi=130)
+    plt.close(fig)
+
+    # Fig 2: T and P vs elevation overlay, with feed zones
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(10, 7), sharey=True)
+    for i, (name, w) in enumerate(wells.items()):
+        p = prof[name]
+        a1.plot(p["T"], p["z"], "o-", ms=3, color=colors[i % 10], label=name.replace("WELL-", "W"))
+        a2.plot(p["P"], p["z"], "o-", ms=3, color=colors[i % 10])
+        for top, bot, q in w["feed"]:
+            a1.axhspan(bot, top, color=colors[i % 10], alpha=0.12)
+    a1.set_xlabel("Temperature (degC)")
+    a2.set_xlabel("Pressure (bar)")
+    a1.set_ylabel("Elevation (masl)")
+    a1.set_title("Downhole temperature (2015-07-29)")
+    a2.set_title("Downhole pressure (2015-07-29)")
+    a1.grid(alpha=0.3); a2.grid(alpha=0.3)
+    a1.legend(fontsize=7, ncol=2)
+    fig.suptitle("Natural-state downhole profiles; shaded bands = feed zones")
+    fig.tight_layout()
+    fig.savefig(os.path.join(FIG, "02_T_P_profiles.png"), dpi=130)
+    plt.close(fig)
+
+    # Fig 3: P-T state with saturation curve
+    fig, ax = plt.subplots(figsize=(7, 6))
+    pp = np.linspace(1, 260, 300)
+    ax.plot(pp, t_sat_C(pp), "k--", lw=1.2, label="Boiling curve (Tsat)")
+    for i, (name, w) in enumerate(wells.items()):
+        p = prof[name]
+        ax.plot(p["P"], p["T"], "o-", ms=3, color=colors[i % 10], label=name.replace("WELL-", "W"))
+    ax.set_xlabel("Pressure (bar)")
+    ax.set_ylabel("Temperature (degC)")
+    ax.set_title("P-T state of measured points vs boiling curve")
+    ax.grid(alpha=0.3)
+    ax.legend(fontsize=7, ncol=2)
+    fig.tight_layout()
+    fig.savefig(os.path.join(FIG, "03_PT_state.png"), dpi=130)
+    plt.close(fig)
+
+    # Fig 4: pressure reduced to datum 0 masl, plotted against depth per well
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(10, 6))
+    for i, (name, w) in enumerate(wells.items()):
+        rows = [r for r in dat0_rows if r[0] == name]
+        z = np.array([r[1] for r in rows]); P0 = np.array([r[3] for r in rows])
+        a1.plot(P0, z, "o-", ms=3, color=colors[i % 10], label=name.replace("WELL-", "W"))
+    a1.set_xlabel("Pressure reduced to datum 0 masl (bar)")
+    a1.set_ylabel("Measurement elevation (masl)")
+    a1.set_title("Datum-reduced pressure (each well)")
+    a1.grid(alpha=0.3); a1.legend(fontsize=7, ncol=2)
+    names = list(datum_means.keys())
+    means = [datum_means[n] for n in names]
+    a2.bar([n.replace("WELL-", "W") for n in names], means, color="0.6")
+    a2.set_ylabel("Mean datum pressure (bar)")
+    a2.set_title("Well-mean datum pressure")
+    a2.tick_params(axis="x", rotation=45)
+    a2.set_ylim(min(means) - 2, max(means) + 2)
+    fig.tight_layout()
+    fig.savefig(os.path.join(FIG, "04_datum_pressure_consistency.png"), dpi=130)
+    plt.close(fig)
+
+    # Fig 5: T and P at common elevations, plotted at well positions (scatter maps)
+    fig, axes = plt.subplots(2, 4, figsize=(14, 7))
+    show_z = [0, -500, -1000, -1500]
+    for j, zc in enumerate(show_z):
+        for row_i, var in enumerate(["T", "P"]):
+            ax = axes[row_i, j]
+            xs, ys, vs, labs = [], [], [], []
+            for name, w in wells.items():
+                p = prof[name]
+                zs, arr = p["z"][::-1], (p["T"] if var == "T" else p["P"])[::-1]
+                if zs[0] <= zc <= zs[-1]:
+                    x, y = well_xy_at_z(w["track"], zc)
+                    xs.append(x); ys.append(y); vs.append(float(np.interp(zc, zs, arr))); labs.append(name.replace("WELL-", "W"))
+            if xs:
+                sc = ax.scatter(xs, ys, c=vs, cmap="coolwarm" if var == "T" else "viridis", s=120, edgecolor="k")
+                for x, y, l, v in zip(xs, ys, labs, vs):
+                    ax.annotate(f"{l}\n{v:.0f}", (x, y), fontsize=6, xytext=(3, 3), textcoords="offset points")
+                plt.colorbar(sc, ax=ax, shrink=0.8, label=("degC" if var == "T" else "bar"))
+            ax.set_title(f"{var} at {zc} masl", fontsize=9)
+            ax.ticklabel_format(useOffset=False, style="plain")
+            ax.tick_params(labelsize=6)
+            ax.set_aspect("equal", adjustable="datalim")
+    fig.suptitle("Temperature (top) and pressure (bottom) at common elevations; wells with data only (no extrapolation)")
+    fig.tight_layout()
+    fig.savefig(os.path.join(FIG, "05_T_P_maps_by_elevation.png"), dpi=130)
+    plt.close(fig)
+
+    log("Done. Outputs written to " + OUT)
+    with open(os.path.join(OUT, "run_console_log.txt"), "w") as f:
+        f.write("\n".join(LOG) + "\n")
 
 
-secA = section("Section A: WSW-ENE", (2817500, 6332000), (2823500, 6334500), "06_section_A_WSW-ENE.png", 1800)
-secB = section("Section B: SSW-NNE", (2819200, 6332200), (2821500, 6337800), "06_section_B_SSW-NNE.png", 1800)
-
-# 6. isothermal/convective layer & BPD cross-plot for all wells
-fig, ax = plt.subplots(1, 2, figsize=(14, 6))
-for nm in wellnames:
-    w = wells[nm]
-    ax[0].plot(w["T"], w["P"], "-o", ms=3, color=col[nm], label=nm)
-    ax[1].plot(w["T"], w["z"], "-", color=col[nm], label=nm)
-tt = np.linspace(10, 330, 100); ax[0].plot(tt, psat_bar(tt), "k--", label="Saturation")
-ax[0].set_xlabel("T (degC)"); ax[0].set_ylabel("P (bar)"); ax[0].legend(fontsize=7, ncol=2); ax[0].grid(alpha=.3); ax[0].set_title("P-T state of surveyed fluid vs saturation curve")
-ax[1].set_title("Temperature vs elevation"); ax[1].grid(alpha=.3)
-fig.tight_layout(); fig.savefig(os.path.join(FIG, "07_PT_state.png"), dpi=130); plt.close(fig)
-
-# 7. production-test initial values vs survey (pressure)
-print("DONE. Wells:", len(wellnames), "targets:", len(tgt))
-print("sections", [u[0] for u in secA], [u[0] for u in secB])
+if __name__ == "__main__":
+    main()

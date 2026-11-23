@@ -1,267 +1,251 @@
-well,aut2,x,y,elev_mRL,T_C,P_bar,Tsat_C,boiling_margin_C,in_feedzone,model_column,model_layer,layer_centre_mRL,block,column_surface_mRL,suggested_weight,note
-WELL-1,WELL1,2823330.0,6334011.0,15.0,32.9,10.8,183.3,150.4,False,arg,50,10.0,arg50,120.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-1,WELL1,2823330.0,6334011.0,10.0,33.6,11.3,185.3,151.7,False,arg,50,10.0,arg50,120.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-1,WELL1,2823330.0,6334011.0,-25.0,38.5,14.8,197.7,159.2,False,arg,51,-25.0,arg51,120.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-1,WELL1,2823330.0,6334011.0,-75.0,43.1,20.1,212.6,169.5,False,arg,52,-75.0,arg52,120.0,0.5,behind casing - conductive interpretation
-WELL-1,WELL1,2823330.0,6334011.0,-150.0,47.4,28.1,230.3,182.9,False,arg,53,-150.0,arg53,120.0,0.5,behind casing - conductive interpretation
-WELL-1,WELL1,2823330.0,6334011.0,-250.0,52.4,38.6,248.3,195.9,False,arg,54,-250.0,arg54,120.0,0.5,behind casing - conductive interpretation
-WELL-1,WELL1,2823330.0,6334011.0,-350.0,60.9,48.7,262.3,201.4,False,arg,55,-350.0,arg55,120.0,0.5,behind casing - conductive interpretation
-WELL-1,WELL1,2823330.0,6334011.0,-450.0,69.0,58.6,274.1,205.1,False,arg,56,-450.0,arg56,120.0,0.5,behind casing - conductive interpretation
-WELL-1,WELL1,2823330.0,6334011.0,-550.0,76.4,68.4,284.3,207.9,False,arg,57,-550.0,arg57,120.0,0.5,behind casing - conductive interpretation
-WELL-1,WELL1,2823330.0,6334011.0,-650.0,83.5,78.6,293.8,210.3,False,arg,58,-650.0,arg58,120.0,0.5,behind casing - conductive interpretation
-WELL-1,WELL1,2823330.0,6334011.0,-750.0,89.8,89.0,302.5,212.7,False,arg,59,-750.0,arg59,120.0,0.5,behind casing - conductive interpretation
-WELL-1,WELL1,2823330.0,6334011.0,-850.0,95.3,99.3,310.5,215.2,False,arg,60,-850.0,arg60,120.0,0.5,behind casing - conductive interpretation
-WELL-1,WELL1,2823330.0,6334011.0,-950.0,100.2,109.5,317.7,217.5,False,arg,61,-950.0,arg61,120.0,0.5,behind casing - conductive interpretation
-WELL-1,WELL1,2823330.0,6334011.0,-1100.0,106.5,124.2,327.3,220.8,False,arg,62,-1100.0,arg62,120.0,0.8,open hole
-WELL-1,WELL1,2823330.0,6334011.0,-1300.0,112.5,143.2,338.5,226.0,False,arg,63,-1300.0,arg63,120.0,1.0,feed zone - most reliable formation temperature
-WELL-1,WELL1,2823330.0,6334011.0,-1337.5,113.2,146.7,340.4,227.2,True,arg,63,-1300.0,arg63,120.0,1.0,feed zone - most reliable formation temperature
-WELL-1,WELL1,2823330.0,6334011.0,-1465.0,115.5,158.7,346.7,231.2,True,arg,64,-1500.0,arg64,120.0,1.0,feed zone - most reliable formation temperature
-WELL-1,WELL1,2823330.0,6334011.0,-1500.0,116.2,162.0,348.4,232.2,False,arg,64,-1500.0,arg64,120.0,1.0,feed zone - most reliable formation temperature
-WELL-1,WELL1,2823330.0,6334011.0,-1672.0,118.6,178.2,356.2,237.6,False,arg,65,-1700.0,arg65,120.0,0.8,open hole
-WELL-2,WELL2,2819527.0,6335494.0,225.0,16.5,1.0,99.6,83.1,False,ajf,39,230.0,ajf39,260.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-2,WELL2,2819527.0,6335494.0,210.0,19.3,1.1,102.3,83.0,False,ajf,40,210.0,ajf40,260.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-2,WELL2,2819527.0,6335494.0,190.0,35.4,3.1,134.6,99.2,False,ajf,41,190.0,ajf41,260.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-2,WELL2,2819527.0,6335494.0,170.0,48.1,5.2,153.3,105.2,False,ajf,42,170.0,ajf42,260.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-2,WELL2,2819527.0,6335494.0,150.0,75.8,7.2,166.1,90.3,False,ajf,43,150.0,ajf43,260.0,0.5,behind casing - conductive interpretation
-WELL-2,WELL2,2819527.0,6335494.0,130.0,98.3,9.3,176.8,78.5,False,ajf,44,130.0,ajf44,260.0,0.5,behind casing - conductive interpretation
-WELL-2,WELL2,2819527.0,6335494.0,110.0,116.7,11.3,185.3,68.6,False,ajf,45,110.0,ajf45,260.0,0.5,behind casing - conductive interpretation
-WELL-2,WELL2,2819527.0,6335494.0,90.0,131.4,13.2,192.3,60.9,False,ajf,46,90.0,ajf46,260.0,0.5,behind casing - conductive interpretation
-WELL-2,WELL2,2819527.0,6335494.0,70.0,140.2,15.1,198.6,58.4,False,ajf,47,70.0,ajf47,260.0,0.5,behind casing - conductive interpretation
-WELL-2,WELL2,2819527.0,6335494.0,50.0,149.5,17.5,205.7,56.2,False,ajf,48,50.0,ajf48,260.0,0.5,behind casing - conductive interpretation
-WELL-2,WELL2,2819527.0,6335494.0,30.0,159.0,20.1,212.6,53.6,False,ajf,49,30.0,ajf49,260.0,0.5,behind casing - conductive interpretation
-WELL-2,WELL2,2819527.0,6335494.0,10.0,167.8,22.7,218.9,51.1,False,ajf,50,10.0,ajf50,260.0,0.5,behind casing - conductive interpretation
-WELL-2,WELL2,2819527.0,6335494.0,-25.0,181.7,27.5,229.1,47.4,False,ajf,51,-25.0,ajf51,260.0,0.5,behind casing - conductive interpretation
-WELL-2,WELL2,2819527.0,6335494.0,-75.0,198.4,34.3,241.4,43.0,False,ajf,52,-75.0,ajf52,260.0,0.5,behind casing - conductive interpretation
-WELL-2,WELL2,2819527.0,6335494.0,-150.0,218.5,43.9,255.9,37.4,False,ajf,53,-150.0,ajf53,260.0,0.8,open hole
-WELL-2,WELL2,2819527.0,6335494.0,-250.0,238.2,55.0,270.0,31.8,True,ajf,54,-250.0,ajf54,260.0,1.0,feed zone - most reliable formation temperature
-WELL-2,WELL2,2819527.0,6335494.0,-260.0,239.7,55.9,271.0,31.3,True,ajf,54,-250.0,ajf54,260.0,1.0,feed zone - most reliable formation temperature
-WELL-2,WELL2,2819527.0,6335494.0,-350.0,253.0,64.5,280.3,27.3,False,ajf,55,-350.0,ajf55,260.0,0.8,open hole
-WELL-2,WELL2,2819527.0,6335494.0,-450.0,265.3,73.4,289.1,23.8,False,ajf,56,-450.0,ajf56,260.0,0.8,open hole
-WELL-2,WELL2,2819527.0,6335494.0,-550.0,266.9,81.5,296.3,29.4,False,ajf,57,-550.0,ajf57,260.0,0.8,open hole
-WELL-2,WELL2,2819527.0,6335494.0,-650.0,263.6,89.7,303.1,39.5,False,ajf,58,-650.0,ajf58,260.0,0.8,open hole
-WELL-2,WELL2,2819527.0,6335494.0,-745.0,258.0,97.8,309.4,51.4,True,ajf,59,-750.0,ajf59,260.0,1.0,feed zone - most reliable formation temperature
-WELL-2,WELL2,2819527.0,6335494.0,-750.0,257.7,98.2,309.7,52.0,True,ajf,59,-750.0,ajf59,260.0,1.0,feed zone - most reliable formation temperature
-WELL-2,WELL2,2819527.0,6335494.0,-850.0,248.9,106.8,315.9,67.0,False,ajf,60,-850.0,ajf60,260.0,0.8,open hole
-WELL-2,WELL2,2819527.0,6335494.0,-950.0,242.7,115.6,321.8,79.1,False,ajf,61,-950.0,ajf61,260.0,0.8,open hole
-WELL-2,WELL2,2819527.0,6335494.0,-1100.0,237.8,128.9,330.2,92.4,False,ajf,62,-1100.0,ajf62,260.0,0.8,open hole
-WELL-2,WELL2,2819527.0,6335494.0,-1300.0,236.1,146.7,340.4,104.3,False,ajf,63,-1300.0,ajf63,260.0,0.8,open hole
-WELL-2,WELL2,2819527.0,6335494.0,-1500.0,236.0,164.5,349.6,113.6,False,ajf,64,-1500.0,ajf64,260.0,0.8,open hole
-WELL-2,WELL2,2819527.0,6335494.0,-1700.0,237.1,182.2,358.0,120.9,False,ajf,65,-1700.0,ajf65,260.0,0.8,open hole
-WELL-2,WELL2,2819527.0,6335494.0,-1900.0,240.0,199.8,365.7,125.7,True,ajf,66,-1900.0,ajf66,260.0,1.0,feed zone - most reliable formation temperature
-WELL-2,WELL2,2819527.0,6335494.0,-1910.0,240.3,200.7,366.0,125.7,True,ajf,66,-1900.0,ajf66,260.0,1.0,feed zone - most reliable formation temperature
-WELL-2,WELL2,2819527.0,6335494.0,-2250.0,251.6,230.4,376.8,125.2,False,ajf,67,-2250.0,ajf67,260.0,0.8,open hole
-WELL-2,WELL2,2819527.0,6335494.0,-2348.0,253.7,239.1,377.0,123.3,False,ajf,67,-2250.0,ajf67,260.0,0.8,open hole
-WELL-3,WELL3,2820133.0,6334454.0,164.0,35.1,1.4,109.3,74.2,False,asd,42,170.0,asd42,180.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-3,WELL3,2820133.0,6334454.0,150.0,42.6,2.4,126.1,83.5,False,asd,43,150.0,asd43,180.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-3,WELL3,2820133.0,6334454.0,130.0,63.3,4.4,147.1,83.8,False,asd,44,130.0,asd44,180.0,0.5,behind casing - conductive interpretation
-WELL-3,WELL3,2820133.0,6334454.0,110.0,93.0,6.4,161.4,68.4,False,asd,45,110.0,asd45,180.0,0.5,behind casing - conductive interpretation
-WELL-3,WELL3,2820133.0,6334454.0,90.0,118.3,8.4,172.4,54.1,False,asd,46,90.0,asd46,180.0,0.5,behind casing - conductive interpretation
-WELL-3,WELL3,2820133.0,6334454.0,70.0,140.0,10.3,181.2,41.2,False,asd,47,70.0,asd47,180.0,0.5,behind casing - conductive interpretation
-WELL-3,WELL3,2820133.0,6334454.0,50.0,158.5,12.4,189.5,31.0,False,asd,48,50.0,asd48,180.0,0.5,behind casing - conductive interpretation
-WELL-3,WELL3,2820133.0,6334454.0,30.0,174.2,15.3,199.2,25.0,False,asd,49,30.0,asd49,180.0,0.5,behind casing - conductive interpretation
-WELL-3,WELL3,2820133.0,6334454.0,10.0,187.6,18.6,208.7,21.1,False,asd,50,10.0,asd50,180.0,0.5,behind casing - conductive interpretation
-WELL-3,WELL3,2820133.0,6334454.0,-25.0,205.9,24.1,222.0,16.1,False,asd,51,-25.0,asd51,180.0,0.5,behind casing - conductive interpretation
-WELL-3,WELL3,2820133.0,6334454.0,-75.0,224.5,31.6,236.8,12.3,False,asd,52,-75.0,asd52,180.0,0.5,behind casing - conductive interpretation
-WELL-3,WELL3,2820133.0,6334454.0,-150.0,241.8,42.5,254.0,12.2,False,asd,53,-150.0,asd53,180.0,0.5,behind casing - conductive interpretation
-WELL-3,WELL3,2820133.0,6334454.0,-250.0,254.7,55.0,270.0,15.3,False,asd,54,-250.0,asd54,180.0,0.5,behind casing - conductive interpretation
-WELL-3,WELL3,2820133.0,6334454.0,-335.0,259.1,62.8,278.6,19.5,True,asd,55,-350.0,asd55,180.0,1.0,feed zone - most reliable formation temperature
-WELL-3,WELL3,2820133.0,6334454.0,-350.0,260.0,64.2,280.0,20.0,True,asd,55,-350.0,asd55,180.0,1.0,feed zone - most reliable formation temperature
-WELL-3,WELL3,2820133.0,6334454.0,-450.0,261.4,72.5,288.2,26.8,False,asd,56,-450.0,asd56,180.0,0.8,open hole
-WELL-3,WELL3,2820133.0,6334454.0,-550.0,260.7,80.7,295.6,34.9,False,asd,57,-550.0,asd57,180.0,0.8,open hole
-WELL-3,WELL3,2820133.0,6334454.0,-650.0,254.3,89.0,302.5,48.2,False,asd,58,-650.0,asd58,180.0,0.8,open hole
-WELL-3,WELL3,2820133.0,6334454.0,-750.0,243.7,97.4,309.1,65.4,False,asd,59,-750.0,asd59,180.0,0.8,open hole
-WELL-3,WELL3,2820133.0,6334454.0,-845.0,229.8,105.6,315.0,85.2,True,asd,60,-850.0,asd60,180.0,1.0,feed zone - most reliable formation temperature
-WELL-3,WELL3,2820133.0,6334454.0,-850.0,229.1,106.0,315.3,86.2,True,asd,60,-850.0,asd60,180.0,1.0,feed zone - most reliable formation temperature
-WELL-3,WELL3,2820133.0,6334454.0,-950.0,209.0,114.7,321.2,112.2,False,asd,61,-950.0,asd61,180.0,0.8,open hole
-WELL-3,WELL3,2820133.0,6334454.0,-1100.0,177.2,128.0,329.7,152.5,False,asd,62,-1100.0,asd62,180.0,0.8,open hole
-WELL-3,WELL3,2820133.0,6334454.0,-1300.0,177.0,145.8,339.9,162.9,False,asd,63,-1300.0,asd63,180.0,0.8,open hole
-WELL-3,WELL3,2820133.0,6334454.0,-1500.0,175.6,163.9,349.3,173.7,False,asd,64,-1500.0,asd64,180.0,0.8,open hole
-WELL-3,WELL3,2820133.0,6334454.0,-1700.0,174.5,182.1,358.0,183.5,False,asd,65,-1700.0,asd65,180.0,0.8,open hole
-WELL-3,WELL3,2820133.0,6334454.0,-1900.0,174.5,200.4,365.9,191.4,False,asd,66,-1900.0,asd66,180.0,0.8,open hole
-WELL-3,WELL3,2820133.0,6334454.0,-2250.0,176.7,231.9,376.9,200.2,False,asd,67,-2250.0,asd67,180.0,0.8,open hole
-WELL-3,WELL3,2820133.0,6334454.0,-2750.0,185.5,276.6,377.0,191.5,False,asd,68,-2750.0,asd68,180.0,0.8,open hole
-WELL-3,WELL3,2820133.0,6334454.0,-2887.0,188.2,288.8,377.0,188.8,False,asd,68,-2750.0,asd68,180.0,0.8,open hole
-WELL-4,WELL4,2822243.0,6337763.0,230.0,12.3,2.4,126.1,113.8,False,aop,39,230.0,aop39,340.0,0.5,behind casing - conductive interpretation
-WELL-4,WELL4,2822243.0,6337763.0,210.0,12.4,3.8,141.8,129.4,False,aop,40,210.0,aop40,340.0,0.5,behind casing - conductive interpretation
-WELL-4,WELL4,2822243.0,6337763.0,190.0,12.6,5.1,152.6,140.0,False,aop,41,190.0,aop41,340.0,0.5,behind casing - conductive interpretation
-WELL-4,WELL4,2822243.0,6337763.0,170.0,12.9,6.7,163.2,150.3,False,aop,42,170.0,aop42,340.0,0.5,behind casing - conductive interpretation
-WELL-4,WELL4,2822243.0,6337763.0,150.0,13.1,8.5,172.9,159.8,False,aop,43,150.0,aop43,340.0,0.5,behind casing - conductive interpretation
-WELL-4,WELL4,2822243.0,6337763.0,130.0,13.4,10.5,182.0,168.6,False,aop,44,130.0,aop44,340.0,0.5,behind casing - conductive interpretation
-WELL-4,WELL4,2822243.0,6337763.0,110.0,13.7,12.7,190.5,176.8,False,aop,45,110.0,aop45,340.0,0.5,behind casing - conductive interpretation
-WELL-4,WELL4,2822243.0,6337763.0,90.0,14.0,14.8,197.7,183.7,False,aop,46,90.0,aop46,340.0,0.5,behind casing - conductive interpretation
-WELL-4,WELL4,2822243.0,6337763.0,70.0,14.3,17.0,204.3,190.0,False,aop,47,70.0,aop47,340.0,0.5,behind casing - conductive interpretation
-WELL-4,WELL4,2822243.0,6337763.0,50.0,14.6,19.1,210.1,195.5,False,aop,48,50.0,aop48,340.0,0.5,behind casing - conductive interpretation
-WELL-4,WELL4,2822243.0,6337763.0,30.0,14.9,21.2,215.4,200.5,False,aop,49,30.0,aop49,340.0,0.5,behind casing - conductive interpretation
-WELL-4,WELL4,2822243.0,6337763.0,10.0,15.2,23.4,220.5,205.3,False,aop,50,10.0,aop50,340.0,0.5,behind casing - conductive interpretation
-WELL-4,WELL4,2822243.0,6337763.0,-25.0,15.7,27.1,228.3,212.6,False,aop,51,-25.0,aop51,340.0,0.5,behind casing - conductive interpretation
-WELL-4,WELL4,2822243.0,6337763.0,-75.0,16.5,32.5,238.3,221.8,False,aop,52,-75.0,aop52,340.0,0.5,behind casing - conductive interpretation
-WELL-4,WELL4,2822243.0,6337763.0,-150.0,17.6,40.5,251.1,233.5,False,aop,53,-150.0,aop53,340.0,0.5,behind casing - conductive interpretation
-WELL-4,WELL4,2822243.0,6337763.0,-250.0,19.4,51.1,265.3,245.9,False,aop,54,-250.0,aop54,340.0,0.5,behind casing - conductive interpretation
-WELL-4,WELL4,2822243.0,6337763.0,-350.0,21.1,61.4,277.1,256.0,False,aop,55,-350.0,aop55,340.0,0.5,behind casing - conductive interpretation
-WELL-4,WELL4,2822243.0,6337763.0,-450.0,23.1,71.3,287.1,264.0,False,aop,56,-450.0,aop56,340.0,0.5,behind casing - conductive interpretation
-WELL-4,WELL4,2822243.0,6337763.0,-550.0,25.2,81.3,296.1,270.9,False,aop,57,-550.0,aop57,340.0,0.8,open hole
-WELL-4,WELL4,2822243.0,6337763.0,-650.0,27.2,91.3,304.4,277.2,True,aop,58,-650.0,aop58,340.0,1.0,feed zone - most reliable formation temperature
-WELL-4,WELL4,2822243.0,6337763.0,-655.0,27.3,91.7,304.7,277.4,True,aop,58,-650.0,aop58,340.0,1.0,feed zone - most reliable formation temperature
-WELL-4,WELL4,2822243.0,6337763.0,-750.0,29.0,100.5,311.4,282.4,False,aop,59,-750.0,aop59,340.0,0.8,open hole
-WELL-5,WELL5,2822044.0,6334190.0,93.0,27.5,4.9,151.1,123.6,False,arc,46,90.0,arc46,140.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-5,WELL5,2822044.0,6334190.0,90.0,28.5,5.2,153.3,124.8,False,arc,46,90.0,arc46,140.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-5,WELL5,2822044.0,6334190.0,70.0,35.1,7.5,167.8,132.7,False,arc,47,70.0,arc47,140.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-5,WELL5,2822044.0,6334190.0,50.0,41.5,9.8,179.0,137.5,False,arc,48,50.0,arc48,140.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-5,WELL5,2822044.0,6334190.0,30.0,48.2,12.0,188.0,139.8,False,arc,49,30.0,arc49,140.0,0.5,behind casing - conductive interpretation
-WELL-5,WELL5,2822044.0,6334190.0,10.0,54.7,14.3,196.0,141.3,False,arc,50,10.0,arc50,140.0,0.5,behind casing - conductive interpretation
-WELL-5,WELL5,2822044.0,6334190.0,-25.0,65.9,18.2,207.7,141.8,False,arc,51,-25.0,arc51,140.0,0.5,behind casing - conductive interpretation
-WELL-5,WELL5,2822044.0,6334190.0,-75.0,79.7,24.2,222.2,142.5,False,arc,52,-75.0,arc52,140.0,0.5,behind casing - conductive interpretation
-WELL-5,WELL5,2822044.0,6334190.0,-150.0,98.0,33.3,239.7,141.7,False,arc,53,-150.0,arc53,140.0,0.5,behind casing - conductive interpretation
-WELL-5,WELL5,2822044.0,6334190.0,-250.0,118.3,44.9,257.3,139.0,False,arc,54,-250.0,arc54,140.0,0.5,behind casing - conductive interpretation
-WELL-5,WELL5,2822044.0,6334190.0,-350.0,135.2,56.2,271.4,136.2,False,arc,55,-350.0,arc55,140.0,0.5,behind casing - conductive interpretation
-WELL-5,WELL5,2822044.0,6334190.0,-450.0,148.8,66.8,282.7,133.9,False,arc,56,-450.0,arc56,140.0,0.5,behind casing - conductive interpretation
-WELL-5,WELL5,2822044.0,6334190.0,-550.0,157.0,76.5,291.9,134.9,False,arc,57,-550.0,arc57,140.0,0.5,behind casing - conductive interpretation
-WELL-5,WELL5,2822044.0,6334190.0,-650.0,158.0,86.0,300.1,142.1,False,arc,58,-650.0,arc58,140.0,0.5,behind casing - conductive interpretation
-WELL-5,WELL5,2822044.0,6334190.0,-750.0,157.1,95.4,307.6,150.5,False,arc,59,-750.0,arc59,140.0,0.5,behind casing - conductive interpretation
-WELL-5,WELL5,2822044.0,6334190.0,-850.0,156.1,104.7,314.4,158.3,False,arc,60,-850.0,arc60,140.0,0.5,behind casing - conductive interpretation
-WELL-5,WELL5,2822044.0,6334190.0,-950.0,155.0,114.0,320.8,165.8,False,arc,61,-950.0,arc61,140.0,0.5,behind casing - conductive interpretation
-WELL-5,WELL5,2822044.0,6334190.0,-1100.0,153.6,127.7,329.5,175.9,False,arc,62,-1100.0,arc62,140.0,0.8,open hole
-WELL-5,WELL5,2822044.0,6334190.0,-1300.0,147.7,145.8,339.9,192.2,True,arc,63,-1300.0,arc63,140.0,1.0,feed zone - most reliable formation temperature
-WELL-5,WELL5,2822044.0,6334190.0,-1325.0,147.3,148.1,341.1,193.8,True,arc,63,-1300.0,arc63,140.0,1.0,feed zone - most reliable formation temperature
-WELL-5,WELL5,2822044.0,6334190.0,-1500.0,144.8,164.0,349.4,204.6,True,arc,64,-1500.0,arc64,140.0,1.0,feed zone - most reliable formation temperature
-WELL-5,WELL5,2822044.0,6334190.0,-1525.0,144.8,166.3,350.5,205.7,True,arc,64,-1500.0,arc64,140.0,1.0,feed zone - most reliable formation temperature
-WELL-5,WELL5,2822044.0,6334190.0,-1700.0,144.7,182.2,358.0,213.3,False,arc,65,-1700.0,arc65,140.0,0.8,open hole
-WELL-5,WELL5,2822044.0,6334190.0,-1900.0,145.3,200.5,366.0,220.7,False,arc,66,-1900.0,arc66,140.0,0.8,open hole
-WELL-5,WELL5,2822044.0,6334190.0,-2250.0,147.4,232.6,376.9,229.5,False,arc,67,-2250.0,arc67,140.0,0.8,open hole
-WELL-5,WELL5,2822044.0,6334190.0,-2595.0,154.7,264.1,377.0,222.3,False,arc,68,-2750.0,arc68,140.0,0.8,open hole
-WELL-6,WELL6,2819841.0,6333177.0,147.0,21.8,2.0,120.2,98.4,False,aph,43,150.0,aph43,160.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-6,WELL6,2819841.0,6333177.0,130.0,30.9,3.7,140.8,109.9,False,aph,44,130.0,aph44,160.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-6,WELL6,2819841.0,6333177.0,110.0,43.4,5.7,156.8,113.4,False,aph,45,110.0,aph45,160.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-6,WELL6,2819841.0,6333177.0,90.0,55.5,7.7,168.8,113.3,False,aph,46,90.0,aph46,160.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-6,WELL6,2819841.0,6333177.0,70.0,67.4,9.7,178.6,111.2,False,aph,47,70.0,aph47,160.0,0.5,behind casing - conductive interpretation
-WELL-6,WELL6,2819841.0,6333177.0,50.0,79.6,11.7,186.8,107.2,False,aph,48,50.0,aph48,160.0,0.5,behind casing - conductive interpretation
-WELL-6,WELL6,2819841.0,6333177.0,30.0,91.0,14.2,195.7,104.7,False,aph,49,30.0,aph49,160.0,0.5,behind casing - conductive interpretation
-WELL-6,WELL6,2819841.0,6333177.0,10.0,101.6,17.2,204.9,103.3,False,aph,50,10.0,aph50,160.0,0.5,behind casing - conductive interpretation
-WELL-6,WELL6,2819841.0,6333177.0,-25.0,118.2,22.1,217.5,99.3,False,aph,51,-25.0,aph51,160.0,0.5,behind casing - conductive interpretation
-WELL-6,WELL6,2819841.0,6333177.0,-75.0,138.4,28.7,231.4,93.0,False,aph,52,-75.0,aph52,160.0,0.5,behind casing - conductive interpretation
-WELL-6,WELL6,2819841.0,6333177.0,-150.0,162.4,38.1,247.5,85.1,False,aph,53,-150.0,aph53,160.0,0.5,behind casing - conductive interpretation
-WELL-6,WELL6,2819841.0,6333177.0,-250.0,186.1,49.9,263.8,77.7,False,aph,54,-250.0,aph54,160.0,0.5,behind casing - conductive interpretation
-WELL-6,WELL6,2819841.0,6333177.0,-350.0,203.8,61.4,277.1,73.3,False,aph,55,-350.0,aph55,160.0,0.5,behind casing - conductive interpretation
-WELL-6,WELL6,2819841.0,6333177.0,-450.0,217.1,71.3,287.1,70.0,False,aph,56,-450.0,aph56,160.0,1.0,feed zone - most reliable formation temperature
-WELL-6,WELL6,2819841.0,6333177.0,-475.0,218.0,73.5,289.2,71.2,True,aph,56,-450.0,aph56,160.0,1.0,feed zone - most reliable formation temperature
-WELL-6,WELL6,2819841.0,6333177.0,-550.0,220.5,80.0,295.0,74.5,False,aph,57,-550.0,aph57,160.0,0.8,open hole
-WELL-6,WELL6,2819841.0,6333177.0,-650.0,209.4,88.4,302.1,92.7,False,aph,58,-650.0,aph58,160.0,0.8,open hole
-WELL-6,WELL6,2819841.0,6333177.0,-750.0,193.6,97.0,308.8,115.2,False,aph,59,-750.0,aph59,160.0,0.8,open hole
-WELL-6,WELL6,2819841.0,6333177.0,-850.0,176.2,105.7,315.1,138.9,False,aph,60,-850.0,aph60,160.0,0.8,open hole
-WELL-6,WELL6,2819841.0,6333177.0,-950.0,160.0,114.6,321.2,161.2,False,aph,61,-950.0,aph61,160.0,0.8,open hole
-WELL-6,WELL6,2819841.0,6333177.0,-1100.0,140.9,128.2,329.8,188.9,True,aph,62,-1100.0,aph62,160.0,1.0,feed zone - most reliable formation temperature
-WELL-6,WELL6,2819841.0,6333177.0,-1125.0,139.8,130.5,331.2,191.4,True,aph,62,-1100.0,aph62,160.0,1.0,feed zone - most reliable formation temperature
-WELL-6,WELL6,2819841.0,6333177.0,-1300.0,131.5,146.6,340.3,208.8,False,aph,63,-1300.0,aph63,160.0,0.8,open hole
-WELL-6,WELL6,2819841.0,6333177.0,-1500.0,126.7,165.1,349.9,223.2,False,aph,64,-1500.0,aph64,160.0,0.8,open hole
-WELL-6,WELL6,2819841.0,6333177.0,-1700.0,123.5,183.6,358.6,235.1,False,aph,65,-1700.0,aph65,160.0,0.8,open hole
-WELL-6,WELL6,2819841.0,6333177.0,-1900.0,122.4,202.1,366.6,244.2,False,aph,66,-1900.0,aph66,160.0,0.8,open hole
-WELL-6,WELL6,2819841.0,6333177.0,-2250.0,123.9,234.7,376.9,253.0,False,aph,67,-2250.0,aph67,160.0,0.8,open hole
-WELL-6,WELL6,2819841.0,6333177.0,-2359.0,126.1,244.8,377.0,250.9,False,aph,67,-2250.0,aph67,160.0,0.8,open hole
-WELL-7,WELL7,2820840.0,6332682.0,190.0,18.6,1.0,99.6,81.0,False,apk,41,190.0,apk41,240.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-7,WELL7,2820840.0,6332682.0,170.0,21.8,1.1,102.3,80.5,False,apk,42,170.0,apk42,240.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-7,WELL7,2820840.0,6332682.0,150.0,24.7,2.1,121.8,97.1,False,apk,43,150.0,apk43,240.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-7,WELL7,2820840.0,6332682.0,130.0,29.3,4.0,143.6,114.3,False,apk,44,130.0,apk44,240.0,0.5,behind casing - conductive interpretation
-WELL-7,WELL7,2820840.0,6332682.0,110.0,33.9,6.1,159.5,125.6,False,apk,45,110.0,apk45,240.0,0.5,behind casing - conductive interpretation
-WELL-7,WELL7,2820840.0,6332682.0,90.0,38.7,8.3,171.9,133.2,False,apk,46,90.0,apk46,240.0,0.5,behind casing - conductive interpretation
-WELL-7,WELL7,2820840.0,6332682.0,70.0,44.0,10.4,181.6,137.6,False,apk,47,70.0,apk47,240.0,0.5,behind casing - conductive interpretation
-WELL-7,WELL7,2820840.0,6332682.0,50.0,51.3,12.7,190.5,139.2,False,apk,48,50.0,apk48,240.0,0.5,behind casing - conductive interpretation
-WELL-7,WELL7,2820840.0,6332682.0,30.0,58.4,15.3,199.2,140.8,False,apk,49,30.0,apk49,240.0,0.5,behind casing - conductive interpretation
-WELL-7,WELL7,2820840.0,6332682.0,10.0,65.1,17.7,206.3,141.2,False,apk,50,10.0,apk50,240.0,0.5,behind casing - conductive interpretation
-WELL-7,WELL7,2820840.0,6332682.0,-25.0,76.2,21.9,217.0,140.8,False,apk,51,-25.0,apk51,240.0,0.5,behind casing - conductive interpretation
-WELL-7,WELL7,2820840.0,6332682.0,-75.0,90.4,27.7,229.5,139.1,False,apk,52,-75.0,apk52,240.0,0.5,behind casing - conductive interpretation
-WELL-7,WELL7,2820840.0,6332682.0,-150.0,109.0,36.1,244.3,135.3,False,apk,53,-150.0,apk53,240.0,0.5,behind casing - conductive interpretation
-WELL-7,WELL7,2820840.0,6332682.0,-250.0,129.1,46.9,260.0,130.9,False,apk,54,-250.0,apk54,240.0,0.5,behind casing - conductive interpretation
-WELL-7,WELL7,2820840.0,6332682.0,-350.0,145.4,57.6,272.9,127.5,False,apk,55,-350.0,apk55,240.0,0.5,behind casing - conductive interpretation
-WELL-7,WELL7,2820840.0,6332682.0,-450.0,158.5,68.1,284.0,125.5,False,apk,56,-450.0,apk56,240.0,0.8,open hole
-WELL-7,WELL7,2820840.0,6332682.0,-475.0,161.0,70.7,286.5,125.5,False,apk,56,-450.0,apk56,240.0,0.8,open hole
-WELL-7,WELL7,2820840.0,6332682.0,-550.0,168.6,78.4,293.6,125.0,False,apk,57,-550.0,apk57,240.0,0.8,open hole
-WELL-7,WELL7,2820840.0,6332682.0,-630.0,175.1,86.0,300.1,125.0,True,apk,58,-650.0,apk58,240.0,1.0,feed zone - most reliable formation temperature
-WELL-7,WELL7,2820840.0,6332682.0,-650.0,176.7,87.9,301.7,125.0,True,apk,58,-650.0,apk58,240.0,1.0,feed zone - most reliable formation temperature
-WELL-7,WELL7,2820840.0,6332682.0,-750.0,173.7,96.6,308.5,134.8,False,apk,59,-750.0,apk59,240.0,0.8,open hole
-WELL-7,WELL7,2820840.0,6332682.0,-850.0,167.9,105.5,315.0,147.1,False,apk,60,-850.0,apk60,240.0,0.8,open hole
-WELL-7,WELL7,2820840.0,6332682.0,-950.0,158.7,114.4,321.0,162.3,False,apk,61,-950.0,apk61,240.0,0.8,open hole
-WELL-7,WELL7,2820840.0,6332682.0,-1100.0,144.3,128.0,329.7,185.4,False,apk,62,-1100.0,apk62,240.0,0.8,open hole
-WELL-7,WELL7,2820840.0,6332682.0,-1300.0,131.3,146.4,340.2,208.9,True,apk,63,-1300.0,apk63,240.0,1.0,feed zone - most reliable formation temperature
-WELL-7,WELL7,2820840.0,6332682.0,-1325.0,131.3,148.7,341.5,210.2,True,apk,63,-1300.0,apk63,240.0,1.0,feed zone - most reliable formation temperature
-WELL-7,WELL7,2820840.0,6332682.0,-1500.0,130.9,164.8,349.8,218.9,False,apk,64,-1500.0,apk64,240.0,0.8,open hole
-WELL-7,WELL7,2820840.0,6332682.0,-1700.0,130.7,183.3,358.5,227.8,False,apk,65,-1700.0,apk65,240.0,0.8,open hole
-WELL-7,WELL7,2820840.0,6332682.0,-1900.0,131.2,201.8,366.5,235.3,False,apk,66,-1900.0,apk66,240.0,0.8,open hole
-WELL-7,WELL7,2820840.0,6332682.0,-2250.0,134.0,234.2,376.9,242.9,False,apk,67,-2250.0,apk67,240.0,0.8,open hole
-WELL-7,WELL7,2820840.0,6332682.0,-2750.0,144.4,280.4,377.0,232.6,False,apk,68,-2750.0,apk68,240.0,0.8,open hole
-WELL-7,WELL7,2820840.0,6332682.0,-2762.0,144.7,281.5,377.0,232.3,False,apk,68,-2750.0,apk68,240.0,0.8,open hole
-WELL-8,WELL8,2818757.0,6332185.0,176.0,12.8,1.8,116.9,104.1,False,ana,42,170.0,ana42,260.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-8,WELL8,2818757.0,6332185.0,170.0,12.9,2.0,120.2,107.3,False,ana,42,170.0,ana42,260.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-8,WELL8,2818757.0,6332185.0,150.0,13.7,3.9,142.7,129.0,False,ana,43,150.0,ana43,260.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-8,WELL8,2818757.0,6332185.0,130.0,15.5,5.9,158.2,142.7,False,ana,44,130.0,ana44,260.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-8,WELL8,2818757.0,6332185.0,110.0,17.2,7.9,169.9,152.7,False,ana,45,110.0,ana45,260.0,0.5,behind casing - conductive interpretation
-WELL-8,WELL8,2818757.0,6332185.0,90.0,18.9,10.0,179.9,161.0,False,ana,46,90.0,ana46,260.0,0.5,behind casing - conductive interpretation
-WELL-8,WELL8,2818757.0,6332185.0,70.0,20.7,12.2,188.7,168.0,False,ana,47,70.0,ana47,260.0,0.5,behind casing - conductive interpretation
-WELL-8,WELL8,2818757.0,6332185.0,50.0,22.3,14.5,196.7,174.4,False,ana,48,50.0,ana48,260.0,0.5,behind casing - conductive interpretation
-WELL-8,WELL8,2818757.0,6332185.0,30.0,24.0,16.6,203.2,179.2,False,ana,49,30.0,ana49,260.0,0.5,behind casing - conductive interpretation
-WELL-8,WELL8,2818757.0,6332185.0,10.0,25.8,18.7,209.0,183.2,False,ana,50,10.0,ana50,260.0,0.5,behind casing - conductive interpretation
-WELL-8,WELL8,2818757.0,6332185.0,-25.0,29.1,22.4,218.2,189.1,False,ana,51,-25.0,ana51,260.0,0.5,behind casing - conductive interpretation
-WELL-8,WELL8,2818757.0,6332185.0,-75.0,33.7,27.8,229.7,196.0,False,ana,52,-75.0,ana52,260.0,0.5,behind casing - conductive interpretation
-WELL-8,WELL8,2818755.2,6332185.4,-150.0,40.2,35.7,243.7,203.5,False,ana,53,-150.0,ana53,260.0,0.5,behind casing - conductive interpretation
-WELL-8,WELL8,2818752.5,6332186.0,-250.0,48.0,46.1,258.9,210.9,False,ana,54,-250.0,ana54,260.0,0.5,behind casing - conductive interpretation
-WELL-8,WELL8,2818740.5,6332189.4,-350.0,54.5,56.3,271.5,217.0,False,ana,55,-350.0,ana55,260.0,0.5,behind casing - conductive interpretation
-WELL-8,WELL8,2818725.6,6332193.5,-450.0,59.9,66.4,282.3,222.4,False,ana,56,-450.0,ana56,260.0,0.5,behind casing - conductive interpretation
-WELL-8,WELL8,2818703.6,6332201.3,-550.0,63.9,76.3,291.7,227.8,False,ana,57,-550.0,ana57,260.0,0.5,behind casing - conductive interpretation
-WELL-8,WELL8,2818679.8,6332210.2,-650.0,66.5,86.2,300.3,233.8,False,ana,58,-650.0,ana58,260.0,0.5,behind casing - conductive interpretation
-WELL-8,WELL8,2818651.2,6332219.1,-750.0,67.8,95.9,307.9,240.1,False,ana,59,-750.0,ana59,260.0,0.8,open hole
-WELL-8,WELL8,2818621.8,6332227.9,-850.0,68.1,105.5,315.0,246.9,False,ana,60,-850.0,ana60,260.0,0.8,open hole
-WELL-8,WELL8,2818590.3,6332236.4,-950.0,67.1,115.0,321.4,254.3,False,ana,61,-950.0,ana61,260.0,0.8,open hole
-WELL-8,WELL8,2818530.9,6332249.4,-1100.0,63.8,129.5,330.6,266.8,True,ana,62,-1100.0,ana62,260.0,1.0,feed zone - most reliable formation temperature
-WELL-8,WELL8,2818520.2,6332251.5,-1125.0,63.9,132.0,332.0,268.1,True,ana,62,-1100.0,ana62,260.0,1.0,feed zone - most reliable formation temperature
-WELL-8,WELL8,2818442.9,6332263.5,-1300.0,63.6,149.4,341.8,278.2,False,anb,63,-1300.0,anb63,280.0,0.8,open hole
-WELL-8,WELL8,2818354.2,6332274.0,-1500.0,64.5,169.2,351.9,287.4,False,anb,64,-1500.0,anb64,280.0,0.8,open hole
-WELL-8,WELL8,2818266.1,6332284.2,-1700.0,66.8,188.9,361.0,294.2,False,anb,65,-1700.0,anb65,280.0,0.8,open hole
-WELL-8,WELL8,2818174.1,6332293.2,-1900.0,70.7,208.6,369.3,298.6,False,anb,66,-1900.0,anb66,280.0,0.8,open hole
-WELL-8,WELL8,2818001.9,6332311.7,-2250.0,79.1,242.9,377.0,297.9,False,anb,67,-2250.0,anb67,280.0,0.8,open hole
-WELL-8,WELL8,2817771.1,6332350.5,-2716.1,93.1,288.6,377.0,283.9,False,amw,68,-2750.0,amw68,440.0,0.8,open hole
-WELL-9,WELL9,2820920.0,6335679.0,174.0,16.9,1.4,109.3,92.4,False,ajj,42,170.0,ajj42,220.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-9,WELL9,2820920.0,6335679.0,170.0,17.4,1.5,111.4,94.0,False,ajj,42,170.0,ajj42,220.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-9,WELL9,2820920.0,6335679.0,150.0,18.0,3.2,135.7,117.7,False,ajj,43,150.0,ajj43,220.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-9,WELL9,2820920.0,6335679.0,130.0,19.5,5.0,151.8,132.3,False,ajj,44,130.0,ajj44,220.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-9,WELL9,2820920.0,6335679.0,110.0,22.3,6.8,163.8,141.5,False,ajj,45,110.0,ajj45,220.0,0.5,behind casing - conductive interpretation
-WELL-9,WELL9,2820920.0,6335679.0,90.0,27.0,8.7,173.9,146.9,False,ajj,46,90.0,ajj46,220.0,0.5,behind casing - conductive interpretation
-WELL-9,WELL9,2820920.0,6335679.0,70.0,33.7,10.6,182.4,148.7,False,ajj,47,70.0,ajj47,220.0,0.5,behind casing - conductive interpretation
-WELL-9,WELL9,2820920.0,6335679.0,50.0,41.8,12.5,189.8,148.0,False,ajj,48,50.0,ajj48,220.0,0.5,behind casing - conductive interpretation
-WELL-9,WELL9,2820920.0,6335679.0,30.0,49.9,14.5,196.7,146.8,False,ajj,49,30.0,ajj49,220.0,0.5,behind casing - conductive interpretation
-WELL-9,WELL9,2820920.0,6335679.0,10.0,58.9,16.9,204.0,145.1,False,ajj,50,10.0,ajj50,220.0,0.5,behind casing - conductive interpretation
-WELL-9,WELL9,2820920.0,6335679.0,-25.0,75.5,21.8,216.8,141.3,False,ajj,51,-25.0,ajj51,220.0,0.5,behind casing - conductive interpretation
-WELL-9,WELL9,2820920.0,6335678.9,-75.0,96.7,28.5,231.0,134.3,False,ajj,52,-75.0,ajj52,220.0,0.5,behind casing - conductive interpretation
-WELL-9,WELL9,2820921.1,6335678.3,-150.0,123.8,37.8,247.0,123.2,False,ajj,53,-150.0,ajj53,220.0,0.5,behind casing - conductive interpretation
-WELL-9,WELL9,2820927.2,6335674.8,-250.0,153.0,49.3,263.1,110.1,False,ajj,54,-250.0,ajj54,220.0,0.5,behind casing - conductive interpretation
-WELL-9,WELL9,2820942.1,6335666.2,-350.0,176.0,60.3,275.9,99.9,False,ajj,55,-350.0,ajj55,220.0,0.5,behind casing - conductive interpretation
-WELL-9,WELL9,2820968.5,6335650.9,-450.0,193.6,70.8,286.6,93.0,False,ajj,56,-450.0,ajj56,220.0,0.8,open hole
-WELL-9,WELL9,2820993.0,6335636.8,-535.0,205.4,78.9,294.0,88.6,True,ajj,57,-550.0,ajj57,220.0,1.0,feed zone - most reliable formation temperature
-WELL-9,WELL9,2820997.5,6335634.2,-550.0,207.5,80.3,295.3,87.8,True,ajj,57,-550.0,ajj57,220.0,1.0,feed zone - most reliable formation temperature
-WELL-9,WELL9,2821030.7,6335615.0,-650.0,214.0,89.1,302.6,88.6,False,ajq,58,-650.0,ajq58,200.0,0.8,open hole
-WELL-9,WELL9,2821067.8,6335593.6,-750.0,217.7,97.7,309.3,91.6,False,ajq,59,-750.0,ajq59,200.0,0.8,open hole
-WELL-9,WELL9,2821101.3,6335573.7,-837.5,211.6,105.2,314.7,103.1,True,ajq,60,-850.0,ajq60,200.0,1.0,feed zone - most reliable formation temperature
-WELL-9,WELL9,2821106.2,6335570.6,-850.0,210.7,106.2,315.5,104.8,False,ajq,60,-850.0,ajq60,200.0,1.0,feed zone - most reliable formation temperature
-WELL-9,WELL9,2821145.1,6335546.4,-950.0,198.8,114.9,321.4,122.6,False,ajq,61,-950.0,ajq61,200.0,0.8,open hole
-WELL-9,WELL9,2821201.0,6335510.1,-1100.0,187.9,128.1,329.7,141.8,False,ajq,62,-1100.0,ajq62,200.0,0.8,open hole
-WELL-9,WELL9,2821274.5,6335460.1,-1300.0,185.4,146.0,340.0,154.6,False,ajq,63,-1300.0,ajq63,200.0,0.8,open hole
-WELL-9,WELL9,2821352.4,6335406.6,-1500.0,182.5,163.9,349.3,166.8,False,asg,64,-1500.0,asg64,180.0,0.8,open hole
-WELL-9,WELL9,2821421.8,6335355.6,-1700.0,177.3,182.1,358.0,180.7,False,asg,65,-1700.0,asg65,180.0,0.8,open hole
-WELL-9,WELL9,2821484.3,6335306.7,-1900.0,171.9,200.3,365.9,194.0,False,asg,66,-1900.0,asg66,180.0,0.8,open hole
-WELL-9,WELL9,2821582.6,6335224.6,-2250.0,160.0,232.3,376.9,216.9,False,asf,67,-2250.0,asf67,160.0,0.8,open hole
-WELL-9,WELL9,2821632.0,6335183.2,-2427.1,161.6,248.5,377.0,215.4,False,asf,67,-2250.0,asf67,160.0,0.8,open hole
-WELL-10,WEL10,2819400.0,6334900.0,210.0,24.6,1.0,99.6,75.0,False,arz,40,210.0,arz40,260.0,0.3,near-surface / wellhead - affected by casing & air
-WELL-10,WEL10,2819400.0,6334900.0,190.0,45.1,1.9,118.6,73.5,False,arz,41,190.0,arz41,260.0,0.5,behind casing - conductive interpretation
-WELL-10,WEL10,2819400.0,6334900.0,170.0,93.4,3.6,139.9,46.5,False,arz,42,170.0,arz42,260.0,0.5,behind casing - conductive interpretation
-WELL-10,WEL10,2819400.0,6334900.0,150.0,118.2,6.0,158.8,40.6,False,arz,43,150.0,arz43,260.0,0.5,behind casing - conductive interpretation
-WELL-10,WEL10,2819400.0,6334900.0,130.0,138.6,8.4,172.4,33.8,False,arz,44,130.0,arz44,260.0,0.5,behind casing - conductive interpretation
-WELL-10,WEL10,2819400.0,6334900.0,110.0,156.8,11.1,184.5,27.7,False,arz,45,110.0,arz45,260.0,0.5,behind casing - conductive interpretation
-WELL-10,WEL10,2819400.0,6334900.0,90.0,172.9,13.9,194.7,21.8,False,arz,46,90.0,arz46,260.0,0.5,behind casing - conductive interpretation
-WELL-10,WEL10,2819400.0,6334900.0,70.0,186.7,16.5,202.9,16.2,False,arz,47,70.0,arz47,260.0,0.5,behind casing - conductive interpretation
-WELL-10,WEL10,2819400.0,6334900.0,50.0,198.0,19.1,210.1,12.1,False,arz,48,50.0,arz48,260.0,0.5,behind casing - conductive interpretation
-WELL-10,WEL10,2819400.0,6334900.0,30.0,207.0,21.9,217.0,10.0,False,arz,49,30.0,arz49,260.0,0.5,behind casing - conductive interpretation
-WELL-10,WEL10,2819400.0,6334900.0,10.0,215.6,24.9,223.7,8.1,False,arz,50,10.0,arz50,260.0,0.5,behind casing - conductive interpretation
-WELL-10,WEL10,2819400.0,6334900.0,-25.0,227.9,29.9,233.7,5.8,False,arz,51,-25.0,arz51,260.0,0.5,behind casing - conductive interpretation
-WELL-10,WEL10,2819400.0,6334900.0,-75.0,241.7,36.7,245.3,3.6,False,arz,52,-75.0,arz52,260.0,0.5,behind casing - conductive interpretation
-WELL-10,WEL10,2819400.0,6334900.0,-150.0,256.8,46.5,259.4,2.6,False,arz,53,-150.0,arz53,260.0,0.5,behind casing - conductive interpretation
-WELL-10,WEL10,2819400.0,6334900.0,-250.0,268.7,56.7,271.9,3.2,True,arz,54,-250.0,arz54,260.0,1.0,feed zone - most reliable formation temperature
-WELL-10,WEL10,2819400.0,6334900.0,-262.5,268.7,57.7,273.0,4.3,True,arz,54,-250.0,arz54,260.0,1.0,feed zone - most reliable formation temperature
-WELL-10,WEL10,2819400.0,6334900.0,-350.0,268.5,64.4,280.2,11.7,False,arz,55,-350.0,arz55,260.0,0.8,open hole
+well,block,column,layer,layer_top,layer_centre,layer_bottom,well_in_block_top,well_in_block_bottom,T_mean_over_well_interval,P_mean_over_well_interval_bar,T_at_layer_centre,P_at_layer_centre_bar,feed_zone_block
+WELL-1,arg50,arg,50,20.0,10.0,0.0,15.0,0.0,34.0,11.6,33.6,11.3,False
+WELL-1,arg51,arg,51,0.0,-25.0,-50.0,0.0,-50.0,38.2,14.8,38.5,14.8,False
+WELL-1,arg52,arg,52,-50.0,-75.0,-100.0,-50.0,-100.0,42.9,20.1,43.1,20.1,False
+WELL-1,arg53,arg,53,-100.0,-150.0,-200.0,-100.0,-200.0,47.3,28.1,47.4,28.1,False
+WELL-1,arg54,arg,54,-200.0,-250.0,-300.0,-200.0,-300.0,52.9,38.5,52.4,38.6,False
+WELL-1,arg55,arg,55,-300.0,-350.0,-400.0,-300.0,-400.0,60.8,48.7,60.9,48.7,False
+WELL-1,arg56,arg,56,-400.0,-450.0,-500.0,-400.0,-500.0,68.9,58.6,69.0,58.6,False
+WELL-1,arg57,arg,57,-500.0,-550.0,-600.0,-500.0,-600.0,76.4,68.5,76.4,68.4,False
+WELL-1,arg58,arg,58,-600.0,-650.0,-700.0,-600.0,-700.0,83.4,78.6,83.5,78.6,False
+WELL-1,arg59,arg,59,-700.0,-750.0,-800.0,-700.0,-800.0,89.7,89.0,89.8,89.0,False
+WELL-1,arg60,arg,60,-800.0,-850.0,-900.0,-800.0,-900.0,95.2,99.3,95.3,99.3,False
+WELL-1,arg61,arg,61,-900.0,-950.0,-1000.0,-900.0,-1000.0,100.1,109.4,100.2,109.5,False
+WELL-1,arg62,arg,62,-1000.0,-1100.0,-1200.0,-1000.0,-1200.0,106.2,124.1,106.5,124.2,False
+WELL-1,arg63,arg,63,-1200.0,-1300.0,-1400.0,-1200.0,-1400.0,112.2,143.2,112.5,143.2,True
+WELL-1,arg64,arg,64,-1400.0,-1500.0,-1600.0,-1400.0,-1600.0,116.1,162.0,116.2,162.0,True
+WELL-1,arg65,arg,65,-1600.0,-1700.0,-1800.0,-1600.0,-1672.0,118.1,174.8,,,False
+WELL-2,ajf39,ajf,39,240.0,230.0,220.0,225.0,220.0,17.0,1.0,,,False
+WELL-2,ajf40,ajf,40,220.0,210.0,200.0,220.0,200.0,21.0,1.4,19.3,1.1,False
+WELL-2,ajf41,ajf,41,200.0,190.0,180.0,200.0,180.0,34.9,3.1,35.4,3.1,False
+WELL-2,ajf42,ajf,42,180.0,170.0,160.0,180.0,160.0,50.2,5.2,48.1,5.2,False
+WELL-2,ajf43,ajf,43,160.0,150.0,140.0,160.0,140.0,75.1,7.2,75.8,7.2,False
+WELL-2,ajf44,ajf,44,140.0,130.0,120.0,140.0,120.0,97.7,9.3,98.3,9.3,False
+WELL-2,ajf45,ajf,45,120.0,110.0,100.0,120.0,100.0,116.2,11.3,116.7,11.3,False
+WELL-2,ajf46,ajf,46,100.0,90.0,80.0,100.0,80.0,130.6,13.2,131.4,13.2,False
+WELL-2,ajf47,ajf,47,80.0,70.0,60.0,80.0,60.0,140.3,15.2,140.2,15.1,False
+WELL-2,ajf48,ajf,48,60.0,50.0,40.0,60.0,40.0,149.5,17.5,149.5,17.5,False
+WELL-2,ajf49,ajf,49,40.0,30.0,20.0,40.0,20.0,158.9,20.1,159.0,20.1,False
+WELL-2,ajf50,ajf,50,20.0,10.0,0.0,20.0,0.0,167.7,22.7,167.8,22.7,False
+WELL-2,ajf51,ajf,51,0.0,-25.0,-50.0,0.0,-50.0,181.3,27.5,181.7,27.5,False
+WELL-2,ajf52,ajf,52,-50.0,-75.0,-100.0,-50.0,-100.0,197.9,34.2,198.4,34.3,False
+WELL-2,ajf53,ajf,53,-100.0,-150.0,-200.0,-100.0,-200.0,217.5,43.7,218.5,43.9,False
+WELL-2,ajf54,ajf,54,-200.0,-250.0,-300.0,-200.0,-300.0,237.5,54.8,238.2,55.0,True
+WELL-2,ajf55,ajf,55,-300.0,-350.0,-400.0,-300.0,-400.0,252.7,64.4,253.0,64.5,False
+WELL-2,ajf56,ajf,56,-400.0,-450.0,-500.0,-400.0,-500.0,263.8,73.3,265.3,73.4,False
+WELL-2,ajf57,ajf,57,-500.0,-550.0,-600.0,-500.0,-600.0,266.2,81.5,266.9,81.5,False
+WELL-2,ajf58,ajf,58,-600.0,-650.0,-700.0,-600.0,-700.0,263.2,89.7,263.6,89.7,False
+WELL-2,ajf59,ajf,59,-700.0,-750.0,-800.0,-700.0,-800.0,257.3,98.2,257.7,98.2,True
+WELL-2,ajf60,ajf,60,-800.0,-850.0,-900.0,-800.0,-900.0,249.3,106.8,248.9,106.8,False
+WELL-2,ajf61,ajf,61,-900.0,-950.0,-1000.0,-900.0,-1000.0,243.1,115.6,242.7,115.6,False
+WELL-2,ajf62,ajf,62,-1000.0,-1100.0,-1200.0,-1000.0,-1200.0,238.5,128.9,237.8,128.9,False
+WELL-2,ajf63,ajf,63,-1200.0,-1300.0,-1400.0,-1200.0,-1400.0,236.3,146.7,236.1,146.7,False
+WELL-2,ajf64,ajf,64,-1400.0,-1500.0,-1600.0,-1400.0,-1600.0,236.2,164.5,236.0,164.5,False
+WELL-2,ajf65,ajf,65,-1600.0,-1700.0,-1800.0,-1600.0,-1800.0,237.4,182.2,237.1,182.2,False
+WELL-2,ajf66,ajf,66,-1800.0,-1900.0,-2000.0,-1800.0,-2000.0,240.5,199.8,240.0,199.8,True
+WELL-2,ajf67,ajf,67,-2000.0,-2250.0,-2500.0,-2000.0,-2348.0,248.9,223.8,251.6,230.4,False
+WELL-3,asd42,asd,42,180.0,170.0,160.0,164.0,160.0,36.2,1.5,,,False
+WELL-3,asd43,asd,43,160.0,150.0,140.0,160.0,140.0,44.0,2.5,42.6,2.4,False
+WELL-3,asd44,asd,44,140.0,130.0,120.0,140.0,120.0,64.6,4.4,63.3,4.4,False
+WELL-3,asd45,asd,45,120.0,110.0,100.0,120.0,100.0,92.4,6.4,93.0,6.4,False
+WELL-3,asd46,asd,46,100.0,90.0,80.0,100.0,80.0,117.8,8.4,118.3,8.4,False
+WELL-3,asd47,asd,47,80.0,70.0,60.0,80.0,60.0,139.6,10.3,140.0,10.3,False
+WELL-3,asd48,asd,48,60.0,50.0,40.0,60.0,40.0,158.1,12.5,158.5,12.4,False
+WELL-3,asd49,asd,49,40.0,30.0,20.0,40.0,20.0,173.9,15.4,174.2,15.3,False
+WELL-3,asd50,asd,50,20.0,10.0,0.0,20.0,0.0,187.2,18.6,187.6,18.6,False
+WELL-3,asd51,asd,51,0.0,-25.0,-50.0,0.0,-50.0,204.9,24.1,205.9,24.1,False
+WELL-3,asd52,asd,52,-50.0,-75.0,-100.0,-50.0,-100.0,223.5,31.6,224.5,31.6,False
+WELL-3,asd53,asd,53,-100.0,-150.0,-200.0,-100.0,-200.0,240.4,42.2,241.8,42.5,False
+WELL-3,asd54,asd,54,-200.0,-250.0,-300.0,-200.0,-300.0,253.6,54.5,254.7,55.0,False
+WELL-3,asd55,asd,55,-300.0,-350.0,-400.0,-300.0,-400.0,259.4,64.1,260.0,64.2,True
+WELL-3,asd56,asd,56,-400.0,-450.0,-500.0,-400.0,-500.0,261.1,72.5,261.4,72.5,False
+WELL-3,asd57,asd,57,-500.0,-550.0,-600.0,-500.0,-600.0,259.9,80.7,260.7,80.7,False
+WELL-3,asd58,asd,58,-600.0,-650.0,-700.0,-600.0,-700.0,253.7,89.0,254.3,89.0,False
+WELL-3,asd59,asd,59,-700.0,-750.0,-800.0,-700.0,-800.0,243.1,97.4,243.7,97.4,False
+WELL-3,asd60,asd,60,-800.0,-850.0,-900.0,-800.0,-900.0,228.3,106.0,229.1,106.0,True
+WELL-3,asd61,asd,61,-900.0,-950.0,-1000.0,-900.0,-1000.0,208.8,114.7,209.0,114.7,False
+WELL-3,asd62,asd,62,-1000.0,-1100.0,-1200.0,-1000.0,-1200.0,183.1,128.0,177.2,128.0,False
+WELL-3,asd63,asd,63,-1200.0,-1300.0,-1400.0,-1200.0,-1400.0,176.8,145.8,177.0,145.8,False
+WELL-3,asd64,asd,64,-1400.0,-1500.0,-1600.0,-1400.0,-1600.0,175.6,163.9,175.6,163.9,False
+WELL-3,asd65,asd,65,-1600.0,-1700.0,-1800.0,-1600.0,-1800.0,174.7,182.1,174.5,182.1,False
+WELL-3,asd66,asd,66,-1800.0,-1900.0,-2000.0,-1800.0,-2000.0,174.7,200.4,174.5,200.4,False
+WELL-3,asd67,asd,67,-2000.0,-2250.0,-2500.0,-2000.0,-2500.0,177.5,231.9,176.7,231.9,False
+WELL-3,asd68,asd,68,-2500.0,-2750.0,-3000.0,-2500.0,-2887.0,184.6,271.5,185.5,276.6,False
+WELL-4,aop34,aop,34,340.0,330.0,320.0,340.0,320.0,,,,,False
+WELL-4,aop35,aop,35,320.0,310.0,300.0,320.0,300.0,,,,,False
+WELL-4,aop36,aop,36,300.0,290.0,280.0,300.0,280.0,,,,,False
+WELL-4,aop37,aop,37,280.0,270.0,260.0,280.0,260.0,,,,,False
+WELL-4,aop38,aop,38,260.0,250.0,240.0,260.0,240.0,,,,,False
+WELL-4,aop39,aop,39,240.0,230.0,220.0,240.0,220.0,12.3,2.8,12.3,2.4,False
+WELL-4,aop40,aop,40,220.0,210.0,200.0,220.0,200.0,12.4,3.8,12.4,3.8,False
+WELL-4,aop41,aop,41,200.0,190.0,180.0,200.0,180.0,12.6,5.1,12.6,5.1,False
+WELL-4,aop42,aop,42,180.0,170.0,160.0,180.0,160.0,12.9,6.7,12.9,6.7,False
+WELL-4,aop43,aop,43,160.0,150.0,140.0,160.0,140.0,13.1,8.5,13.1,8.5,False
+WELL-4,aop44,aop,44,140.0,130.0,120.0,140.0,120.0,13.4,10.5,13.4,10.5,False
+WELL-4,aop45,aop,45,120.0,110.0,100.0,120.0,100.0,13.7,12.7,13.7,12.7,False
+WELL-4,aop46,aop,46,100.0,90.0,80.0,100.0,80.0,14.0,14.8,14.0,14.8,False
+WELL-4,aop47,aop,47,80.0,70.0,60.0,80.0,60.0,14.3,17.0,14.3,17.0,False
+WELL-4,aop48,aop,48,60.0,50.0,40.0,60.0,40.0,14.6,19.1,14.6,19.1,False
+WELL-4,aop49,aop,49,40.0,30.0,20.0,40.0,20.0,14.9,21.2,14.9,21.2,False
+WELL-4,aop50,aop,50,20.0,10.0,0.0,20.0,0.0,15.2,23.4,15.2,23.4,False
+WELL-4,aop51,aop,51,0.0,-25.0,-50.0,0.0,-50.0,15.7,27.1,15.7,27.1,False
+WELL-4,aop52,aop,52,-50.0,-75.0,-100.0,-50.0,-100.0,16.5,32.5,16.5,32.5,False
+WELL-4,aop53,aop,53,-100.0,-150.0,-200.0,-100.0,-200.0,17.6,40.5,17.6,40.5,False
+WELL-4,aop54,aop,54,-200.0,-250.0,-300.0,-200.0,-300.0,19.4,51.1,19.4,51.1,False
+WELL-4,aop55,aop,55,-300.0,-350.0,-400.0,-300.0,-400.0,21.1,61.3,21.1,61.4,False
+WELL-4,aop56,aop,56,-400.0,-450.0,-500.0,-400.0,-500.0,23.1,71.3,23.1,71.3,False
+WELL-4,aop57,aop,57,-500.0,-550.0,-600.0,-500.0,-600.0,25.2,81.3,25.2,81.3,False
+WELL-4,aop58,aop,58,-600.0,-650.0,-700.0,-600.0,-700.0,27.2,91.2,27.2,91.3,True
+WELL-4,aop59,aop,59,-700.0,-750.0,-800.0,-700.0,-750.0,28.6,98.2,29.0,100.5,False
+WELL-5,arc46,arc,46,100.0,90.0,80.0,93.0,80.0,29.7,5.6,28.5,5.2,False
+WELL-5,arc47,arc,47,80.0,70.0,60.0,80.0,60.0,35.1,7.5,35.1,7.5,False
+WELL-5,arc48,arc,48,60.0,50.0,40.0,60.0,40.0,41.5,9.8,41.5,9.8,False
+WELL-5,arc49,arc,49,40.0,30.0,20.0,40.0,20.0,48.2,12.0,48.2,12.0,False
+WELL-5,arc50,arc,50,20.0,10.0,0.0,20.0,0.0,54.7,14.3,54.7,14.3,False
+WELL-5,arc51,arc,51,0.0,-25.0,-50.0,0.0,-50.0,65.6,18.3,65.9,18.2,False
+WELL-5,arc52,arc,52,-50.0,-75.0,-100.0,-50.0,-100.0,79.5,24.2,79.7,24.2,False
+WELL-5,arc53,arc,53,-100.0,-150.0,-200.0,-100.0,-200.0,97.4,33.2,98.0,33.3,False
+WELL-5,arc54,arc,54,-200.0,-250.0,-300.0,-200.0,-300.0,117.8,44.9,118.3,44.9,False
+WELL-5,arc55,arc,55,-300.0,-350.0,-400.0,-300.0,-400.0,134.7,56.1,135.2,56.2,False
+WELL-5,arc56,arc,56,-400.0,-450.0,-500.0,-400.0,-500.0,148.1,66.7,148.8,66.8,False
+WELL-5,arc57,arc,57,-500.0,-550.0,-600.0,-500.0,-600.0,156.0,76.5,157.0,76.5,False
+WELL-5,arc58,arc,58,-600.0,-650.0,-700.0,-600.0,-700.0,157.7,86.0,158.0,86.0,False
+WELL-5,arc59,arc,59,-700.0,-750.0,-800.0,-700.0,-800.0,157.1,95.4,157.1,95.4,False
+WELL-5,arc60,arc,60,-800.0,-850.0,-900.0,-800.0,-900.0,156.1,104.7,156.1,104.7,False
+WELL-5,arc61,arc,61,-900.0,-950.0,-1000.0,-900.0,-1000.0,155.0,114.0,155.0,114.0,False
+WELL-5,arc62,arc,62,-1000.0,-1100.0,-1200.0,-1000.0,-1200.0,153.0,127.7,153.6,127.7,False
+WELL-5,arc63,arc,63,-1200.0,-1300.0,-1400.0,-1200.0,-1400.0,148.1,145.8,147.7,145.8,True
+WELL-5,arc64,arc,64,-1400.0,-1500.0,-1600.0,-1400.0,-1600.0,145.2,164.0,144.8,164.0,True
+WELL-5,arc65,arc,65,-1600.0,-1700.0,-1800.0,-1600.0,-1800.0,144.8,182.2,144.7,182.2,False
+WELL-5,arc66,arc,66,-1800.0,-1900.0,-2000.0,-1800.0,-2000.0,145.4,200.5,145.3,200.5,False
+WELL-5,arc67,arc,67,-2000.0,-2250.0,-2500.0,-2000.0,-2500.0,148.5,232.6,147.4,232.6,False
+WELL-5,arc68,arc,68,-2500.0,-2750.0,-3000.0,-2500.0,-2595.0,153.7,259.8,,,False
+WELL-6,aph43,aph,43,160.0,150.0,140.0,147.0,140.0,23.7,2.3,,,False
+WELL-6,aph44,aph,44,140.0,130.0,120.0,140.0,120.0,31.1,3.7,30.9,3.7,False
+WELL-6,aph45,aph,45,120.0,110.0,100.0,120.0,100.0,43.3,5.7,43.4,5.7,False
+WELL-6,aph46,aph,46,100.0,90.0,80.0,100.0,80.0,55.5,7.7,55.5,7.7,False
+WELL-6,aph47,aph,47,80.0,70.0,60.0,80.0,60.0,67.4,9.7,67.4,9.7,False
+WELL-6,aph48,aph,48,60.0,50.0,40.0,60.0,40.0,79.5,11.8,79.6,11.7,False
+WELL-6,aph49,aph,49,40.0,30.0,20.0,40.0,20.0,90.9,14.3,91.0,14.2,False
+WELL-6,aph50,aph,50,20.0,10.0,0.0,20.0,0.0,101.4,17.2,101.6,17.2,False
+WELL-6,aph51,aph,51,0.0,-25.0,-50.0,0.0,-50.0,117.7,22.0,118.2,22.1,False
+WELL-6,aph52,aph,52,-50.0,-75.0,-100.0,-50.0,-100.0,137.8,28.7,138.4,28.7,False
+WELL-6,aph53,aph,53,-100.0,-150.0,-200.0,-100.0,-200.0,161.2,38.0,162.4,38.1,False
+WELL-6,aph54,aph,54,-200.0,-250.0,-300.0,-200.0,-300.0,185.3,49.9,186.1,49.9,False
+WELL-6,aph55,aph,55,-300.0,-350.0,-400.0,-300.0,-400.0,203.2,61.2,203.8,61.4,False
+WELL-6,aph56,aph,56,-400.0,-450.0,-500.0,-400.0,-500.0,215.7,71.1,217.1,71.3,True
+WELL-6,aph57,aph,57,-500.0,-550.0,-600.0,-500.0,-600.0,218.5,80.0,220.5,80.0,False
+WELL-6,aph58,aph,58,-600.0,-650.0,-700.0,-600.0,-700.0,208.7,88.4,209.4,88.4,False
+WELL-6,aph59,aph,59,-700.0,-750.0,-800.0,-700.0,-800.0,193.4,97.0,193.6,97.0,False
+WELL-6,aph60,aph,60,-800.0,-850.0,-900.0,-800.0,-900.0,176.4,105.7,176.2,105.7,False
+WELL-6,aph61,aph,61,-900.0,-950.0,-1000.0,-900.0,-1000.0,160.5,114.6,160.0,114.6,False
+WELL-6,aph62,aph,62,-1000.0,-1100.0,-1200.0,-1000.0,-1200.0,143.2,128.2,140.9,128.2,True
+WELL-6,aph63,aph,63,-1200.0,-1300.0,-1400.0,-1200.0,-1400.0,132.2,146.6,131.5,146.6,False
+WELL-6,aph64,aph,64,-1400.0,-1500.0,-1600.0,-1400.0,-1600.0,126.9,165.1,126.7,165.1,False
+WELL-6,aph65,aph,65,-1600.0,-1700.0,-1800.0,-1600.0,-1800.0,123.8,183.6,123.5,183.6,False
+WELL-6,aph66,aph,66,-1800.0,-1900.0,-2000.0,-1800.0,-2000.0,122.7,202.1,122.4,202.1,False
+WELL-6,aph67,aph,67,-2000.0,-2250.0,-2500.0,-2000.0,-2359.0,123.9,228.1,123.9,234.7,False
+WELL-7,apk41,apk,41,200.0,190.0,180.0,190.0,180.0,19.4,1.0,18.6,1.0,False
+WELL-7,apk42,apk,42,180.0,170.0,160.0,180.0,160.0,21.8,1.2,21.8,1.1,False
+WELL-7,apk43,apk,43,160.0,150.0,140.0,160.0,140.0,24.9,2.2,24.7,2.1,False
+WELL-7,apk44,apk,44,140.0,130.0,120.0,140.0,120.0,29.3,4.0,29.3,4.0,False
+WELL-7,apk45,apk,45,120.0,110.0,100.0,120.0,100.0,33.9,6.1,33.9,6.1,False
+WELL-7,apk46,apk,46,100.0,90.0,80.0,100.0,80.0,38.8,8.3,38.7,8.3,False
+WELL-7,apk47,apk,47,80.0,70.0,60.0,80.0,60.0,44.3,10.4,44.0,10.4,False
+WELL-7,apk48,apk,48,60.0,50.0,40.0,60.0,40.0,51.3,12.7,51.3,12.7,False
+WELL-7,apk49,apk,49,40.0,30.0,20.0,40.0,20.0,58.3,15.3,58.4,15.3,False
+WELL-7,apk50,apk,50,20.0,10.0,0.0,20.0,0.0,65.1,17.7,65.1,17.7,False
+WELL-7,apk51,apk,51,0.0,-25.0,-50.0,0.0,-50.0,76.0,21.9,76.2,21.9,False
+WELL-7,apk52,apk,52,-50.0,-75.0,-100.0,-50.0,-100.0,90.2,27.7,90.4,27.7,False
+WELL-7,apk53,apk,53,-100.0,-150.0,-200.0,-100.0,-200.0,108.3,36.0,109.0,36.1,False
+WELL-7,apk54,apk,54,-200.0,-250.0,-300.0,-200.0,-300.0,128.6,46.9,129.1,46.9,False
+WELL-7,apk55,apk,55,-300.0,-350.0,-400.0,-300.0,-400.0,145.0,57.6,145.4,57.6,False
+WELL-7,apk56,apk,56,-400.0,-450.0,-500.0,-400.0,-500.0,158.1,68.1,158.5,68.1,False
+WELL-7,apk57,apk,57,-500.0,-550.0,-600.0,-500.0,-600.0,168.3,78.3,168.6,78.4,False
+WELL-7,apk58,apk,58,-600.0,-650.0,-700.0,-600.0,-700.0,175.2,87.8,176.7,87.9,True
+WELL-7,apk59,apk,59,-700.0,-750.0,-800.0,-700.0,-800.0,173.3,96.6,173.7,96.6,False
+WELL-7,apk60,apk,60,-800.0,-850.0,-900.0,-800.0,-900.0,167.4,105.5,167.9,105.5,False
+WELL-7,apk61,apk,61,-900.0,-950.0,-1000.0,-900.0,-1000.0,158.6,114.4,158.7,114.4,False
+WELL-7,apk62,apk,62,-1000.0,-1100.0,-1200.0,-1000.0,-1200.0,145.2,128.0,144.3,128.0,False
+WELL-7,apk63,apk,63,-1200.0,-1300.0,-1400.0,-1200.0,-1400.0,133.1,146.4,131.3,146.4,True
+WELL-7,apk64,apk,64,-1400.0,-1500.0,-1600.0,-1400.0,-1600.0,130.9,164.8,130.9,164.8,False
+WELL-7,apk65,apk,65,-1600.0,-1700.0,-1800.0,-1600.0,-1800.0,130.8,183.3,130.7,183.3,False
+WELL-7,apk66,apk,66,-1800.0,-1900.0,-2000.0,-1800.0,-2000.0,131.4,201.8,131.2,201.8,False
+WELL-7,apk67,apk,67,-2000.0,-2250.0,-2500.0,-2000.0,-2500.0,134.9,234.2,134.0,234.2,False
+WELL-7,apk68,apk,68,-2500.0,-2750.0,-3000.0,-2500.0,-2762.0,141.9,269.4,144.4,280.4,False
+WELL-8,ana42,ana,42,180.0,170.0,160.0,176.0,160.0,13.0,2.3,12.9,2.0,False
+WELL-8,ana43,ana,43,160.0,150.0,140.0,160.0,140.0,13.8,3.9,13.7,3.9,False
+WELL-8,ana44,ana,44,140.0,130.0,120.0,140.0,120.0,15.5,5.9,15.5,5.9,False
+WELL-8,ana45,ana,45,120.0,110.0,100.0,120.0,100.0,17.2,7.9,17.2,7.9,False
+WELL-8,ana46,ana,46,100.0,90.0,80.0,100.0,80.0,18.9,10.0,18.9,10.0,False
+WELL-8,ana47,ana,47,80.0,70.0,60.0,80.0,60.0,20.7,12.2,20.7,12.2,False
+WELL-8,ana48,ana,48,60.0,50.0,40.0,60.0,40.0,22.3,14.5,22.3,14.5,False
+WELL-8,ana49,ana,49,40.0,30.0,20.0,40.0,20.0,24.0,16.6,24.0,16.6,False
+WELL-8,ana50,ana,50,20.0,10.0,0.0,20.0,0.0,25.8,18.7,25.8,18.7,False
+WELL-8,ana51,ana,51,0.0,-25.0,-50.0,0.0,-50.0,29.1,22.4,29.1,22.4,False
+WELL-8,ana52,ana,52,-50.0,-75.0,-100.0,-50.0,-100.0,33.7,27.8,33.7,27.8,False
+WELL-8,ana53,ana,53,-100.0,-150.0,-200.0,-100.0,-200.0,40.1,35.7,40.2,35.7,False
+WELL-8,ana54,ana,54,-200.0,-250.0,-300.0,-200.0,-300.0,47.8,46.1,48.0,46.1,False
+WELL-8,ana55,ana,55,-300.0,-350.0,-400.0,-300.0,-400.0,54.3,56.3,54.5,56.3,False
+WELL-8,ana56,ana,56,-400.0,-450.0,-500.0,-400.0,-500.0,59.7,66.4,59.9,66.4,False
+WELL-8,ana57,ana,57,-500.0,-550.0,-600.0,-500.0,-600.0,63.7,76.3,63.9,76.3,False
+WELL-8,ana58,ana,58,-600.0,-650.0,-700.0,-600.0,-700.0,66.3,86.2,66.5,86.2,False
+WELL-8,ana59,ana,59,-700.0,-750.0,-800.0,-700.0,-800.0,67.7,95.9,67.8,95.9,False
+WELL-8,ana60,ana,60,-800.0,-850.0,-900.0,-800.0,-900.0,67.9,105.5,68.1,105.5,False
+WELL-8,ana61,ana,61,-900.0,-950.0,-1000.0,-900.0,-1000.0,66.9,115.0,67.1,115.0,False
+WELL-8,ana62,ana,62,-1000.0,-1100.0,-1200.0,-1000.0,-1200.0,64.4,129.6,63.8,129.5,True
+WELL-8,ana63,ana,63,-1200.0,-1300.0,-1400.0,-1200.0,-1272.187,63.7,143.0,63.6,149.4,False
+WELL-8,anb63,anb,63,-1200.0,-1300.0,-1400.0,-1272.187,-1400.0,63.8,153.0,63.6,149.4,False
+WELL-8,anb64,anb,64,-1400.0,-1500.0,-1600.0,-1400.0,-1600.0,64.7,169.2,64.5,169.2,False
+WELL-8,anb65,anb,65,-1600.0,-1700.0,-1800.0,-1600.0,-1800.0,67.0,188.9,66.8,188.9,False
+WELL-8,anb66,anb,66,-1800.0,-1900.0,-2000.0,-1800.0,-2000.0,70.8,208.6,70.7,208.6,False
+WELL-8,anb67,anb,67,-2000.0,-2250.0,-2500.0,-2000.0,-2341.573,77.3,235.1,79.1,242.9,False
+WELL-8,amw67,amw,67,-2000.0,-2250.0,-2500.0,-2341.573,-2500.0,84.2,259.6,79.1,242.9,False
+WELL-8,amw68,amw,68,-2500.0,-2750.0,-3000.0,-2500.0,-2716.1,89.9,278.0,,,False
+WELL-9,ajj42,ajj,42,180.0,170.0,160.0,174.0,160.0,17.4,1.8,17.4,1.5,False
+WELL-9,ajj43,ajj,43,160.0,150.0,140.0,160.0,140.0,18.1,3.2,18.0,3.2,False
+WELL-9,ajj44,ajj,44,140.0,130.0,120.0,140.0,120.0,19.7,5.0,19.5,5.0,False
+WELL-9,ajj45,ajj,45,120.0,110.0,100.0,120.0,100.0,22.6,6.8,22.3,6.8,False
+WELL-9,ajj46,ajj,46,100.0,90.0,80.0,100.0,80.0,27.3,8.7,27.0,8.7,False
+WELL-9,ajj47,ajj,47,80.0,70.0,60.0,80.0,60.0,33.9,10.6,33.7,10.6,False
+WELL-9,ajj48,ajj,48,60.0,50.0,40.0,60.0,40.0,41.8,12.5,41.8,12.5,False
+WELL-9,ajj49,ajj,49,40.0,30.0,20.0,40.0,20.0,50.0,14.6,49.9,14.5,False
+WELL-9,ajj50,ajj,50,20.0,10.0,0.0,20.0,0.0,59.0,17.0,58.9,16.9,False
+WELL-9,ajj51,ajj,51,0.0,-25.0,-50.0,0.0,-50.0,75.2,21.8,75.5,21.8,False
+WELL-9,ajj52,ajj,52,-50.0,-75.0,-100.0,-50.0,-100.0,96.3,28.4,96.7,28.5,False
+WELL-9,ajj53,ajj,53,-100.0,-150.0,-200.0,-100.0,-200.0,122.8,37.7,123.8,37.8,False
+WELL-9,ajj54,ajj,54,-200.0,-250.0,-300.0,-200.0,-300.0,152.1,49.2,153.0,49.3,False
+WELL-9,ajj55,ajj,55,-300.0,-350.0,-400.0,-300.0,-400.0,175.2,60.2,176.0,60.3,False
+WELL-9,ajj56,ajj,56,-400.0,-450.0,-500.0,-400.0,-500.0,193.1,70.7,193.6,70.8,False
+WELL-9,ajj57,ajj,57,-500.0,-550.0,-600.0,-500.0,-600.0,206.5,80.2,207.5,80.3,True
+WELL-9,ajj58,ajj,58,-600.0,-650.0,-700.0,-600.0,-603.412,210.9,84.9,214.0,89.1,False
+WELL-9,ajq58,ajq,58,-600.0,-650.0,-700.0,-603.412,-700.0,213.7,89.2,214.0,89.1,False
+WELL-9,ajq59,ajq,59,-700.0,-750.0,-800.0,-700.0,-800.0,216.2,97.7,217.7,97.7,False
+WELL-9,ajq60,ajq,60,-800.0,-850.0,-900.0,-800.0,-900.0,210.0,106.2,210.7,106.2,True
+WELL-9,ajq61,ajq,61,-900.0,-950.0,-1000.0,-900.0,-1000.0,199.4,114.9,198.8,114.9,False
+WELL-9,ajq62,ajq,62,-1000.0,-1100.0,-1200.0,-1000.0,-1200.0,189.6,128.1,187.9,128.1,False
+WELL-9,ajq63,ajq,63,-1200.0,-1300.0,-1400.0,-1200.0,-1400.0,185.3,146.0,185.4,146.0,False
+WELL-9,ajq64,ajq,64,-1400.0,-1500.0,-1600.0,-1400.0,-1444.422,183.6,156.9,182.5,163.9,False
+WELL-9,asg64,asg,64,-1400.0,-1500.0,-1600.0,-1444.422,-1600.0,181.8,165.9,182.5,163.9,False
+WELL-9,asg65,asg,65,-1600.0,-1700.0,-1800.0,-1600.0,-1800.0,177.3,182.1,177.3,182.1,False
+WELL-9,asg66,asg,66,-1800.0,-1900.0,-2000.0,-1800.0,-1986.024,171.9,199.7,171.9,200.3,False
+WELL-9,asf66,asf,66,-1800.0,-1900.0,-2000.0,-1986.024,-2000.0,168.7,208.8,171.9,200.3,False
+WELL-9,asf67,asf,67,-2000.0,-2250.0,-2500.0,-2000.0,-2427.1,163.1,229.0,160.0,232.3,False
+WELL-10,arz38,arz,38,260.0,250.0,240.0,260.0,240.0,,,,,False
+WELL-10,arz39,arz,39,240.0,230.0,220.0,240.0,220.0,,,,,False
+WELL-10,arz40,arz,40,220.0,210.0,200.0,220.0,200.0,29.7,1.2,24.6,1.0,False
+WELL-10,arz41,arz,41,200.0,190.0,180.0,200.0,180.0,49.0,2.0,45.1,1.9,False
+WELL-10,arz42,arz,42,180.0,170.0,160.0,180.0,160.0,90.1,3.7,93.4,3.6,False
+WELL-10,arz43,arz,43,160.0,150.0,140.0,160.0,140.0,117.6,6.0,118.2,6.0,False
+WELL-10,arz44,arz,44,140.0,130.0,120.0,140.0,120.0,138.3,8.4,138.6,8.4,False
+WELL-10,arz45,arz,45,120.0,110.0,100.0,120.0,100.0,156.5,11.1,156.8,11.1,False
+WELL-10,arz46,arz,46,100.0,90.0,80.0,100.0,80.0,172.6,13.9,172.9,13.9,False
+WELL-10,arz47,arz,47,80.0,70.0,60.0,80.0,60.0,186.4,16.5,186.7,16.5,False
+WELL-10,arz48,arz,48,60.0,50.0,40.0,60.0,40.0,197.7,19.1,198.0,19.1,False
+WELL-10,arz49,arz,49,40.0,30.0,20.0,40.0,20.0,206.9,21.9,207.0,21.9,False
+WELL-10,arz50,arz,50,20.0,10.0,0.0,20.0,0.0,215.4,24.9,215.6,24.9,False
+WELL-10,arz51,arz,51,0.0,-25.0,-50.0,0.0,-50.0,227.4,29.9,227.9,29.9,False
+WELL-10,arz52,arz,52,-50.0,-75.0,-100.0,-50.0,-100.0,241.2,36.7,241.7,36.7,False
+WELL-10,arz53,arz,53,-100.0,-150.0,-200.0,-100.0,-200.0,255.7,46.1,256.8,46.5,False
+WELL-10,arz54,arz,54,-200.0,-250.0,-300.0,-200.0,-300.0,267.0,56.4,268.7,56.7,True
+WELL-10,arz55,arz,55,-300.0,-350.0,-400.0,-300.0,-350.0,268.6,62.5,268.5,64.4,False

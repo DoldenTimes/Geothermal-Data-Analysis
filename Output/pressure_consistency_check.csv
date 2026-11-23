@@ -1,5 +1,5 @@
-well,elev_mRL,profile_P_bar,first_transient_date,first_transient_P_bar
-WELL-2,-750.0,98.2,01/01/2014,98.3
-WELL-3,-550.0,80.7,01/01/2014,80.8
-WELL-9,-675.0,91.2,01/01/2014,89.2
-WELL-10,-250.0,56.7,01/01/2020,48.7
+well,gauge_elev,first_pressure_date,first_transient_P_bar,survey_P_at_elev_bar,diff_bar,survey_T_at_elev,first_enthalpy_date,first_enthalpy_kJkg,liquid_T_equiv_of_enthalpy,first_massflow_date,first_massflow_kgs,Tsat_at_gauge_P
+WELL-2,-750.0,01/01/2014,98.3,98.2,0.1,257.7,01/01/2014,1301.6,292.0,01/01/2014,85.0,309.7
+WELL-3,-550.0,01/01/2014,80.8,80.7,0.1,260.7,01/01/2014,1087.9,250.0,01/01/2014,130.0,295.7
+WELL-9,-675.0,01/01/2014,89.2,91.2,-2.0,214.9,01/01/2014,929.6,217.0,01/01/2014,200.0,302.7
+WELL-10,-250.0,01/01/2020,48.7,56.7,-8.0,268.7,01/01/2020,2680.9,steam/2-phase (h>hf max),01/12/2019,0.1,262.3

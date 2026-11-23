@@ -1,0 +1,73 @@
+well,check,n_json,n_dat,n_matched,max_abs_diff,status
+WELL-1,temperature,19,19,19,0,OK
+WELL-1,pressure,19,19,19,0,OK
+WELL-1,survey points inside track z-range,19,,,,OK
+WELL-1,feed zone -1355..-1320 (MEDIUM),,,,,in track
+WELL-1,feed zone -1490..-1440 (MEDIUM),,,,,in track
+WELL-1,track ends: JSON vs gTE14515.dat WELLS,,,,0,OK
+WELL-1,survey points whose block layer contains z,19,,16,,3 point(s) fall in layer gaps or outside layers
+WELL-2,temperature,33,33,33,0,OK
+WELL-2,pressure,33,33,33,0,OK
+WELL-2,transient -750 mRL,12,12,12,0,OK
+WELL-2,survey points inside track z-range,33,,,,OK
+WELL-2,feed zone -270..-250 (LOW),,,,,in track
+WELL-2,feed zone -770..-720 (HIGH),,,,,in track
+WELL-2,feed zone -1920..-1900 (MEDIUM),,,,,in track
+WELL-2,track ends: JSON vs gTE14515.dat WELLS,,,,0,OK
+WELL-2,survey points whose block layer contains z,33,,32,,1 point(s) fall in layer gaps or outside layers
+WELL-3,temperature,30,30,30,0,OK
+WELL-3,pressure,30,30,30,0,OK
+WELL-3,transient -550 mRL,12,12,12,0,OK
+WELL-3,survey points inside track z-range,30,,,,OK
+WELL-3,feed zone -360..-310 (HIGH),,,,,in track
+WELL-3,feed zone -870..-820 (MEDIUM),,,,,in track
+WELL-3,track ends: JSON vs gTE14515.dat WELLS,,,,0,OK
+WELL-3,survey points whose block layer contains z,30,,28,,2 point(s) fall in layer gaps or outside layers
+WELL-4,temperature,22,22,22,0,OK
+WELL-4,pressure,22,22,22,0,OK
+WELL-4,survey points inside track z-range,22,,,,OK
+WELL-4,feed zone -680..-630 (MEDIUM),,,,,in track
+WELL-4,track ends: JSON vs gTE14515.dat WELLS,,,,0,OK
+WELL-4,survey points whose block layer contains z,22,,22,,OK
+WELL-5,temperature,26,26,26,0,OK
+WELL-5,pressure,26,26,26,0,OK
+WELL-5,survey points inside track z-range,26,,,,OK
+WELL-5,feed zone -1350..-1300 (MEDIUM),,,,,in track
+WELL-5,feed zone -1550..-1500 (MEDIUM),,,,,in track
+WELL-5,track ends: JSON vs gTE14515.dat WELLS,,,,0,OK
+WELL-5,survey points whose block layer contains z,26,,24,,2 point(s) fall in layer gaps or outside layers
+WELL-6,temperature,28,28,28,0,OK
+WELL-6,pressure,28,28,28,0,OK
+WELL-6,survey points inside track z-range,28,,,,OK
+WELL-6,feed zone -490..-460 (HIGH),,,,,in track
+WELL-6,feed zone -1150..-1100 (HIGH),,,,,in track
+WELL-6,track ends: JSON vs gTE14515.dat WELLS,,,,0,OK
+WELL-6,survey points whose block layer contains z,28,,28,,OK
+WELL-7,temperature,32,32,32,0,OK
+WELL-7,pressure,32,32,32,0,OK
+WELL-7,survey points inside track z-range,32,,,,OK
+WELL-7,feed zone -650..-610 (HIGH),,,,,in track
+WELL-7,feed zone -1350..-1300 (HIGH),,,,,in track
+WELL-7,track ends: JSON vs gTE14515.dat WELLS,,,,0,OK
+WELL-7,survey points whose block layer contains z,32,,31,,1 point(s) fall in layer gaps or outside layers
+WELL-8,temperature,29,29,29,0,OK
+WELL-8,pressure,29,29,29,0,OK
+WELL-8,survey points inside track z-range,29,,,,OK
+WELL-8,feed zone -1150..-1100 (HIGH),,,,,in track
+WELL-8,track ends: JSON vs gTE14515.dat WELLS,,,,0,OK
+WELL-8,survey points whose block layer contains z,29,,27,,2 point(s) fall in layer gaps or outside layers
+WELL-9,temperature,30,30,30,0,OK
+WELL-9,pressure,30,30,30,0,OK
+WELL-9,transient -675 mRL,12,12,12,0,OK
+WELL-9,survey points inside track z-range,30,,,,OK
+WELL-9,feed zone -550..-520 (LOW),,,,,in track
+WELL-9,feed zone -845..-830 (MEDIUM),,,,,in track
+WELL-9,track ends: JSON vs gTE14515.dat WELLS,,,,0,OK
+WELL-9,survey points whose block layer contains z,30,,27,,3 point(s) fall in layer gaps or outside layers
+WELL-10,temperature,17,17,17,0,OK
+WELL-10,pressure,17,17,17,0,OK
+WELL-10,transient -250 mRL,6,6,6,0,OK
+WELL-10,survey points inside track z-range,17,,,,OK
+WELL-10,feed zone -275..-250 (Synthetic),,,,,in track
+WELL-10,track ends: JSON vs gTE14515.dat WELLS,,,,0,OK
+WELL-10,survey points whose block layer contains z,17,,17,,OK

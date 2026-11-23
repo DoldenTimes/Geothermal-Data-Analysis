@@ -1,0 +1,88 @@
+=== natural_state_analysis.py run ===
+Run date: 2026-11-24 10:26
+Reading inputs from Baseline/ only (read-only).
+IF97 validation (CLAUDE 3.3: fail if any error > 0.1 K):
+  Tsat(1.01325 bar) = 99.974 C | reference 99.97 C | error +0.0043 K
+  Tsat(100 bar) = 310.999 C | reference 311.00 C | error -0.0005 K
+  rho_liquid(1.01325 bar, 25 C) = 997.05 kg/m3 | reference 997.05 | error -0.00
+  IF97 validation PASSED.
+Geometry parsed: 385 vertices, 70 layers, 398 surface columns, 10 well tracks in WELLS section.
+Mapping loaded: Lake Tarawera (1 polyline(s)), Tarawera River (5 polyline(s)), river (5 polyline(s)), Fault 1 (1 polyline(s)), Fault 2 (1 polyline(s)), Fault 3 (1 polyline(s))
+Loaded WELL-1: 19 T pts, 19 P pts, 2 feed zones, survey 29/07/2015, flow: none
+Loaded WELL-2: 33 T pts, 33 P pts, 3 feed zones, survey 29/07/2015, flow: production from 01/01/2014
+Loaded WELL-3: 30 T pts, 30 P pts, 2 feed zones, survey 29/07/2015, flow: production from 01/01/2014
+Loaded WELL-4: 22 T pts, 22 P pts, 1 feed zones, survey 29/07/2015, flow: injection from 01/01/2014
+Loaded WELL-5: 26 T pts, 26 P pts, 2 feed zones, survey 29/07/2015, flow: injection from 01/01/2014
+Loaded WELL-6: 28 T pts, 28 P pts, 2 feed zones, survey 29/07/2015, flow: none
+Loaded WELL-7: 32 T pts, 32 P pts, 2 feed zones, survey 29/07/2015, flow: none
+Loaded WELL-8: 29 T pts, 29 P pts, 1 feed zones, survey 29/07/2015, flow: injection from 01/01/2014
+Loaded WELL-9: 30 T pts, 30 P pts, 2 feed zones, survey 29/07/2015, flow: production from 01/01/2014
+Loaded WELL-10: 17 T pts, 17 P pts, 1 feed zones, survey 29/07/2015, flow: production from 01/12/2019
+Survey dates present: ['29/07/2015']
+Design source labels: ['Synthetic data']
+Data integrity (CLAUDE 3.1.1):
+  WELL-1 temperature: JSON 19 pts, dat 19 rows, matched 19, max |diff| 0 -> OK
+  WELL-1 pressure: JSON 19 pts, dat 19 rows, matched 19, max |diff| 0 -> OK
+  WELL-1 track ends vs WELLS section: max diff 0 m -> OK
+  WELL-2 temperature: JSON 33 pts, dat 33 rows, matched 33, max |diff| 0 -> OK
+  WELL-2 pressure: JSON 33 pts, dat 33 rows, matched 33, max |diff| 0 -> OK
+  WELL-2 transient -750 mRL: JSON 12, dat 12, matched 12 -> OK
+  WELL-2 track ends vs WELLS section: max diff 0 m -> OK
+  WELL-3 temperature: JSON 30 pts, dat 30 rows, matched 30, max |diff| 0 -> OK
+  WELL-3 pressure: JSON 30 pts, dat 30 rows, matched 30, max |diff| 0 -> OK
+  WELL-3 transient -550 mRL: JSON 12, dat 12, matched 12 -> OK
+  WELL-3 track ends vs WELLS section: max diff 0 m -> OK
+  WELL-4 temperature: JSON 22 pts, dat 22 rows, matched 22, max |diff| 0 -> OK
+  WELL-4 pressure: JSON 22 pts, dat 22 rows, matched 22, max |diff| 0 -> OK
+  WELL-4 track ends vs WELLS section: max diff 0 m -> OK
+  WELL-5 temperature: JSON 26 pts, dat 26 rows, matched 26, max |diff| 0 -> OK
+  WELL-5 pressure: JSON 26 pts, dat 26 rows, matched 26, max |diff| 0 -> OK
+  WELL-5 track ends vs WELLS section: max diff 0 m -> OK
+  WELL-6 temperature: JSON 28 pts, dat 28 rows, matched 28, max |diff| 0 -> OK
+  WELL-6 pressure: JSON 28 pts, dat 28 rows, matched 28, max |diff| 0 -> OK
+  WELL-6 track ends vs WELLS section: max diff 0 m -> OK
+  WELL-7 temperature: JSON 32 pts, dat 32 rows, matched 32, max |diff| 0 -> OK
+  WELL-7 pressure: JSON 32 pts, dat 32 rows, matched 32, max |diff| 0 -> OK
+  WELL-7 track ends vs WELLS section: max diff 0 m -> OK
+  WELL-8 temperature: JSON 29 pts, dat 29 rows, matched 29, max |diff| 0 -> OK
+  WELL-8 pressure: JSON 29 pts, dat 29 rows, matched 29, max |diff| 0 -> OK
+  WELL-8 track ends vs WELLS section: max diff 0 m -> OK
+  WELL-9 temperature: JSON 30 pts, dat 30 rows, matched 30, max |diff| 0 -> OK
+  WELL-9 pressure: JSON 30 pts, dat 30 rows, matched 30, max |diff| 0 -> OK
+  WELL-9 transient -675 mRL: JSON 12, dat 12, matched 12 -> OK
+  WELL-9 track ends vs WELLS section: max diff 0 m -> OK
+  WELL-10 temperature: JSON 17 pts, dat 17 rows, matched 17, max |diff| 0 -> OK
+  WELL-10 pressure: JSON 17 pts, dat 17 rows, matched 17, max |diff| 0 -> OK
+  WELL-10 transient -250 mRL: JSON 6, dat 6, matched 6 -> OK
+  WELL-10 track ends vs WELLS section: max diff 0 m -> OK
+  wrote Output/data_integrity_check.csv (72 rows)
+  wrote Output/NS_calibration_targets.csv (266 rows)
+  wrote Output/feedzones.csv (18 rows)
+  wrote Output/T_P_at_layer_centres.csv (229 rows)
+  wrote Output/T_P_at_common_elevations.csv (10 rows)
+  wrote Output/well_summary.csv (10 rows)
+  wrote Output/pressure_consistency_check.csv (4 rows)
+  pressure check WELL-2 @ -750.0 mRL: survey 98.20 bar vs first 01/01/2014 98.30 bar (diff -0.10); at survey date diff 9.92 -> agrees with first transient (<=1 bar); disagrees with transient at survey date (>3 bar)
+  pressure check WELL-3 @ -550.0 mRL: survey 80.70 bar vs first 01/01/2014 80.80 bar (diff -0.10); at survey date diff 9.07 -> agrees with first transient (<=1 bar); disagrees with transient at survey date (>3 bar)
+  pressure check WELL-9 @ -675.0 mRL: survey 91.25 bar vs first 01/01/2014 89.20 bar (diff 2.05); at survey date diff 14.69 -> marginal agreement with first transient (1-3 bar); disagrees with transient at survey date (>3 bar)
+  pressure check WELL-10 @ -250.0 mRL: survey 56.70 bar vs first 01/01/2020 48.70 bar (diff 8.00); at survey date diff  -> disagrees with first transient (>3 bar)
+  hydrostatic WELL-1: median excess +5.48 % over 17 interval(s)
+  hydrostatic WELL-2: median excess +12.93 % over 31 interval(s)
+  hydrostatic WELL-3: median excess +7.43 % over 28 interval(s)
+  hydrostatic WELL-4: median excess +7.38 % over 19 interval(s)
+  hydrostatic WELL-5: median excess +5.32 % over 25 interval(s)
+  hydrostatic WELL-6: median excess +6.57 % over 26 interval(s)
+  hydrostatic WELL-7: median excess +8.89 % over 30 interval(s)
+  hydrostatic WELL-8: median excess +4.02 % over 28 interval(s)
+  hydrostatic WELL-9: median excess +13.34 % over 28 interval(s)
+  hydrostatic WELL-10: median excess +35.98 % over 2 interval(s)
+  FIELD-WIDE median excess (all valid intervals): +8.02 %, range -4.13 to +77.34 %
+  wrote Output/hydrostatic_check.csv (247 rows)
+  wrote Output/well_geometry_check.csv (10 rows)
+Figures:
+  well map
+  10 well profiles
+  T and P maps by elevation
+  section WELL-10 to WELL-3, length 858 m
+  P-T state plot
+Done.

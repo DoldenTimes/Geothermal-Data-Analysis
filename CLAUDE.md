@@ -5,7 +5,7 @@
 - **Ignore `README.md`.**
 - **`Baseline/` is read-only.** Read all input data from it. Never edit, move, rename or write anything inside it.
 - **Scripts go in `Scripts/`.** Data outputs, figures and reports go in `Output/`, with figures in `Output/figures/`.
-- **Scope is the natural state only.** Production, injection and future scenarios are out of scope. The only exception is in §4.1: early-time records may be used, but only to test whether the surveys are undisturbed.
+- **Scope is the natural state only.** Production, injection and future scenarios are out of scope.
 - **Audience.** Write every output for a reservoir engineer, or another agent, who will calibrate the natural-state model. Each finding should end in something they can act on: a target, a weight, a structural feature the model needs, or a data problem to resolve.
 - **Process log.** Write `Output/process_log.md`. It must contain:
   - the user's prompt, verbatim;
@@ -27,57 +27,22 @@
 - **Describing the starting model is allowed.** You may describe the reference model so the engineer can see how far the data are from it. Label that content clearly as "reference model".
 - **State any assumption you need.** If you need a parameter that is not in the data, for example rock thermal conductivity to turn a gradient into a heat flux, state the assumed value and where it came from.
 
-## 3. Dataset facts and known quirks
 
-Verify these facts at the start of each run. Do not assume they still hold.
+## 3. Required analysis steps
 
-**Wells and roles**
-- There are 10 wells, `WELL-1` to `WELL-10`.
-- Producers: WELL-2, 3, 9, 10. Injectors: WELL-4, 5, 8. Monitor only: WELL-1, 6, 7.
-- WELL-8 and WELL-9 are deviated. Map every survey point and feed zone to a model column using its position along the track, not the wellhead position.
-
-**File names**
-- The dat files and grid use `Wel10` / `WEL10` for WELL-10.
-- The JSON field `AUT2_Name` gives each well's name in the model.
-
-**Surveys**
-- Each well has exactly one T survey and one P survey, both dated **29/07/2015** and flagged `StableFlag: True`.
-- T and P are sampled at the same elevations. Pressure is in bar and is rounded to 0.1 bar.
-- The pressure files do not say whether pressure is absolute or gauge. Infer which from the shallowest readings and state your conclusion.
-- In the `.dat` files, the columns are `value elevation`, in that order.
-- In the `*_transient_pressure.dat` files, the elevation of the gauge is in the filename, and the first column is time (check its units).
-
-**Units and elevations**
-- Units are labelled inconsistently: `m`, `masl` and `mRL`. Every elevation, including feed-zone `Top` and `Bottom` (labelled "m"), is an **elevation in mRL**, not a measured depth. Treat it as such and say so in the report.
-
-**Feed zones**
-- Feed zones carry quality tags LOW, MEDIUM or HIGH.
-- WELL-10's single feed zone is tagged `Synthetic`. Treat it as a placeholder.
-
-**Geometry mismatches to check and report**
-- **Model surface vs wellhead.** The model surface elevation (`SURFA`) differs from the wellhead elevation by up to about 100 m in some columns. Report the mismatch for every well. Down-weight, or exclude, survey points that lie above the model surface or inside the top layer.
-- **WELL-4 casing.** WELL-4's casing record lists a liner to about −3250 mRL, but its track and survey end at −750 mRL.
-- **Late survey starts.** The surveys for WELL-4 and WELL-10 start below the wellhead.
-
-**Python environment**
-- The previously available environment had numpy and matplotlib only. pandas, scipy and iapws were not installed. Check again at the start of each run.
-- If a package would help, ask the user before installing it. Otherwise implement what you need yourself (see §4.3).
-
-## 4. Required analysis steps
-
-### 4.1 Data integrity and timing
+### 3.1 Data integrity and timing
 1. **Cross-check sources.** Compare the JSON with the dat files for every T and P point. Check that every survey point and feed zone lies within the well track and within the slotted or open interval.
-2. **Test whether the 2015 surveys represent the natural state.** Production and injection began on 01/01/2014, before the surveys, so this must be tested, not assumed:
+2. **Test whether the surveys represent the natural state.**
    - Compare each survey pressure, interpolated to the transient-gauge elevation, with the **first** transient pressure value (WELL-2, 3 and 9 start in 2014; WELL-10's series starts in 2020).
-   - Note how the injector profiles might be affected by injection since 2014.
+   - Note how the injector profiles might be affected by injection.
    - Give a per-well verdict: natural state, probably natural state, or possibly disturbed. Give each verdict a confidence level, and carry it through to the target weights.
 
-### 4.2 Wellbore physics: read the profiles correctly
+### 3.2 Wellbore physics: read the profiles correctly
 - **Pressure.** Measured pressure represents the formation only at feed zones. Elsewhere it follows the fluid column inside the well, which pivots at the dominant feed zone. Use pressure at feed zones, or the pivot point, as the formation pressure target. Do not treat the shallow wellbore column, for example about 1 bar at the wellhead, as reservoir pressure.
 - **Temperature.** Between feed zones in open hole, internal flow in the well can distort temperature, for example by producing isothermal sections. Behind casing, temperatures are usually closer to the conductive formation temperature. Before interpreting any feature as a reservoir feature, consider whether the well itself could have caused it.
 - **Inversions and isothermal sections.** Interpret temperature inversions, isothermal sections and boiling-point-for-depth sections physically: lateral outflow, cold downflow, or two-phase conditions. Locate each one against the casing shoe and the feed zones.
 
-### 4.3 Thermodynamics
+### 3.3 Thermodynamics
 - **Use IAPWS-IF97.** Use Region 4 for saturation temperature and pressure, and Region 1 for liquid density. **Do not use the Kell polynomial, or any fit only valid below 150 °C,** at reservoir temperatures.
 - **Validate your implementation.** Check it against published reference values, for example Tsat(1.01325 bar) = 99.97 °C and Tsat(100 bar) = 311.0 °C. Make the script fail if any error exceeds 0.1 K.
 - **Hydrostatic checks.**
@@ -86,7 +51,7 @@ Verify these facts at the start of each run. Do not assume they still hold.
   - Separate any field-wide gradient excess (seen even in cold wells) from the excess in individual wells. Report the field-wide excess as a possible datum or convention issue, not as physical overpressure.
 - **Boiling margin.** Report Tsat(P) − T at every point, and flag every interval where it is below about 5 °C.
 
-### 4.4 Interpretation for calibration
+### 3.4 Interpretation for calibration
 Produce at least the following:
 - **Per-well characteristics:**
   - maximum temperature and its elevation;
@@ -108,7 +73,7 @@ Produce at least the following:
   Relate each feature to the faults and surface water in `Mapping.json`. For every claim, state which observation supports it.
 - **Feed zones.** Give survey T, P and boiling margin at each feed zone, its model block (from the track position), and its quality tag.
 
-## 5. Standard deliverables
+## 4. Standard deliverables
 
 Use these exact names, so that runs can be compared with one another. Additional files are welcome.
 

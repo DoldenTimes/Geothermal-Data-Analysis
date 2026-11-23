@@ -1,6 +1,6 @@
 # Geothermal Data Analysis: natural-state interpretation
 
-This repository is for analysing geothermal reservoir data with AI agents, using Claude Code.
+This repository is for analysing geothermal reservoir data with AI agents, with initial work done using Claude Code.
 
 Its current process is to take downhole data and well geometry from a field and interpret it into **natural-state calibration targets** and a **conceptual model**. The intended user is a reservoir engineer, or another agent, who is calibrating a numerical reservoir model.
 
@@ -184,14 +184,3 @@ CSV conventions:
 - comma-separated, with a header row;
 - SI-style units are written into the column names (`_mRL`, `_degC`, `_bar`);
 - blank cells mean no data, never zero.
-
-## 6. Known caveats in the Teaching_Model_3D dataset
-
-`CLAUDE.md` §3 has the full list. The main ones:
-
-- **Survey timing.** All downhole surveys are dated 29/07/2015, after production and injection started on 01/01/2014. Whether each survey is natural state has to be tested per well.
-- **Model surface.** The model surface (`SURFA`) is up to about 100 m above some wellheads.
-- **WELL-4.** Its casing record extends below its track.
-- **Late survey starts.** The surveys for WELL-4 and WELL-10 start below the wellhead.
-- **WELL-10 feed zone.** It is tagged `Synthetic`.
-- **Plotting files.** The JSON files in `Data/Plotting/` contain absolute paths from another machine. Do not use them.

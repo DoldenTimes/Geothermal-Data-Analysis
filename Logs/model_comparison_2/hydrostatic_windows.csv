@@ -1,0 +1,4 @@
+model,windows,min_window_m,max_window_m
+Opus2,68,300.0,3037.0
+Sonnet2,48,345.0,987.0
+Haiku2,234,200.0,500.0

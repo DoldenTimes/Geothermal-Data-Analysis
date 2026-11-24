@@ -1,0 +1,11 @@
+quantity,max,median
+T_TD,0.0,0.0
+Tmax,0.0,0.0
+Tmax_elev,0.0,0.0
+deep_grad,11.0,4.105
+inversion,4.5,0.0
+min_bm,0.05,0.025
+shallow_grad,196.67,69.345
+water_level,28.86,5.015000000000001
+z100,0.47,0.15
+z200,0.47,0.28

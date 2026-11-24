@@ -1,0 +1,4 @@
+model,rows,max_abs_centre_error_m,layers_with_centre_error,layers_compared,T_vs_Opus2_median_abs_dT,T_vs_Opus2_max_abs_dT
+Opus2,232,0.0,0,30,0.0,0.0
+Sonnet2,232,0.0,0,30,0.0,0.0
+Haiku2,229,125.0,30,30,1.62,12.08

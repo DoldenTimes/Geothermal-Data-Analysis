@@ -1,0 +1,11 @@
+well,Haiku2_verdict,Opus2_verdict,Sonnet2_verdict,Haiku2_confidence,Opus2_confidence,Sonnet2_confidence,Haiku2_mean_weight,Opus2_mean_weight,Sonnet2_mean_weight
+WELL-1,probably natural state,probably natural state,probably natural state,low,medium,medium,0.18,0.476,0.438
+WELL-10,probably natural state,probably natural state,probably natural state,low,medium,low,0.173,0.461,0.339
+WELL-2,possibly disturbed,natural state,natural state,low,high,high,0.21,0.648,0.655
+WELL-3,possibly disturbed,natural state,natural state,low,high,high,0.206,0.683,0.627
+WELL-4,possibly disturbed,probably natural state,probably natural state,low,medium,low,0.176,0.458,0.344
+WELL-5,possibly disturbed,probably natural state,possibly disturbed,low,medium,low,0.185,0.489,0.228
+WELL-6,probably natural state,probably natural state,probably natural state,low,medium,medium,0.198,0.534,0.471
+WELL-7,probably natural state,probably natural state,probably natural state,low,medium,medium,0.2,0.538,0.471
+WELL-8,possibly disturbed,probably natural state,probably natural state,low,medium,low,0.183,0.486,0.329
+WELL-9,possibly disturbed,probably natural state,probably natural state,low,medium,medium,0.196,0.52,0.482

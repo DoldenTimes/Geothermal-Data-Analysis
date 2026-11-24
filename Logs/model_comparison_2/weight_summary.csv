@@ -1,0 +1,4 @@
+model,points,weight_sum,weight_mean,weight_min,weight_max,n_distinct_weights,in_feedzone,behind_casing,pressure_weight_column
+Opus2,266,143.4,0.539,0.24,1.0,7,32,150,True
+Sonnet2,266,120.3,0.452,0.12,1.0,14,32,149,True
+Haiku2,266,51.3,0.193,0.09,0.3,4,32,143,False

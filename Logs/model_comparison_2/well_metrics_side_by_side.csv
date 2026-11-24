@@ -1,0 +1,111 @@
+well,quantity,Opus2,Sonnet2,Haiku2,spread
+WELL-1,Tmax,118.6,118.6,118.6,0.0
+WELL-1,Tmax_elev,-1672.0,-1672.0,-1672.0,0.0
+WELL-1,T_TD,118.6,118.6,118.6,0.0
+WELL-1,inversion,0.0,0.0,0.0,0.0
+WELL-1,shallow_grad,89.0,73.2,140.0,66.8
+WELL-1,deep_grad,17.0,16.5,16.54,0.5
+WELL-1,z100,-946.0,-945.9183673469387,-946.0,0.08
+WELL-1,z200,,,,
+WELL-1,min_bm,150.4,150.4,150.36,0.04
+WELL-1,water_level,115.0,113.0,115.28,2.28
+WELL-1,regime,conductive,conductive,"conductive (T increases with depth, no inversion)",
+WELL-2,Tmax,266.9,266.9,266.9,0.0
+WELL-2,Tmax_elev,-550.0,-550.0,-550.0,0.0
+WELL-2,T_TD,253.7,253.7,253.7,0.0
+WELL-2,inversion,30.9,30.9,30.9,0.0
+WELL-2,shallow_grad,692.0,664.4,770.81,106.41
+WELL-2,deep_grad,23.0,31.4,31.42,8.42
+WELL-2,z100,128.0,128.15217391304347,128.0,0.15
+WELL-2,z200,-81.0,-80.97014925373132,-81.0,0.03
+WELL-2,min_bm,23.8,23.8,23.76,0.04
+WELL-2,water_level,211.0,211.0,224.86,13.86
+WELL-2,regime,outflow (hot tongue over cooler water); deep reheating,"upflow (hot to TD, with shallow outflow peak)",upflow with lateral outflow (interior T maximum; cooler below),
+WELL-3,Tmax,261.4,261.4,261.4,0.0
+WELL-3,Tmax_elev,-450.0,-450.0,-450.0,0.0
+WELL-3,T_TD,188.2,188.2,188.2,0.0
+WELL-3,inversion,86.9,86.9,86.9,0.0
+WELL-3,shallow_grad,860.0,860.4,1056.67,196.67
+WELL-3,deep_grad,12.0,19.7,19.71,7.71
+WELL-3,z100,104.0,104.46640316205533,104.0,0.47
+WELL-3,z200,-14.0,-13.715846994535518,-14.0,0.28
+WELL-3,min_bm,12.2,12.2,12.18,0.02
+WELL-3,water_level,164.0,164.0,167.97,3.97
+WELL-3,regime,outflow (hot tongue over cooler water); deep reheating,outflow over cooler deep water (inversion),upflow with lateral outflow (interior T maximum; cooler below),
+WELL-4,Tmax,29.0,29.0,29.0,0.0
+WELL-4,Tmax_elev,-750.0,-750.0,-750.0,0.0
+WELL-4,T_TD,29.0,29.0,29.0,0.0
+WELL-4,inversion,0.0,0.0,0.0,0.0
+WELL-4,shallow_grad,14.0,13.9,13.71,0.29
+WELL-4,deep_grad,20.0,19.6,19.61,0.4
+WELL-4,z100,,,,
+WELL-4,z200,,,,
+WELL-4,min_bm,113.8,113.8,113.77,0.03
+WELL-4,water_level,244.0,251.0,244.15,7.0
+WELL-4,regime,recharge / cold downflow,"recharge / downflow (cold, sub-conductive gradient)",cold (<100 C): recharge/downflow or injection-cooled,
+WELL-5,Tmax,158.0,158.0,158.0,0.0
+WELL-5,Tmax_elev,-650.0,-650.0,-650.0,0.0
+WELL-5,T_TD,154.7,154.7,154.7,0.0
+WELL-5,inversion,13.3,13.3,13.3,0.0
+WELL-5,shallow_grad,295.0,295.2,327.61,32.61
+WELL-5,deep_grad,11.0,21.2,21.16,10.2
+WELL-5,z100,-160.0,-159.85221674876848,-160.0,0.15
+WELL-5,z200,,,,
+WELL-5,min_bm,123.6,123.6,123.58,0.02
+WELL-5,water_level,133.0,127.0,132.77,6.0
+WELL-5,regime,distal outflow (weak inversion),outflow over cooler deep water (inversion),interior T maximum with weak cooling below (<10 K): mixed,
+WELL-6,Tmax,220.5,220.5,220.5,0.0
+WELL-6,Tmax_elev,-550.0,-550.0,-550.0,0.0
+WELL-6,T_TD,126.1,126.1,126.1,0.0
+WELL-6,inversion,98.1,98.1,98.1,0.0
+WELL-6,shallow_grad,540.0,489.8,590.51,100.71
+WELL-6,deep_grad,7.0,7.1,7.14,0.14
+WELL-6,z100,13.0,13.018867924528294,13.0,0.02
+WELL-6,z200,-329.0,-328.53107344632764,-329.0,0.47
+WELL-6,min_bm,70.0,70.0,69.98,0.02
+WELL-6,water_level,157.0,157.0,157.08,0.08
+WELL-6,regime,outflow (hot tongue over cooler water),outflow over cooler deep water (inversion),upflow with lateral outflow (interior T maximum; cooler below),
+WELL-7,Tmax,176.7,176.7,176.7,0.0
+WELL-7,Tmax_elev,-650.0,-650.0,-650.0,0.0
+WELL-7,T_TD,144.7,144.7,144.7,0.0
+WELL-7,inversion,46.0,46.0,46.0,0.0
+WELL-7,shallow_grad,301.0,280.2,259.58,41.42
+WELL-7,deep_grad,14.0,25.0,25.0,11.0
+WELL-7,z100,-114.0,-113.70967741935482,-114.0,0.29
+WELL-7,z200,,,,
+WELL-7,min_bm,80.5,80.5,80.49,0.01
+WELL-7,water_level,161.0,161.0,189.86,28.86
+WELL-7,regime,distal outflow (cooler tongue over cooler water); deep reheating,outflow over cooler deep water (inversion),upflow with lateral outflow (interior T maximum; cooler below),
+WELL-8,Tmax,93.1,93.1,93.1,0.0
+WELL-8,Tmax_elev,-2716.1,-2716.1,-2716.1,0.0
+WELL-8,T_TD,93.1,93.1,93.1,0.0
+WELL-8,inversion,0.0,4.5,0.0,4.5
+WELL-8,shallow_grad,83.0,84.6,80.63,3.97
+WELL-8,deep_grad,21.0,30.0,30.04,9.04
+WELL-8,z100,,,,
+WELL-8,z200,,,,
+WELL-8,min_bm,104.1,104.1,104.11,0.01
+WELL-8,water_level,184.0,180.0,184.03,4.03
+WELL-8,regime,recharge / cold downflow,conductive-cold with weak inversion (lateral cold flow),cold (<100 C): recharge/downflow or injection-cooled,
+WELL-9,Tmax,217.7,217.7,217.7,0.0
+WELL-9,Tmax_elev,-750.0,-750.0,-750.0,0.0
+WELL-9,T_TD,161.6,161.6,161.6,0.0
+WELL-9,inversion,57.7,57.7,57.7,0.0
+WELL-9,shallow_grad,319.0,318.7,247.11,71.89
+WELL-9,deep_grad,,9.0,9.03,0.03
+WELL-9,z100,-84.0,-84.13284132841328,-84.0,0.13
+WELL-9,z200,-496.0,-496.10169491525426,-496.0,0.1
+WELL-9,min_bm,87.8,87.8,87.77,0.03
+WELL-9,water_level,175.0,174.0,177.95,3.95
+WELL-9,regime,outflow (hot tongue over cooler water),outflow over cooler deep water (inversion),upflow with lateral outflow (interior T maximum; cooler below),
+WELL-10,Tmax,268.7,268.7,268.7,0.0
+WELL-10,Tmax_elev,-250.0,-250.0,-250.0,0.0
+WELL-10,T_TD,268.5,268.5,268.5,0.0
+WELL-10,inversion,0.0,0.0,0.2,0.2
+WELL-10,shallow_grad,792.0,760.4,948.95,188.55
+WELL-10,deep_grad,,285.0,284.97,0.03
+WELL-10,z100,165.0,164.67741935483872,165.0,0.32
+WELL-10,z200,46.0,45.55555555555556,46.0,0.44
+WELL-10,min_bm,2.6,2.6,2.65,0.05
+WELL-10,water_level,199.0,192.0,209.86,17.86
+WELL-10,regime,upflow / two-phase (near-boiling),two-phase / near-boiling upflow,two-phase / near-boiling upflow (>=2 points with margin < 5 K),

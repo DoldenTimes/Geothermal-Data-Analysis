@@ -1,0 +1,4 @@
+model,branch_tip,claude_md_same_as_main,required_files_present,required_files_total,output_files,figures,targets_rows,targets_missing_required_cols,targets_extra_cols,script_lines,report_lines,has_conceptual_sketch,n_sections
+Opus2,98f5dc4 Second iteration analysis with Opus 5.5,True,11,11,14,22,266,none,location_class;weight_P;rho_IF97_kgm3;flags,1975,247,True,3
+Sonnet2,954fd4c Second iteration analysis with Sonnet 5.5,True,11,11,13,21,266,none,weight_P;P_role;location_class,1390,296,True,3
+Haiku2,0403a66 Second iteration analysis with Haiku 5.5,True,11,11,12,15,266,none,none,1074,212,False,1

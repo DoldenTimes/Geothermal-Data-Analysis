@@ -1,0 +1,11 @@
+well,wellhead_mRL,model_surface_mRL,wellhead_minus_surface_m,max_horizontal_deviation_m,nearest_fault,dist_nearest_fault_m,nearest_water_body,dist_nearest_water_body_m,dist_Lake_Tarawera_m,dist_Tarawera_River_m,dist_river_m,dist_Fault_1_m,dist_Fault_2_m,dist_Fault_3_m
+WELL-10,260.0,260.0,0.0,0.0,Fault 3,225.7,Tarawera River,1336.5,5904.4,1336.5,2213.0,364.6,1788.8,225.7
+WELL-1,15.0,20.0,-5.0,0.0,Fault 2,2141.2,river,95.8,7892.0,116.3,95.8,3583.2,2141.2,3544.5
+WELL-2,225.0,240.0,-15.0,0.0,Fault 3,124.7,Tarawera River,1905.6,6494.8,1905.6,2458.7,250.2,1661.8,124.7
+WELL-3,164.0,180.0,-16.0,0.0,Fault 1,377.6,Tarawera River,827.6,5892.3,827.6,1356.0,377.6,1055.8,1050.6
+WELL-4,340.0,340.0,0.0,0.0,Fault 3,50.3,river,3125.5,9815.1,3800.9,3125.5,3289.9,1354.0,50.3
+WELL-5,93.0,100.0,-7.0,0.0,Fault 2,855.2,river,345.0,6978.4,800.0,345.0,2293.8,855.2,2540.7
+WELL-6,147.0,160.0,-13.0,0.0,Fault 1,112.6,Tarawera River,423.9,4701.3,423.9,1626.0,112.6,1347.8,1790.8
+WELL-7,190.0,200.0,-10.0,0.0,Fault 2,348.8,Tarawera River,858.2,5092.1,858.2,1243.0,1121.8,348.8,2832.2
+WELL-8,176.0,180.0,-4.0,999.7,Fault 1,950.3,Tarawera River,234.9,3247.4,234.9,2644.7,950.3,2431.8,1784.5
+WELL-9,174.0,180.0,-6.0,867.6,Fault 2,268.8,river,1488.2,7347.7,1901.4,1488.2,1144.9,268.8,684.2

@@ -1,0 +1,17 @@
+well,band,n_windows,median_ratio,cold_well_component_ratio,excess_above_component_pct,cold_well
+WELL-1,cased,1,1.0633,1.0402,2.23,False
+WELL-1,open,1,1.0077,1.007,0.07,False
+WELL-2,open,3,1.0916,1.007,8.4,False
+WELL-3,cased,1,1.5507,1.0402,49.08,False
+WELL-3,open,2,1.0547,1.007,4.73,False
+WELL-4,cased,1,1.032,1.0402,-0.78,True
+WELL-5,cased,1,1.1315,1.0402,8.78,False
+WELL-5,open,2,1.0003,1.007,-0.67,False
+WELL-6,cased,1,1.2962,1.0402,24.62,False
+WELL-6,open,2,1.0038,1.007,-0.32,False
+WELL-7,cased,1,1.1745,1.0402,12.92,False
+WELL-7,open,2,1.0139,1.007,0.69,False
+WELL-8,cased,1,1.0483,1.0402,0.78,True
+WELL-8,open,2,1.007,1.007,0.0,True
+WELL-9,cased,1,1.2064,1.0402,15.98,False
+WELL-9,open,2,1.0394,1.007,3.22,False

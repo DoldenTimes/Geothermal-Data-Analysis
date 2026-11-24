@@ -1,0 +1,74 @@
+== Natural-state analysis (CLAUDE.md v3) ==
+Repository root: C:\Users\Dold718\GDA Files
+IF97 Region 4 check: Tsat(1 bar) = 99.6059 degC; error vs IF97 table -3.89e-07 K (tolerance 0.1 K)
+IF97 Region 4 check: Tsat(10 bar) = 179.8856 degC; error vs IF97 table +3.91e-07 K (tolerance 0.1 K)
+IF97 Region 4 check: Tsat(100 bar) = 310.9995 degC; error vs IF97 table -1.47e-09 K (tolerance 0.1 K)
+IF97 Tsat(1.01325 bar) = 99.97 degC (reference 99.97); Tsat(100 bar) = 311.00 degC (reference 311.0)
+Input inventory: 75 files; roles: well_data_dat=38, reference_other=12, well_data_json=10, out_of_scope=7, reference_results=2, geometry_dat=1, mapping=1, reference_bc=1, reference_rock=1, well_blocks_json=1, well_groups=1
+Wells: 10; grid layers in LAYERS section: 70
+Injectate enthalpy 335.0 kJ/kg -> injectate temperature 79.83 degC (IF97, liquid at 10 bar)
+JSON vs dat cross-check: 38 of 38 series agree
+Natural-state reference wells (gauge test passed): ['WELL-2', 'WELL-3']
+
+Gauge tests and verdicts:
+   well  gauge_elev_mRL  diff_survey_minus_first_bar  trend_max_abs_dev_bar                verdict confidence
+WELL-10          -250.0                         8.00                    NaN probably natural state        low
+ WELL-1             NaN                          NaN                  -2.92 probably natural state        low
+ WELL-2          -750.0                        -0.10                    NaN          natural state       high
+ WELL-3          -550.0                        -0.10                    NaN          natural state     medium
+ WELL-4             NaN                          NaN                   1.93 probably natural state     medium
+ WELL-5             NaN                          NaN                  -0.39 probably natural state        low
+ WELL-6             NaN                          NaN                  -1.49 probably natural state     medium
+ WELL-7             NaN                          NaN                  -1.70 probably natural state     medium
+ WELL-8             NaN                          NaN                   1.32 probably natural state        low
+ WELL-9          -675.0                         2.05                    NaN     possibly disturbed        low
+
+Well summary:
+   well  Tmax_degC  inversion_degC  shallow_gradient_degC_per_km  deep_gradient_degC_per_km  water_level_mRL            regime             ns_verdict ns_confidence
+WELL-10      268.7             NaN                         760.4                        NaN            191.3            upflow probably natural state           low
+ WELL-1      118.6             NaN                          73.2                        NaN            107.3        conductive probably natural state           low
+ WELL-2      266.9            30.9                         664.4                       21.4            200.7           outflow          natural state          high
+ WELL-3      261.4            86.9                         860.4                       14.3            149.8           outflow          natural state        medium
+ WELL-4       29.0             NaN                          13.9                        NaN            232.4 recharge/downflow probably natural state        medium
+ WELL-5      158.0            13.3                         295.2                       13.5            125.2           outflow probably natural state           low
+ WELL-6      220.5            98.1                         489.8                       20.2            145.7           outflow probably natural state        medium
+ WELL-7      176.7            46.0                         280.2                       16.4            154.9           outflow probably natural state        medium
+ WELL-8       93.1             4.5                          84.6                       23.9            178.3 recharge/downflow probably natural state           low
+ WELL-9      217.7            57.7                         318.7                        NaN            164.7           outflow     possibly disturbed           low
+
+Hydrostatic windows used: 24; excluded or trimmed notes: 14
+   WELL-10 cased: single-phase part 0 m, no window >= 300 m
+   WELL-10 open: single-phase part 0 m, no window >= 300 m
+   WELL-1 open: no survey points between -1100 and -1000 mRL; window top set to -1100 mRL
+   WELL-2 cased: single-phase part 290 m, no window >= 300 m
+   WELL-2 open: no survey points between -150 and -100 mRL; window top set to -150 mRL
+   WELL-3 cased: survey points above 164 mRL not single-phase; window top set to 150 mRL
+   WELL-4 open: single-phase part 200 m, no window >= 300 m
+   WELL-5 open: no survey points between -1100 and -1000 mRL; window top set to -1100 mRL
+   WELL-6 open: no survey points between -450 and -440 mRL; window top set to -450 mRL
+   WELL-7 cased: survey points above 170 mRL not single-phase; window top set to 150 mRL
+   WELL-7 open: no survey points between -450 and -440 mRL; window top set to -450 mRL
+   WELL-8 open: no survey points between -750 and -700 mRL; window top set to -750 mRL
+   WELL-9 cased: survey points above 174 mRL not single-phase; window top set to 170 mRL
+   WELL-9 open: no survey points between -450 and -400 mRL; window top set to -450 mRL
+
+Hydrostatic summary:
+  well  band  n_windows  median_ratio  cold_well_component_ratio  excess_above_component_pct  cold_well
+WELL-1 cased          1        1.0633                     1.0402                        2.23      False
+WELL-1  open          1        1.0077                     1.0070                        0.07      False
+WELL-2  open          3        1.0916                     1.0070                        8.40      False
+WELL-3 cased          1        1.5507                     1.0402                       49.08      False
+WELL-3  open          2        1.0547                     1.0070                        4.73      False
+WELL-4 cased          1        1.0320                     1.0402                       -0.78       True
+WELL-5 cased          1        1.1315                     1.0402                        8.78      False
+WELL-5  open          2        1.0003                     1.0070                       -0.67      False
+WELL-6 cased          1        1.2962                     1.0402                       24.62      False
+WELL-6  open          2        1.0038                     1.0070                       -0.32      False
+WELL-7 cased          1        1.1745                     1.0402                       12.92      False
+WELL-7  open          2        1.0139                     1.0070                        0.69      False
+WELL-8 cased          1        1.0483                     1.0402                        0.78       True
+WELL-8  open          2        1.0070                     1.0070                        0.00       True
+WELL-9 cased          1        1.2064                     1.0402                       15.98      False
+WELL-9  open          2        1.0394                     1.0070                        3.22      False
+
+Report written: Output/NS_data_interpretation.md

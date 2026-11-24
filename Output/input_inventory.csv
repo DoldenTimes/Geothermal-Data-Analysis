@@ -1,0 +1,76 @@
+role,path,note
+geometry_dat,Baseline/Teaching_Model_3D/Models/TE14515/gTE14515.dat,MULgraph grid; only LAYERS used for layer centres (geometry only)
+mapping,Baseline/Teaching_Model_3D/Data/Mapping/Mapping.json,"Faults, lake and river polylines (factual); river entries are ragged arrays"
+out_of_scope,Baseline/Teaching_Model_3D/Data/Groups_data.json,Field-total steam-flow record (production); not used in any calculation
+out_of_scope,Baseline/Teaching_Model_3D/Models/TE14515/FutureScenarios/000/currentFSSetup.json,Production or future-scenario model set-up; not read
+out_of_scope,Baseline/Teaching_Model_3D/Models/TE14515/Production/currentPRSetup.json,Production or future-scenario model set-up; not read
+out_of_scope,Baseline/Teaching_Model_3D/Parameters/ProductionHistory/.DS_Store,"Production-history, reinjection and forecast spreadsheets; not read (records used only via well files)"
+out_of_scope,Baseline/Teaching_Model_3D/Parameters/ProductionHistory/000/3D_Model_Monitor_000.xlsx,"Production-history, reinjection and forecast spreadsheets; not read (records used only via well files)"
+out_of_scope,Baseline/Teaching_Model_3D/Parameters/ProductionHistory/000/3D_Model_Production_000.xlsx,"Production-history, reinjection and forecast spreadsheets; not read (records used only via well files)"
+out_of_scope,Baseline/Teaching_Model_3D/Parameters/ProductionHistory/000/3D_Model_Reinjection_000.xlsx,"Production-history, reinjection and forecast spreadsheets; not read (records used only via well files)"
+reference_bc,Baseline/Teaching_Model_3D/Models/TE14515/gTE14515_boundary_conditions.json,"Reference-model boundary conditions; reference only, not read"
+reference_other,Baseline/Teaching_Model_3D/Data/Plotting/Downhole_pressure.json,Plotting configuration; not evidence
+reference_other,Baseline/Teaching_Model_3D/Data/Plotting/Downhole_temperature.json,Plotting configuration; not evidence
+reference_other,Baseline/Teaching_Model_3D/Data/Plotting/Wel10.json,Plotting configuration; not evidence
+reference_other,Baseline/Teaching_Model_3D/Data/Plotting/Well2.json,Plotting configuration; not evidence
+reference_other,Baseline/Teaching_Model_3D/Data/Plotting/Well3.json,Plotting configuration; not evidence
+reference_other,Baseline/Teaching_Model_3D/Data/Plotting/Well4.json,Plotting configuration; not evidence
+reference_other,Baseline/Teaching_Model_3D/Data/Plotting/Well5.json,Plotting configuration; not evidence
+reference_other,Baseline/Teaching_Model_3D/Data/Plotting/Well8.json,Plotting configuration; not evidence
+reference_other,Baseline/Teaching_Model_3D/Data/Plotting/Well9.json,Plotting configuration; not evidence
+reference_other,Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/currentNSSetup.json,Reference natural-state set-up; not read
+reference_other,Baseline/Teaching_Model_3D/Models/TE14515/currentGeomSetup.json,Model set-up (hard-coded paths from another machine); not read
+reference_other,Baseline/Teaching_Model_3D/Models/TE14515/gTE14515.auxjson,Scene/plot features copied from Mapping.json; hard-coded path from another machine
+reference_results,Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/TE14515_NS_000.dat,"Reference natural-state run output / initial conditions; role from file name, not opened"
+reference_results,Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/TE14515_NS_000.incon,"Reference natural-state run output / initial conditions; role from file name, not opened"
+reference_rock,Baseline/Teaching_Model_3D/Models/TE14515/gTE14515_dict_rocktype.json,"Reference-model rock types; reference only, not read"
+well_blocks_json,Baseline/Teaching_Model_3D/Models/TE14515/gTE14515_wells.json,"Well-to-block intersections, feed-zone blocks and interpolation weights; block authority"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Wel10_-250.0_transient_pressure.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Wel10_downhole_pressure.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Wel10_downhole_temperature.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Wel10_production_mass_flow.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Wel10_transient_enthalpy.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well1_downhole_pressure.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well1_downhole_temperature.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well2_-750.0_transient_pressure.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well2_downhole_pressure.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well2_downhole_temperature.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well2_production_mass_flow.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well2_transient_enthalpy.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well3_-550.0_transient_pressure.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well3_downhole_pressure.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well3_downhole_temperature.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well3_production_mass_flow.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well3_transient_enthalpy.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well4_downhole_pressure.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well4_downhole_temperature.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well4_injection_enthalpy.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well4_injection_mass_flow.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well5_downhole_pressure.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well5_downhole_temperature.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well5_injection_enthalpy.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well5_injection_mass_flow.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well6_downhole_pressure.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well6_downhole_temperature.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well7_downhole_pressure.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well7_downhole_temperature.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well8_downhole_pressure.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well8_downhole_temperature.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well8_injection_enthalpy.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well8_injection_mass_flow.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well9_-675.0_transient_pressure.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well9_downhole_pressure.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well9_downhole_temperature.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well9_production_mass_flow.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat/Well9_transient_enthalpy.dat,"Plain-column copy of well data; cross-checked against JSON, not a primary source"
+well_data_json,Baseline/Teaching_Model_3D/Data/Data_json/WELL-10_data.json,"Per-well JSON: track, design, feed zones, T/P survey, transients, flows (factual)"
+well_data_json,Baseline/Teaching_Model_3D/Data/Data_json/WELL-1_data.json,"Per-well JSON: track, design, feed zones, T/P survey, transients, flows (factual)"
+well_data_json,Baseline/Teaching_Model_3D/Data/Data_json/WELL-2_data.json,"Per-well JSON: track, design, feed zones, T/P survey, transients, flows (factual)"
+well_data_json,Baseline/Teaching_Model_3D/Data/Data_json/WELL-3_data.json,"Per-well JSON: track, design, feed zones, T/P survey, transients, flows (factual)"
+well_data_json,Baseline/Teaching_Model_3D/Data/Data_json/WELL-4_data.json,"Per-well JSON: track, design, feed zones, T/P survey, transients, flows (factual)"
+well_data_json,Baseline/Teaching_Model_3D/Data/Data_json/WELL-5_data.json,"Per-well JSON: track, design, feed zones, T/P survey, transients, flows (factual)"
+well_data_json,Baseline/Teaching_Model_3D/Data/Data_json/WELL-6_data.json,"Per-well JSON: track, design, feed zones, T/P survey, transients, flows (factual)"
+well_data_json,Baseline/Teaching_Model_3D/Data/Data_json/WELL-7_data.json,"Per-well JSON: track, design, feed zones, T/P survey, transients, flows (factual)"
+well_data_json,Baseline/Teaching_Model_3D/Data/Data_json/WELL-8_data.json,"Per-well JSON: track, design, feed zones, T/P survey, transients, flows (factual)"
+well_data_json,Baseline/Teaching_Model_3D/Data/Data_json/WELL-9_data.json,"Per-well JSON: track, design, feed zones, T/P survey, transients, flows (factual)"
+well_groups,Baseline/Teaching_Model_3D/Data/Area_data.json,Area membership: list of wells (factual)

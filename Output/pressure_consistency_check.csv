@@ -1,0 +1,11 @@
+well,gauge_elev_mRL,survey_P_at_gauge_bar,first_gauge_date,first_gauge_P_bar,diff_survey_minus_first_bar,verdict,confidence,first_flow_record_well,gauge_minus_first_flow_days,gauge_in_feedzone,trend_max_abs_dev_bar,note
+WELL-10,-250.0,56.7,01/01/2020,48.7,8.0,probably natural state,low,01/12/2019,31.0,True,,gauge starts after the well's first flow record: no pre-production gauge test; survey date precedes the first production record
+WELL-1,,,,,,probably natural state,low,none,,,-2.92,no gauge; feed-zone pressure deviates from the trend by -2.9 bar (between 2 and 3 bar)
+WELL-2,-750.0,98.2,01/01/2014,98.3,-0.1,natural state,high,01/01/2014,0.0,True,,gauge test passed: survey matches earliest gauge reading within tolerance
+WELL-3,-550.0,80.7,01/01/2014,80.8,-0.1,natural state,medium,01/01/2014,0.0,False,,gauge test passed: survey matches earliest gauge reading within tolerance (gauge is between feed zones: wellbore effect possible)
+WELL-4,,,,,,probably natural state,medium,01/01/2014,,,1.93,no gauge; feed-zone pressure within 2 bar of the natural-state trend (max deviation +1.9 bar); injector: whole profile colder than injectate (80 degC) with no isothermal section near it: evidence against an injection-affected survey
+WELL-5,,,,,,probably natural state,low,01/01/2014,,,-0.39,"no gauge; feed-zone pressure within 2 bar of the natural-state trend (max deviation -0.4 bar); injector: formation Tmax 158 degC exceeds injectate 80 degC; injection cooling could be hidden, confidence lowered"
+WELL-6,,,,,,probably natural state,medium,none,,,-1.49,no gauge; feed-zone pressure within 2 bar of the natural-state trend (max deviation -1.5 bar)
+WELL-7,,,,,,probably natural state,medium,none,,,-1.7,no gauge; feed-zone pressure within 2 bar of the natural-state trend (max deviation -1.7 bar)
+WELL-8,,,,,,probably natural state,low,01/01/2014,,,1.32,"no gauge; feed-zone pressure within 2 bar of the natural-state trend (max deviation +1.3 bar); injector: formation Tmax 93 degC exceeds injectate 80 degC; injection cooling could be hidden, confidence lowered"
+WELL-9,-675.0,91.25,01/01/2014,89.2,2.05,possibly disturbed,low,01/01/2014,0.0,False,,gauge test failed: survey and earliest gauge reading differ beyond tolerance; gauge is between feed zones

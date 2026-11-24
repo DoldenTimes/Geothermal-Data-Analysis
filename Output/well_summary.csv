@@ -1,0 +1,11 @@
+well,Tmax_degC,Tmax_elev_mRL,T_at_TD_degC,TD_mRL,inversion_degC,inversion_top_mRL,inversion_base_mRL,shallow_gradient_degC_per_km,deep_gradient_degC_per_km,z_100C_mRL,z_200C_mRL,min_boiling_margin_degC,min_boiling_margin_elev_mRL,water_level_mRL,pivot_elev_mRL,pivot_P_bar,regime,ns_verdict,ns_confidence,pivot_feedzone,wellhead_mRL,surface_mRL
+WELL-10,268.7,-250.0,268.5,-350.0,,,,760.4,,164.7,45.6,2.6,-150.0,191.3,-262.5,57.7,upflow,probably natural state,low,FZ1 (Synthetic),260.0,260.0
+WELL-1,118.6,-1672.0,118.6,-1672.0,,,,73.2,,-945.9,,150.4,15.0,107.3,-1465.0,158.7,conductive,probably natural state,low,FZ2 (MEDIUM),15.0,20.0
+WELL-2,266.9,-550.0,253.7,-2348.0,30.9,-550.0,-1500.0,664.4,21.4,128.2,-81.0,23.8,-450.0,200.7,-745.0,97.8,outflow,natural state,high,FZ2 (HIGH),225.0,240.0
+WELL-3,261.4,-450.0,188.2,-2887.0,86.9,-450.0,-1700.0,860.4,14.3,104.5,-13.7,12.2,-150.0,149.8,-335.0,62.8,outflow,natural state,medium,FZ1 (HIGH),164.0,180.0
+WELL-4,29.0,-750.0,29.0,-750.0,,,,13.9,,,,113.8,230.0,232.4,-655.0,91.7,recharge/downflow,probably natural state,medium,FZ1 (MEDIUM),340.0,340.0
+WELL-5,158.0,-650.0,154.7,-2595.0,13.3,-650.0,-1700.0,295.2,13.5,-159.9,,123.6,93.0,125.2,-1325.0,148.1,outflow,probably natural state,low,FZ1 (MEDIUM),93.0,100.0
+WELL-6,220.5,-550.0,126.1,-2359.0,98.1,-550.0,-1900.0,489.8,20.2,13.0,-328.5,70.0,-450.0,145.7,-1125.0,130.5,outflow,probably natural state,medium,FZ2 (HIGH),147.0,160.0
+WELL-7,176.7,-650.0,144.7,-2762.0,46.0,-650.0,-1700.0,280.2,16.4,-113.7,,80.5,170.0,154.9,-1325.0,148.7,outflow,probably natural state,medium,FZ2 (HIGH),190.0,200.0
+WELL-8,93.1,-2716.1,93.1,-2716.1,4.5,-850.0,-1300.0,84.6,23.9,,,104.1,176.0,178.3,-1125.0,132.0,recharge/downflow,probably natural state,low,FZ1 (HIGH),176.0,180.0
+WELL-9,217.7,-750.0,161.6,-2427.1,57.7,-750.0,-2250.0,318.7,,-84.1,-496.1,87.8,-550.0,164.7,-837.5,105.2,outflow,possibly disturbed,low,FZ2 (MEDIUM),174.0,180.0

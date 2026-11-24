@@ -1,0 +1,28 @@
+PASS  I1   75 inventory rows, all roles valid and paths present
+PASS  I1   every Baseline file is covered by the inventory
+PASS  F1   all 12 required files present
+PASS  F1   all required figure types present
+PASS  S1   input_inventory.csv: columns OK
+PASS  S1   NS_calibration_targets.csv: columns OK
+PASS  S1   feedzones.csv: columns OK
+PASS  S1   T_P_at_layer_centres.csv: columns OK
+PASS  S1   well_summary.csv: columns OK
+PASS  S1   pressure_consistency_check.csv: columns OK
+PASS  S1   hydrostatic_check.csv: columns OK
+PASS  S1   well_geometry_check.csv: columns OK
+PASS  S2   one pressure-consistency row per well
+PASS  S2   hydrostatic band labels OK
+PASS  T1   Tsat agrees with an independent IF97 Region 4 within 0.1 K at every point
+PASS  T2   boiling margins consistent
+PASS  W1   weights valid
+PASS  W2   ns_confidence takes 3 values across wells
+PASS  R1   1/601 report numbers (0%) not found in any output table; first: ['1040']
+PASS  R2   analysis script writes the report
+PASS  P1   process log has prompt, departures and acceptance check
+PASS  G1   all 266 survey-point blocks match the well-to-block file
+PASS  G2   all 18 feed-zone blocks match
+PASS  G3   all 30 layer centres match the grid file
+PASS  G3   no layer-centre row lies outside its well's survey range
+PASS  R3   re-run reproduces every CSV and the report
+
+0 FAIL, 0 WARN, 26 PASS

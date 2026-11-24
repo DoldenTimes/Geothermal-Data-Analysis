@@ -1,0 +1,11 @@
+well,survey_date,T_source,T_comment,P_source,P_comment,StableFlag,design_source,feedzone_source,feedzone_quality_tags,gauges_m,flow_records
+WELL-10,29/07/2015,(blank),(blank),(blank),(blank),True,Synthetic data,(blank),Synthetic,-250.0,Production_Mass_Flow;Transient_Enthalpy
+WELL-1,29/07/2015,(blank),(blank),(blank),(blank),True,Synthetic data,(blank),MEDIUM,none,none
+WELL-2,29/07/2015,(blank),(blank),(blank),(blank),True,Synthetic data,(blank),HIGH;LOW;MEDIUM,-750.0,Production_Mass_Flow;Transient_Enthalpy
+WELL-3,29/07/2015,(blank),(blank),(blank),(blank),True,Synthetic data,(blank),HIGH;MEDIUM,-550.0,Production_Mass_Flow;Transient_Enthalpy
+WELL-4,29/07/2015,(blank),(blank),(blank),(blank),True,Synthetic data,(blank),MEDIUM,none,Injection_Mass_Flow;Injection_Enthalpy
+WELL-5,29/07/2015,(blank),(blank),(blank),(blank),True,Synthetic data,(blank),MEDIUM,none,Injection_Mass_Flow;Injection_Enthalpy
+WELL-6,29/07/2015,(blank),(blank),(blank),(blank),True,Synthetic data,(blank),HIGH,none,none
+WELL-7,29/07/2015,(blank),(blank),(blank),(blank),True,Synthetic data,(blank),HIGH,none,none
+WELL-8,29/07/2015,(blank),(blank),(blank),(blank),True,Synthetic data,(blank),HIGH,none,Injection_Mass_Flow;Injection_Enthalpy
+WELL-9,29/07/2015,(blank),(blank),(blank),(blank),True,Synthetic data,(blank),LOW;MEDIUM,-675.0,Production_Mass_Flow;Transient_Enthalpy

@@ -1,0 +1,8 @@
+item,value
+heat_flux_default_W_m2,0.1
+atmosphere_T_degC,12.3
+rain_default_mm_yr,1000.0
+n_heat_sources,398.0
+heat_total_MW,15.6
+heat_per_block_min_kW,14.61
+heat_per_block_max_kW,91.55

@@ -1,0 +1,16 @@
+name,value,unit,note
+max_trend_resid,2.9,bar,largest feed-zone pressure residual against the passed wells
+tr_res_range,2.9,bar,max abs residual
+spread_1500,7.2,bar,"spread of P at -1500 mRL, all wells"
+spread_1500_x8,3.1,bar,spread of P at -1500 mRL without W8
+spread_1500b,7.2,bar,spread of P at -1500 mRL
+spread_2000,9.8,bar,spread of P at -2000 mRL
+spread_2500,13.2,bar,spread of P at -2500 mRL
+g,9.80665,m/s2,gravity used
+max_round_ratio,0.003,,largest rounding uncertainty of a ratio
+max_round_rho,3.1,kg/m3,largest rounding uncertainty of implied density
+if97_density_cold_cased,995.0,kg/m3,length-weighted IF97 density of the cold-well cased windows
+comp_o_minus1,0.009,,open-band cold-well component minus 1
+comp_c_minus1,0.04,,cased-band cold-well component minus 1
+max_cased_minus1,0.551,,largest cased ratio minus 1
+sum_T_weights_all,127.73,,sum of all temperature weights

@@ -1,4 +1,4 @@
-PASS  I1   75 inventory rows, all roles valid and paths present
+PASS  I1   22 inventory rows, all roles valid and paths present
 PASS  I1   every Baseline file is covered by the inventory
 PASS  F1   all 12 required files present
 PASS  F1   all required figure types present
@@ -16,7 +16,7 @@ PASS  T1   Tsat agrees with an independent IF97 Region 4 within 0.1 K at every p
 PASS  T2   boiling margins consistent
 PASS  W1   weights valid
 PASS  W2   ns_confidence takes 3 values across wells
-PASS  R1   1/601 report numbers (0%) not found in any output table; first: ['1040']
+PASS  R1   0/892 report numbers (0%) not found in any output table; first: []
 PASS  R2   analysis script writes the report
 PASS  P1   process log has prompt, departures and acceptance check
 PASS  G1   all 266 survey-point blocks match the well-to-block file

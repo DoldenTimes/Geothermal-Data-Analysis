@@ -1,267 +1,267 @@
-well,x,y,elevation_mRL,T_degC,P_bar,Tsat_degC,boiling_margin_degC,column,layer,block,in_feedzone,behind_casing,above_model_surface,ns_confidence,weight,weight_reason,weight_P,feedzone,quality_tag,open_isothermal_section,location_weight,confidence_factor
-WELL-10,2819400.0,6334900.0,210.0,24.6,1.0,99.61,75.01,arz,40,arz40,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-10,2819400.0,6334900.0,190.0,45.1,1.9,118.6,73.5,arz,41,arz41,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-10,2819400.0,6334900.0,170.0,93.4,3.6,139.85,46.45,arz,42,arz42,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-10,2819400.0,6334900.0,150.0,118.2,6.0,158.83,40.63,arz,43,arz43,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-10,2819400.0,6334900.0,130.0,138.6,8.4,172.45,33.85,arz,44,arz44,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-10,2819400.0,6334900.0,110.0,156.8,11.1,184.47,27.67,arz,45,arz45,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-10,2819400.0,6334900.0,90.0,172.9,13.9,194.71,21.81,arz,46,arz46,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-10,2819400.0,6334900.0,70.0,186.7,16.5,202.86,16.16,arz,47,arz47,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-10,2819400.0,6334900.0,50.0,198.0,19.1,210.07,12.07,arz,48,arz48,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-10,2819400.0,6334900.0,30.0,207.0,21.9,217.02,10.02,arz,49,arz49,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-10,2819400.0,6334900.0,10.0,215.6,24.9,223.74,8.14,arz,50,arz50,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-10,2819400.0,6334900.0,-25.0,227.9,29.9,233.67,5.77,arz,51,arz51,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-10,2819400.0,6334900.0,-75.0,241.7,36.7,245.3,3.6,arz,52,arz52,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-10,2819400.0,6334900.0,-150.0,256.8,46.5,259.45,2.65,arz,53,arz53,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-10,2819400.0,6334900.0,-250.0,268.7,56.7,271.92,3.22,arz,54,arz54,True,False,False,low,0.5,feed zone,0.25,FZ1,Synthetic,False,1.0,0.5
-WELL-10,2819400.0,6334900.0,-262.5,268.7,57.7,273.05,4.35,arz,54,arz54,True,False,False,low,0.5,feed zone,0.25,FZ1,Synthetic,False,1.0,0.5
-WELL-10,2819400.0,6334900.0,-350.0,268.5,64.4,280.24,11.74,arz,55,arz55,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-1,2823330.0,6334011.0,15.0,32.9,10.8,183.26,150.36,arg,50,arg50,False,True,False,low,0.15,within 30 m of wellhead or in top block of column,0.0,,,False,0.3,0.5
-WELL-1,2823330.0,6334011.0,10.0,33.6,11.3,185.27,151.67,arg,50,arg50,False,True,False,low,0.15,within 30 m of wellhead or in top block of column,0.0,,,False,0.3,0.5
-WELL-1,2823330.0,6334011.0,-25.0,38.5,14.8,197.66,159.16,arg,51,arg51,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-1,2823330.0,6334011.0,-75.0,43.1,20.1,212.64,169.54,arg,52,arg52,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-1,2823330.0,6334011.0,-150.0,47.4,28.1,230.26,182.86,arg,53,arg53,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-1,2823330.0,6334011.0,-250.0,52.4,38.6,248.25,195.85,arg,54,arg54,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-1,2823330.0,6334011.0,-350.0,60.9,48.7,262.3,201.4,arg,55,arg55,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-1,2823330.0,6334011.0,-450.0,69.0,58.6,274.05,205.05,arg,56,arg56,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-1,2823330.0,6334011.0,-550.0,76.4,68.4,284.27,207.87,arg,57,arg57,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-1,2823330.0,6334011.0,-650.0,83.5,78.6,293.78,210.28,arg,58,arg58,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-1,2823330.0,6334011.0,-750.0,89.8,89.0,302.55,212.75,arg,59,arg59,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-1,2823330.0,6334011.0,-850.0,95.3,99.3,310.48,215.18,arg,60,arg60,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-1,2823330.0,6334011.0,-950.0,100.2,109.5,317.74,217.54,arg,61,arg61,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-1,2823330.0,6334011.0,-1100.0,106.5,124.2,327.32,220.82,arg,62,arg62,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-1,2823330.0,6334011.0,-1300.0,112.5,143.2,338.46,225.96,arg,63,arg63,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-1,2823330.0,6334011.0,-1337.5,113.2,146.7,340.38,227.18,arg,63,arg63,True,False,False,low,0.5,feed zone,0.4,FZ1,MEDIUM,False,1.0,0.5
-WELL-1,2823330.0,6334011.0,-1465.0,115.5,158.7,346.7,231.2,arg,64,arg64,True,False,False,low,0.5,feed zone,0.4,FZ2,MEDIUM,False,1.0,0.5
-WELL-1,2823330.0,6334011.0,-1500.0,116.2,162.0,348.36,232.16,arg,64,arg64,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-1,2823330.0,6334011.0,-1672.0,118.6,178.2,356.16,237.56,arg,65,arg65,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-2,2819527.0,6335494.0,225.0,16.5,1.0,99.61,83.11,ajf,39,ajf39,False,True,False,high,0.3,within 30 m of wellhead or in top block of column,0.0,,,False,0.3,1.0
-WELL-2,2819527.0,6335494.0,210.0,19.3,1.1,102.29,82.99,ajf,40,ajf40,False,True,False,high,0.3,within 30 m of wellhead or in top block of column,0.0,,,False,0.3,1.0
-WELL-2,2819527.0,6335494.0,190.0,35.4,3.1,134.65,99.25,ajf,41,ajf41,False,True,False,high,0.5,behind casing (at or above production casing shoe),0.0,,,False,0.5,1.0
-WELL-2,2819527.0,6335494.0,170.0,48.1,5.2,153.32,105.22,ajf,42,ajf42,False,True,False,high,0.5,behind casing (at or above production casing shoe),0.0,,,False,0.5,1.0
-WELL-2,2819527.0,6335494.0,150.0,75.8,7.2,166.09,90.29,ajf,43,ajf43,False,True,False,high,0.5,behind casing (at or above production casing shoe),0.0,,,False,0.5,1.0
-WELL-2,2819527.0,6335494.0,130.0,98.3,9.3,176.76,78.46,ajf,44,ajf44,False,True,False,high,0.5,behind casing (at or above production casing shoe),0.0,,,False,0.5,1.0
-WELL-2,2819527.0,6335494.0,110.0,116.7,11.3,185.27,68.57,ajf,45,ajf45,False,True,False,high,0.5,behind casing (at or above production casing shoe),0.0,,,False,0.5,1.0
-WELL-2,2819527.0,6335494.0,90.0,131.4,13.2,192.32,60.92,ajf,46,ajf46,False,True,False,high,0.5,behind casing (at or above production casing shoe),0.0,,,False,0.5,1.0
-WELL-2,2819527.0,6335494.0,70.0,140.2,15.1,198.61,58.41,ajf,47,ajf47,False,True,False,high,0.5,behind casing (at or above production casing shoe),0.0,,,False,0.5,1.0
-WELL-2,2819527.0,6335494.0,50.0,149.5,17.5,205.73,56.23,ajf,48,ajf48,False,True,False,high,0.5,behind casing (at or above production casing shoe),0.0,,,False,0.5,1.0
-WELL-2,2819527.0,6335494.0,30.0,159.0,20.1,212.64,53.64,ajf,49,ajf49,False,True,False,high,0.5,behind casing (at or above production casing shoe),0.0,,,False,0.5,1.0
-WELL-2,2819527.0,6335494.0,10.0,167.8,22.7,218.88,51.08,ajf,50,ajf50,False,True,False,high,0.5,behind casing (at or above production casing shoe),0.0,,,False,0.5,1.0
-WELL-2,2819527.0,6335494.0,-25.0,181.7,27.5,229.08,47.38,ajf,51,ajf51,False,True,False,high,0.5,behind casing (at or above production casing shoe),0.0,,,False,0.5,1.0
-WELL-2,2819527.0,6335494.0,-75.0,198.4,34.3,241.4,43.0,ajf,52,ajf52,False,True,False,high,0.5,behind casing (at or above production casing shoe),0.0,,,False,0.5,1.0
-WELL-2,2819527.0,6335494.0,-150.0,218.5,43.9,255.94,37.44,ajf,53,ajf53,False,False,False,high,0.8,open hole,0.0,,,False,0.8,1.0
-WELL-2,2819527.0,6335494.0,-250.0,238.2,55.0,269.97,31.77,ajf,54,ajf54,True,False,False,high,1.0,feed zone,0.5,FZ1,LOW,False,1.0,1.0
-WELL-2,2819527.0,6335494.0,-260.0,239.7,55.9,271.01,31.31,ajf,54,ajf54,True,False,False,high,1.0,feed zone,0.5,FZ1,LOW,False,1.0,1.0
-WELL-2,2819527.0,6335494.0,-350.0,253.0,64.5,280.35,27.35,ajf,55,ajf55,False,False,False,high,0.8,open hole,0.0,,,False,0.8,1.0
-WELL-2,2819527.0,6335494.0,-450.0,265.3,73.4,289.06,23.76,ajf,56,ajf56,False,False,False,high,0.8,open hole,0.0,,,False,0.8,1.0
-WELL-2,2819527.0,6335494.0,-550.0,266.9,81.5,296.31,29.41,ajf,57,ajf57,False,False,False,high,0.8,open hole,0.0,,,False,0.8,1.0
-WELL-2,2819527.0,6335494.0,-650.0,263.6,89.7,303.11,39.51,ajf,58,ajf58,False,False,False,high,0.8,open hole,0.0,,,False,0.8,1.0
-WELL-2,2819527.0,6335494.0,-745.0,258.0,97.8,309.37,51.37,ajf,59,ajf59,True,False,False,high,1.0,feed zone,1.0,FZ2,HIGH,False,1.0,1.0
-WELL-2,2819527.0,6335494.0,-750.0,257.7,98.2,309.67,51.97,ajf,59,ajf59,True,False,False,high,1.0,feed zone,1.0,FZ2,HIGH,False,1.0,1.0
-WELL-2,2819527.0,6335494.0,-850.0,248.9,106.8,315.87,66.97,ajf,60,ajf60,False,False,False,high,0.8,open hole,0.0,,,False,0.8,1.0
-WELL-2,2819527.0,6335494.0,-950.0,242.7,115.6,321.83,79.13,ajf,61,ajf61,False,False,False,high,0.8,open hole,0.0,,,False,0.8,1.0
-WELL-2,2819527.0,6335494.0,-1100.0,237.8,128.9,330.2,92.4,ajf,62,ajf62,False,False,False,high,0.5,open hole in isothermal section >= 300 m (possible internal flow),0.0,,,True,0.5,1.0
-WELL-2,2819527.0,6335494.0,-1300.0,236.1,146.7,340.38,104.28,ajf,63,ajf63,False,False,False,high,0.5,open hole in isothermal section >= 300 m (possible internal flow),0.0,,,True,0.5,1.0
-WELL-2,2819527.0,6335494.0,-1500.0,236.0,164.5,349.61,113.61,ajf,64,ajf64,False,False,False,high,0.5,open hole in isothermal section >= 300 m (possible internal flow),0.0,,,True,0.5,1.0
-WELL-2,2819527.0,6335494.0,-1700.0,237.1,182.2,358.0,120.9,ajf,65,ajf65,False,False,False,high,0.5,open hole in isothermal section >= 300 m (possible internal flow),0.0,,,True,0.5,1.0
-WELL-2,2819527.0,6335494.0,-1900.0,240.0,199.8,365.66,125.66,ajf,66,ajf66,True,False,False,high,1.0,feed zone,0.8,FZ3,MEDIUM,False,1.0,1.0
-WELL-2,2819527.0,6335494.0,-1910.0,240.3,200.7,366.04,125.74,ajf,66,ajf66,True,False,False,high,1.0,feed zone,0.8,FZ3,MEDIUM,False,1.0,1.0
-WELL-2,2819527.0,6335494.0,-2250.0,251.6,230.4,,,ajf,67,ajf67,False,False,False,high,0.8,open hole,0.0,,,False,0.8,1.0
-WELL-2,2819527.0,6335494.0,-2348.0,253.7,239.1,,,ajf,67,ajf67,False,False,False,high,0.8,open hole,0.0,,,False,0.8,1.0
-WELL-3,2820133.0,6334454.0,164.0,35.1,1.4,109.29,74.19,asd,42,asd42,False,True,False,medium,0.225,within 30 m of wellhead or in top block of column,0.0,,,False,0.3,0.75
-WELL-3,2820133.0,6334454.0,150.0,42.6,2.4,126.07,83.47,asd,43,asd43,False,True,False,medium,0.225,within 30 m of wellhead or in top block of column,0.0,,,False,0.3,0.75
-WELL-3,2820133.0,6334454.0,130.0,63.3,4.4,147.08,83.78,asd,44,asd44,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-3,2820133.0,6334454.0,110.0,93.0,6.4,161.37,68.37,asd,45,asd45,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-3,2820133.0,6334454.0,90.0,118.3,8.4,172.45,54.15,asd,46,asd46,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-3,2820133.0,6334454.0,70.0,140.0,10.3,181.17,41.17,asd,47,asd47,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-3,2820133.0,6334454.0,50.0,158.5,12.4,189.45,30.95,asd,48,asd48,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-3,2820133.0,6334454.0,30.0,174.2,15.3,199.24,25.04,asd,49,asd49,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-3,2820133.0,6334454.0,10.0,187.6,18.6,208.74,21.14,asd,50,asd50,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-3,2820133.0,6334454.0,-25.0,205.9,24.1,222.01,16.11,asd,51,asd51,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-3,2820133.0,6334454.0,-75.0,224.5,31.6,236.76,12.26,asd,52,asd52,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-3,2820133.0,6334454.0,-150.0,241.8,42.5,253.98,12.18,asd,53,asd53,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-3,2820133.0,6334454.0,-250.0,254.7,55.0,269.97,15.27,asd,54,asd54,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-3,2820133.0,6334454.0,-335.0,259.1,62.8,278.58,19.48,asd,55,asd55,True,False,False,medium,0.75,feed zone,0.75,FZ1,HIGH,False,1.0,0.75
-WELL-3,2820133.0,6334454.0,-350.0,260.0,64.2,280.04,20.04,asd,55,asd55,True,False,False,medium,0.75,feed zone,0.75,FZ1,HIGH,False,1.0,0.75
-WELL-3,2820133.0,6334454.0,-450.0,261.4,72.5,288.21,26.81,asd,56,asd56,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-3,2820133.0,6334454.0,-550.0,260.7,80.7,295.62,34.92,asd,57,asd57,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-3,2820133.0,6334454.0,-650.0,254.3,89.0,302.55,48.25,asd,58,asd58,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-3,2820133.0,6334454.0,-750.0,243.7,97.4,309.07,65.37,asd,59,asd59,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-3,2820133.0,6334454.0,-845.0,229.8,105.6,315.03,85.23,asd,60,asd60,True,False,False,medium,0.75,feed zone,0.6,FZ2,MEDIUM,False,1.0,0.75
-WELL-3,2820133.0,6334454.0,-850.0,229.1,106.0,315.31,86.21,asd,60,asd60,True,False,False,medium,0.75,feed zone,0.6,FZ2,MEDIUM,False,1.0,0.75
-WELL-3,2820133.0,6334454.0,-950.0,209.0,114.7,321.24,112.24,asd,61,asd61,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-3,2820133.0,6334454.0,-1100.0,177.2,128.0,329.65,152.45,asd,62,asd62,False,False,False,medium,0.375,open hole in isothermal section >= 300 m (possible internal flow),0.0,,,True,0.5,0.75
-WELL-3,2820133.0,6334454.0,-1300.0,177.0,145.8,339.89,162.89,asd,63,asd63,False,False,False,medium,0.375,open hole in isothermal section >= 300 m (possible internal flow),0.0,,,True,0.5,0.75
-WELL-3,2820133.0,6334454.0,-1500.0,175.6,163.9,349.31,173.71,asd,64,asd64,False,False,False,medium,0.375,open hole in isothermal section >= 300 m (possible internal flow),0.0,,,True,0.5,0.75
-WELL-3,2820133.0,6334454.0,-1700.0,174.5,182.1,357.95,183.45,asd,65,asd65,False,False,False,medium,0.375,open hole in isothermal section >= 300 m (possible internal flow),0.0,,,True,0.5,0.75
-WELL-3,2820133.0,6334454.0,-1900.0,174.5,200.4,365.91,191.41,asd,66,asd66,False,False,False,medium,0.375,open hole in isothermal section >= 300 m (possible internal flow),0.0,,,True,0.5,0.75
-WELL-3,2820133.0,6334454.0,-2250.0,176.7,231.9,,,asd,67,asd67,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-3,2820133.0,6334454.0,-2750.0,185.5,276.6,,,asd,68,asd68,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-3,2820133.0,6334454.0,-2887.0,188.2,288.8,,,asd,68,asd68,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-4,2822243.0,6337763.0,230.0,12.3,2.4,126.07,113.77,aop,39,aop39,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-4,2822243.0,6337763.0,210.0,12.4,3.8,141.77,129.37,aop,40,aop40,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-4,2822243.0,6337763.0,190.0,12.6,5.1,152.58,139.98,aop,41,aop41,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-4,2822243.0,6337763.0,170.0,12.9,6.7,163.19,150.29,aop,42,aop42,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-4,2822243.0,6337763.0,150.0,13.1,8.5,172.94,159.84,aop,43,aop43,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-4,2822243.0,6337763.0,130.0,13.4,10.5,182.02,168.62,aop,44,aop44,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-4,2822243.0,6337763.0,110.0,13.7,12.7,190.54,176.84,aop,45,aop45,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-4,2822243.0,6337763.0,90.0,14.0,14.8,197.66,183.66,aop,46,aop46,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-4,2822243.0,6337763.0,70.0,14.3,17.0,204.31,190.01,aop,47,aop47,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-4,2822243.0,6337763.0,50.0,14.6,19.1,210.07,195.47,aop,48,aop48,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-4,2822243.0,6337763.0,30.0,14.9,21.2,215.35,200.45,aop,49,aop49,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-4,2822243.0,6337763.0,10.0,15.2,23.4,220.47,205.27,aop,50,aop50,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-4,2822243.0,6337763.0,-25.0,15.7,27.1,228.29,212.59,aop,51,aop51,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-4,2822243.0,6337763.0,-75.0,16.5,32.5,238.34,221.84,aop,52,aop52,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-4,2822243.0,6337763.0,-150.0,17.6,40.5,251.1,233.5,aop,53,aop53,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-4,2822243.0,6337763.0,-250.0,19.4,51.1,265.31,245.91,aop,54,aop54,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-4,2822243.0,6337763.0,-350.0,21.1,61.4,277.1,256.0,aop,55,aop55,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-4,2822243.0,6337763.0,-450.0,23.1,71.3,287.08,263.98,aop,56,aop56,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-4,2822243.0,6337763.0,-550.0,25.2,81.3,296.14,270.94,aop,57,aop57,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-4,2822243.0,6337763.0,-650.0,27.2,91.3,304.38,277.18,aop,58,aop58,True,False,False,medium,0.75,feed zone,0.6,FZ1,MEDIUM,False,1.0,0.75
-WELL-4,2822243.0,6337763.0,-655.0,27.3,91.7,304.69,277.39,aop,58,aop58,True,False,False,medium,0.75,feed zone,0.6,FZ1,MEDIUM,False,1.0,0.75
-WELL-4,2822243.0,6337763.0,-750.0,29.0,100.5,311.37,282.37,aop,59,aop59,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-5,2822044.0,6334190.0,93.0,27.5,4.9,151.08,123.58,arc,46,arc46,False,True,False,low,0.15,within 30 m of wellhead or in top block of column,0.0,,,False,0.3,0.5
-WELL-5,2822044.0,6334190.0,90.0,28.5,5.2,153.32,124.82,arc,46,arc46,False,True,False,low,0.15,within 30 m of wellhead or in top block of column,0.0,,,False,0.3,0.5
-WELL-5,2822044.0,6334190.0,70.0,35.1,7.5,167.76,132.66,arc,47,arc47,False,True,False,low,0.15,within 30 m of wellhead or in top block of column,0.0,,,False,0.3,0.5
-WELL-5,2822044.0,6334190.0,50.0,41.5,9.8,179.01,137.51,arc,48,arc48,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-5,2822044.0,6334190.0,30.0,48.2,12.0,187.96,139.76,arc,49,arc49,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-5,2822044.0,6334190.0,10.0,54.7,14.3,196.04,141.34,arc,50,arc50,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-5,2822044.0,6334190.0,-25.0,65.9,18.2,207.67,141.77,arc,51,arc51,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-5,2822044.0,6334190.0,-75.0,79.7,24.2,222.23,142.53,arc,52,arc52,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-5,2822044.0,6334190.0,-150.0,98.0,33.3,239.72,141.72,arc,53,arc53,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-5,2822044.0,6334190.0,-250.0,118.3,44.9,257.3,139.0,arc,54,arc54,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-5,2822044.0,6334190.0,-350.0,135.2,56.2,271.35,136.15,arc,55,arc55,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-5,2822044.0,6334190.0,-450.0,148.8,66.8,282.68,133.88,arc,56,arc56,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-5,2822044.0,6334190.0,-550.0,157.0,76.5,291.9,134.9,arc,57,arc57,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-5,2822044.0,6334190.0,-650.0,158.0,86.0,300.1,142.1,arc,58,arc58,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-5,2822044.0,6334190.0,-750.0,157.1,95.4,307.56,150.46,arc,59,arc59,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-5,2822044.0,6334190.0,-850.0,156.1,104.7,314.39,158.29,arc,60,arc60,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-5,2822044.0,6334190.0,-950.0,155.0,114.0,320.77,165.77,arc,61,arc61,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-5,2822044.0,6334190.0,-1100.0,153.6,127.7,329.47,175.87,arc,62,arc62,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-5,2822044.0,6334190.0,-1300.0,147.7,145.8,339.89,192.19,arc,63,arc63,True,False,False,low,0.5,feed zone,0.4,FZ1,MEDIUM,False,1.0,0.5
-WELL-5,2822044.0,6334190.0,-1325.0,147.3,148.1,341.14,193.84,arc,63,arc63,True,False,False,low,0.5,feed zone,0.4,FZ1,MEDIUM,False,1.0,0.5
-WELL-5,2822044.0,6334190.0,-1500.0,144.8,164.0,349.36,204.56,arc,64,arc64,True,False,False,low,0.5,feed zone,0.4,FZ2,MEDIUM,True,1.0,0.5
-WELL-5,2822044.0,6334190.0,-1525.0,144.8,166.3,350.5,205.7,arc,64,arc64,True,False,False,low,0.5,feed zone,0.4,FZ2,MEDIUM,True,1.0,0.5
-WELL-5,2822044.0,6334190.0,-1700.0,144.7,182.2,358.0,213.3,arc,65,arc65,False,False,False,low,0.25,open hole in isothermal section >= 300 m (possible internal flow),0.0,,,True,0.5,0.5
-WELL-5,2822044.0,6334190.0,-1900.0,145.3,200.5,365.95,220.65,arc,66,arc66,False,False,False,low,0.25,open hole in isothermal section >= 300 m (possible internal flow),0.0,,,True,0.5,0.5
-WELL-5,2822044.0,6334190.0,-2250.0,147.4,232.6,,,arc,67,arc67,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-5,2822044.0,6334190.0,-2595.0,154.7,264.1,,,arc,68,arc68,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-6,2819841.0,6333177.0,147.0,21.8,2.0,120.21,98.41,aph,43,aph43,False,True,False,medium,0.225,within 30 m of wellhead or in top block of column,0.0,,,False,0.3,0.75
-WELL-6,2819841.0,6333177.0,130.0,30.9,3.7,140.82,109.92,aph,44,aph44,False,True,False,medium,0.225,within 30 m of wellhead or in top block of column,0.0,,,False,0.3,0.75
-WELL-6,2819841.0,6333177.0,110.0,43.4,5.7,156.84,113.44,aph,45,aph45,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-6,2819841.0,6333177.0,90.0,55.5,7.7,168.83,113.33,aph,46,aph46,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-6,2819841.0,6333177.0,70.0,67.4,9.7,178.57,111.17,aph,47,aph47,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-6,2819841.0,6333177.0,50.0,79.6,11.7,186.82,107.22,aph,48,aph48,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-6,2819841.0,6333177.0,30.0,91.0,14.2,195.71,104.71,aph,49,aph49,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-6,2819841.0,6333177.0,10.0,101.6,17.2,204.89,103.29,aph,50,aph50,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-6,2819841.0,6333177.0,-25.0,118.2,22.1,217.49,99.29,aph,51,aph51,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-6,2819841.0,6333177.0,-75.0,138.4,28.7,231.41,93.01,aph,52,aph52,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-6,2819841.0,6333177.0,-150.0,162.4,38.1,247.49,85.09,aph,53,aph53,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-6,2819841.0,6333177.0,-250.0,186.1,49.9,263.82,77.72,aph,54,aph54,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-6,2819841.0,6333177.0,-350.0,203.8,61.4,277.1,73.3,aph,55,aph55,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-6,2819841.0,6333177.0,-450.0,217.1,71.3,287.08,69.98,aph,56,aph56,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-6,2819841.0,6333177.0,-475.0,218.0,73.5,289.15,71.15,aph,56,aph56,True,False,False,medium,0.75,feed zone,0.75,FZ1,HIGH,False,1.0,0.75
-WELL-6,2819841.0,6333177.0,-550.0,220.5,80.0,295.01,74.51,aph,57,aph57,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-6,2819841.0,6333177.0,-650.0,209.4,88.4,302.06,92.66,aph,58,aph58,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-6,2819841.0,6333177.0,-750.0,193.6,97.0,308.77,115.17,aph,59,aph59,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-6,2819841.0,6333177.0,-850.0,176.2,105.7,315.1,138.9,aph,60,aph60,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-6,2819841.0,6333177.0,-950.0,160.0,114.6,321.17,161.17,aph,61,aph61,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-6,2819841.0,6333177.0,-1100.0,140.9,128.2,329.77,188.87,aph,62,aph62,True,False,False,medium,0.75,feed zone,0.75,FZ2,HIGH,False,1.0,0.75
-WELL-6,2819841.0,6333177.0,-1125.0,139.8,130.5,331.16,191.36,aph,62,aph62,True,False,False,medium,0.75,feed zone,0.75,FZ2,HIGH,False,1.0,0.75
-WELL-6,2819841.0,6333177.0,-1300.0,131.5,146.6,340.33,208.83,aph,63,aph63,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-6,2819841.0,6333177.0,-1500.0,126.7,165.1,349.91,223.21,aph,64,aph64,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-6,2819841.0,6333177.0,-1700.0,123.5,183.6,358.63,235.13,aph,65,aph65,False,False,False,medium,0.375,open hole in isothermal section >= 300 m (possible internal flow),0.0,,,True,0.5,0.75
-WELL-6,2819841.0,6333177.0,-1900.0,122.4,202.1,366.62,244.22,aph,66,aph66,False,False,False,medium,0.375,open hole in isothermal section >= 300 m (possible internal flow),0.0,,,True,0.5,0.75
-WELL-6,2819841.0,6333177.0,-2250.0,123.9,234.7,,,aph,67,aph67,False,False,False,medium,0.375,open hole in isothermal section >= 300 m (possible internal flow),0.0,,,True,0.5,0.75
-WELL-6,2819841.0,6333177.0,-2359.0,126.1,244.8,,,aph,67,aph67,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-7,2820840.0,6332682.0,190.0,18.6,1.0,99.61,81.01,apk,41,apk41,False,True,False,medium,0.225,within 30 m of wellhead or in top block of column,0.0,,,False,0.3,0.75
-WELL-7,2820840.0,6332682.0,170.0,21.8,1.1,102.29,80.49,apk,42,apk42,False,True,False,medium,0.225,within 30 m of wellhead or in top block of column,0.0,,,False,0.3,0.75
-WELL-7,2820840.0,6332682.0,150.0,24.7,2.1,121.76,97.06,apk,43,apk43,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-7,2820840.0,6332682.0,130.0,29.3,4.0,143.61,114.31,apk,44,apk44,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-7,2820840.0,6332682.0,110.0,33.9,6.1,159.48,125.58,apk,45,apk45,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-7,2820840.0,6332682.0,90.0,38.7,8.3,171.95,133.25,apk,46,apk46,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-7,2820840.0,6332682.0,70.0,44.0,10.4,181.6,137.6,apk,47,apk47,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-7,2820840.0,6332682.0,50.0,51.3,12.7,190.54,139.24,apk,48,apk48,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-7,2820840.0,6332682.0,30.0,58.4,15.3,199.24,140.84,apk,49,apk49,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-7,2820840.0,6332682.0,10.0,65.1,17.7,206.29,141.19,apk,50,apk50,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-7,2820840.0,6332682.0,-25.0,76.2,21.9,217.02,140.82,apk,51,apk51,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-7,2820840.0,6332682.0,-75.0,90.4,27.7,229.48,139.08,apk,52,apk52,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-7,2820840.0,6332682.0,-150.0,109.0,36.1,244.35,135.35,apk,53,apk53,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-7,2820840.0,6332682.0,-250.0,129.1,46.9,259.97,130.87,apk,54,apk54,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-7,2820840.0,6332682.0,-350.0,145.4,57.6,272.94,127.54,apk,55,apk55,False,True,False,medium,0.375,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.75
-WELL-7,2820840.0,6332682.0,-450.0,158.5,68.1,283.97,125.47,apk,56,apk56,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-7,2820840.0,6332682.0,-475.0,161.0,70.7,286.5,125.5,apk,56,apk56,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-7,2820840.0,6332682.0,-550.0,168.6,78.4,293.6,125.0,apk,57,apk57,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-7,2820840.0,6332682.0,-630.0,175.1,86.0,300.1,125.0,apk,58,apk58,True,False,False,medium,0.75,feed zone,0.75,FZ1,HIGH,False,1.0,0.75
-WELL-7,2820840.0,6332682.0,-650.0,176.7,87.9,301.66,124.96,apk,58,apk58,True,False,False,medium,0.75,feed zone,0.75,FZ1,HIGH,False,1.0,0.75
-WELL-7,2820840.0,6332682.0,-750.0,173.7,96.6,308.47,134.77,apk,59,apk59,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-7,2820840.0,6332682.0,-850.0,167.9,105.5,314.96,147.06,apk,60,apk60,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-7,2820840.0,6332682.0,-950.0,158.7,114.4,321.04,162.34,apk,61,apk61,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-7,2820840.0,6332682.0,-1100.0,144.3,128.0,329.65,185.35,apk,62,apk62,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-7,2820840.0,6332682.0,-1300.0,131.3,146.4,340.22,208.92,apk,63,apk63,True,False,False,medium,0.75,feed zone,0.75,FZ2,HIGH,True,1.0,0.75
-WELL-7,2820840.0,6332682.0,-1325.0,131.3,148.7,341.46,210.16,apk,63,apk63,True,False,False,medium,0.75,feed zone,0.75,FZ2,HIGH,True,1.0,0.75
-WELL-7,2820840.0,6332682.0,-1500.0,130.9,164.8,349.76,218.86,apk,64,apk64,False,False,False,medium,0.375,open hole in isothermal section >= 300 m (possible internal flow),0.0,,,True,0.5,0.75
-WELL-7,2820840.0,6332682.0,-1700.0,130.7,183.3,358.49,227.79,apk,65,apk65,False,False,False,medium,0.375,open hole in isothermal section >= 300 m (possible internal flow),0.0,,,True,0.5,0.75
-WELL-7,2820840.0,6332682.0,-1900.0,131.2,201.8,366.49,235.29,apk,66,apk66,False,False,False,medium,0.375,open hole in isothermal section >= 300 m (possible internal flow),0.0,,,True,0.5,0.75
-WELL-7,2820840.0,6332682.0,-2250.0,134.0,234.2,,,apk,67,apk67,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-7,2820840.0,6332682.0,-2750.0,144.4,280.4,,,apk,68,apk68,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-7,2820840.0,6332682.0,-2762.0,144.7,281.5,,,apk,68,apk68,False,False,False,medium,0.6,open hole,0.0,,,False,0.8,0.75
-WELL-8,2818757.0,6332185.0,176.0,12.8,1.8,116.91,104.11,ana,42,ana42,False,True,False,low,0.15,within 30 m of wellhead or in top block of column,0.0,,,False,0.3,0.5
-WELL-8,2818757.0,6332185.0,170.0,12.9,2.0,120.21,107.31,ana,42,ana42,False,True,False,low,0.15,within 30 m of wellhead or in top block of column,0.0,,,False,0.3,0.5
-WELL-8,2818757.0,6332185.0,150.0,13.7,3.9,142.7,129.0,ana,43,ana43,False,True,False,low,0.15,within 30 m of wellhead or in top block of column,0.0,,,False,0.3,0.5
-WELL-8,2818757.0,6332185.0,130.0,15.5,5.9,158.18,142.68,ana,44,ana44,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-8,2818757.0,6332185.0,110.0,17.2,7.9,169.89,152.69,ana,45,ana45,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-8,2818757.0,6332185.0,90.0,18.9,10.0,179.89,160.99,ana,46,ana46,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-8,2818757.0,6332185.0,70.0,20.7,12.2,188.71,168.01,ana,47,ana47,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-8,2818757.0,6332185.0,50.0,22.3,14.5,196.69,174.39,ana,48,ana48,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-8,2818757.0,6332185.0,30.0,24.0,16.6,203.16,179.16,ana,49,ana49,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-8,2818757.0,6332185.0,10.0,25.8,18.7,209.01,183.21,ana,50,ana50,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-8,2818757.0,6332185.0,-25.0,29.1,22.4,218.19,189.09,ana,51,ana51,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-8,2818757.0,6332185.0,-75.0,33.7,27.8,229.67,195.97,ana,52,ana52,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-8,2818755.2,6332185.4,-150.0,40.2,35.7,243.7,203.5,ana,53,ana53,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-8,2818752.5,6332186.0,-250.0,48.0,46.1,258.92,210.92,ana,54,ana54,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-8,2818740.5,6332189.4,-350.0,54.5,56.3,271.46,216.96,ana,55,ana55,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-8,2818725.6,6332193.5,-450.0,59.9,66.4,282.28,222.38,ana,56,ana56,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-8,2818703.6,6332201.3,-550.0,63.9,76.3,291.72,227.82,ana,57,ana57,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-8,2818679.8,6332210.2,-650.0,66.5,86.2,300.27,233.77,ana,58,ana58,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-8,2818651.2,6332219.1,-750.0,67.8,95.9,307.94,240.14,ana,59,ana59,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-8,2818621.8,6332227.9,-850.0,68.1,105.5,314.96,246.86,ana,60,ana60,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-8,2818590.3,6332236.4,-950.0,67.1,115.0,321.44,254.34,ana,61,ana61,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-8,2818530.9,6332249.4,-1100.0,63.8,129.5,330.56,266.76,ana,62,ana62,True,False,False,low,0.5,feed zone,0.5,FZ1,HIGH,True,1.0,0.5
-WELL-8,2818520.2,6332251.5,-1125.0,63.9,132.0,332.05,268.15,ana,62,ana62,True,False,False,low,0.5,feed zone,0.5,FZ1,HIGH,True,1.0,0.5
-WELL-8,2818442.9,6332263.5,-1300.0,63.6,149.4,341.84,278.24,anb,63,anb63,False,False,False,low,0.25,open hole in isothermal section >= 300 m (possible internal flow),0.0,,,True,0.5,0.5
-WELL-8,2818354.2,6332274.0,-1500.0,64.5,169.2,351.91,287.41,anb,64,anb64,False,False,False,low,0.25,open hole in isothermal section >= 300 m (possible internal flow),0.0,,,True,0.5,0.5
-WELL-8,2818266.1,6332284.2,-1700.0,66.8,188.9,360.99,294.19,anb,65,anb65,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-8,2818174.1,6332293.2,-1900.0,70.7,208.6,369.27,298.57,anb,66,anb66,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-8,2818001.9,6332311.7,-2250.0,79.1,242.9,,,anb,67,anb67,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-8,2817771.1,6332350.5,-2716.1,93.1,288.6,,,amw,68,amw68,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-9,2820920.0,6335679.0,174.0,16.9,1.4,109.29,92.39,ajj,42,ajj42,False,True,False,low,0.15,within 30 m of wellhead or in top block of column,0.0,,,False,0.3,0.5
-WELL-9,2820920.0,6335679.0,170.0,17.4,1.5,111.35,93.95,ajj,42,ajj42,False,True,False,low,0.15,within 30 m of wellhead or in top block of column,0.0,,,False,0.3,0.5
-WELL-9,2820920.0,6335679.0,150.0,18.0,3.2,135.74,117.74,ajj,43,ajj43,False,True,False,low,0.15,within 30 m of wellhead or in top block of column,0.0,,,False,0.3,0.5
-WELL-9,2820920.0,6335679.0,130.0,19.5,5.0,151.84,132.34,ajj,44,ajj44,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-9,2820920.0,6335679.0,110.0,22.3,6.8,163.79,141.49,ajj,45,ajj45,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-9,2820920.0,6335679.0,90.0,27.0,8.7,173.92,146.92,ajj,46,ajj46,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-9,2820920.0,6335679.0,70.0,33.7,10.6,182.43,148.73,ajj,47,ajj47,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-9,2820920.0,6335679.0,50.0,41.8,12.5,189.82,148.02,ajj,48,ajj48,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-9,2820920.0,6335679.0,30.0,49.9,14.5,196.69,146.79,ajj,49,ajj49,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-9,2820920.0,6335679.0,10.0,58.9,16.9,204.03,145.13,ajj,50,ajj50,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-9,2820920.0,6335679.0,-25.0,75.5,21.8,216.78,141.28,ajj,51,ajj51,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-9,2820920.0,6335678.9,-75.0,96.7,28.5,231.03,134.33,ajj,52,ajj52,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-9,2820921.1,6335678.3,-150.0,123.8,37.8,247.03,123.23,ajj,53,ajj53,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-9,2820927.2,6335674.8,-250.0,153.0,49.3,263.06,110.06,ajj,54,ajj54,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-9,2820942.1,6335666.2,-350.0,176.0,60.3,275.91,99.91,ajj,55,ajj55,False,True,False,low,0.25,behind casing (at or above production casing shoe),0.0,,,False,0.5,0.5
-WELL-9,2820968.5,6335650.9,-450.0,193.6,70.8,286.6,93.0,ajj,56,ajj56,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-9,2820993.0,6335636.8,-535.0,205.4,78.9,294.04,88.64,ajj,57,ajj57,True,False,False,low,0.5,feed zone,0.25,FZ1,LOW,False,1.0,0.5
-WELL-9,2820997.5,6335634.2,-550.0,207.5,80.3,295.27,87.77,ajj,57,ajj57,True,False,False,low,0.5,feed zone,0.25,FZ1,LOW,False,1.0,0.5
-WELL-9,2821030.7,6335615.0,-650.0,214.0,89.1,302.63,88.63,ajq,58,ajq58,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-9,2821067.8,6335593.6,-750.0,217.7,97.7,309.29,91.59,ajq,59,ajq59,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-9,2821101.3,6335573.7,-837.5,211.6,105.2,314.75,103.15,ajq,60,ajq60,True,False,False,low,0.5,feed zone,0.4,FZ2,MEDIUM,False,1.0,0.5
-WELL-9,2821106.2,6335570.6,-850.0,210.7,106.2,315.45,104.75,ajq,60,ajq60,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-9,2821145.1,6335546.4,-950.0,198.8,114.9,321.37,122.57,ajq,61,ajq61,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-9,2821201.0,6335510.1,-1100.0,187.9,128.1,329.71,141.81,ajq,62,ajq62,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-9,2821274.5,6335460.1,-1300.0,185.4,146.0,340.0,154.6,ajq,63,ajq63,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-9,2821352.4,6335406.6,-1500.0,182.5,163.9,349.31,166.81,asg,64,asg64,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-9,2821421.8,6335355.6,-1700.0,177.3,182.1,357.95,180.65,asg,65,asg65,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-9,2821484.3,6335306.7,-1900.0,171.9,200.3,365.87,193.97,asg,66,asg66,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-9,2821582.6,6335224.6,-2250.0,160.0,232.3,,,asf,67,asf67,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
-WELL-9,2821632.0,6335183.2,-2427.1,161.6,248.5,,,asf,67,asf67,False,False,False,low,0.4,open hole,0.0,,,False,0.8,0.5
+well,x,y,elevation_mRL,T_degC,P_bar,Tsat_degC,boiling_margin_degC,column,layer,block,in_feedzone,behind_casing,above_model_surface,ns_confidence,weight,weight_reason,weight_P,feedzone
+WELL-1,2823330.0,6334011.0,15.0,32.9,10.8,183.2575,150.3575,arg,50,arg50,False,True,False,medium,0.225,within 30 m of the wellhead or in the top block of its column (0.3) x natural-state confidence medium (0.75),0.0,
+WELL-1,2823330.0,6334011.0,10.0,33.6,11.3,185.2664,151.6664,arg,50,arg50,False,True,False,medium,0.225,within 30 m of the wellhead or in the top block of its column (0.3) x natural-state confidence medium (0.75),0.0,
+WELL-1,2823330.0,6334011.0,-25.0,38.5,14.8,197.6595,159.1595,arg,51,arg51,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-1,2823330.0,6334011.0,-75.0,43.1,20.1,212.6369,169.5369,arg,52,arg52,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-1,2823330.0,6334011.0,-150.0,47.4,28.1,230.2572,182.8572,arg,53,arg53,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-1,2823330.0,6334011.0,-250.0,52.4,38.6,248.2537,195.8537,arg,54,arg54,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-1,2823330.0,6334011.0,-350.0,60.9,48.7,262.3016,201.4016,arg,55,arg55,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-1,2823330.0,6334011.0,-450.0,69.0,58.6,274.0502,205.0502,arg,56,arg56,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-1,2823330.0,6334011.0,-550.0,76.4,68.4,284.2696,207.8696,arg,57,arg57,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-1,2823330.0,6334011.0,-650.0,83.5,78.6,293.7789,210.2789,arg,58,arg58,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-1,2823330.0,6334011.0,-750.0,89.8,89.0,302.5461,212.7461,arg,59,arg59,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-1,2823330.0,6334011.0,-850.0,95.3,99.3,310.4835,215.1835,arg,60,arg60,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-1,2823330.0,6334011.0,-950.0,100.2,109.5,317.7394,217.5394,arg,61,arg61,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-1,2823330.0,6334011.0,-1100.0,106.5,124.2,327.321,220.821,arg,62,arg62,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-1,2823330.0,6334011.0,-1300.0,112.5,143.2,338.4592,225.9592,arg,63,arg63,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-1,2823330.0,6334011.0,-1337.5,113.2,146.7,340.3802,227.1802,arg,63,arg63,True,False,False,medium,0.75,feed zone (1) x natural-state confidence medium (0.75),0.6,1
+WELL-1,2823330.0,6334011.0,-1465.0,115.5,158.7,346.6961,231.1961,arg,64,arg64,True,False,False,medium,0.75,feed zone (1) x natural-state confidence medium (0.75),0.6,2
+WELL-1,2823330.0,6334011.0,-1500.0,116.2,162.0,348.364,232.164,arg,64,arg64,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-1,2823330.0,6334011.0,-1672.0,118.6,178.2,356.1628,237.5628,arg,65,arg65,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-2,2819527.0,6335494.0,225.0,16.5,1.0,99.6059,83.1059,ajf,39,ajf39,False,True,False,high,0.3,within 30 m of the wellhead or in the top block of its column (0.3) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,210.0,19.3,1.1,102.2923,82.9923,ajf,40,ajf40,False,True,False,high,0.3,within 30 m of the wellhead or in the top block of its column (0.3) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,190.0,35.4,3.1,134.6471,99.2471,ajf,41,ajf41,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,170.0,48.1,5.2,153.3197,105.2197,ajf,42,ajf42,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,150.0,75.8,7.2,166.0923,90.2923,ajf,43,ajf43,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,130.0,98.3,9.3,176.7562,78.4562,ajf,44,ajf44,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,110.0,116.7,11.3,185.2664,68.5664,ajf,45,ajf45,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,90.0,131.4,13.2,192.3158,60.9158,ajf,46,ajf46,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,70.0,140.2,15.1,198.6106,58.4106,ajf,47,ajf47,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,50.0,149.5,17.5,205.7327,56.2327,ajf,48,ajf48,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,30.0,159.0,20.1,212.6369,53.6369,ajf,49,ajf49,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,10.0,167.8,22.7,218.8797,51.0797,ajf,50,ajf50,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,-25.0,181.7,27.5,229.0811,47.3811,ajf,51,ajf51,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,-75.0,198.4,34.3,241.4033,43.0033,ajf,52,ajf52,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,-150.0,218.5,43.9,255.935,37.435,ajf,53,ajf53,False,False,False,high,0.8,open hole (0.8) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,-250.0,238.2,55.0,269.967,31.767,ajf,54,ajf54,True,False,False,high,1.0,feed zone (1) x natural-state confidence high (1),0.5,1
+WELL-2,2819527.0,6335494.0,-260.0,239.7,55.9,271.0065,31.3065,ajf,54,ajf54,True,False,False,high,1.0,feed zone (1) x natural-state confidence high (1),0.5,1
+WELL-2,2819527.0,6335494.0,-350.0,253.0,64.5,280.3458,27.3458,ajf,55,ajf55,False,False,False,high,0.8,open hole (0.8) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,-450.0,265.3,73.4,289.0574,23.7574,ajf,56,ajf56,False,False,False,high,0.8,open hole (0.8) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,-550.0,266.9,81.5,296.309,29.409,ajf,57,ajf57,False,False,False,high,0.8,open hole (0.8) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,-650.0,263.6,89.7,303.1073,39.5073,ajf,58,ajf58,False,False,False,high,0.8,open hole (0.8) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,-745.0,258.0,97.8,309.3683,51.3683,ajf,59,ajf59,True,False,False,high,1.0,feed zone (1) x natural-state confidence high (1),1.0,2
+WELL-2,2819527.0,6335494.0,-750.0,257.7,98.2,309.667,51.967,ajf,59,ajf59,True,False,False,high,1.0,feed zone (1) x natural-state confidence high (1),1.0,2
+WELL-2,2819527.0,6335494.0,-850.0,248.9,106.8,315.8715,66.9715,ajf,60,ajf60,False,False,False,high,0.8,open hole (0.8) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,-950.0,242.7,115.6,321.8307,79.1307,ajf,61,ajf61,False,False,False,high,0.8,open hole (0.8) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,-1100.0,237.8,128.9,330.196,92.396,ajf,62,ajf62,False,False,False,high,0.5,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,-1300.0,236.1,146.7,340.3802,104.2802,ajf,63,ajf63,False,False,False,high,0.5,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,-1500.0,236.0,164.5,349.609,113.609,ajf,64,ajf64,False,False,False,high,0.5,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,-1700.0,237.1,182.2,357.9954,120.8954,ajf,65,ajf65,False,False,False,high,0.5,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,-1900.0,240.0,199.8,365.6623,125.6623,ajf,66,ajf66,True,False,False,high,1.0,feed zone (1) x natural-state confidence high (1),0.8,3
+WELL-2,2819527.0,6335494.0,-1910.0,240.3,200.7,366.0378,125.7378,ajf,66,ajf66,True,False,False,high,1.0,feed zone (1) x natural-state confidence high (1),0.8,3
+WELL-2,2819527.0,6335494.0,-2250.0,251.6,230.4,,,ajf,67,ajf67,False,False,False,high,0.8,open hole (0.8) x natural-state confidence high (1),0.0,
+WELL-2,2819527.0,6335494.0,-2348.0,253.7,239.1,,,ajf,67,ajf67,False,False,False,high,0.8,open hole (0.8) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,164.0,35.1,1.4,109.2921,74.1921,asd,42,asd42,False,True,False,high,0.3,within 30 m of the wellhead or in the top block of its column (0.3) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,150.0,42.6,2.4,126.0737,83.4737,asd,43,asd43,False,True,False,high,0.3,within 30 m of the wellhead or in the top block of its column (0.3) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,130.0,63.3,4.4,147.0808,83.7808,asd,44,asd44,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,110.0,93.0,6.4,161.3714,68.3714,asd,45,asd45,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,90.0,118.3,8.4,172.4469,54.1469,asd,46,asd46,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,70.0,140.0,10.3,181.1742,41.1742,asd,47,asd47,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,50.0,158.5,12.4,189.4515,30.9515,asd,48,asd48,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,30.0,174.2,15.3,199.2366,25.0366,asd,49,asd49,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,10.0,187.6,18.6,208.7448,21.1448,asd,50,asd50,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,-25.0,205.9,24.1,222.0147,16.1147,asd,51,asd51,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,-75.0,224.5,31.6,236.7574,12.2574,asd,52,asd52,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,-150.0,241.8,42.5,253.9782,12.1782,asd,53,asd53,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,-250.0,254.7,55.0,269.967,15.267,asd,54,asd54,False,True,False,high,0.5,behind casing (0.5) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,-335.0,259.1,62.8,278.5786,19.4786,asd,55,asd55,True,False,False,high,1.0,feed zone (1) x natural-state confidence high (1),1.0,1
+WELL-3,2820133.0,6334454.0,-350.0,260.0,64.2,280.0366,20.0366,asd,55,asd55,True,False,False,high,1.0,feed zone (1) x natural-state confidence high (1),1.0,1
+WELL-3,2820133.0,6334454.0,-450.0,261.4,72.5,288.2144,26.8144,asd,56,asd56,False,False,False,high,0.8,open hole (0.8) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,-550.0,260.7,80.7,295.618,34.918,asd,57,asd57,False,False,False,high,0.8,open hole (0.8) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,-650.0,254.3,89.0,302.5461,48.2461,asd,58,asd58,False,False,False,high,0.8,open hole (0.8) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,-750.0,243.7,97.4,309.0687,65.3687,asd,59,asd59,False,False,False,high,0.8,open hole (0.8) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,-845.0,229.8,105.6,315.0296,85.2296,asd,60,asd60,True,False,False,high,1.0,feed zone (1) x natural-state confidence high (1),0.8,2
+WELL-3,2820133.0,6334454.0,-850.0,229.1,106.0,315.3111,86.2111,asd,60,asd60,True,False,False,high,1.0,feed zone (1) x natural-state confidence high (1),0.8,2
+WELL-3,2820133.0,6334454.0,-950.0,209.0,114.7,321.2379,112.2379,asd,61,asd61,False,False,False,high,0.8,open hole (0.8) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,-1100.0,177.2,128.0,329.6519,152.4519,asd,62,asd62,False,False,False,high,0.5,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,-1300.0,177.0,145.8,339.8898,162.8898,asd,63,asd63,False,False,False,high,0.5,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,-1500.0,175.6,163.9,349.3117,173.7117,asd,64,asd64,False,False,False,high,0.5,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,-1700.0,174.5,182.1,357.95,183.45,asd,65,asd65,False,False,False,high,0.5,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,-1900.0,174.5,200.4,365.9128,191.4128,asd,66,asd66,False,False,False,high,0.5,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,-2250.0,176.7,231.9,,,asd,67,asd67,False,False,False,high,0.5,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,-2750.0,185.5,276.6,,,asd,68,asd68,False,False,False,high,0.8,open hole (0.8) x natural-state confidence high (1),0.0,
+WELL-3,2820133.0,6334454.0,-2887.0,188.2,288.8,,,asd,68,asd68,False,False,False,high,0.8,open hole (0.8) x natural-state confidence high (1),0.0,
+WELL-4,2822243.0,6337763.0,230.0,12.3,2.4,126.0737,113.7737,aop,39,aop39,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-4,2822243.0,6337763.0,210.0,12.4,3.8,141.7726,129.3726,aop,40,aop40,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-4,2822243.0,6337763.0,190.0,12.6,5.1,152.5838,139.9838,aop,41,aop41,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-4,2822243.0,6337763.0,170.0,12.9,6.7,163.194,150.294,aop,42,aop42,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-4,2822243.0,6337763.0,150.0,13.1,8.5,172.9432,159.8432,aop,43,aop43,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-4,2822243.0,6337763.0,130.0,13.4,10.5,182.0169,168.6169,aop,44,aop44,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-4,2822243.0,6337763.0,110.0,13.7,12.7,190.5421,176.8421,aop,45,aop45,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-4,2822243.0,6337763.0,90.0,14.0,14.8,197.6595,183.6595,aop,46,aop46,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-4,2822243.0,6337763.0,70.0,14.3,17.0,204.3147,190.0147,aop,47,aop47,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-4,2822243.0,6337763.0,50.0,14.6,19.1,210.0684,195.4684,aop,48,aop48,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-4,2822243.0,6337763.0,30.0,14.9,21.2,215.3502,200.4502,aop,49,aop49,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-4,2822243.0,6337763.0,10.0,15.2,23.4,220.4653,205.2653,aop,50,aop50,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-4,2822243.0,6337763.0,-25.0,15.7,27.1,228.286,212.586,aop,51,aop51,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-4,2822243.0,6337763.0,-75.0,16.5,32.5,238.3388,221.8388,aop,52,aop52,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-4,2822243.0,6337763.0,-150.0,17.6,40.5,251.0952,233.4952,aop,53,aop53,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-4,2822243.0,6337763.0,-250.0,19.4,51.1,265.3064,245.9064,aop,54,aop54,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-4,2822243.0,6337763.0,-350.0,21.1,61.4,277.0955,255.9955,aop,55,aop55,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-4,2822243.0,6337763.0,-450.0,23.1,71.3,287.0779,263.9779,aop,56,aop56,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-4,2822243.0,6337763.0,-550.0,25.2,81.3,296.1367,270.9367,aop,57,aop57,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-4,2822243.0,6337763.0,-650.0,27.2,91.3,304.3776,277.1776,aop,58,aop58,True,False,False,medium,0.75,feed zone (1) x natural-state confidence medium (0.75),0.6,1
+WELL-4,2822243.0,6337763.0,-655.0,27.3,91.7,304.6925,277.3925,aop,58,aop58,True,False,False,medium,0.75,feed zone (1) x natural-state confidence medium (0.75),0.6,1
+WELL-4,2822243.0,6337763.0,-750.0,29.0,100.5,311.3663,282.3663,aop,59,aop59,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-5,2822044.0,6334190.0,93.0,27.5,4.9,151.0766,123.5766,arc,46,arc46,False,True,False,low,0.15,within 30 m of the wellhead or in the top block of its column (0.3) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,90.0,28.5,5.2,153.3197,124.8197,arc,46,arc46,False,True,False,low,0.15,within 30 m of the wellhead or in the top block of its column (0.3) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,70.0,35.1,7.5,167.7554,132.6554,arc,47,arc47,False,True,False,low,0.15,within 30 m of the wellhead or in the top block of its column (0.3) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,50.0,41.5,9.8,179.0096,137.5096,arc,48,arc48,False,True,False,low,0.25,behind casing (0.5) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,30.0,48.2,12.0,187.9646,139.7646,arc,49,arc49,False,True,False,low,0.25,behind casing (0.5) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,10.0,54.7,14.3,196.0402,141.3402,arc,50,arc50,False,True,False,low,0.25,behind casing (0.5) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,-25.0,65.9,18.2,207.6659,141.7659,arc,51,arc51,False,True,False,low,0.25,behind casing (0.5) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,-75.0,79.7,24.2,222.2332,142.5332,arc,52,arc52,False,True,False,low,0.25,behind casing (0.5) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,-150.0,98.0,33.3,239.7164,141.7164,arc,53,arc53,False,True,False,low,0.25,behind casing (0.5) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,-250.0,118.3,44.9,257.3038,139.0038,arc,54,arc54,False,True,False,low,0.25,behind casing (0.5) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,-350.0,135.2,56.2,271.3502,136.1502,arc,55,arc55,False,True,False,low,0.25,behind casing (0.5) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,-450.0,148.8,66.8,282.6811,133.8811,arc,56,arc56,False,True,False,low,0.25,behind casing (0.5) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,-550.0,157.0,76.5,291.9018,134.9018,arc,57,arc57,False,True,False,low,0.25,behind casing (0.5) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,-650.0,158.0,86.0,300.1015,142.1015,arc,58,arc58,False,True,False,low,0.25,behind casing (0.5) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,-750.0,157.1,95.4,307.5563,150.4563,arc,59,arc59,False,True,False,low,0.25,behind casing (0.5) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,-850.0,156.1,104.7,314.3933,158.2933,arc,60,arc60,False,True,False,low,0.25,behind casing (0.5) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,-950.0,155.0,114.0,320.7742,165.7742,arc,61,arc61,False,True,False,low,0.25,behind casing (0.5) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,-1100.0,153.6,127.7,329.4699,175.8699,arc,62,arc62,False,False,False,low,0.25,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,-1300.0,147.7,145.8,339.8898,192.1898,arc,63,arc63,True,False,False,low,0.5,feed zone (1) x natural-state confidence low (0.5),0.4,1
+WELL-5,2822044.0,6334190.0,-1325.0,147.3,148.1,341.1383,193.8383,arc,63,arc63,True,False,False,low,0.5,feed zone (1) x natural-state confidence low (0.5),0.4,1
+WELL-5,2822044.0,6334190.0,-1500.0,144.8,164.0,349.3613,204.5613,arc,64,arc64,True,False,False,low,0.5,feed zone (1) x natural-state confidence low (0.5),0.4,2
+WELL-5,2822044.0,6334190.0,-1525.0,144.8,166.3,350.4957,205.6957,arc,64,arc64,True,False,False,low,0.5,feed zone (1) x natural-state confidence low (0.5),0.4,2
+WELL-5,2822044.0,6334190.0,-1700.0,144.7,182.2,357.9954,213.2954,arc,65,arc65,False,False,False,low,0.25,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,-1900.0,145.3,200.5,365.9545,220.6545,arc,66,arc66,False,False,False,low,0.25,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,-2250.0,147.4,232.6,,,arc,67,arc67,False,False,False,low,0.25,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence low (0.5),0.0,
+WELL-5,2822044.0,6334190.0,-2595.0,154.7,264.1,,,arc,68,arc68,False,False,False,low,0.4,open hole (0.8) x natural-state confidence low (0.5),0.0,
+WELL-6,2819841.0,6333177.0,147.0,21.8,2.0,120.2115,98.4115,aph,43,aph43,False,True,False,medium,0.225,within 30 m of the wellhead or in the top block of its column (0.3) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,130.0,30.9,3.7,140.8233,109.9233,aph,44,aph44,False,True,False,medium,0.225,within 30 m of the wellhead or in the top block of its column (0.3) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,110.0,43.4,5.7,156.8381,113.4381,aph,45,aph45,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,90.0,55.5,7.7,168.835,113.335,aph,46,aph46,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,70.0,67.4,9.7,178.5663,111.1663,aph,47,aph47,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,50.0,79.6,11.7,186.8238,107.2238,aph,48,aph48,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,30.0,91.0,14.2,195.7111,104.7111,aph,49,aph49,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,10.0,101.6,17.2,204.8857,103.2857,aph,50,aph50,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,-25.0,118.2,22.1,217.4902,99.2902,aph,51,aph51,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,-75.0,138.4,28.7,231.4142,93.0142,aph,52,aph52,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,-150.0,162.4,38.1,247.4881,85.0881,aph,53,aph53,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,-250.0,186.1,49.9,263.8178,77.7178,aph,54,aph54,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,-350.0,203.8,61.4,277.0955,73.2955,aph,55,aph55,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,-450.0,217.1,71.3,287.0779,69.9779,aph,56,aph56,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,-475.0,218.0,73.5,289.1506,71.1506,aph,56,aph56,True,False,False,medium,0.75,feed zone (1) x natural-state confidence medium (0.75),0.75,1
+WELL-6,2819841.0,6333177.0,-550.0,220.5,80.0,295.0091,74.5091,aph,57,aph57,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,-650.0,209.4,88.4,302.0623,92.6623,aph,58,aph58,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,-750.0,193.6,97.0,308.7682,115.1682,aph,59,aph59,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,-850.0,176.2,105.7,315.1001,138.9001,aph,60,aph60,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,-950.0,160.0,114.6,321.1718,161.1718,aph,61,aph61,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,-1100.0,140.9,128.2,329.7731,188.8731,aph,62,aph62,True,False,False,medium,0.75,feed zone (1) x natural-state confidence medium (0.75),0.75,2
+WELL-6,2819841.0,6333177.0,-1125.0,139.8,130.5,331.1558,191.3558,aph,62,aph62,True,False,False,medium,0.75,feed zone (1) x natural-state confidence medium (0.75),0.75,2
+WELL-6,2819841.0,6333177.0,-1300.0,131.5,146.6,340.3259,208.8259,aph,63,aph63,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,-1500.0,126.7,165.1,349.9055,223.2055,aph,64,aph64,False,False,False,medium,0.375,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,-1700.0,123.5,183.6,358.6286,235.1286,aph,65,aph65,False,False,False,medium,0.375,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,-1900.0,122.4,202.1,366.6189,244.2189,aph,66,aph66,False,False,False,medium,0.375,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,-2250.0,123.9,234.7,,,aph,67,aph67,False,False,False,medium,0.375,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-6,2819841.0,6333177.0,-2359.0,126.1,244.8,,,aph,67,aph67,False,False,False,medium,0.375,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,190.0,18.6,1.0,99.6059,81.0059,apk,41,apk41,False,True,False,medium,0.225,within 30 m of the wellhead or in the top block of its column (0.3) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,170.0,21.8,1.1,102.2923,80.4923,apk,42,apk42,False,True,False,medium,0.225,within 30 m of the wellhead or in the top block of its column (0.3) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,150.0,24.7,2.1,121.761,97.061,apk,43,apk43,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,130.0,29.3,4.0,143.6125,114.3125,apk,44,apk44,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,110.0,33.9,6.1,159.4795,125.5795,apk,45,apk45,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,90.0,38.7,8.3,171.9458,133.2458,apk,46,apk46,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,70.0,44.0,10.4,181.5971,137.5971,apk,47,apk47,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,50.0,51.3,12.7,190.5421,139.2421,apk,48,apk48,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,30.0,58.4,15.3,199.2366,140.8366,apk,49,apk49,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,10.0,65.1,17.7,206.2911,141.1911,apk,50,apk50,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,-25.0,76.2,21.9,217.0205,140.8205,apk,51,apk51,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,-75.0,90.4,27.7,229.4753,139.0753,apk,52,apk52,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,-150.0,109.0,36.1,244.3467,135.3467,apk,53,apk53,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,-250.0,129.1,46.9,259.9728,130.8728,apk,54,apk54,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,-350.0,145.4,57.6,272.9356,127.5356,apk,55,apk55,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,-450.0,158.5,68.1,283.974,125.474,apk,56,apk56,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,-475.0,161.0,70.7,286.5041,125.5041,apk,56,apk56,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,-550.0,168.6,78.4,293.6018,125.0018,apk,57,apk57,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,-630.0,175.1,86.0,300.1015,125.0015,apk,58,apk58,True,False,False,medium,0.75,feed zone (1) x natural-state confidence medium (0.75),0.75,1
+WELL-7,2820840.0,6332682.0,-650.0,176.7,87.9,301.6572,124.9572,apk,58,apk58,True,False,False,medium,0.75,feed zone (1) x natural-state confidence medium (0.75),0.75,1
+WELL-7,2820840.0,6332682.0,-750.0,173.7,96.6,308.4667,134.7667,apk,59,apk59,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,-850.0,167.9,105.5,314.9591,147.0591,apk,60,apk60,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,-950.0,158.7,114.4,321.0394,162.3394,apk,61,apk61,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,-1100.0,144.3,128.0,329.6519,185.3519,apk,62,apk62,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,-1300.0,131.3,146.4,340.217,208.917,apk,63,apk63,True,False,False,medium,0.75,feed zone (1) x natural-state confidence medium (0.75),0.75,2
+WELL-7,2820840.0,6332682.0,-1325.0,131.3,148.7,341.4614,210.1614,apk,63,apk63,True,False,False,medium,0.75,feed zone (1) x natural-state confidence medium (0.75),0.75,2
+WELL-7,2820840.0,6332682.0,-1500.0,130.9,164.8,349.7574,218.8574,apk,64,apk64,False,False,False,medium,0.375,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,-1700.0,130.7,183.3,358.4933,227.7933,apk,65,apk65,False,False,False,medium,0.375,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,-1900.0,131.2,201.8,366.4947,235.2947,apk,66,apk66,False,False,False,medium,0.375,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,-2250.0,134.0,234.2,,,apk,67,apk67,False,False,False,medium,0.375,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,-2750.0,144.4,280.4,,,apk,68,apk68,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-7,2820840.0,6332682.0,-2762.0,144.7,281.5,,,apk,68,apk68,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818757.0,6332185.0,176.0,12.8,1.8,116.9124,104.1124,ana,42,ana42,False,True,False,medium,0.225,within 30 m of the wellhead or in the top block of its column (0.3) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818757.0,6332185.0,170.0,12.9,2.0,120.2115,107.3115,ana,42,ana42,False,True,False,medium,0.225,within 30 m of the wellhead or in the top block of its column (0.3) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818757.0,6332185.0,150.0,13.7,3.9,142.7021,129.0021,ana,43,ana43,False,True,False,medium,0.225,within 30 m of the wellhead or in the top block of its column (0.3) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818757.0,6332185.0,130.0,15.5,5.9,158.1767,142.6767,ana,44,ana44,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818757.0,6332185.0,110.0,17.2,7.9,169.8926,152.6926,ana,45,ana45,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818757.0,6332185.0,90.0,18.9,10.0,179.8856,160.9856,ana,46,ana46,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818757.0,6332185.0,70.0,20.7,12.2,188.7128,168.0128,ana,47,ana47,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818757.0,6332185.0,50.0,22.3,14.5,196.6932,174.3932,ana,48,ana48,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818757.0,6332185.0,30.0,24.0,16.6,203.1567,179.1567,ana,49,ana49,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818757.0,6332185.0,10.0,25.8,18.7,209.0117,183.2117,ana,50,ana50,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818757.0,6332185.0,-25.0,29.1,22.4,218.1885,189.0885,ana,51,ana51,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818757.0,6332185.0,-75.0,33.7,27.8,229.6716,195.9716,ana,52,ana52,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818755.2,6332185.4,-150.0,40.2,35.7,243.7025,203.5025,ana,53,ana53,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818752.5,6332186.0,-250.0,48.0,46.1,258.9158,210.9158,ana,54,ana54,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818740.5,6332189.4,-350.0,54.5,56.3,271.4644,216.9644,ana,55,ana55,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818725.6,6332193.5,-450.0,59.9,66.4,282.2794,222.3794,ana,56,ana56,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818703.6,6332201.3,-550.0,63.9,76.3,291.721,227.821,ana,57,ana57,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818679.8,6332210.2,-650.0,66.5,86.2,300.2665,233.7665,ana,58,ana58,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818651.2,6332219.1,-750.0,67.8,95.9,307.9367,240.1367,ana,59,ana59,False,False,False,medium,0.375,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818621.8,6332227.9,-850.0,68.1,105.5,314.9591,246.8591,ana,60,ana60,False,False,False,medium,0.375,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818590.3,6332236.4,-950.0,67.1,115.0,321.4359,254.3359,ana,61,ana61,False,False,False,medium,0.375,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818530.9,6332249.4,-1100.0,63.8,129.5,330.557,266.757,ana,62,ana62,True,False,False,medium,0.75,feed zone (1) x natural-state confidence medium (0.75),0.75,1
+WELL-8,2818520.2,6332251.5,-1125.0,63.9,132.0,332.0472,268.1472,ana,62,ana62,True,False,False,medium,0.75,feed zone (1) x natural-state confidence medium (0.75),0.75,1
+WELL-8,2818442.9,6332263.5,-1300.0,63.6,149.4,341.837,278.237,anb,63,anb63,False,False,False,medium,0.375,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818354.2,6332274.0,-1500.0,64.5,169.2,351.9075,287.4075,anb,64,anb64,False,False,False,medium,0.375,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818266.1,6332284.2,-1700.0,66.8,188.9,360.9884,294.1884,anb,65,anb65,False,False,False,medium,0.375,open hole within an isothermal section >= 300 m long (possible internal flow) (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818174.1,6332293.2,-1900.0,70.7,208.6,369.2675,298.5675,anb,66,anb66,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-8,2818001.9,6332311.7,-2250.0,79.1,242.9,,,anb,67,anb67,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-8,2817771.1,6332350.5,-2716.1,93.1,288.6,,,amw,68,amw68,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-9,2820920.0,6335679.0,174.0,16.9,1.4,109.2921,92.3921,ajj,42,ajj42,False,True,False,medium,0.225,within 30 m of the wellhead or in the top block of its column (0.3) x natural-state confidence medium (0.75),0.0,
+WELL-9,2820920.0,6335679.0,170.0,17.4,1.5,111.35,93.95,ajj,42,ajj42,False,True,False,medium,0.225,within 30 m of the wellhead or in the top block of its column (0.3) x natural-state confidence medium (0.75),0.0,
+WELL-9,2820920.0,6335679.0,150.0,18.0,3.2,135.74,117.74,ajj,43,ajj43,False,True,False,medium,0.225,within 30 m of the wellhead or in the top block of its column (0.3) x natural-state confidence medium (0.75),0.0,
+WELL-9,2820920.0,6335679.0,130.0,19.5,5.0,151.8362,132.3362,ajj,44,ajj44,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-9,2820920.0,6335679.0,110.0,22.3,6.8,163.7871,141.4871,ajj,45,ajj45,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-9,2820920.0,6335679.0,90.0,27.0,8.7,173.9222,146.9222,ajj,46,ajj46,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-9,2820920.0,6335679.0,70.0,33.7,10.6,182.4335,148.7335,ajj,47,ajj47,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-9,2820920.0,6335679.0,50.0,41.8,12.5,189.8173,148.0173,ajj,48,ajj48,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-9,2820920.0,6335679.0,30.0,49.9,14.5,196.6932,146.7932,ajj,49,ajj49,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-9,2820920.0,6335679.0,10.0,58.9,16.9,204.0272,145.1272,ajj,50,ajj50,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-9,2820920.0,6335679.0,-25.0,75.5,21.8,216.7845,141.2845,ajj,51,ajj51,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-9,2820920.0,6335678.9,-75.0,96.7,28.5,231.0306,134.3306,ajj,52,ajj52,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-9,2820921.1,6335678.3,-150.0,123.8,37.8,247.0251,123.2251,ajj,53,ajj53,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-9,2820927.2,6335674.8,-250.0,153.0,49.3,263.0632,110.0632,ajj,54,ajj54,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-9,2820942.1,6335666.2,-350.0,176.0,60.3,275.912,99.912,ajj,55,ajj55,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-9,2820968.5,6335650.9,-450.0,193.6,70.8,286.6,93.0,ajj,56,ajj56,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-9,2820993.0,6335636.8,-535.0,205.4,78.9,294.044,88.644,ajj,57,ajj57,True,False,False,medium,0.75,feed zone (1) x natural-state confidence medium (0.75),0.375,1
+WELL-9,2820997.5,6335634.2,-550.0,207.5,80.3,295.2706,87.7706,ajj,57,ajj57,True,False,False,medium,0.75,feed zone (1) x natural-state confidence medium (0.75),0.375,1
+WELL-9,2821030.7,6335615.0,-650.0,214.0,89.1,302.6264,88.6264,ajq,58,ajq58,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-9,2821067.8,6335593.6,-750.0,217.7,97.7,309.2935,91.5935,ajq,59,ajq59,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-9,2821101.3,6335573.7,-837.5,211.6,105.2,314.7473,103.1473,ajq,60,ajq60,True,False,False,medium,0.75,feed zone (1) x natural-state confidence medium (0.75),0.6,2
+WELL-9,2821106.2,6335570.6,-850.0,210.7,106.2,315.4515,104.7515,ajq,60,ajq60,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-9,2821145.1,6335546.4,-950.0,198.8,114.9,321.3699,122.5699,ajq,61,ajq61,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-9,2821201.0,6335510.1,-1100.0,187.9,128.1,329.7125,141.8125,ajq,62,ajq62,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-9,2821274.5,6335460.1,-1300.0,185.4,146.0,339.999,154.599,ajq,63,ajq63,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-9,2821352.4,6335406.6,-1500.0,182.5,163.9,349.3117,166.8117,asg,64,asg64,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-9,2821421.8,6335355.6,-1700.0,177.3,182.1,357.95,180.65,asg,65,asg65,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-9,2821484.3,6335306.7,-1900.0,171.9,200.3,365.8711,193.9711,asg,66,asg66,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-9,2821582.6,6335224.6,-2250.0,160.0,232.3,,,asf,67,asf67,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-9,2821632.0,6335183.2,-2427.1,161.6,248.5,,,asf,67,asf67,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,
+WELL-10,2819400.0,6334900.0,210.0,24.6,1.0,99.6059,75.0059,arz,40,arz40,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-10,2819400.0,6334900.0,190.0,45.1,1.9,118.5975,73.4975,arz,41,arz41,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-10,2819400.0,6334900.0,170.0,93.4,3.6,139.853,46.453,arz,42,arz42,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-10,2819400.0,6334900.0,150.0,118.2,6.0,158.8324,40.6324,arz,43,arz43,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-10,2819400.0,6334900.0,130.0,138.6,8.4,172.4469,33.8469,arz,44,arz44,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-10,2819400.0,6334900.0,110.0,156.8,11.1,184.4714,27.6714,arz,45,arz45,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-10,2819400.0,6334900.0,90.0,172.9,13.9,194.7127,21.8127,arz,46,arz46,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-10,2819400.0,6334900.0,70.0,186.7,16.5,202.8638,16.1638,arz,47,arz47,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-10,2819400.0,6334900.0,50.0,198.0,19.1,210.0684,12.0684,arz,48,arz48,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-10,2819400.0,6334900.0,30.0,207.0,21.9,217.0205,10.0205,arz,49,arz49,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-10,2819400.0,6334900.0,10.0,215.6,24.9,223.7434,8.1434,arz,50,arz50,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-10,2819400.0,6334900.0,-25.0,227.9,29.9,233.6733,5.7733,arz,51,arz51,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-10,2819400.0,6334900.0,-75.0,241.7,36.7,245.3029,3.6029,arz,52,arz52,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-10,2819400.0,6334900.0,-150.0,256.8,46.5,259.4461,2.6461,arz,53,arz53,False,True,False,medium,0.375,behind casing (0.5) x natural-state confidence medium (0.75),0.0,
+WELL-10,2819400.0,6334900.0,-250.0,268.7,56.7,271.9198,3.2198,arz,54,arz54,True,False,False,medium,0.75,feed zone (1) x natural-state confidence medium (0.75),0.375,1
+WELL-10,2819400.0,6334900.0,-262.5,268.7,57.7,273.0477,4.3477,arz,54,arz54,True,False,False,medium,0.75,feed zone (1) x natural-state confidence medium (0.75),0.375,1
+WELL-10,2819400.0,6334900.0,-350.0,268.5,64.4,280.2429,11.7429,arz,55,arz55,False,False,False,medium,0.6,open hole (0.8) x natural-state confidence medium (0.75),0.0,

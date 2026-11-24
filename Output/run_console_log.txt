@@ -1,88 +1,312 @@
-=== natural_state_analysis.py run ===
-Run date: 2026-11-24 10:26
-Reading inputs from Baseline/ only (read-only).
-IF97 validation (CLAUDE 3.3: fail if any error > 0.1 K):
-  Tsat(1.01325 bar) = 99.974 C | reference 99.97 C | error +0.0043 K
-  Tsat(100 bar) = 310.999 C | reference 311.00 C | error -0.0005 K
-  rho_liquid(1.01325 bar, 25 C) = 997.05 kg/m3 | reference 997.05 | error -0.00
-  IF97 validation PASSED.
-Geometry parsed: 385 vertices, 70 layers, 398 surface columns, 10 well tracks in WELLS section.
-Mapping loaded: Lake Tarawera (1 polyline(s)), Tarawera River (5 polyline(s)), river (5 polyline(s)), Fault 1 (1 polyline(s)), Fault 2 (1 polyline(s)), Fault 3 (1 polyline(s))
-Loaded WELL-1: 19 T pts, 19 P pts, 2 feed zones, survey 29/07/2015, flow: none
-Loaded WELL-2: 33 T pts, 33 P pts, 3 feed zones, survey 29/07/2015, flow: production from 01/01/2014
-Loaded WELL-3: 30 T pts, 30 P pts, 2 feed zones, survey 29/07/2015, flow: production from 01/01/2014
-Loaded WELL-4: 22 T pts, 22 P pts, 1 feed zones, survey 29/07/2015, flow: injection from 01/01/2014
-Loaded WELL-5: 26 T pts, 26 P pts, 2 feed zones, survey 29/07/2015, flow: injection from 01/01/2014
-Loaded WELL-6: 28 T pts, 28 P pts, 2 feed zones, survey 29/07/2015, flow: none
-Loaded WELL-7: 32 T pts, 32 P pts, 2 feed zones, survey 29/07/2015, flow: none
-Loaded WELL-8: 29 T pts, 29 P pts, 1 feed zones, survey 29/07/2015, flow: injection from 01/01/2014
-Loaded WELL-9: 30 T pts, 30 P pts, 2 feed zones, survey 29/07/2015, flow: production from 01/01/2014
-Loaded WELL-10: 17 T pts, 17 P pts, 1 feed zones, survey 29/07/2015, flow: production from 01/12/2019
-Survey dates present: ['29/07/2015']
-Design source labels: ['Synthetic data']
-Data integrity (CLAUDE 3.1.1):
-  WELL-1 temperature: JSON 19 pts, dat 19 rows, matched 19, max |diff| 0 -> OK
-  WELL-1 pressure: JSON 19 pts, dat 19 rows, matched 19, max |diff| 0 -> OK
-  WELL-1 track ends vs WELLS section: max diff 0 m -> OK
-  WELL-2 temperature: JSON 33 pts, dat 33 rows, matched 33, max |diff| 0 -> OK
-  WELL-2 pressure: JSON 33 pts, dat 33 rows, matched 33, max |diff| 0 -> OK
-  WELL-2 transient -750 mRL: JSON 12, dat 12, matched 12 -> OK
-  WELL-2 track ends vs WELLS section: max diff 0 m -> OK
-  WELL-3 temperature: JSON 30 pts, dat 30 rows, matched 30, max |diff| 0 -> OK
-  WELL-3 pressure: JSON 30 pts, dat 30 rows, matched 30, max |diff| 0 -> OK
-  WELL-3 transient -550 mRL: JSON 12, dat 12, matched 12 -> OK
-  WELL-3 track ends vs WELLS section: max diff 0 m -> OK
-  WELL-4 temperature: JSON 22 pts, dat 22 rows, matched 22, max |diff| 0 -> OK
-  WELL-4 pressure: JSON 22 pts, dat 22 rows, matched 22, max |diff| 0 -> OK
-  WELL-4 track ends vs WELLS section: max diff 0 m -> OK
-  WELL-5 temperature: JSON 26 pts, dat 26 rows, matched 26, max |diff| 0 -> OK
-  WELL-5 pressure: JSON 26 pts, dat 26 rows, matched 26, max |diff| 0 -> OK
-  WELL-5 track ends vs WELLS section: max diff 0 m -> OK
-  WELL-6 temperature: JSON 28 pts, dat 28 rows, matched 28, max |diff| 0 -> OK
-  WELL-6 pressure: JSON 28 pts, dat 28 rows, matched 28, max |diff| 0 -> OK
-  WELL-6 track ends vs WELLS section: max diff 0 m -> OK
-  WELL-7 temperature: JSON 32 pts, dat 32 rows, matched 32, max |diff| 0 -> OK
-  WELL-7 pressure: JSON 32 pts, dat 32 rows, matched 32, max |diff| 0 -> OK
-  WELL-7 track ends vs WELLS section: max diff 0 m -> OK
-  WELL-8 temperature: JSON 29 pts, dat 29 rows, matched 29, max |diff| 0 -> OK
-  WELL-8 pressure: JSON 29 pts, dat 29 rows, matched 29, max |diff| 0 -> OK
-  WELL-8 track ends vs WELLS section: max diff 0 m -> OK
-  WELL-9 temperature: JSON 30 pts, dat 30 rows, matched 30, max |diff| 0 -> OK
-  WELL-9 pressure: JSON 30 pts, dat 30 rows, matched 30, max |diff| 0 -> OK
-  WELL-9 transient -675 mRL: JSON 12, dat 12, matched 12 -> OK
-  WELL-9 track ends vs WELLS section: max diff 0 m -> OK
-  WELL-10 temperature: JSON 17 pts, dat 17 rows, matched 17, max |diff| 0 -> OK
-  WELL-10 pressure: JSON 17 pts, dat 17 rows, matched 17, max |diff| 0 -> OK
-  WELL-10 transient -250 mRL: JSON 6, dat 6, matched 6 -> OK
-  WELL-10 track ends vs WELLS section: max diff 0 m -> OK
-  wrote Output/data_integrity_check.csv (72 rows)
-  wrote Output/NS_calibration_targets.csv (266 rows)
-  wrote Output/feedzones.csv (18 rows)
-  wrote Output/T_P_at_layer_centres.csv (229 rows)
-  wrote Output/T_P_at_common_elevations.csv (10 rows)
-  wrote Output/well_summary.csv (10 rows)
-  wrote Output/pressure_consistency_check.csv (4 rows)
-  pressure check WELL-2 @ -750.0 mRL: survey 98.20 bar vs first 01/01/2014 98.30 bar (diff -0.10); at survey date diff 9.92 -> agrees with first transient (<=1 bar); disagrees with transient at survey date (>3 bar)
-  pressure check WELL-3 @ -550.0 mRL: survey 80.70 bar vs first 01/01/2014 80.80 bar (diff -0.10); at survey date diff 9.07 -> agrees with first transient (<=1 bar); disagrees with transient at survey date (>3 bar)
-  pressure check WELL-9 @ -675.0 mRL: survey 91.25 bar vs first 01/01/2014 89.20 bar (diff 2.05); at survey date diff 14.69 -> marginal agreement with first transient (1-3 bar); disagrees with transient at survey date (>3 bar)
-  pressure check WELL-10 @ -250.0 mRL: survey 56.70 bar vs first 01/01/2020 48.70 bar (diff 8.00); at survey date diff  -> disagrees with first transient (>3 bar)
-  hydrostatic WELL-1: median excess +5.48 % over 17 interval(s)
-  hydrostatic WELL-2: median excess +12.93 % over 31 interval(s)
-  hydrostatic WELL-3: median excess +7.43 % over 28 interval(s)
-  hydrostatic WELL-4: median excess +7.38 % over 19 interval(s)
-  hydrostatic WELL-5: median excess +5.32 % over 25 interval(s)
-  hydrostatic WELL-6: median excess +6.57 % over 26 interval(s)
-  hydrostatic WELL-7: median excess +8.89 % over 30 interval(s)
-  hydrostatic WELL-8: median excess +4.02 % over 28 interval(s)
-  hydrostatic WELL-9: median excess +13.34 % over 28 interval(s)
-  hydrostatic WELL-10: median excess +35.98 % over 2 interval(s)
-  FIELD-WIDE median excess (all valid intervals): +8.02 %, range -4.13 to +77.34 %
-  wrote Output/hydrostatic_check.csv (247 rows)
-  wrote Output/well_geometry_check.csv (10 rows)
-Figures:
-  well map
-  10 well profiles
-  T and P maps by elevation
-  section WELL-10 to WELL-3, length 858 m
-  P-T state plot
-Done.
+
+====================================================================================================
+0. IAPWS-IF97 validation (script aborts if any T error > 0.1 K)
+====================================================================================================
+  Tsat(1.01325 bar)                        computed=     99.974300 reference=     99.970000 error=+4.30e-03 degC     OK
+  Tsat(100 bar)                            computed=    310.999488 reference=    311.000000 error=-5.12e-04 degC     OK
+  Tsat(0.1 MPa) IAPWS table 35             computed=    372.755919 reference=    372.755919 error=-3.89e-07 K        OK
+  Tsat(1 MPa)   IAPWS table 35             computed=    453.035632 reference=    453.035632 error=+3.91e-07 K        OK
+  Tsat(10 MPa)  IAPWS table 35             computed=    584.149488 reference=    584.149488 error=-1.47e-09 K        OK
+  Psat(300 K)   IAPWS table 35 [kPa]       computed=      3.536589 reference=      3.536589 error=+3.01e-09 kPa      OK
+  Psat(500 K)   IAPWS table 35 [MPa]       computed=      2.638898 reference=      2.638898 error=-3.73e-09 MPa      OK
+  Psat(600 K)   IAPWS table 35 [MPa]       computed=     12.344315 reference=     12.344315 error=-2.16e-08 MPa      OK
+  rho(3 MPa,300 K) IAPWS table 5           computed=    997.852940 reference=    997.852940 error=+3.12e-07 kg/m3    OK
+  rho(80 MPa,300 K) IAPWS table 5          computed=   1029.674293 reference=   1029.674293 error=-2.29e-08 kg/m3    OK
+  rho(3 MPa,500 K) IAPWS table 5           computed=    831.657541 reference=    831.657543 error=-2.34e-06 kg/m3    OK
+  All IAPWS-IF97 validation checks passed (T errors << 0.1 K).
+
+====================================================================================================
+1. Loading data
+====================================================================================================
+Wells (Groups_data.json): ['WELL-1', 'WELL-2', 'WELL-3', 'WELL-4', 'WELL-5', 'WELL-6', 'WELL-7', 'WELL-8', 'WELL-9', 'WELL-10']
+  WELL-1: role=monitor (no flow data)   n_survey=19 survey date=29/07/2015 track_pts=2 wellhead z=15 TD z=-1672.0  FZ=[(-1320.0, -1355.0, 'MEDIUM'), (-1440.0, -1490.0, 'MEDIUM')]
+  WELL-2: role=producer                 n_survey=33 survey date=29/07/2015 track_pts=2 wellhead z=225 TD z=-2348.0  FZ=[(-250, -270, 'LOW'), (-720, -770, 'HIGH'), (-1900, -1920, 'MEDIUM')]
+  WELL-3: role=producer                 n_survey=30 survey date=29/07/2015 track_pts=2 wellhead z=164 TD z=-2887.0  FZ=[(-310.0, -360.0, 'HIGH'), (-820.0, -870.0, 'MEDIUM')]
+  WELL-4: role=injector                 n_survey=22 survey date=29/07/2015 track_pts=2 wellhead z=340 TD z=-750.0  FZ=[(-630.0, -680.0, 'MEDIUM')]
+  WELL-5: role=injector                 n_survey=26 survey date=29/07/2015 track_pts=2 wellhead z=93 TD z=-2595.0  FZ=[(-1300.0, -1350.0, 'MEDIUM'), (-1500.0, -1550.0, 'MEDIUM')]
+  WELL-6: role=monitor (no flow data)   n_survey=28 survey date=29/07/2015 track_pts=2 wellhead z=147 TD z=-2359.0  FZ=[(-460.0, -490.0, 'HIGH'), (-1100.0, -1150.0, 'HIGH')]
+  WELL-7: role=monitor (no flow data)   n_survey=32 survey date=29/07/2015 track_pts=2 wellhead z=190 TD z=-2762.0  FZ=[(-610.0, -650.0, 'HIGH'), (-1300.0, -1350.0, 'HIGH')]
+  WELL-8: role=injector                 n_survey=29 survey date=29/07/2015 track_pts=20 wellhead z=176 TD z=-2716.1  FZ=[(-1100.0, -1150.0, 'HIGH')]
+  WELL-9: role=producer                 n_survey=30 survey date=29/07/2015 track_pts=25 wellhead z=174 TD z=-2427.1  FZ=[(-520.0, -550.0, 'LOW'), (-830.0, -845.0, 'MEDIUM')]
+  WELL-10: role=producer                 n_survey=17 survey date=29/07/2015 track_pts=2 wellhead z=260 TD z=-350.0  FZ=[(-250.0, -275.0, 'Synthetic')]
+  Fault 1: 2 pts  from (2819600,6327105) to (2819779,6335583)
+  Fault 2: 2 pts  from (2821189,6336913) to (2821189,6327145)
+  Fault 3: 2 pts  from (2812472,6328812) to (2826927,6342155)
+  Lake polygon: 1114 pts, extent x 2805649-2816783 y 6322750-6331964
+  Grid: 385 vertices, 398 columns, 70 layers (layer 0 = atmosphere), surface elevation range 80..880 mRL
+
+====================================================================================================
+2. Data integrity: JSON vs .dat, survey/feed zones/track/design
+====================================================================================================
+check                                                         result                               
+Casing/liner overlap or gap                                   PASS (liner laps inside casing)          10
+Design interval inside track z-range                          FLAG (design extends below track end)     1
+                                                              PASS                                     19
+Feed zone within track and open/slotted interval              PASS                                     18
+Feed-zone units                                               NOTE                                     10
+JSON vs dat pressure                                          PASS                                     10
+JSON vs dat temperature                                       PASS                                     10
+JSON vs dat transient pressure                                PASS                                      4
+StableFlag                                                    PASS                                     10
+Survey elevations strictly descending                         PASS                                     10
+Survey point blocks (own grid lookup) in gTE14515_wells.json  PASS                                     10
+Survey point inside feed zone                                 PASS                                     18
+Survey points inside track z-range                            PASS                                     10
+FLAGS:
+                                    check    well                                                            detail
+52  Design interval inside track z-range  WELL-4  Liner 4-1/2": -450..-3251 mRL, slotted=True; track bottom -750.0
+
+====================================================================================================
+3. Natural-state timing tests
+====================================================================================================
+Wells verified as natural state by gauge test (valid test, |delta| <= 0.5 bar): ['WELL-2', 'WELL-3']
+  WELL-1   monitor (no flow data)   -> probably natural state   [medium] ns_conf=0.75
+      no flow data and no transient gauge: cannot be tested directly; P offset vs verified wells (W2, W3) at the pivot feed zone: -2.4 bar (max |offset| over its feed zones 2.9 bar)
+  WELL-2   producer                 -> natural state            [high] ns_conf=1.0
+      survey P at gauge (-750 mRL) = 98.2 bar vs first transient value 98.3 bar on 01/01/2014 (day production began): delta -0.10 bar
+  WELL-3   producer                 -> natural state            [high] ns_conf=1.0
+      survey P at gauge (-550 mRL) = 80.7 bar vs first transient value 80.8 bar on 01/01/2014 (day production began): delta -0.10 bar
+  WELL-4   injector                 -> probably natural state   [low] ns_conf=0.6
+      injector (injection from 01/01/2014, 110 kg/s at ~80 degC, i.e. 01/01/2014 to survey ~1.6 yr); no pressure gauge. Survey T at pivot feed zone 27 degC is BELOW the injectate temperature, so the profile shows no warm-injection signature; P vs verified wells (W2, W3) at the pivot feed zone: +1.9 bar
+  WELL-5   injector                 -> possibly disturbed       [low] ns_conf=0.4
+      injector (injection from 01/01/2014, 100 kg/s at ~80 degC, i.e. 01/01/2014 to survey ~1.6 yr); no pressure gauge. Survey T at pivot feed zone 147 degC is ABOVE the injectate temperature, so cooling by injection would be invisible as a warm signature and cannot be excluded; P vs verified wells (W2, W3) at the pivot feed zone: -0.4 bar
+  WELL-6   monitor (no flow data)   -> probably natural state   [medium] ns_conf=0.75
+      no flow data and no transient gauge: cannot be tested directly; P offset vs verified wells (W2, W3) at the pivot feed zone: -1.5 bar (max |offset| over its feed zones 1.5 bar)
+  WELL-7   monitor (no flow data)   -> probably natural state   [medium] ns_conf=0.75
+      no flow data and no transient gauge: cannot be tested directly; P offset vs verified wells (W2, W3) at the pivot feed zone: -1.7 bar (max |offset| over its feed zones 1.7 bar)
+  WELL-8   injector                 -> probably natural state   [low] ns_conf=0.6
+      injector (injection from 01/01/2014, 100 kg/s at ~80 degC, i.e. 01/01/2014 to survey ~1.6 yr); no pressure gauge. Survey T at pivot feed zone 64 degC is BELOW the injectate temperature, so the profile shows no warm-injection signature; P vs verified wells (W2, W3) at the pivot feed zone: +1.3 bar
+  WELL-9   producer                 -> probably natural state   [medium] ns_conf=0.75
+      survey P at gauge (-675 mRL) = 91.2 bar is +2.05 bar ABOVE first transient 89.2 bar (01/01/2014); sign is opposite to drawdown, so not production-disturbed, but the offset exceeds gauge rounding (0.1 bar)
+  WELL-10  producer                 -> probably natural state   [low] ns_conf=0.6
+      transient series starts 01/01/2020, AFTER first flow (01/12/2019) and 4.4 yr after the survey: test is not valid; survey P at gauge 56.7 bar vs first transient 48.7 bar (+8.0 bar) is the sign expected for later drawdown; the survey P at its feed zone is +1.6 bar from the verified wells (W2, W3) at the same elevation
+
+====================================================================================================
+4. Survey-point table (boiling margin, block, location class)
+====================================================================================================
+location_class
+behind casing                     121
+feed zone                          32
+near wellhead                      28
+open hole                          60
+open hole (isothermal section)     25
+Points with boiling margin < 5 degC:
+         well  elevation_mRL  T_degC  P_bar  Tsat_degC  boiling_margin_degC
+261  WELL-10          -75.0   241.7   36.7     245.30                 3.60
+262  WELL-10         -150.0   256.8   46.5     259.45                 2.65
+263  WELL-10         -250.0   268.7   56.7     271.92                 3.22
+264  WELL-10         -262.5   268.7   57.7     273.05                 4.35
+
+====================================================================================================
+5. Hydrostatic column-density tests (single-phase intervals >= 300 m only)
+====================================================================================================
+       well  z_top_mRL  z_bottom_mRL  length_m  n_points  T_mean_degC T_range_degC  min_boiling_margin_degC  single_phase_ok  dP_obs_bar  dP_expected_IF97_bar  excess_pct  excess_kg_m3  apparent_density_kg_m3  model_density_kg_m3  rounding_uncertainty_pct   cold  max_liquid_density_kg_m3  exceeds_max_liquid_gradient
+0    WELL-1       15.0        -450.0     465.0         8         47.2        33-69                    150.4             True        47.8                 45.07        6.05          59.9                  1049.9                990.0                      0.29   True                    1001.3                         True
+1    WELL-1     -450.0        -850.0     400.0         5         82.8        69-95                    205.1             True        40.7                 38.18        6.61          64.3                  1037.6                973.3                      0.35   True                    1003.8                         True
+2    WELL-1     -850.0       -1300.0     450.0         4        103.6       95-112                    215.2             True        43.9                 42.38        3.58          34.4                   995.6                961.1                      0.32  False                    1005.7                        False
+3    WELL-1    -1300.0       -1672.0     372.0         5        115.2      112-119                    226.0             True        35.0                 34.81        0.55           5.3                   959.7                954.4                      0.40  False                    1007.6                        False
+4    WELL-2      225.0        -250.0     475.0        16        124.7       16-238                     31.8             True        54.0                 41.92       28.82         267.8                  1196.9                929.2                      0.26  False                    1000.8                         True
+5    WELL-2     -250.0        -650.0     400.0         6        254.4      238-267                     23.8             True        34.7                 30.92       12.24          97.3                   892.2                794.9                      0.41  False                    1003.4                        False
+6    WELL-2     -650.0       -1100.0     450.0         6        251.4      238-264                     39.5             True        39.2                 35.65        9.96          80.0                   883.7                803.7                      0.36  False                    1005.1                        False
+7    WELL-2    -1100.0       -1500.0     400.0         3        236.6      236-238                     92.4             True        35.6                 32.54        9.42          78.1                   907.3                829.3                      0.40  False                    1007.1                        False
+8    WELL-2    -1500.0       -1900.0     400.0         3        237.7      236-240                    113.6             True        35.3                 32.61        8.25          68.6                   899.7                831.1                      0.40  False                    1008.8                        False
+9    WELL-2    -1900.0       -2348.0     448.0         4        246.4      240-254                    123.3             True        39.3                 36.10        8.87          73.0                   895.6                822.7                      0.36  False                    1010.4                        False
+10   WELL-3      164.0        -250.0     414.0        13        149.2       35-255                     12.2             True        53.6                 35.28       51.94         470.8                  1377.1                906.3                      0.26  False                    1000.8                         True
+11   WELL-3     -250.0        -650.0     400.0         6        258.4      254-261                     15.3             True        34.0                 30.92        9.96          78.6                   867.9                789.3                      0.41  False                    1003.4                        False
+12   WELL-3     -650.0       -1100.0     450.0         6        223.8      177-254                     48.2             True        39.0                 37.26        4.67          39.3                   879.6                840.3                      0.36  False                    1005.1                        False
+13   WELL-3    -1100.0       -1500.0     400.0         3        176.6      176-177                    152.5             True        35.9                 35.27        1.78          16.0                   915.3                899.3                      0.39  False                    1007.0                        False
+14   WELL-3    -1500.0       -1900.0     400.0         3        174.9      174-176                    173.7             True        36.5                 35.43        3.01          27.2                   930.4                903.2                      0.39  False                    1008.8                        False
+15   WELL-3    -1900.0       -2887.0     987.0         4        181.2      174-188                    188.8             True        88.4                 87.29        1.27          11.4                   912.3                900.9                      0.16  False                    1011.9                        False
+16   WELL-4      230.0        -250.0     480.0        16         14.5        12-19                    113.8             True        48.7                 47.08        3.45          34.5                  1034.4               1000.0                      0.29   True                    1000.8                         True
+17   WELL-4     -250.0        -750.0     500.0         7         24.6        19-29                    245.9             True        49.4                 49.06        0.69           6.9                  1007.4               1000.5                      0.29   True                    1003.8                        False
+18   WELL-5       93.0        -350.0     443.0        11         66.6       28-135                    123.6             True        51.3                 41.93       22.36         218.5                  1195.8                977.3                      0.27  False                    1001.0                         True
+19   WELL-5     -350.0        -750.0     400.0         5        151.2      135-158                    133.9             True        39.2                 36.03        8.79          80.8                  1000.6                919.7                      0.36  False                    1003.7                        False
+20   WELL-5     -750.0       -1300.0     550.0         5        153.9      148-157                    150.5             True        50.4                 49.63        1.56          14.3                   934.0                919.6                      0.28  False                    1005.7                        False
+21   WELL-5    -1300.0       -1700.0     400.0         5        145.9      145-148                    192.2             True        36.4                 36.47       -0.20          -1.8                   927.5                929.3                      0.39  False                    1007.8                        False
+22   WELL-5    -1700.0       -2250.0     550.0         3        145.8      145-147                    213.3             True        50.4                 50.25        0.29           2.7                   934.4                931.7                      0.28  False                    1009.8                        False
+23   WELL-5    -2250.0       -2595.0     345.0         2        151.0      147-155                    222.3             True        31.5                 31.44        0.19           1.8                   931.0                929.3                      0.45  False                    1011.9                        False
+24   WELL-6      147.0        -350.0     497.0        13        100.0       22-204                     73.3             True        59.4                 45.13       31.61         300.9                  1252.7                951.8                      0.24  False                    1001.0                         True
+25   WELL-6     -350.0        -750.0     400.0         6        210.4      194-220                     70.0             True        35.6                 33.56        6.07          52.0                   908.7                856.7                      0.40  False                    1003.8                        False
+26   WELL-6     -750.0       -1300.0     550.0         6        157.0      132-194                    115.2             True        49.6                 49.53        0.15           1.4                   917.2                915.8                      0.28  False                    1005.8                        False
+27   WELL-6    -1300.0       -1700.0     400.0         3        127.2      124-132                    208.8             True        37.0                 37.08       -0.23          -2.2                   943.1                945.3                      0.38  False                    1007.9                        False
+28   WELL-6    -1700.0       -2359.0     659.0         4        124.0      122-126                    235.1             True        61.2                 61.44       -0.39          -3.7                   946.6                950.4                      0.23  False                    1010.4                        False
+29   WELL-7      190.0        -250.0     440.0        14         56.5       19-129                     80.5             True        45.9                 41.97        9.37          92.0                  1074.5                982.5                      0.31  False                    1000.7                         True
+30   WELL-7     -250.0        -650.0     400.0         7        159.2      129-177                    125.0             True        41.0                 35.86       14.33         130.6                  1042.2                911.5                      0.34  False                    1003.4                         True
+31   WELL-7     -650.0       -1100.0     450.0         5        164.3      144-177                    125.0             True        40.1                 40.14       -0.10          -0.9                   908.0                908.9                      0.35  False                    1005.1                        False
+32   WELL-7    -1100.0       -1500.0     400.0         4        134.5      131-144                    185.4             True        36.8                 36.81       -0.02          -0.2                   938.2                938.4                      0.38  False                    1007.1                        False
+33   WELL-7    -1500.0       -1900.0     400.0         3        130.9      131-131                    218.9             True        37.0                 37.00        0.00           0.0                   943.2                943.2                      0.38  False                    1008.8                        False
+34   WELL-7    -1900.0       -2762.0     862.0         4        138.6      131-145                    232.3             True        79.7                 79.57        0.16           1.5                   941.5                940.1                      0.18  False                    1011.9                        False
+35   WELL-8      176.0        -250.0     426.0        14         23.9        13-48                    104.1             True        44.3                 41.61        6.46          64.4                  1061.9                997.5                      0.32   True                    1000.7                         True
+36   WELL-8     -250.0        -650.0     400.0         5         58.6        48-66                    210.9             True        40.1                 38.70        3.62          35.8                  1022.4                986.6                      0.35   True                    1003.2                         True
+37   WELL-8     -650.0       -1100.0     450.0         5         66.7        64-68                    233.8             True        43.3                 43.43       -0.30          -3.0                   981.2                984.2                      0.33   True                    1005.1                        False
+38   WELL-8    -1100.0       -1500.0     400.0         4         64.0        64-64                    266.8             True        39.7                 38.74        2.48          24.5                  1011.9                987.3                      0.36   True                    1007.0                        False
+39   WELL-8    -1500.0       -1900.0     400.0         3         67.3        64-71                    287.4             True        39.4                 38.73        1.72          17.0                  1004.3                987.3                      0.36   True                    1009.1                        False
+40   WELL-8    -1900.0       -2716.1     816.1         3         81.0        71-93                    283.9             True        80.0                 78.56        1.83          18.0                   999.7                981.7                      0.18   True                    1011.8                        False
+41   WELL-9      174.0        -250.0     424.0        14         53.9       17-153                     92.4             True        47.9                 40.23       19.07         187.2                  1169.0                981.8                      0.29  False                    1000.7                         True
+42   WELL-9     -250.0        -650.0     400.0         6        191.6      153-214                     87.8             True        39.8                 34.48       15.41         135.2                  1012.7                877.4                      0.35  False                    1003.4                         True
+43   WELL-9     -650.0       -1100.0     450.0         6        206.8      188-218                     88.6             True        39.0                 38.16        2.19          18.9                   882.1                863.2                      0.36  False                    1005.2                        False
+44   WELL-9    -1100.0       -1500.0     400.0         3        185.3      182-188                    141.8             True        35.8                 34.92        2.52          22.4                   912.7                890.3                      0.39  False                    1007.0                        False
+45   WELL-9    -1500.0       -1900.0     400.0         3        177.2      172-182                    166.8             True        36.4                 35.33        3.02          27.2                   927.9                900.8                      0.39  False                    1008.8                        False
+46   WELL-9    -1900.0       -2427.1     527.1         3        164.5      160-172                    194.0             True        48.2                 47.34        1.81          16.6                   932.3                915.8                      0.29  False                    1010.9                        False
+47  WELL-10      210.0        -350.0     560.0        17        181.7       25-269                      2.6            False        63.4                 45.95         NaN           NaN                  1203.0                871.8                      0.22  False                    1001.1                         True
+
+Cold windows (max T < 100 degC): shallow (top > -250 mRL) n=3 median 6.05 %, range 3.45..6.46; deeper n=7 median 1.83 %, range -0.30..6.61
+Field-wide excess estimate: median of cold windows (max T<100 degC, n=10): 2.96 %  (range -0.30..6.61)
+Deep windows (top <= -1000 mRL, n=21): median 1.72 %, range -0.39..9.42
+For comparison, using g = 10 m/s2 instead of 9.80665 would give +1.97 % on every window.
+
+====================================================================================================
+6. Per-well characteristics
+====================================================================================================
+                                                      0                                              1                                           2                                                    3                                           4                                           5                                           6                                                        7                                           8                                9
+well                                             WELL-1                                         WELL-2                                      WELL-3                                               WELL-4                                      WELL-5                                      WELL-6                                      WELL-7                                                   WELL-8                                      WELL-9                          WELL-10
+role                             monitor (no flow data)                                       producer                                    producer                                             injector                                    injector                      monitor (no flow data)                      monitor (no flow data)                                                 injector                                    producer                         producer
+x                                             2823330.0                                      2819527.0                                   2820133.0                                            2822243.0                                   2822044.0                                   2819841.0                                   2820840.0                                                2818757.0                                   2820920.0                        2819400.0
+y                                             6334011.0                                      6335494.0                                   6334454.0                                            6337763.0                                   6334190.0                                   6333177.0                                   6332682.0                                                6332185.0                                   6335679.0                        6334900.0
+wellhead_mRL                                       15.0                                          225.0                                       164.0                                                340.0                                        93.0                                       147.0                                       190.0                                                    176.0                                       174.0                            260.0
+td_mRL                                          -1672.0                                        -2348.0                                     -2887.0                                               -750.0                                     -2595.0                                     -2359.0                                     -2762.0                                                  -2716.1                                     -2427.1                           -350.0
+T_max_degC                                        118.6                                          266.9                                       261.4                                                 29.0                                       158.0                                       220.5                                       176.7                                                     93.1                                       217.7                            268.7
+T_max_elev_mRL                                  -1672.0                                         -550.0                                      -450.0                                               -750.0                                      -650.0                                      -550.0                                      -650.0                                                  -2716.1                                      -750.0                           -250.0
+T_at_TD_degC                                      118.6                                          253.7                                       188.2                                                 29.0                                       154.7                                       126.1                                       144.7                                                     93.1                                       161.6                            268.5
+inversion                                         False                                           True                                        True                                                False                                        True                                        True                                        True                                                     True                                        True                            False
+inversion_size_degC                                 0.0                                           30.9                                        86.9                                                  0.0                                        13.3                                        98.1                                        46.0                                                      4.5                                        57.7                              0.0
+inversion_top_mRL                                   NaN                                         -550.0                                      -450.0                                                  NaN                                      -650.0                                      -550.0                                      -650.0                                                   -850.0                                      -750.0                              NaN
+inversion_bottom_mRL                                NaN                                        -1500.0                                     -1700.0                                                  NaN                                     -1700.0                                     -1900.0                                     -1700.0                                                  -1300.0                                     -2250.0                              NaN
+rebound_below_inversion_degC                        NaN                                           17.7                                        13.7                                                  NaN                                        10.0                                         3.7                                        14.0                                                     29.5                                         1.6                              NaN
+casing_shoe_mRL                                 -1000.0                                         -100.0                                      -250.0                                               -500.0                                     -1000.0                                      -440.0                                      -440.0                                                   -700.0                                      -400.0                           -200.0
+inversion_vs_shoe                                                               peak below casing shoe                      peak below casing shoe                                                                               peak behind casing                      peak below casing shoe                      peak below casing shoe                                   peak below casing shoe                      peak below casing shoe                                 
+cap_gradient_K_km                                  73.2                                          664.4                                       860.4                                                 13.9                                       295.2                                       489.8                                       280.2                                                     84.6                                       318.7                            760.4
+deep_gradient_K_km                                 16.5                                           31.4                                        19.7                                                 19.6                                        21.2                                         7.1                                        25.0                                                     30.0                                         9.0                            285.0
+cond_heat_flux_mW_m2_ASSUMED_k2                   146.0                                         1329.0                                      1721.0                                                 28.0                                       590.0                                       980.0                                       560.0                                                    169.0                                       637.0                           1521.0
+elev_100C_first_mRL                         -945.918367                                     128.152174                                  104.466403                                                  NaN                                 -159.852217                                   13.018868                                 -113.709677                                                      NaN                                  -84.132841                       164.677419
+elev_100C_deepest_up_mRL                            NaN                                            NaN                                         NaN                                                  NaN                                         NaN                                         NaN                                         NaN                                                      NaN                                         NaN                              NaN
+elev_200C_first_mRL                                 NaN                                     -80.970149                                  -13.715847                                                  NaN                                         NaN                                 -328.531073                                         NaN                                                      NaN                                 -496.101695                        45.555556
+elev_200C_deepest_up_mRL                            NaN                                            NaN                                  -992.45283                                                  NaN                                         NaN                                 -709.493671                                         NaN                                                      NaN                                 -939.915966                              NaN
+elev_T90pct_Tmax_mRL                                NaN                                    -263.451128                                 -121.647399                                                  NaN                                 -401.470588                                 -319.774011                                      -455.3                                                      NaN                                 -466.783898                       -75.645695
+min_boiling_margin_degC                           150.4                                           23.8                                        12.2                                                113.8                                       123.6                                        70.0                                        80.5                                                    104.1                                        87.8                              2.6
+min_margin_elev_mRL                                15.0                                         -450.0                                      -150.0                                                230.0                                        93.0                                      -450.0                                       170.0                                                    176.0                                      -550.0                           -150.0
+n_points_margin_lt5                                   0                                              0                                           0                                                    0                                           0                                           0                                           0                                                        0                                           0                                4
+n_points_margin_lt10                                  0                                              0                                           0                                                    0                                           0                                           0                                           0                                                        0                                           0                                6
+water_level_est_mRL                               113.0                                          211.0                                       164.0                                                251.0                                       127.0                                       157.0                                       161.0                                                    180.0                                       174.0                            192.0
+wellhead_minus_water_level_m                      -98.0                                           14.0                                         0.0                                                 89.0                                       -34.0                                       -10.0                                        29.0                                                     -4.0                                        -0.0                             68.0
+shallow_gradient_bar_100m                          10.0                                          10.25                                        10.0                                                 6.75                                       11.38                                        10.0                                        10.0                                                     9.75                                         9.0                             12.0
+pivot_fz_mid_mRL                                -1465.0                                         -745.0                                      -335.0                                               -655.0                                     -1325.0                                      -475.0                                      -630.0                                                  -1125.0                                      -837.5                           -262.5
+pivot_P_bar                                       158.7                                           97.8                                        62.8                                                 91.7                                       148.1                                        73.5                                        86.0                                                    132.0                                       105.2                             57.7
+pivot_T_degC                                      115.5                                          258.0                                       259.1                                                 27.3                                       147.3                                       218.0                                       175.1                                                     63.9                                       211.6                            268.7
+pivot_quality                                    MEDIUM                                           HIGH                                        HIGH                                               MEDIUM                                      MEDIUM                                        HIGH                                        HIGH                                                     HIGH                                      MEDIUM                        Synthetic
+isothermal_sections                                                                 -1100 to -1700 mRL                          -1100 to -2250 mRL                                                             -550 to -950 mRL; -1300 to -2250 mRL                          -1700 to -2250 mRL      -1300 to -1900 mRL; -1900 to -2250 mRL                     -650 to -950 mRL; -1100 to -1500 mRL                                                                             
+model_surface_mRL                                 120.0                                          260.0                                       180.0                                                340.0                                       140.0                                       160.0                                       240.0                                                    260.0                                       220.0                            260.0
+regime                                       conductive  upflow (hot to TD, with shallow outflow peak)  outflow over cooler deep water (inversion)  recharge / downflow (cold, sub-conductive gradient)  outflow over cooler deep water (inversion)  outflow over cooler deep water (inversion)  outflow over cooler deep water (inversion)  conductive-cold with weak inversion (lateral cold flow)  outflow over cooler deep water (inversion)  two-phase / near-boiling upflow
+       well    feed  top_mRL  bottom_mRL  mid_mRL  thickness_m    quality  T_degC  P_bar  Tsat_degC  boiling_margin_degC  survey_points_in_interval column  layer block_at_mid blocks_spanned blocks_gTE14515_wells_json  block_match  is_pivot  ns_confidence  weight_T  weight_P     completion
+0    WELL-1  Feed 1  -1320.0     -1355.0  -1337.5         35.0     MEDIUM   113.2  146.7      340.4                227.2                          1    arg     63        arg63          arg63                      arg63         True     False           0.75      0.75      0.75  slotted liner
+1    WELL-1  Feed 2  -1440.0     -1490.0  -1465.0         50.0     MEDIUM   115.5  158.7      346.7                231.2                          1    arg     64        arg64          arg64                      arg64         True      True           0.75      0.75      0.75  slotted liner
+2    WELL-2  Feed 1   -250.0      -270.0   -260.0         20.0        LOW   239.7   55.9      271.0                 31.3                          2    ajf     54        ajf54          ajf54                      ajf54         True     False           1.00      1.00      1.00  slotted liner
+3    WELL-2  Feed 2   -720.0      -770.0   -745.0         50.0       HIGH   258.0   97.8      309.4                 51.4                          2    ajf     59        ajf59          ajf59                      ajf59         True      True           1.00      1.00      1.00  slotted liner
+4    WELL-2  Feed 3  -1900.0     -1920.0  -1910.0         20.0     MEDIUM   240.3  200.7      366.0                125.7                          2    ajf     66        ajf66          ajf66                      ajf66         True     False           1.00      1.00      1.00  slotted liner
+5    WELL-3  Feed 1   -310.0      -360.0   -335.0         50.0       HIGH   259.1   62.8      278.6                 19.5                          2    asd     55        asd55          asd55                      asd55         True      True           1.00      1.00      1.00  slotted liner
+6    WELL-3  Feed 2   -820.0      -870.0   -845.0         50.0     MEDIUM   229.8  105.6      315.0                 85.2                          2    asd     60        asd60          asd60                      asd60         True     False           1.00      1.00      1.00  slotted liner
+7    WELL-4  Feed 1   -630.0      -680.0   -655.0         50.0     MEDIUM    27.3   91.7      304.7                277.4                          2    aop     58        aop58          aop58                      aop58         True      True           0.60      0.60      0.60  slotted liner
+8    WELL-5  Feed 1  -1300.0     -1350.0  -1325.0         50.0     MEDIUM   147.3  148.1      341.1                193.8                          2    arc     63        arc63          arc63                      arc63         True      True           0.40      0.40      0.40  slotted liner
+9    WELL-5  Feed 2  -1500.0     -1550.0  -1525.0         50.0     MEDIUM   144.8  166.3      350.5                205.7                          2    arc     64        arc64          arc64                      arc64         True     False           0.40      0.40      0.40  slotted liner
+10   WELL-6  Feed 1   -460.0      -490.0   -475.0         30.0       HIGH   218.0   73.5      289.2                 71.2                          1    aph     56        aph56          aph56                      aph56         True      True           0.75      0.75      0.75  slotted liner
+11   WELL-6  Feed 2  -1100.0     -1150.0  -1125.0         50.0       HIGH   139.8  130.5      331.2                191.4                          2    aph     62        aph62          aph62                      aph62         True     False           0.75      0.75      0.75  slotted liner
+12   WELL-7  Feed 1   -610.0      -650.0   -630.0         40.0       HIGH   175.1   86.0      300.1                125.0                          2    apk     58        apk58          apk58                      apk58         True      True           0.75      0.75      0.75  slotted liner
+13   WELL-7  Feed 2  -1300.0     -1350.0  -1325.0         50.0       HIGH   131.3  148.7      341.5                210.2                          2    apk     63        apk63          apk63                      apk63         True     False           0.75      0.75      0.75  slotted liner
+14   WELL-8  Feed 1  -1100.0     -1150.0  -1125.0         50.0       HIGH    63.9  132.0      332.0                268.1                          2    ana     62        ana62          ana62                      ana62         True      True           0.60      0.60      0.60  slotted liner
+15   WELL-9  Feed 1   -520.0      -550.0   -535.0         30.0        LOW   205.4   78.9      294.0                 88.6                          2    ajj     57        ajj57          ajj57                      ajj57         True     False           0.75      0.75      0.75  slotted liner
+16   WELL-9  Feed 2   -830.0      -845.0   -837.5         15.0     MEDIUM   211.6  105.2      314.7                103.1                          1    ajq     60        ajq60          ajq60                      ajq60         True      True           0.75      0.75      0.75  slotted liner
+17  WELL-10  Feed 1   -250.0      -275.0   -262.5         25.0  Synthetic   268.7   57.7      273.0                  4.3                          2    arz     54        arz54          arz54                      arz54         True      True           0.60      0.60      0.60  slotted liner
+   fault_a  fault_b          x          y  within_both_segments nearest_well  nearest_well_dist_m  dist_to_WELL_2_m  dist_to_WELL_10_m  dist_to_WELL_3_m
+0  Fault 1  Fault 2  2821189.0  6402464.0                 False       WELL-4              64709.0           66990.0            67587.0           68018.0
+1  Fault 1  Fault 3  2819779.0  6335557.0                  True       WELL-2                259.0             259.0              758.0            1158.0
+2  Fault 2  Fault 3  2821189.0  6336858.0                  True       WELL-9               1210.0            2150.0             2652.0            2626.0
+                                           0               1               2          3          4               5               6               7          8               9
+well                                  WELL-1          WELL-2          WELL-3     WELL-4     WELL-5          WELL-6          WELL-7          WELL-8     WELL-9         WELL-10
+x                                  2823330.0       2819527.0       2820133.0  2822243.0  2822044.0       2819841.0       2820840.0       2818757.0  2820920.0       2819400.0
+y                                  6334011.0       6335494.0       6334454.0  6337763.0  6334190.0       6333177.0       6332682.0       6332185.0  6335679.0       6334900.0
+wellhead_mRL                            15.0           225.0           164.0      340.0       93.0           147.0           190.0           176.0      174.0           260.0
+column                                   arg             ajf             asd        aop        arc             aph             apk             ana        ajj             arz
+model_surface_mRL                      120.0           260.0           180.0      340.0      140.0           160.0           240.0           260.0      220.0           260.0
+wellhead_minus_model_surface_m        -105.0           -35.0           -16.0        0.0      -47.0           -13.0           -50.0           -84.0      -46.0             0.0
+td_x                               2823330.0       2819527.0       2820133.0  2822243.0  2822044.0       2819841.0       2820840.0       2817771.1  2821632.0       2819400.0
+td_y                               6334011.0       6335494.0       6334454.0  6337763.0  6334190.0       6333177.0       6332682.0       6332350.5  6335183.2       6334900.0
+td_mRL                               -1672.0         -2348.0         -2887.0     -750.0    -2595.0         -2359.0         -2762.0         -2716.1    -2427.1          -350.0
+td_column                                arg             ajf             asd        aop        arc             aph             apk             amw        asf             arz
+max_horizontal_deviation_m               0.0             0.0             0.0        0.0        0.0             0.0             0.0           999.7      867.6             0.0
+offset_from_column_centre_m            156.0           314.0           263.0       48.0      198.0           121.0           127.0            61.0      155.0           245.0
+nearest_fault                        Fault 2         Fault 3         Fault 1    Fault 3    Fault 2         Fault 1         Fault 2         Fault 1    Fault 2         Fault 3
+dist_nearest_fault_m                  2141.0           125.0           378.0       50.0      855.0           113.0           349.0           950.0      269.0           226.0
+dist_fault1_m                         3583.0           250.0           378.0     3290.0     2294.0           113.0          1122.0           950.0     1145.0           365.0
+dist_fault2_m                         2141.0          1662.0          1056.0     1354.0      855.0          1348.0           349.0          2432.0      269.0          1789.0
+dist_fault3_m                         3545.0           125.0          1051.0       50.0     2541.0          1791.0          2832.0          1785.0      684.0           226.0
+nearest_river                          river  Tarawera River  Tarawera River      river      river  Tarawera River  Tarawera River  Tarawera River      river  Tarawera River
+dist_nearest_river_m                    96.0          1906.0           828.0     3125.0      345.0           424.0           858.0           235.0     1488.0          1337.0
+dist_lake_edge_m                      7892.0          6495.0          5892.0     9815.0     6978.0          4701.0          5092.0          3247.0     7348.0          5904.0
+wellhead_inside_lake                   False           False           False      False      False           False           False           False      False           False
+td_dist_nearest_fault_m               2141.0           125.0           378.0       50.0      855.0           113.0           349.0           994.0      443.0           226.0
+first_block_wells_json                 arg50           ajf39           asd42      aop34      arc46           aph43           apk41           ana42      ajj42           arz38
+feed_zone_blocks_match_wells_json       True            True            True       True       True            True            True            True       True            True
+
+====================================================================================================
+7. Lateral structure tables (interpolation only)
+====================================================================================================
+elevation_mRL  -2500  -2000  -1500  -1000  -750   -500   -250    0      100 
+well                                                                        
+WELL-1           NaN    NaN  116.2  102.3   89.8   72.7   52.4   35.0    NaN
+WELL-10          NaN    NaN    NaN    NaN    NaN    NaN  268.7  219.1  164.9
+WELL-2           NaN  243.3  236.0  241.1  257.7  266.1  238.2  171.8  124.1
+WELL-3         181.1  175.1  175.6  198.4  243.7  261.0  254.7  192.8  105.7
+WELL-4           NaN    NaN    NaN    NaN   29.0   24.1   19.4   15.3   13.8
+WELL-5         152.7  145.9  144.8  154.5  157.1  152.9  118.3   57.9    NaN
+WELL-6           NaN  122.8  126.7  153.6  193.6  218.8  186.1  106.3   49.5
+WELL-7         139.2  132.0  130.9  153.9  173.7  163.5  129.1   68.3   36.3
+WELL-8          86.6   73.1   64.5   66.0   67.8   61.9   48.0   26.7   18.0
+WELL-9           NaN  168.5  182.5  195.2  217.7  200.5  153.0   63.6   24.6
+elevation_mRL  -2500  -2000  -1500  -1000  -750   -500   -250    0      100 
+well                                                                        
+WELL-1           NaN    NaN  162.0  114.4   89.0   63.5   38.6   12.3    NaN
+WELL-10          NaN    NaN    NaN    NaN    NaN    NaN   56.7   26.3   12.5
+WELL-2           NaN  208.6  164.5  120.0   98.2   77.5   55.0   24.1   12.2
+WELL-3         254.2  209.4  163.9  119.1   97.4   76.6   55.0   20.2    7.4
+WELL-4           NaN    NaN    NaN    NaN  100.5   76.3   51.1   24.5   13.8
+WELL-5         255.4  209.7  164.0  118.6   95.4   71.7   44.9   15.4    NaN
+WELL-6           NaN  211.4  165.1  119.1   97.0   75.7   49.9   18.6    6.7
+WELL-7         257.3  211.1  164.8  118.9   96.6   73.3   46.9   18.9    7.2
+WELL-8         267.4  218.4  169.2  119.8   95.9   71.3   46.1   19.8    8.9
+WELL-9           NaN  209.4  163.9  119.3   97.7   75.6   49.3   18.3    7.8
+Layer-centre rows: 232 ({'WELL-1': 15, 'WELL-10': 16, 'WELL-2': 28, 'WELL-3': 26, 'WELL-4': 21, 'WELL-5': 22, 'WELL-6': 24, 'WELL-7': 28, 'WELL-8': 26, 'WELL-9': 26})
+
+====================================================================================================
+8. Figures
+====================================================================================================
+  wrote well_map_grid_faults_water.png
+  wrote well_map_zoom_tmax.png
+  wrote profile_WELL-1.png
+  wrote profile_WELL-2.png
+  wrote profile_WELL-3.png
+  wrote profile_WELL-4.png
+  wrote profile_WELL-5.png
+  wrote profile_WELL-6.png
+  wrote profile_WELL-7.png
+  wrote profile_WELL-8.png
+  wrote profile_WELL-9.png
+  wrote profile_WELL-10.png
+  wrote maps_temperature_by_elevation.png
+  wrote maps_pressure_by_elevation.png
+  wrote section_hot_axis_W2-W10-W3.png
+   section hot_axis_W2-W10-W3 [('WELL-2', -200, 573), ('WELL-10', 0, 0), ('WELL-3', 858, 0)]
+  wrote section_regional_W8-W1.png
+   section regional_W8-W1 [('WELL-8', 0, 0), ('WELL-6', 1375, 519), ('WELL-7', 2119, -311), ('WELL-5', 3796, 643), ('WELL-1', 4924, 0)]
+  wrote section_north_south_W4-W7.png
+   section north_south_W4-W7 [('WELL-4', 0, 0), ('WELL-9', 2361, -721), ('WELL-5', 3497, 759), ('WELL-3', 3751, -1153), ('WELL-6', 5060, -1095), ('WELL-7', 5271, 0)]
+  wrote PT_state_vs_saturation.png
+  wrote hydrostatic_excess_by_window.png
+  wrote natural_state_pressure_test.png
+  wrote conceptual_model_sketch.png
+
+====================================================================================================
+9. Writing report
+====================================================================================================
+  wrote NS_data_interpretation.md 28591 chars
+
+DONE

@@ -1,212 +1,296 @@
-# Natural-state data interpretation: TE14515 / Teaching_Model_3D
+# Natural-state data interpretation – Teaching_Model_3D (TE14515 grid)
 
-Scope: natural state only. Inputs: `Baseline/Teaching_Model_3D` (read-only). All numbers below come from the files in `Output/`, written by `Scripts/natural_state_analysis.py`. Units: mRL, bar, °C, kJ/kg, kg/s. Each claim is labelled **[Obs]** (observation in the data), **[Calc]** (derived by the script with a stated method) or **[Interp]** (interpretation; the observation is cited).
-
----
+*Scope: natural state only. Inputs: `Baseline/Teaching_Model_3D` (read-only). Every number below is taken from a table in `Output/` written by `Scripts/natural_state_analysis.py`. Claims are tagged **[Obs]** observation, **[Int]** interpretation, **[Assump]** assumption. Elevations mRL, pressures bar (absolute), temperatures °C.*
 
 ## 1. Key conclusions for calibration
 
-1. **The data are labelled as synthetic, and this must be resolved first.** Every well's design record reads `Source: "Synthetic data"` (`Data_json/*.json`), the area is named "Synthetic" (`Groups_data.json`), and WELL-10's feed zone quality is "Synthetic". [Obs] If these surveys were generated from a model, calibrating to them tests consistency only. Reference-model results were not used as evidence (CLAUDE §2).
-
-2. **No well can be confirmed as natural state.** The verdicts (`well_summary.csv`) are: possibly disturbed for WELL-2, 3, 4, 5, 8 and 9; probably natural for WELL-1, 6, 7 and 10. Every verdict is low confidence, so every target is weighted at 0.3× its base weight. [Obs] Producers WELL-2, 3 and 9 have production records from 01/01/2014. Injectors WELL-4, 5 and 8 have injection records from 01/01/2014. WELL-1, 6 and 7 have no flow or transient record. WELL-10's production starts 01/12/2019, after its survey. [Calc] `natural_state_verdict()` in the script.
-
-3. **Surveys disagree with the transient gauges by up to about 15 bar.** [Obs] `pressure_consistency_check.csv`:
-   - WELL-2 at −750 mRL: survey 98.2 bar; first transient 98.3 bar (01/01/2014), a 0.1 bar match. The transient at the survey date is 88.3 bar, so the survey is **9.9 bar higher**.
-   - WELL-3 at −550 mRL: survey 80.7 bar; first transient 80.8 bar. At the survey date the transient is 71.6 bar, so the survey is **9.1 bar higher**.
-   - WELL-9 at −675 mRL: survey 91.3 bar; first transient 89.2 bar (+2.1 bar). At the survey date the transient is 76.6 bar, so the survey is **14.7 bar higher**.
-   - WELL-10 at −250 mRL: survey 56.7 bar; first transient 48.7 bar (01/01/2020), **8.0 bar higher**. The survey (2015) predates the transient record.
-   Either the survey pressures or the transient series is offset. The first readings match the surveys, but they are also the first readings of the production record. [Interp]
-
-4. **Pressure gradients in the upper hot sections are physically impossible for liquid water.** [Calc] `hydrostatic_check.csv`, intervals ≥200 m, all single-phase:
-   - WELL-2, 210 → 10 mRL: implied density 1,101 kg/m³; 170 → −75: 1,211; 90 → −150: 1,304; 50 → −150: 1,346 kg/m³.
-   - WELL-3, 164 → −75: 1,288 kg/m³; 50 → −150: 1,535 kg/m³.
-   The IF97 liquid density for the same intervals is 865–964 kg/m³ (`rho_IF97_kg_m3` in the same file). Wellbore boiling would lower the density, not raise it, and boiling margins there are 30–105 K. [Interp] These pressures cannot be used as formation targets.
-
-5. **A field-wide pressure-gradient excess is present even in cold wells.** [Calc] Median excess over single-phase intervals is +8.0% for the whole field (234 intervals, overlapping). Cold, uniform columns show it clearly: WELL-4 at 170 → −75 mRL (T 14.7 °C) gives 1,074 kg/m³ against about 1,000 for liquid, and 130–190 mRL intervals give +7 to +9%. WELL-8 at 170 → −75 mRL (T 23.3 °C) gives +7.6%, rising to +9.2% at 130 → −75 mRL. WELL-1 at 15 → −250 mRL (T 42.6 °C) gives +7.8%. [Interp] This is consistent with a datum, unit or gauge convention issue rather than overpressure. It should be checked against the logging records before any P target is used.
-
-6. **The hottest points form a cluster, with the near-boiling column at WELL-10.** [Obs] Maximum temperatures: WELL-10 268.7 °C at −250 mRL; WELL-2 266.9 at −550; WELL-3 261.4 at −450; WELL-6 220.5 at −550; WELL-9 217.7 at −750; WELL-7 176.7 at −650; WELL-5 158.0 at −650. At 0 mRL the three hottest wells are WELL-10 219.1 °C, WELL-3 192.8 and WELL-2 171.8 (`T_P_at_common_elevations.csv`). WELL-10 has four survey points with boiling margin below 5 K (−75: 3.6; −150: 2.6; −250: 3.2; −262.5: 4.3), and its feed zone margin is 4.35 K (`well_summary.csv`, `feedzones.csv`).
-
-7. **Each hot profile cools below a peak at about −450 to −750 mRL.** [Obs] `well_summary.csv` gives inversion drops from the interior maximum to the coolest point below: WELL-6 98.1 K (−550 → −1900); WELL-3 86.9 K (−450 → −1700); WELL-9 57.7 K (−750 → −2250); WELL-7 46.0 K (−650 → −1700); WELL-2 30.9 K (−550 → −1500); WELL-5 13.3 K (−650 → −1700). [Interp] This pattern is consistent with lateral outflow above a deeper cooled zone, or with cold downflow. The data alone do not say which. This is the main structural signal for the model.
-
-8. **Two wells are cold and both are injectors.** [Obs] WELL-4 (T ≤ 29.0 °C, all survey points) and WELL-8 (T ≤ 93.1 °C; 12.8 °C at 176 mRL) both have injection records at about 100–110 kg/s with injectate enthalpy 334.9 kJ/kg (≈ 80 °C). WELL-4's survey temperatures are 12–29 °C, colder than its own injectate. A steady injector profile cannot be colder than the injectate, so WELL-4 cannot be read as natural state [Interp]. Cold ground at WELL-4 and WELL-8 therefore cannot be separated from injection cooling with these data.
-
-9. **Deep pressures are connected across the field.** [Obs] At −1500 mRL, survey pressures are 162.0 bar (WELL-1), 163.9 (WELL-3, WELL-9), 164.0 (WELL-5), 164.5 (WELL-2), 164.8 (WELL-7), 165.1 (WELL-6) and 169.2 (WELL-8). Across the field this is a spread of 7 bar, or about ±3.5 bar about the mean (`T_P_at_common_elevations.csv`). At −1000 mRL the spread is 114.4 to 120.0 bar. [Interp] Within the caveat of conclusion 5, the deep pressure field is laterally connected.
-
-10. **Several feed zones fall in layer gaps or on a column disagreement, and two wells have geometry datum problems.** [Obs] `data_integrity_check.csv`: 14 survey points fall in LAYERS gaps (for example 250–260 mRL and 970–980 mRL are in no layer). Three WELL-2 feed zones (Feed 1–3) assign a different column in `gTE14515_wells.json` (ajf) than the max-weight block at the midpoint (aji). WELL-1's track starts 105 m below the model surface, yet its top pressure of 10.8 bar implies a water level of 115.3 mRL (`well_geometry_check.csv`, `well_summary.csv`).
-
----
+1. **[Obs] The surveys dated 29/07/2015 reproduce the pressure at the *start* of production, not at the survey date.** WELL-2 and WELL-3 survey pressures at the gauge elevation (98.2 and 80.7 bar) equal the first transient values (98.3 and 80.8 bar, 01/01/2014; Δ = -0.10 and -0.10 bar), whereas the gauges had already fallen to 89.2 and 72.6 bar by 01/01/2015 (`pressure_consistency_check.csv`). **Action:** treat the surveys as natural-state (pre-production) data and resolve the date label (§7.1). Verdicts and confidence (§2) set the weights.
+2. **[Obs] The hottest, shallowest water is a compact zone around WELL-10, WELL-2 and WELL-3** (Tmax 269, 267, 261 °C at -250, -550, -450 mRL), falling to 220 (W6), 218 (W9), 177 (W7), 158 (W5) and only 93 (W8), 29 (W4). **[Int]** the upflow is under or next to this zone, which is 259 m (WELL-2) from the Fault 1 × Fault 3 intersection. **Action:** put the deep heat/mass input here. WELL-2 is still 254 °C at -2348 mRL, so no well constrains the source depth.
+3. **[Obs] WELL-10 follows the boiling-point-for-depth curve** (minimum margin 2.6 °C at -150 mRL; 4 points < 5 °C, 6 < 10 °C). No other well is below 12.2 °C. **Action:** the model must reproduce a near-saturated or two-phase zone between about −75 and −350 mRL near WELL-10; match T together with Tsat(P).
+4. **[Obs] Six wells (W2, W3, W5, W6, W7, W9) have temperature inversions of 13–98 K** with peaks at -450 to -750 mRL (W3 87 K, W6 98 K). **[Int]** a lateral outflow layer near −450…−750 mRL over cooler water. **Action:** the model needs a permeable layer there; deep isothermal sections get reduced weight (§3).
+5. **[Obs] Pressure in the upper ~250–650 m of every well rises with depth faster than any liquid column can** (the first window exceeds the maximum liquid gradient in 9 of the 9 wells that can be tested, W10 excluded as near-boiling: WELL-1, WELL-2, WELL-3, WELL-4, WELL-5, WELL-6, WELL-7, WELL-8, WELL-9). Cold wells W1, W4, W8 show 3.5–6.5 %, hot wells up to 52 %. **Action:** do not use shallow pressure gradients as a target (weight 0.25 × location weight); use pressure at feed zones/pivots. Cause unresolved (§7.2).
+6. **[Obs] Below about −750 mRL the pressure profiles of WELL-5, WELL-6, WELL-7 equal the IAPWS-IF97 liquid column within ±0.5 %**, so units and gravity are consistent. Deep excess elsewhere is -0.4 to 8.9 % (W2 largest): well-specific, not a single field-wide offset.
+7. **[Obs] Deep pressures are nearly uniform across the field** (−1500 mRL: 162.0–169.2 bar; −2000 mRL: 208.6–218.4 bar; W8 highest). **[Int]** laterally connected deep reservoir with near-hydrostatic head over ≥ 5 km; W8's high value is consistent with its cold, dense column rather than a lateral head.
+8. **[Obs] Wellheads lie below the model surface by up to 105 m** (WELL-1); estimated water levels span 113–251 mRL. **Action:** use an atmospheric-pressure water-table boundary; do not take the wellhead elevation as the grid top.
+9. **[Obs] WELL-1 (east), WELL-4 (north) and WELL-8 (south-west) are cold:** W1 gradient 73 K/km (top) and 16 (deep); W4 only 14 K/km and 29 °C at -750 mRL; W8 is 64–68 °C from about −650 to −1500 mRL. **[Int]** cold recharge/downflow north and south-west, conductive east.
 
 ## 2. The data
 
-**What exists.** Ten wells, each with a downhole temperature and pressure survey (`Data_json/WELL-n_data.json`). All surveys carry the same date, 29/07/2015 [Obs]. Feed zones: 18 in total (`feedzones.csv`). Transient pressure series: WELL-2 (−750 mRL, 12 values from 2014), WELL-3 (−550, 2014), WELL-9 (−675, 2014) and WELL-10 (−250, 2020). Flow records: production from 01/01/2014 for WELL-2, 3 and 9; production from 01/12/2019 for WELL-10; injection from 01/01/2014 for WELL-4, 5 and 8. WELL-1, 6 and 7 have none [Obs].
+**Inventory.** 10 wells (`Groups_data.json`), one T and one P survey each, all dated 29/07/2015 and flagged stable. Producers W2, W3, W9, W10 have transient gauges; W4, W5, W8 are injectors; W1, W6, W7 have no flow data. Faults, river, lake from `Mapping.json`; grid columns, 69 active layers and surface from `gTE14515.dat`.
 
-**Integrity checks** (`data_integrity_check.csv`) [Calc]:
-- The `.dat` T and P files match the JSON at every point for all ten wells (0 difference). WELL-10's files are named `Wel10_`, which the script handles.
-- The four transient series match their `.dat` files.
-- Track end points match the `WELLS` section of `gTE14515.dat` to 0 m for all wells.
-- All 18 feed zones lie within the well track and within a slotted (open) liner interval.
-- Every survey point lies inside its track z-range.
-- Layer check: 14 survey points fall in LAYERS gaps or outside layers (WELL-1 3, WELL-2 1, WELL-3 2, WELL-5 2, WELL-7 1, WELL-8 2, WELL-9 3).
+**Checks** (`data_integrity_check.csv`, 140 rows): JSON vs `.dat` for every T and P point and every transient series — no difference (119 PASS rows in total); all survey points lie within the track; every feed zone is below the casing shoe in slotted/open hole and contains a survey point; all survey and feed-zone blocks agree with `gTE14515_wells.json`. Flag: WELL-4: Liner 4-1/2": -450..-3251 mRL, slotted=True; track bottom -750.0 (design/track inconsistency; no survey affected). Notes: feed-zone values are labelled "m" but are elevations (mRL); JSON track/design/feed-zone entries mix lists and strings (parsed). IAPWS-IF97 Regions 4 and 1 were validated against published values (errors ≪ 0.1 K; `run_console_log.txt`).
 
-**Natural-state timing verdicts** (`well_summary.csv`, `ns_verdict` and `ns_confidence`):
+**Natural-state timing and verdicts** (`pressure_consistency_check.csv`):
 
-| Well | Verdict | Confidence | Basis |
-|---|---|---|---|
-| WELL-1 | probably natural state | low | no flow or transient record; survey date identical for all wells |
-| WELL-2 | possibly disturbed | low | production from 01/01/2014; survey 9.9 bar above transient at survey date |
-| WELL-3 | possibly disturbed | low | production from 01/01/2014; survey 9.1 bar above transient at survey date |
-| WELL-4 | possibly disturbed | low | injection from 01/01/2014; survey colder than injectate |
-| WELL-5 | possibly disturbed | low | injection from 01/01/2014 |
-| WELL-6 | probably natural state | low | no record |
-| WELL-7 | probably natural state | low | no record |
-| WELL-8 | possibly disturbed | low | injection from 01/01/2014 |
-| WELL-9 | possibly disturbed | low | production from 01/01/2014; survey 14.7 bar above transient at survey date |
-| WELL-10 | probably natural state | low | survey predates production (01/12/2019); unresolved 8.0 bar mismatch with 2020 transient |
+| well | role | verdict | confidence | factor | gauge mRL | survey P at gauge bar | first transient P bar | Δ bar | FZ P offset vs W2/W3 (bar; * pivot) |
+|---|---|---|---|---|---|---|---|---|---|
+| WELL-1 | monitor (no flow data) | probably natural state | medium | 0.75 | – | – | – | – | FZ1@-1338:-2.9; FZ2@-1465:-2.4* |
+| WELL-2 | producer | natural state | high | 1.00 | -750.00 | 98.20 | 98.30 | -0.10 | FZ1@-260:-0.0; FZ2@-745:+0.8*; FZ3@-1910:-0.6 |
+| WELL-3 | producer | natural state | high | 1.00 | -550.00 | 80.70 | 80.80 | -0.10 | FZ1@-335:-0.3*; FZ2@-845:-0.8 |
+| WELL-4 | injector | probably natural state | low | 0.60 | – | – | – | – | FZ1@-655:+1.9* |
+| WELL-5 | injector | possibly disturbed | low | 0.40 | – | – | – | – | FZ1@-1325:-0.4*; FZ2@-1525:-0.1 |
+| WELL-6 | monitor (no flow data) | probably natural state | medium | 0.75 | – | – | – | – | FZ1@-475:-1.5*; FZ2@-1125:-0.2 |
+| WELL-7 | monitor (no flow data) | probably natural state | medium | 0.75 | – | – | – | – | FZ1@-630:-1.7*; FZ2@-1325:+0.2 |
+| WELL-8 | injector | probably natural state | low | 0.60 | – | – | – | – | FZ1@-1125:+1.3* |
+| WELL-9 | producer | probably natural state | medium | 0.75 | -675.00 | 91.25 | 89.20 | 2.05 | FZ1@-535:-1.0; FZ2@-838:-0.1* |
+| WELL-10 | producer | probably natural state | low | 0.60 | -250.00 | 56.70 | 48.70 | 8.00 | FZ1@-262:+1.6* |
 
-Confidence factors used in weights: high 1.0, medium 0.6, low 0.3. All wells are low, so every weight is multiplied by 0.3. If the engineer accepts the surveys as natural state, multiply the weights by 1/0.3 (see §6).
+Method: survey P interpolated to the gauge elevation vs the **first** transient value. Valid test and |Δ| ≤ 0.5 bar ⇒ *natural state* (high, factor 1.0). WELL-9 is +2.05 bar *above* the first value: opposite to drawdown, so not production-disturbed but unexplained ⇒ *probably natural state* (medium, 0.75). WELL-10's series starts 01/01/2020, after production began (01/12/2019), so the test is invalid; the survey is +8.0 bar above the 2020 value (sign expected from later drawdown) and its feed-zone P is +1.6 bar from W2/W3 ⇒ *probably natural state* (low, 0.6). Wells without gauges are compared at feed-zone elevations with W2/W3. **Injectors** ran at 110/100/100 kg/s (W4/W5/W8) of water at ≈ 80 °C [Assump: cp 4.19 kJ/kg/K] from 01/01/2014. W4 and W8 profiles are colder than the injectate (no warm-injection signature) ⇒ probably natural (low, 0.6); W5's feed-zone T (147 °C) exceeds the injectate, so cooling could be hidden ⇒ possibly disturbed (0.4). No injector has a gauge. WELL-1 is -2.4 bar from W2/W3 at its pivot (probably natural, medium, 0.75), as are W6 and W7.
 
----
+![natural-state test](figures/natural_state_pressure_test.png)
+
+![well map](figures/well_map_grid_faults_water.png)
+
+**Geometry** (`well_geometry_check.csv`):
+
+| well | wellhead mRL | model surface mRL | wellhead − surface m | max deviation m | →Fault 1 m | →Fault 2 m | →Fault 3 m | →river m | →lake edge m |
+|---|---|---|---|---|---|---|---|---|---|
+| WELL-1 | 15 | 120 | -105 | 0 | 3583 | 2141 | 3545 | 96 | 7892 |
+| WELL-2 | 225 | 260 | -35 | 0 | 250 | 1662 | 125 | 1906 | 6495 |
+| WELL-3 | 164 | 180 | -16 | 0 | 378 | 1056 | 1051 | 828 | 5892 |
+| WELL-4 | 340 | 340 | 0 | 0 | 3290 | 1354 | 50 | 3125 | 9815 |
+| WELL-5 | 93 | 140 | -47 | 0 | 2294 | 855 | 2541 | 345 | 6978 |
+| WELL-6 | 147 | 160 | -13 | 0 | 113 | 1348 | 1791 | 424 | 4701 |
+| WELL-7 | 190 | 240 | -50 | 0 | 1122 | 349 | 2832 | 858 | 5092 |
+| WELL-8 | 176 | 260 | -84 | 1000 | 950 | 2432 | 1785 | 235 | 3247 |
+| WELL-9 | 174 | 220 | -46 | 868 | 1145 | 269 | 684 | 1488 | 7348 |
+| WELL-10 | 260 | 260 | 0 | 0 | 365 | 1789 | 226 | 1337 | 5904 |
+
+W8 and W9 are deviated (1000 and 868 m at TD); blocks follow the track. No wellhead is inside the lake; the nearest lake edge is 3247 m away.
 
 ## 3. Temperature structure
 
-Table from `well_summary.csv`. Depths are elevations in mRL. "Shallow" gradient = fitted over survey points at or above 0 mRL. "Deep" = fitted over the bottom 500 m of each survey.
+Per-well characteristics (`well_summary.csv`). Cap gradient = top 300 m, deep = bottom 500 m (K/km, positive = T rises with depth). Inversion = largest drop below an earlier maximum (threshold 3 K). 0.9·Tmax is an operational marker of the cap base (hot wells only).
 
-| Well | Max T (°C) at mRL | T at TD (°C) | Inversion (mRL top → base, drop K) | T100 crossing (mRL) | T200 crossing (mRL) | Min boiling margin (K) at mRL | Water level (mRL) | Regime |
-|---|---|---|---|---|---|---|---|---|
-| WELL-1 | 118.6 at −1672 | 118.6 | none | −946 | none | 150.4 at 15 | 115.3 | conductive |
-| WELL-2 | 266.9 at −550 | 253.7 (−2348) | −550 → −1500, 30.9 | 128 | −81 | 23.8 at −450 | 224.9 | upflow with lateral outflow |
-| WELL-3 | 261.4 at −450 | 188.2 (−2887) | −450 → −1700, 86.9 | 104 | −14; −992 | 12.2 at −150 | 168.0 | upflow with lateral outflow |
-| WELL-4 | 29.0 at −750 | 29.0 | none | none | none | 113.8 at 230 | 244.2 | cold |
-| WELL-5 | 158.0 at −650 | 154.7 (−2595) | −650 → −1700, 13.3 | −160 | none | 123.6 at 93 | 132.8 | interior max, weak cooling |
-| WELL-6 | 220.5 at −550 | 126.1 (−2359) | −550 → −1900, 98.1 | 13 | −329; −709 | 70.0 at −450 | 157.1 | upflow with lateral outflow |
-| WELL-7 | 176.7 at −650 | 144.7 (−2762) | −650 → −1700, 46.0 | −114 | none | 80.5 at 170 | 189.9 | upflow with lateral outflow |
-| WELL-8 | 93.1 at −2716 | 93.1 | none | none | none | 104.1 at 176 | 184.0 | cold |
-| WELL-9 | 217.7 at −750 | 161.6 (−2427) | −750 → −2250, 57.7 | −84 | −496; −940 | 87.8 at −550 | 178.0 | upflow with lateral outflow |
-| WELL-10 | 268.7 at −250 | 268.5 (−350) | none (near-boiling) | 165 | 46 | **2.65 at −150** (4 points < 5 K) | 209.9 | two-phase / near-boiling |
+| well | regime | Tmax °C | Tmax mRL | T@TD °C | inversion K | inv. top mRL | inv. bottom mRL | cap grad K/km | deep grad K/km | 100 °C mRL | 200 °C mRL | 0.9·Tmax mRL | min margin °C | at mRL |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| WELL-1 | conductive | 119 | -1672 | 119 | 0 | – | – | 73 | 16 | -946 | – | – | 150 | 15 |
+| WELL-2 | upflow (hot to TD, with shallow outflow peak) | 267 | -550 | 254 | 31 | -550 | -1500 | 664 | 31 | 128 | -81 | -263 | 24 | -450 |
+| WELL-3 | outflow over cooler deep water (inversion) | 261 | -450 | 188 | 87 | -450 | -1700 | 860 | 20 | 104 | -14 | -122 | 12 | -150 |
+| WELL-4 | recharge / downflow (cold, sub-conductive gradient) | 29 | -750 | 29 | 0 | – | – | 14 | 20 | – | – | – | 114 | 230 |
+| WELL-5 | outflow over cooler deep water (inversion) | 158 | -650 | 155 | 13 | -650 | -1700 | 295 | 21 | -160 | – | -401 | 124 | 93 |
+| WELL-6 | outflow over cooler deep water (inversion) | 220 | -550 | 126 | 98 | -550 | -1900 | 490 | 7 | 13 | -329 | -320 | 70 | -450 |
+| WELL-7 | outflow over cooler deep water (inversion) | 177 | -650 | 145 | 46 | -650 | -1700 | 280 | 25 | -114 | – | -455 | 80 | 170 |
+| WELL-8 | conductive-cold with weak inversion (lateral cold flow) | 93 | -2716 | 93 | 4 | -850 | -1300 | 85 | 30 | – | – | – | 104 | 176 |
+| WELL-9 | outflow over cooler deep water (inversion) | 218 | -750 | 162 | 58 | -750 | -2250 | 319 | 9 | -84 | -496 | -467 | 88 | -550 |
+| WELL-10 | two-phase / near-boiling upflow | 269 | -250 | 268 | 0 | – | – | 760 | 285 | 165 | 46 | -76 | 3 | -150 |
 
-Shallow and deep gradients (K/km): WELL-1 140 / 16.5; WELL-2 771 / 31.4; WELL-3 1,057 / 19.7; WELL-4 13.7 / 19.6; WELL-5 328 / 21.2; WELL-6 591 / 7.1; WELL-7 260 / 25.0; WELL-8 80.6 / 30.0; WELL-9 247 / 9.0; WELL-10 949 / 285 (the bottom 500 m of WELL-10 is only 500 m long, so its "deep" value is the full profile).
+**Isothermal sections** (≥ 300 m within 3 K):
 
-Notes:
-- Water level is estimated from the top survey point assuming a liquid column to atmospheric pressure. In WELL-1 it lies 100 m above the wellhead (see §7).
-- Feed-zone boiling margins, from `feedzones.csv`: WELL-10 Feed 1 4.35 K; WELL-3 Feed 1 19.5 K; WELL-2 Feed 1 31.3 K; WELL-2 Feed 2 51.4 K; WELL-6 Feed 1 71.2 K; WELL-3 Feed 2 85.2 K. Every other feed zone exceeds 85 K.
-- Isothermal sections (|ΔT| ≤ 1 K over ≥ 50 m, `well_summary.csv`): WELL-2 −1300:−1700; WELL-3 −450:−550, −1100:−1300, −1700:−1900; WELL-5 −550:−850, −1500:−1900; WELL-7 −1300:−1900; WELL-8 −750:−950 and −1100:−1500. WELL-4 is also near-isothermal over 230 → −25 mRL, at 12–17 °C.
+| well | isothermal_sections |
+|---|---|
+| WELL-2 | -1100 to -1700 mRL |
+| WELL-3 | -1100 to -2250 mRL |
+| WELL-5 | -550 to -950 mRL; -1300 to -2250 mRL |
+| WELL-6 | -1700 to -2250 mRL |
+| WELL-7 | -1300 to -1900 mRL; -1900 to -2250 mRL |
+| WELL-8 | -650 to -950 mRL; -1100 to -1500 mRL |
 
-**Wellbore reading (CLAUDE §3.2).** The upper section of WELL-2 (above the liner top at −50 mRL) and WELL-3 (above −200) sit in casing. The temperature there is closer to formation temperature than the open-hole interval. The rising shallow gradients in these two wells (771 and 1,057 K/km) are above the casing. [Interp] Two readings are possible: the upper column is strongly warm-upflow above the feed zones, or it is wellbore heating from below. The data cannot separate them.
+**Wellbore check.** Inversion peaks lie below the casing shoe (open hole) in W2, W3, W6, W7 and W9, and behind casing in W5 (peak -650, shoe -1000); internal flow could alter the open-hole parts. **[Int]** The long isothermal sections below or between feed zones (e.g. W3, W6, W7) may be partly wellbore convection; open-hole points inside them get weight 0.5 not 0.8 and are not used to infer reservoir uniformity. The peaks lie close to a feed zone in W3 (peak -450, feed zone −335), W6 (-550 vs −475), W7 (-650 vs −630) and W2 (-550 vs −745 and −260), which favours a reservoir origin there. In W5 the peak (-650 mRL) lies ~650 m above its shallowest feed zone (−1325), but it is behind casing, where T is closer to conductive formation T, so it is a formation feature without a nearby feed zone (an open question for the outflow depth there); W9's peak (-750) lies between its feed zones (−535, −838).
 
----
+**Temperature at common elevations** (`T_P_at_common_elevations.csv`, interpolation only):
+
+| well | +100 mRL | +0 mRL | -250 mRL | -500 mRL | -750 mRL | -1000 mRL | -1500 mRL | -2000 mRL | -2500 mRL |
+|---|---|---|---|---|---|---|---|---|---|
+| WELL-1 | – | 35 | 52 | 73 | 90 | 102 | 116 | – | – |
+| WELL-10 | 165 | 219 | 269 | – | – | – | – | – | – |
+| WELL-2 | 124 | 172 | 238 | 266 | 258 | 241 | 236 | 243 | – |
+| WELL-3 | 106 | 193 | 255 | 261 | 244 | 198 | 176 | 175 | 181 |
+| WELL-4 | 14 | 15 | 19 | 24 | 29 | – | – | – | – |
+| WELL-5 | – | 58 | 118 | 153 | 157 | 154 | 145 | 146 | 153 |
+| WELL-6 | 50 | 106 | 186 | 219 | 194 | 154 | 127 | 123 | – |
+| WELL-7 | 36 | 68 | 129 | 164 | 174 | 154 | 131 | 132 | 139 |
+| WELL-8 | 18 | 27 | 48 | 62 | 68 | 66 | 64 | 73 | 87 |
+| WELL-9 | 25 | 64 | 153 | 200 | 218 | 195 | 182 | 168 | – |
+
+![T maps](figures/maps_temperature_by_elevation.png)
+
+![hot-axis section](figures/section_hot_axis_W2-W10-W3.png)
+
+![regional section](figures/section_regional_W8-W1.png)
+
+The N–S section (W4→W7) is also in `figures/`. Sections interpolate between wells at the same elevation only: they are schematic between wells, not constrained images.
+
+![P–T state](figures/PT_state_vs_saturation.png)
+
+**Heat-flux contrast (assumption-based).** With an assumed 2.0 W/m/K [Assump, not in the data] the cap gradients give 28 (W4), 146 (W1), 169 (W8) mW/m² at the cold margins and 1329 (W2) to 1721 (W3) mW/m² in the core. The core values include a near-surface hydrological gradient and are not pure conduction; use only as a margin-to-core contrast.
 
 ## 4. Pressure structure
 
-Interpolated only; blank = outside the survey range (`T_P_at_common_elevations.csv`, bar and °C).
+**Rule applied:** wellbore pressure equals formation pressure only at feed zones; elsewhere it follows the fluid column, pivoting at the dominant feed zone (highest quality tag, ties by higher survey T). Wellhead pressures of ≈ 1–11 bar are not reservoir pressure.
 
-| Well | T 0 mRL | P 0 mRL | T −250 | P −250 | T −500 | P −500 | T −750 | P −750 | T −1000 | P −1000 | T −1500 | P −1500 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| WELL-1 | 35.0 | 12.3 | 52.4 | 38.6 | 72.7 | 63.5 | 89.8 | 89.0 | 102.3 | 114.4 | 116.2 | 162.0 |
-| WELL-2 | 171.8 | 24.1 | 238.2 | 55.0 | 266.1 | 77.5 | 257.7 | 98.2 | 241.1 | 120.0 | 236.0 | 164.5 |
-| WELL-3 | 192.8 | 20.2 | 254.7 | 55.0 | 261.0 | 76.6 | 243.7 | 97.4 | 198.4 | 119.1 | 175.6 | 163.9 |
-| WELL-4 | 15.3 | 24.5 | 19.4 | 51.1 | 24.1 | 76.3 | 29.0 | 100.5 | – | – | – | – |
-| WELL-5 | 57.9 | 15.4 | 118.3 | 44.9 | 152.9 | 71.7 | 157.1 | 95.4 | 154.5 | 118.6 | 144.8 | 164.0 |
-| WELL-6 | 106.3 | 18.6 | 186.1 | 49.9 | 218.8 | 75.7 | 193.6 | 97.0 | 153.6 | 119.1 | 126.7 | 165.1 |
-| WELL-7 | 68.3 | 18.9 | 129.1 | 46.9 | 163.5 | 73.3 | 173.7 | 96.6 | 153.9 | 118.9 | 130.9 | 164.8 |
-| WELL-8 | 26.7 | 19.8 | 48.0 | 46.1 | 61.9 | 71.3 | 67.8 | 95.9 | 66.0 | 119.8 | 64.5 | 169.2 |
-| WELL-9 | 63.6 | 18.3 | 153.0 | 49.3 | 200.5 | 75.6 | 217.7 | 97.7 | 195.2 | 119.3 | 182.5 | 163.9 |
-| WELL-10 | 219.1 | 26.3 | 268.7 | 56.7 | – | – | – | – | – | – | – | – |
+Pressure at common elevations (bar):
 
-At 200 mRL only WELL-2 (27.4 °C, 2.1 bar), WELL-4 (12.5 °C, 4.4 bar) and WELL-10 (34.9 °C, 1.4 bar) have data.
+| well | +100 mRL | +0 mRL | -250 mRL | -500 mRL | -750 mRL | -1000 mRL | -1500 mRL | -2000 mRL | -2500 mRL |
+|---|---|---|---|---|---|---|---|---|---|
+| WELL-1 | – | 12.3 | 38.6 | 63.5 | 89.0 | 114.4 | 162.0 | – | – |
+| WELL-10 | 12.5 | 26.3 | 56.7 | – | – | – | – | – | – |
+| WELL-2 | 12.2 | 24.1 | 55.0 | 77.5 | 98.2 | 120.0 | 164.5 | 208.6 | – |
+| WELL-3 | 7.4 | 20.2 | 55.0 | 76.6 | 97.4 | 119.1 | 163.9 | 209.4 | 254.2 |
+| WELL-4 | 13.8 | 24.5 | 51.1 | 76.3 | 100.5 | – | – | – | – |
+| WELL-5 | – | 15.4 | 44.9 | 71.7 | 95.4 | 118.6 | 164.0 | 209.7 | 255.4 |
+| WELL-6 | 6.7 | 18.6 | 49.9 | 75.7 | 97.0 | 119.1 | 165.1 | 211.4 | – |
+| WELL-7 | 7.2 | 18.9 | 46.9 | 73.3 | 96.6 | 118.9 | 164.8 | 211.1 | 257.3 |
+| WELL-8 | 8.9 | 19.8 | 46.1 | 71.3 | 95.9 | 119.8 | 169.2 | 218.4 | 267.4 |
+| WELL-9 | 7.8 | 18.3 | 49.3 | 75.6 | 97.7 | 119.3 | 163.9 | 209.4 | – |
 
-- **Observation [Obs]:** at 0 mRL pressures run from 12.3 bar (WELL-1) to 26.3 bar (WELL-10); the two cold injectors are at 19.8 bar (WELL-8) and 24.5 bar (WELL-4). At −750 mRL the spread is 95.4 to 100.5 bar. At −1500 mRL it is 162.0 to 169.2 bar.
-- **Interpretation [Interp]:** in the hot, upper sections the pressures are not hydrostatic, as in conclusion 4. Below about −750 mRL the pressures agree with each other to a few bar, which makes them more usable as deep pressure targets, subject to the same datum question.
+Pivot pressures and water levels (`well_summary.csv`):
 
----
+| well | water level est. mRL (extrapolated) | model surface mRL | pivot FZ mRL | quality | pivot P bar | pivot T °C |
+|---|---|---|---|---|---|---|
+| WELL-1 | 113.0 | 120.0 | -1465.0 | MEDIUM | 158.7 | 115.5 |
+| WELL-2 | 211.0 | 260.0 | -745.0 | HIGH | 97.8 | 258.0 |
+| WELL-3 | 164.0 | 180.0 | -335.0 | HIGH | 62.8 | 259.1 |
+| WELL-4 | 251.0 | 340.0 | -655.0 | MEDIUM | 91.7 | 27.3 |
+| WELL-5 | 127.0 | 140.0 | -1325.0 | MEDIUM | 148.1 | 147.3 |
+| WELL-6 | 157.0 | 160.0 | -475.0 | HIGH | 73.5 | 218.0 |
+| WELL-7 | 161.0 | 240.0 | -630.0 | HIGH | 86.0 | 175.1 |
+| WELL-8 | 180.0 | 260.0 | -1125.0 | HIGH | 132.0 | 63.9 |
+| WELL-9 | 174.0 | 220.0 | -837.5 | MEDIUM | 105.2 | 211.6 |
+| WELL-10 | 192.0 | 260.0 | -262.5 | Synthetic | 57.7 | 268.7 |
+
+![P maps](figures/maps_pressure_by_elevation.png)
+
+**Hydrostatic checks** (`hydrostatic_check.csv`; windows ≥ 300 m, single-phase only, margin ≥ 10 °C; W10 excluded). Rounding (0.1 bar) limits each window to about ±0.4 %.
+
+| well | top mRL | bottom mRL | T range °C | min margin °C | ΔP obs bar | ΔP IF97 bar | excess % | apparent ρ | max liquid ρ | > max? |
+|---|---|---|---|---|---|---|---|---|---|---|
+| WELL-1 | 15.0 | -450.0 | 33-69 | 150.4 | 47.8 | 45.1 | 6.0 | 1049.9 | 1001.3 | True |
+| WELL-1 | -450.0 | -850.0 | 69-95 | 205.1 | 40.7 | 38.2 | 6.6 | 1037.6 | 1003.8 | True |
+| WELL-1 | -850.0 | -1300.0 | 95-112 | 215.2 | 43.9 | 42.4 | 3.6 | 995.6 | 1005.7 | False |
+| WELL-1 | -1300.0 | -1672.0 | 112-119 | 226.0 | 35.0 | 34.8 | 0.6 | 959.7 | 1007.6 | False |
+| WELL-2 | 225.0 | -250.0 | 16-238 | 31.8 | 54.0 | 41.9 | 28.8 | 1196.9 | 1000.8 | True |
+| WELL-2 | -250.0 | -650.0 | 238-267 | 23.8 | 34.7 | 30.9 | 12.2 | 892.2 | 1003.4 | False |
+| WELL-2 | -650.0 | -1100.0 | 238-264 | 39.5 | 39.2 | 35.6 | 10.0 | 883.7 | 1005.1 | False |
+| WELL-2 | -1100.0 | -1500.0 | 236-238 | 92.4 | 35.6 | 32.5 | 9.4 | 907.3 | 1007.1 | False |
+| WELL-2 | -1500.0 | -1900.0 | 236-240 | 113.6 | 35.3 | 32.6 | 8.2 | 899.7 | 1008.8 | False |
+| WELL-2 | -1900.0 | -2348.0 | 240-254 | 123.3 | 39.3 | 36.1 | 8.9 | 895.6 | 1010.4 | False |
+| WELL-3 | 164.0 | -250.0 | 35-255 | 12.2 | 53.6 | 35.3 | 51.9 | 1377.1 | 1000.8 | True |
+| WELL-3 | -250.0 | -650.0 | 254-261 | 15.3 | 34.0 | 30.9 | 10.0 | 867.9 | 1003.4 | False |
+| WELL-3 | -650.0 | -1100.0 | 177-254 | 48.2 | 39.0 | 37.3 | 4.7 | 879.6 | 1005.1 | False |
+| WELL-3 | -1100.0 | -1500.0 | 176-177 | 152.5 | 35.9 | 35.3 | 1.8 | 915.3 | 1007.0 | False |
+| WELL-3 | -1500.0 | -1900.0 | 174-176 | 173.7 | 36.5 | 35.4 | 3.0 | 930.4 | 1008.8 | False |
+| WELL-3 | -1900.0 | -2887.0 | 174-188 | 188.8 | 88.4 | 87.3 | 1.3 | 912.3 | 1011.9 | False |
+| WELL-4 | 230.0 | -250.0 | 12-19 | 113.8 | 48.7 | 47.1 | 3.5 | 1034.4 | 1000.8 | True |
+| WELL-4 | -250.0 | -750.0 | 19-29 | 245.9 | 49.4 | 49.1 | 0.7 | 1007.4 | 1003.8 | False |
+| WELL-5 | 93.0 | -350.0 | 28-135 | 123.6 | 51.3 | 41.9 | 22.4 | 1195.8 | 1001.0 | True |
+| WELL-5 | -350.0 | -750.0 | 135-158 | 133.9 | 39.2 | 36.0 | 8.8 | 1000.6 | 1003.7 | False |
+| WELL-5 | -750.0 | -1300.0 | 148-157 | 150.5 | 50.4 | 49.6 | 1.6 | 934.0 | 1005.7 | False |
+| WELL-5 | -1300.0 | -1700.0 | 145-148 | 192.2 | 36.4 | 36.5 | -0.2 | 927.5 | 1007.8 | False |
+| WELL-5 | -1700.0 | -2250.0 | 145-147 | 213.3 | 50.4 | 50.2 | 0.3 | 934.4 | 1009.8 | False |
+| WELL-5 | -2250.0 | -2595.0 | 147-155 | 222.3 | 31.5 | 31.4 | 0.2 | 931.0 | 1011.9 | False |
+| WELL-6 | 147.0 | -350.0 | 22-204 | 73.3 | 59.4 | 45.1 | 31.6 | 1252.7 | 1001.0 | True |
+| WELL-6 | -350.0 | -750.0 | 194-220 | 70.0 | 35.6 | 33.6 | 6.1 | 908.7 | 1003.8 | False |
+| WELL-6 | -750.0 | -1300.0 | 132-194 | 115.2 | 49.6 | 49.5 | 0.1 | 917.2 | 1005.8 | False |
+| WELL-6 | -1300.0 | -1700.0 | 124-132 | 208.8 | 37.0 | 37.1 | -0.2 | 943.1 | 1007.9 | False |
+| WELL-6 | -1700.0 | -2359.0 | 122-126 | 235.1 | 61.2 | 61.4 | -0.4 | 946.6 | 1010.4 | False |
+| WELL-7 | 190.0 | -250.0 | 19-129 | 80.5 | 45.9 | 42.0 | 9.4 | 1074.5 | 1000.7 | True |
+| WELL-7 | -250.0 | -650.0 | 129-177 | 125.0 | 41.0 | 35.9 | 14.3 | 1042.2 | 1003.4 | True |
+| WELL-7 | -650.0 | -1100.0 | 144-177 | 125.0 | 40.1 | 40.1 | -0.1 | 908.0 | 1005.1 | False |
+| WELL-7 | -1100.0 | -1500.0 | 131-144 | 185.4 | 36.8 | 36.8 | -0.0 | 938.2 | 1007.1 | False |
+| WELL-7 | -1500.0 | -1900.0 | 131-131 | 218.9 | 37.0 | 37.0 | 0.0 | 943.2 | 1008.8 | False |
+| WELL-7 | -1900.0 | -2762.0 | 131-145 | 232.3 | 79.7 | 79.6 | 0.2 | 941.5 | 1011.9 | False |
+| WELL-8 | 176.0 | -250.0 | 13-48 | 104.1 | 44.3 | 41.6 | 6.5 | 1061.9 | 1000.7 | True |
+| WELL-8 | -250.0 | -650.0 | 48-66 | 210.9 | 40.1 | 38.7 | 3.6 | 1022.4 | 1003.2 | True |
+| WELL-8 | -650.0 | -1100.0 | 64-68 | 233.8 | 43.3 | 43.4 | -0.3 | 981.2 | 1005.1 | False |
+| WELL-8 | -1100.0 | -1500.0 | 64-64 | 266.8 | 39.7 | 38.7 | 2.5 | 1011.9 | 1007.0 | False |
+| WELL-8 | -1500.0 | -1900.0 | 64-71 | 287.4 | 39.4 | 38.7 | 1.7 | 1004.3 | 1009.1 | False |
+| WELL-8 | -1900.0 | -2716.1 | 71-93 | 283.9 | 80.0 | 78.6 | 1.8 | 999.7 | 1011.8 | False |
+| WELL-9 | 174.0 | -250.0 | 17-153 | 92.4 | 47.9 | 40.2 | 19.1 | 1169.0 | 1000.7 | True |
+| WELL-9 | -250.0 | -650.0 | 153-214 | 87.8 | 39.8 | 34.5 | 15.4 | 1012.7 | 1003.4 | True |
+| WELL-9 | -650.0 | -1100.0 | 188-218 | 88.6 | 39.0 | 38.2 | 2.2 | 882.1 | 1005.2 | False |
+| WELL-9 | -1100.0 | -1500.0 | 182-188 | 141.8 | 35.8 | 34.9 | 2.5 | 912.7 | 1007.0 | False |
+| WELL-9 | -1500.0 | -1900.0 | 172-182 | 166.8 | 36.4 | 35.3 | 3.0 | 927.9 | 1008.8 | False |
+| WELL-9 | -1900.0 | -2427.1 | 160-172 | 194.0 | 48.2 | 47.3 | 1.8 | 932.3 | 1010.9 | False |
+| WELL-10 | 210.0 | -350.0 | 25-269 | 2.6 | 63.4 | 46.0 | – | 1203.0 | 1001.1 | True |
+
+**[Obs]** Windows starting near the surface need an apparent density of 1034–1377 kg/m³ against a maximum liquid density of 1001–1001, so these profiles are not static single-phase columns. Cold windows (max T < 100 °C): shallow median 6.0 % (range 3.5–6.5), deeper median 1.8 %; overall median 3.0 %. For scale, g = 10 m/s² would give +2.0 %. **[Int]** The shallow excess common to the cold wells may be a datum/convention issue (not physical overpressure), but cannot explain the larger hot-well excess or why W5–W7 are exact at depth.
+
+![hydrostatic excess](figures/hydrostatic_excess_by_window.png)
+
+**Explanations checked:** units (bar and mRL agree between JSON and `.dat`); density (IF97 validated, Region 1 used on liquid windows only); datum (windows are elevation differences, so a constant offset cancels); wellbore (a static column cannot exceed the cold-water gradient). None resolves the hot-well excess.
 
 ## 5. Conceptual model
 
-Built from the data alone. Each feature is linked to its supporting observation.
+![conceptual sketch](figures/conceptual_model_sketch.png)
 
-Schematic, not to scale (positions from `well_geometry_check.csv` tracks; temperatures from the common-elevation table):
-
-| Zone | Wells | Observation |
+| Feature | Interpretation (strength) | Supporting observation |
 |---|---|---|
-| Upflow core, −250 to −550 mRL | WELL-10, WELL-2, WELL-3 | peaks 268.7, 266.9, 261.4 °C; 0 mRL: 219, 172, 193 °C |
-| Lateral outflow / cooling, −550 to −750 mRL and below | WELL-6, WELL-7, WELL-9, WELL-5 | peaks 220.5, 176.7, 217.7, 158.0 °C; cooling 13–98 K below peak |
-| Cold ground (injectors) | WELL-4 (NE), WELL-8 (SW) | ≤ 29 °C and ≤ 93 °C; WELL-8 is 235 m from the Tarawera River |
-| Deep connected pressure | all wells | 162–169 bar at −1500 mRL |
-
-- **Upflow [Interp]:** the hottest column is centred on WELL-10 and WELL-2, near −250 to −550 mRL. [Obs] WELL-10 has 268.7 °C at −250, WELL-2 266.9 °C at −550, and WELL-3 261.4 °C at −450. At 0 mRL the same three wells are 219, 172 and 193 °C.
-- **Near-boiling / two-phase margin [Obs]:** WELL-10 has four points below 5 K margin between −75 and −262.5 mRL, and its feed zone is at 4.35 K. [Interp] This is boiling-point-for-depth behaviour at the top of the upflow. Liquid pressures there remain above saturation.
-- **Lateral outflow / cooling below the peaks [Obs + Interp]:** the peaks in WELL-2, 3, 6, 7 and 9 are followed by cooling of 31 to 98 K below. [Interp] The heat and fluid that leave the upflow must go laterally at roughly −550 to −750 mRL, toward WELL-6, 7 and 9 (all three show peaks at −550 to −750). The data do not show where this flow exits.
-- **Cap [Obs]:** the 100 °C isotherm is at 104 mRL in WELL-3, 128 mRL in WELL-2 and 165 mRL in WELL-10. The 200 °C isotherm is at −14 mRL in WELL-3, −81 mRL in WELL-2 and 46 mRL in WELL-10. [Interp] The first 200 °C crossings in the three upflow wells lie between 46 and −81 mRL, so the hot column is close to the surface there. The data do not define a cap thickness, and cap thickness in the cold wells (WELL-4, WELL-8) is undefined because they never reach 100 °C.
-- **Recharge / cold ground [Obs + Interp]:** WELL-4 (NE, 50 m from the nearest mapped fault) and WELL-8 (SW, 235 m from the Tarawera River) are cold, and both are injectors. [Interp] Cold ground may be injection-cooled, or it may be natural recharge along the fault or the river. The data cannot choose.
-- **Faults and water [Obs]:** distance to the nearest of Faults 1–3 (`well_geometry_check.csv`): WELL-2 125 m, WELL-6 113 m, WELL-10 226 m, WELL-3 378 m, WELL-9 269 m, WELL-4 50 m. WELL-8 is 235 m from the Tarawera River and WELL-1 96 m from the unnamed river. No well is inside Lake Tarawera. [Interp] The hot wells lie within about 400 m of a mapped fault, so faults are a plausible control on the upflow. The data do not prove that link, and the fault that is nearest to each well is not recorded in the output.
-
-Strength of claims: the observations (temperatures, boiling margins, inversion depths, distances) are firm. Their interpretation (upflow centre, outflow level, cold ground origin) is not, and should be tested against the survey dates and injection history before it is used as a model constraint.
-
----
+| Upflow | Under/near W10–W2–W3, close to Fault 1 × Fault 3 (259 m from W2) (moderate) | Tmax 269/267/261 °C; W2 T@TD 254 °C and rising; W10 on the boiling curve; 200 °C at 46/-81/-14 mRL |
+| Outflow | Lateral layer ≈ −450…−750 mRL towards S, SE, E (W6, W7, W9, W5) (moderate; direction inferred from the T pattern only) | inversion peaks -550 (W6), -650 (W7), -750 (W9), -650 (W5) mRL (near feed zones except W5); peak T 220/218/177/158 °C |
+| Cap | Conductive top; thin over W10, deeper away (moderate) | cap gradients 664–860 K/km (core); 0.9·Tmax at -76 (W10), -122 (W3), -263 (W2), -320 (W6), -467 (W9) mRL |
+| Two-phase zone | Small, near W10, ≈ −75…−350 mRL (one well) | margin 2.6 °C |
+| Cold recharge/downflow | North (W4), south-west (W8) (weak–moderate) | W4 14 K/km; W8 64–68 °C at −650…−1500 mRL; river 235 m from W8; lake ≥ 3247 m away, so no direct lake influence is seen |
+| Conductive margin | East (W1) (moderate) | monotonic T, 119 °C at -1672 mRL |
+| Deep pressure connection | Laterally connected, near-hydrostatic (moderate) | P at −1500 mRL 162.0–169.2 bar |
+| Faults | Hot wells lie within 113–378 m of Fault 1 (W6, W2, W10, W3) and within 125/226 m of Fault 3 (W2/W10); W9/W7 are 269/349 m from Fault 2 (spatial association only; dip and permeability unknown) | `well_geometry_check.csv`, `fault_intersections.csv` |
 
 ## 6. Recommended calibration set-up
 
-**Targets and weights** (`NS_calibration_targets.csv`, `feedzones.csv`). Base weights follow the CLAUDE §4 table, multiplied by the verdict factor (low = 0.3). The result is:
+**Targets and weights** (`NS_calibration_targets.csv`, 266 survey points; weight = location weight × natural-state factor; extra columns `weight_P`, `P_role`):
 
-| Point type | Base | Current factor 0.3 | If surveys accepted (factor 1.0) |
-|---|---|---|---|
-| Feed zone | 1.0 | 0.30 | 1.00 |
-| Open hole (slotted liner) | 0.8 | 0.24 | 0.80 |
-| Behind casing | 0.5 | 0.15 | 0.50 |
-| Within 50 m of top of track | 0.3 | 0.09 | 0.30 |
-| Above model surface | 0 | 0 | 0 |
+| location_class | points | mean_weight |
+|---|---|---|
+| behind casing | 121 | 0.35 |
+| feed zone | 32 | 0.76 |
+| near wellhead | 28 | 0.22 |
+| open hole | 60 | 0.63 |
+| open hole (isothermal section) | 25 | 0.39 |
 
-No point is above the model surface (`above_model_surface` is False for all 266 rows). Counts: 32 feed-zone points, 91 open-hole, 116 behind casing, 27 near top.
+Scheme: feed zone 1.0; near wellhead (top 50 m) 0.3; behind casing 0.5; open hole 0.8, **reduced to 0.5 inside isothermal sections ≥ 300 m** (possible wellbore flow); above model surface 0 (none occur); multiplied by the factor 1.0 / 0.75 / 0.6 / 0.4. Pressure outside feed zones gets 0.25 × the location weight because it reflects the wellbore column. **Feed-zone targets** (`feedzones.csv`; all blocks match `gTE14515_wells.json`):
 
-Recommendations:
-1. **Temperature targets** are the most usable data. Give T at feed zones and open-hole points the highest weight. Use the hot wells first: WELL-10, 2, 3, 6, 7, 9.
-2. **Pressure targets:** use P only at feed zones, and only after the datum question (§7.1) is answered. Do not use P above the feed zones in WELL-2 and WELL-3, or the top 50 m of any well.
-3. **Injectors (WELL-4, 5, 8):** do not use their temperatures as natural-state targets. Either exclude them or model them as injection-cooled with their injection history. WELL-4 cannot be colder than its injectate in steady state.
-4. **Sensitivity runs:** (a) weights as above, (b) survey factor 1.0 for the producers and 0.6 for "probably natural", (c) injectors excluded.
-5. **Heat and mass in:** an upflow beneath the WELL-10/2/3 cluster, at about −250 to −550 mRL (§5). [Interp] Needed input: enough heat at the base of the cluster to hold a 200 °C column to about −1000 mRL in WELL-3.
-6. **Heat and mass out:** lateral outflow at about −550 to −750 mRL toward WELL-6, 7 and 9, and a cooled zone below −1000 mRL. [Interp] The data give no constraint on where the outflow leaves the field. A boundary or sink is needed, but its location is not determined by these data.
-7. **Permeability structure implied [Interp]:** the sharp cooling below the peaks (up to 98 K in WELL-6) suggests permeable lateral pathways at −550 to −750 mRL and low vertical conductivity below. This is an interpretation from temperature shape only. Rock properties are not evidence (CLAUDE §2).
-8. **Boundary requirements [Interp]:** deep pressures at −1000 to −1500 mRL agree to about ±3.5 bar across the field (§4). This supports a laterally connected deep system, subject to the pressure caveats.
+| well | feed | mid mRL | quality | T °C | P bar | Tsat °C | margin °C | block | pivot | weight |
+|---|---|---|---|---|---|---|---|---|---|---|
+| WELL-1 | Feed 1 | -1337.5 | MEDIUM | 113.2 | 146.7 | 340.4 | 227.2 | arg63 | False | 0.8 |
+| WELL-1 | Feed 2 | -1465.0 | MEDIUM | 115.5 | 158.7 | 346.7 | 231.2 | arg64 | True | 0.8 |
+| WELL-2 | Feed 1 | -260.0 | LOW | 239.7 | 55.9 | 271.0 | 31.3 | ajf54 | False | 1.0 |
+| WELL-2 | Feed 2 | -745.0 | HIGH | 258.0 | 97.8 | 309.4 | 51.4 | ajf59 | True | 1.0 |
+| WELL-2 | Feed 3 | -1910.0 | MEDIUM | 240.3 | 200.7 | 366.0 | 125.7 | ajf66 | False | 1.0 |
+| WELL-3 | Feed 1 | -335.0 | HIGH | 259.1 | 62.8 | 278.6 | 19.5 | asd55 | True | 1.0 |
+| WELL-3 | Feed 2 | -845.0 | MEDIUM | 229.8 | 105.6 | 315.0 | 85.2 | asd60 | False | 1.0 |
+| WELL-4 | Feed 1 | -655.0 | MEDIUM | 27.3 | 91.7 | 304.7 | 277.4 | aop58 | True | 0.6 |
+| WELL-5 | Feed 1 | -1325.0 | MEDIUM | 147.3 | 148.1 | 341.1 | 193.8 | arc63 | True | 0.4 |
+| WELL-5 | Feed 2 | -1525.0 | MEDIUM | 144.8 | 166.3 | 350.5 | 205.7 | arc64 | False | 0.4 |
+| WELL-6 | Feed 1 | -475.0 | HIGH | 218.0 | 73.5 | 289.2 | 71.2 | aph56 | True | 0.8 |
+| WELL-6 | Feed 2 | -1125.0 | HIGH | 139.8 | 130.5 | 331.2 | 191.4 | aph62 | False | 0.8 |
+| WELL-7 | Feed 1 | -630.0 | HIGH | 175.1 | 86.0 | 300.1 | 125.0 | apk58 | True | 0.8 |
+| WELL-7 | Feed 2 | -1325.0 | HIGH | 131.3 | 148.7 | 341.5 | 210.2 | apk63 | False | 0.8 |
+| WELL-8 | Feed 1 | -1125.0 | HIGH | 63.9 | 132.0 | 332.0 | 268.1 | ana62 | True | 0.6 |
+| WELL-9 | Feed 1 | -535.0 | LOW | 205.4 | 78.9 | 294.0 | 88.6 | ajj57 | False | 0.8 |
+| WELL-9 | Feed 2 | -837.5 | MEDIUM | 211.6 | 105.2 | 314.7 | 103.1 | ajq60 | True | 0.8 |
+| WELL-10 | Feed 1 | -262.5 | Synthetic | 268.7 | 57.7 | 273.0 | 4.3 | arz54 | True | 0.6 |
 
----
+**Heat and mass.** Deep hot input near W10–W2–W3 (T ≥ 254 °C at depth in W2); the data give no flux, only the temperatures to match. Cooling/recharge from the north (W4) and south-west (W8). Conductive heat loss at the top (§3 contrast). **Permeability structure implied [Int]:** low-permeability cap above roughly −150…−450 mRL (steep T gradient; steeper-than-hydrostatic P); a permeable lateral layer near −450…−750 mRL (inversion peaks near feed zones in W2, W3, W6, W7; HIGH-quality feed zones at W2 −745, W3 −335, W6 −475/−1125, W7 −630/−1325, W8 −1125); a laterally connected, near-hydrostatic deep column; vertical connection in the hot core. **Boundaries:** atmospheric pressure at the water table (estimated 113–251 mRL); near-surface T about 12–35 °C at the wellheads; lateral sides open to deep pressure support; no flux can be derived for the base.
 
-## 7. Data quality issues and open questions
+`T_P_at_layer_centres.csv` gives 232 well/layer pairs for block-wise comparison.
 
-Ranked by how much they affect calibration.
+## 7. Data quality issues and open questions (ranked by effect on calibration)
 
-1. **Pressure gradients are physically impossible in the hot upper sections** (WELL-2 and WELL-3, implied 1,100 to 1,535 kg/m³; `hydrostatic_check.csv`). **Question for the data owner:** what gauge, datum and density convention produced these pressures? This affects every P target in the upper parts of the wells.
-2. **Field-wide excess of about +8% in cold wells** (WELL-4 +7.4%, WELL-8 +4.0%, WELL-1 +5.5% median; `hydrostatic_check.csv`). Probably a datum or convention issue. **Question:** is the pressure referenced to a different elevation or density?
-3. **Survey and transient series disagree by 8 to 15 bar** (`pressure_consistency_check.csv`). **Question:** what is the true survey date? All surveys carry 29/07/2015, which is implausible for ten wells. Were the transients logged on the same datum?
-4. **"Synthetic" labelling** (`Well_Design.Source`, `Groups_data.json`, WELL-10 feed-zone quality). **Question:** are these real measurements, or generated from a model? The answer determines how the calibration should be read (§1.1).
-5. **Injection-affected cold profiles** (WELL-4 colder than its injectate; WELL-8 at 13 °C near the top). **Question:** when was each injector's survey taken relative to injection, and what is the injection temperature history?
-6. **WELL-1 wellhead datum** (track top 105 m below model surface; water level estimated at 115.3 mRL, 100 m above the wellhead). **Question:** is the wellhead elevation or the surface model right? A flowing or artesian condition would also explain it, but there is no discharge record.
-7. **Layer assignment** (14 survey points in LAYERS gaps; WELL-2 feed-zone column disagreement). **Question for the model owner:** should the 10 m gaps between layers be closed, and which column is correct for the WELL-2 feed zones?
-8. **Timing of WELL-10** (survey 2015, production from December 2019, transient 8 bar lower in 2020). **Question:** was WELL-10 shut in before 2019? If so, what explains the 8 bar difference?
-9. **WELL-10 boiling** (four points and the feed zone below 5 K margin). **Question:** could boiling in the wellbore (rather than in the formation) explain the T profile here?
-10. **Transient gauges are only at four elevations.** No transient in WELL-1, 4, 5, 6, 7, 8. Coverage is too sparse for a field-wide pressure check.
-
----
+1. **Survey date vs content.** Surveys dated 29/07/2015 match the 01/01/2014 pressure (98.2 bar vs 89.2 bar at W2 on 01/01/2015). Either the date is wrong or the data are reconstructed pre-production values. Confirm: the whole natural-state calibration depends on it.
+2. **Pressure gradients steeper than a water column** in the upper part of all wells (hot wells up to 52 %; cold wells 3.5–6.5 %) and a well-dependent excess at depth (W2 mean 8.8 % below −1100 mRL; W5–W7 ≈ 0). Obtain survey conditions (static or flowing, gauge reference) before using non-feed-zone pressure.
+3. **WELL-10:** no valid natural-state test; near-boiling, so P and T errors are coupled; feed-zone quality is "Synthetic".
+4. **Injectors W4, W5, W8:** no gauges; W5 possibly disturbed; W4's survey ends at -750 mRL while its liner is designed to −3251 mRL.
+5. **WELL-1 pressure** is -2.4 bar from W2/W3 at its pivot; its wellhead is 105 m below the grid surface and reads 10.8 bar at the wellhead: check the datum.
+6. **Grid surface vs wellhead elevation** differs by up to 105 m; confirm topography.
+7. Feed-zone units labelled "m" but are mRL; mixed JSON list/string formats; dominant feed zone not given (chosen by quality, then temperature).
+8. Faults have no dip or permeability; no lake data (lake assumed unimportant only because it is far).
+9. Rock conductivity for heat flux is assumed (2.0 W/m/K).
 
 ## 8. Output file index
 
-| File | Contents |
+| File | Content |
 |---|---|
-| `Scripts/natural_state_analysis.py` | One script that regenerates every output: `python Scripts/natural_state_analysis.py` from the repo root |
-| `Output/NS_data_interpretation.md` | This report |
-| `Output/NS_calibration_targets.csv` | 266 survey points, all columns in the CLAUDE §4 specification |
-| `Output/feedzones.csv` | 18 feed zones with survey T, P, margin, block and weight |
-| `Output/T_P_at_layer_centres.csv` | T and P at each model layer centre inside the surveyed range (no extrapolation) |
-| `Output/T_P_at_common_elevations.csv` | T and P at 200, 0, −250, −500, −750, −1000 and −1500 mRL, per well |
-| `Output/well_summary.csv` | Per-well characteristics (CLAUDE §3.4) |
-| `Output/pressure_consistency_check.csv` | Survey pressure vs first and time-matched transient |
-| `Output/hydrostatic_check.csv` | Column-density tests, ≥ 200 m intervals, with field-wide median |
-| `Output/well_geometry_check.csv` | Wellhead vs model surface, deviation, distances to faults, rivers and lake |
-| `Output/data_integrity_check.csv` | .dat vs JSON cross-checks, transients, track vs WELLS section, feed-zone checks, layer checks |
-| `Output/figures/well_map_grid_faults_water.png` | Well map with model vertices, faults and water bodies |
-| `Output/figures/profile_WELL-n.png` (10 files) | T with Tsat(P), P, casing, liner and feed zones |
-| `Output/figures/maps_temperature_by_elevation.png`, `maps_pressure_by_elevation.png` | Interpolated maps at seven elevations, inside the well hull only |
-| `Output/figures/section_WELL-10_to_WELL-3.png` | Section through the two hottest wells (see note below) |
-| `Output/figures/PT_state_vs_saturation.png` | P–T state against the IF97 saturation curve |
-| `Output/run_console_log.txt` | Console output from the final run, including the IF97 validation |
-| `Output/process_log.md` | Prompt, rules, steps and errors |
-
-Note on the section figure: the only survey points inside the 400 m corridor are WELL-10 and WELL-3. The colour fill between them is a two-profile linear interpolation, not evidence of lateral structure. Points outside the corridor are drawn as outlines.
+| `Scripts/natural_state_analysis.py` | regenerates everything except the hand-written `process_log.md` |
+| `Output/NS_data_interpretation.md` | this report |
+| `Output/NS_calibration_targets.csv` | 266 survey points, weights, blocks (+ `weight_P`, `P_role`, `location_class`) |
+| `Output/feedzones.csv` | feed-zone T/P/margin, blocks, weights |
+| `Output/T_P_at_layer_centres.csv` | T, P at layer centres, no extrapolation |
+| `Output/T_P_at_common_elevations.csv` | T, P at common elevations |
+| `Output/well_summary.csv` | per-well characteristics and regime |
+| `Output/pressure_consistency_check.csv` | natural-state timing tests and verdicts |
+| `Output/hydrostatic_check.csv` | column-density windows |
+| `Output/well_geometry_check.csv`, `Output/fault_intersections.csv` | geometry, distances, fault intersections |
+| `Output/data_integrity_check.csv` | all integrity checks |
+| `Output/figures/` | well maps, 10 profiles, T/P maps, 3 sections, P–T plot, hydrostatic excess, natural-state test, conceptual sketch |
+| `Output/run_console_log.txt` | console output of the final run |
+| `Output/process_log.md` | prompt, rules applied, steps |

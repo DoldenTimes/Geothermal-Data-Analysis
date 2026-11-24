@@ -1,0 +1,4 @@
+fault_a,fault_b,x,y,within_both_segments,nearest_well,nearest_well_dist_m,dist_to_WELL_2_m,dist_to_WELL_10_m,dist_to_WELL_3_m
+Fault 1,Fault 2,2821189.0,6402464.0,False,WELL-4,64709.0,66990.0,67587.0,68018.0
+Fault 1,Fault 3,2819779.0,6335557.0,True,WELL-2,259.0,259.0,758.0,1158.0
+Fault 2,Fault 3,2821189.0,6336858.0,True,WELL-9,1210.0,2150.0,2652.0,2626.0

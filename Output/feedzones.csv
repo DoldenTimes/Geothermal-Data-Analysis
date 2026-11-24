@@ -1,19 +1,19 @@
-well,feed_zone,top_mRL,bottom_mRL,quality_tag,midpoint_mRL,x,y,T_degC_at_mid,P_bar_at_mid,Tsat_degC,boiling_margin_degC,n_survey_pts_inside,block_from_wells_json,block_at_midpoint,column,layer,ns_confidence,weight
-WELL-1,Feed 1,-1320.0,-1355.0,MEDIUM,-1337.5,2823330.0,6334011.0,113.20,146.70,340.38,227.18,1,arg63,arg63,arg,63,low,0.300
-WELL-1,Feed 2,-1440.0,-1490.0,MEDIUM,-1465.0,2823330.0,6334011.0,115.50,158.70,346.70,231.20,1,arg64,arg64,arg,64,low,0.300
-WELL-2,Feed 1,-250.0,-270.0,LOW,-260.0,2819527.0,6335494.0,239.70,55.90,271.01,31.31,2,ajf54,aji54,aji,54,low,0.300
-WELL-2,Feed 2,-720.0,-770.0,HIGH,-745.0,2819527.0,6335494.0,258.00,97.80,309.37,51.37,2,ajf59,aji59,aji,59,low,0.300
-WELL-2,Feed 3,-1900.0,-1920.0,MEDIUM,-1910.0,2819527.0,6335494.0,240.30,200.70,366.04,125.74,2,ajf66,aji66,aji,66,low,0.300
-WELL-3,Feed 1,-310.0,-360.0,HIGH,-335.0,2820133.0,6334454.0,259.10,62.80,278.58,19.48,2,asd55,asd55,asd,55,low,0.300
-WELL-3,Feed 2,-820.0,-870.0,MEDIUM,-845.0,2820133.0,6334454.0,229.80,105.60,315.03,85.23,2,asd60,asd60,asd,60,low,0.300
-WELL-4,Feed 1,-630.0,-680.0,MEDIUM,-655.0,2822243.0,6337763.0,27.30,91.70,304.69,277.39,2,aop58,aop58,aop,58,low,0.300
-WELL-5,Feed 1,-1300.0,-1350.0,MEDIUM,-1325.0,2822044.0,6334190.0,147.30,148.10,341.14,193.84,2,arc63,arc63,arc,63,low,0.300
-WELL-5,Feed 2,-1500.0,-1550.0,MEDIUM,-1525.0,2822044.0,6334190.0,144.80,166.30,350.50,205.70,2,arc64,arc64,arc,64,low,0.300
-WELL-6,Feed 1,-460.0,-490.0,HIGH,-475.0,2819841.0,6333177.0,218.00,73.50,289.15,71.15,1,aph56,aph56,aph,56,low,0.300
-WELL-6,Feed 2,-1100.0,-1150.0,HIGH,-1125.0,2819841.0,6333177.0,139.80,130.50,331.16,191.36,2,aph62,aph62,aph,62,low,0.300
-WELL-7,Feed 1,-610.0,-650.0,HIGH,-630.0,2820840.0,6332682.0,175.10,86.00,300.10,125.00,2,apk58,apk58,apk,58,low,0.300
-WELL-7,Feed 2,-1300.0,-1350.0,HIGH,-1325.0,2820840.0,6332682.0,131.30,148.70,341.46,210.16,2,apk63,apk63,apk,63,low,0.300
-WELL-8,Feed 1,-1100.0,-1150.0,HIGH,-1125.0,2818520.2,6332251.5,63.90,132.00,332.05,268.15,2,ana62,ana62,ana,62,low,0.300
-WELL-9,Feed 1,-520.0,-550.0,LOW,-535.0,2820993.0,6335636.8,205.40,78.90,294.04,88.64,2,ajj57,ajj57,ajj,57,low,0.300
-WELL-9,Feed 2,-830.0,-845.0,MEDIUM,-837.5,2821101.3,6335573.7,211.60,105.20,314.75,103.15,1,ajq60,ajq60,ajq,60,low,0.300
-WELL-10,Feed 1,-250.0,-275.0,Synthetic,-262.5,2819400.0,6334900.0,268.70,57.70,273.05,4.35,2,arz54,arz54,arz,54,low,0.300
+well,feed,top_mRL,bottom_mRL,mid_mRL,thickness_m,quality,T_degC,P_bar,Tsat_degC,boiling_margin_degC,survey_points_in_interval,column,layer,block_at_mid,blocks_spanned,blocks_gTE14515_wells_json,block_match,is_pivot,ns_confidence,weight_T,weight_P,completion
+WELL-1,Feed 1,-1320.0,-1355.0,-1337.5,35.0,MEDIUM,113.2,146.7,340.4,227.2,1,arg,63,arg63,arg63,arg63,True,False,0.75,0.75,0.75,slotted liner
+WELL-1,Feed 2,-1440.0,-1490.0,-1465.0,50.0,MEDIUM,115.5,158.7,346.7,231.2,1,arg,64,arg64,arg64,arg64,True,True,0.75,0.75,0.75,slotted liner
+WELL-2,Feed 1,-250.0,-270.0,-260.0,20.0,LOW,239.7,55.9,271.0,31.3,2,ajf,54,ajf54,ajf54,ajf54,True,False,1.0,1.0,1.0,slotted liner
+WELL-2,Feed 2,-720.0,-770.0,-745.0,50.0,HIGH,258.0,97.8,309.4,51.4,2,ajf,59,ajf59,ajf59,ajf59,True,True,1.0,1.0,1.0,slotted liner
+WELL-2,Feed 3,-1900.0,-1920.0,-1910.0,20.0,MEDIUM,240.3,200.7,366.0,125.7,2,ajf,66,ajf66,ajf66,ajf66,True,False,1.0,1.0,1.0,slotted liner
+WELL-3,Feed 1,-310.0,-360.0,-335.0,50.0,HIGH,259.1,62.8,278.6,19.5,2,asd,55,asd55,asd55,asd55,True,True,1.0,1.0,1.0,slotted liner
+WELL-3,Feed 2,-820.0,-870.0,-845.0,50.0,MEDIUM,229.8,105.6,315.0,85.2,2,asd,60,asd60,asd60,asd60,True,False,1.0,1.0,1.0,slotted liner
+WELL-4,Feed 1,-630.0,-680.0,-655.0,50.0,MEDIUM,27.3,91.7,304.7,277.4,2,aop,58,aop58,aop58,aop58,True,True,0.6,0.6,0.6,slotted liner
+WELL-5,Feed 1,-1300.0,-1350.0,-1325.0,50.0,MEDIUM,147.3,148.1,341.1,193.8,2,arc,63,arc63,arc63,arc63,True,True,0.4,0.4,0.4,slotted liner
+WELL-5,Feed 2,-1500.0,-1550.0,-1525.0,50.0,MEDIUM,144.8,166.3,350.5,205.7,2,arc,64,arc64,arc64,arc64,True,False,0.4,0.4,0.4,slotted liner
+WELL-6,Feed 1,-460.0,-490.0,-475.0,30.0,HIGH,218.0,73.5,289.2,71.2,1,aph,56,aph56,aph56,aph56,True,True,0.75,0.75,0.75,slotted liner
+WELL-6,Feed 2,-1100.0,-1150.0,-1125.0,50.0,HIGH,139.8,130.5,331.2,191.4,2,aph,62,aph62,aph62,aph62,True,False,0.75,0.75,0.75,slotted liner
+WELL-7,Feed 1,-610.0,-650.0,-630.0,40.0,HIGH,175.1,86.0,300.1,125.0,2,apk,58,apk58,apk58,apk58,True,True,0.75,0.75,0.75,slotted liner
+WELL-7,Feed 2,-1300.0,-1350.0,-1325.0,50.0,HIGH,131.3,148.7,341.5,210.2,2,apk,63,apk63,apk63,apk63,True,False,0.75,0.75,0.75,slotted liner
+WELL-8,Feed 1,-1100.0,-1150.0,-1125.0,50.0,HIGH,63.9,132.0,332.0,268.1,2,ana,62,ana62,ana62,ana62,True,True,0.6,0.6,0.6,slotted liner
+WELL-9,Feed 1,-520.0,-550.0,-535.0,30.0,LOW,205.4,78.9,294.0,88.6,2,ajj,57,ajj57,ajj57,ajj57,True,False,0.75,0.75,0.75,slotted liner
+WELL-9,Feed 2,-830.0,-845.0,-837.5,15.0,MEDIUM,211.6,105.2,314.7,103.1,1,ajq,60,ajq60,ajq60,ajq60,True,True,0.75,0.75,0.75,slotted liner
+WELL-10,Feed 1,-250.0,-275.0,-262.5,25.0,Synthetic,268.7,57.7,273.0,4.3,2,arz,54,arz54,arz54,arz54,True,True,0.6,0.6,0.6,slotted liner

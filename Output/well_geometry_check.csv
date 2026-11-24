@@ -1,11 +1,11 @@
-well,wellhead_x,wellhead_y,wellhead_mRL,track_bottom_mRL,column_top,model_surface_SURFA_mRL,wellhead_minus_surface_m,horizontal_offset_top_to_bottom_m,dist_fault1_m,dist_fault2_m,dist_fault3_m,nearest_fault_m,dist_Tarawera_River_m,dist_river_m,dist_lake_shore_m,inside_lake_outline
-WELL-1,2823330.0,6334011.0,15.0,-1672.0,arg,120.0,-105.0,0.0,3583,2141,3545,2141,116,96,7892,False
-WELL-2,2819527.0,6335494.0,225.0,-2348.0,ajf,260.0,-35.0,0.0,250,1662,125,125,1906,2459,6495,False
-WELL-3,2820133.0,6334454.0,164.0,-2887.0,asd,180.0,-16.0,0.0,378,1056,1051,378,828,1356,5892,False
-WELL-4,2822243.0,6337763.0,340.0,-750.0,aop,340.0,0.0,0.0,3290,1354,50,50,3801,3125,9815,False
-WELL-5,2822044.0,6334190.0,93.0,-2595.0,arc,140.0,-47.0,0.0,2294,855,2541,855,800,345,6978,False
-WELL-6,2819841.0,6333177.0,147.0,-2359.0,aph,160.0,-13.0,0.0,113,1348,1791,113,424,1626,4701,False
-WELL-7,2820840.0,6332682.0,190.0,-2762.0,apk,240.0,-50.0,0.0,1122,349,2832,349,858,1243,5092,False
-WELL-8,2818757.0,6332185.0,176.0,-2716.1,ana,260.0,-84.0,999.7,950,2432,1785,950,235,2645,3247,False
-WELL-9,2820920.0,6335679.0,174.0,-2427.1,ajj,220.0,-46.0,867.6,1145,269,684,269,1901,1488,7348,False
-WELL-10,2819400.0,6334900.0,260.0,-350.0,arz,260.0,0.0,0.0,365,1789,226,226,1337,2213,5904,False
+well,x,y,wellhead_mRL,column,model_surface_mRL,wellhead_minus_model_surface_m,td_x,td_y,td_mRL,td_column,max_horizontal_deviation_m,offset_from_column_centre_m,nearest_fault,dist_nearest_fault_m,dist_fault1_m,dist_fault2_m,dist_fault3_m,nearest_river,dist_nearest_river_m,dist_lake_edge_m,wellhead_inside_lake,td_dist_nearest_fault_m,first_block_wells_json,feed_zone_blocks_match_wells_json
+WELL-1,2823330.0,6334011.0,15.0,arg,120.0,-105.0,2823330.0,6334011.0,-1672.0,arg,0.0,156.0,Fault 2,2141.0,3583.0,2141.0,3545.0,river,96.0,7892.0,False,2141.0,arg50,True
+WELL-2,2819527.0,6335494.0,225.0,ajf,260.0,-35.0,2819527.0,6335494.0,-2348.0,ajf,0.0,314.0,Fault 3,125.0,250.0,1662.0,125.0,Tarawera River,1906.0,6495.0,False,125.0,ajf39,True
+WELL-3,2820133.0,6334454.0,164.0,asd,180.0,-16.0,2820133.0,6334454.0,-2887.0,asd,0.0,263.0,Fault 1,378.0,378.0,1056.0,1051.0,Tarawera River,828.0,5892.0,False,378.0,asd42,True
+WELL-4,2822243.0,6337763.0,340.0,aop,340.0,0.0,2822243.0,6337763.0,-750.0,aop,0.0,48.0,Fault 3,50.0,3290.0,1354.0,50.0,river,3125.0,9815.0,False,50.0,aop34,True
+WELL-5,2822044.0,6334190.0,93.0,arc,140.0,-47.0,2822044.0,6334190.0,-2595.0,arc,0.0,198.0,Fault 2,855.0,2294.0,855.0,2541.0,river,345.0,6978.0,False,855.0,arc46,True
+WELL-6,2819841.0,6333177.0,147.0,aph,160.0,-13.0,2819841.0,6333177.0,-2359.0,aph,0.0,121.0,Fault 1,113.0,113.0,1348.0,1791.0,Tarawera River,424.0,4701.0,False,113.0,aph43,True
+WELL-7,2820840.0,6332682.0,190.0,apk,240.0,-50.0,2820840.0,6332682.0,-2762.0,apk,0.0,127.0,Fault 2,349.0,1122.0,349.0,2832.0,Tarawera River,858.0,5092.0,False,349.0,apk41,True
+WELL-8,2818757.0,6332185.0,176.0,ana,260.0,-84.0,2817771.1,6332350.5,-2716.1,amw,999.7,61.0,Fault 1,950.0,950.0,2432.0,1785.0,Tarawera River,235.0,3247.0,False,994.0,ana42,True
+WELL-9,2820920.0,6335679.0,174.0,ajj,220.0,-46.0,2821632.0,6335183.2,-2427.1,asf,867.6,155.0,Fault 2,269.0,1145.0,269.0,684.0,river,1488.0,7348.0,False,443.0,ajj42,True
+WELL-10,2819400.0,6334900.0,260.0,arz,260.0,0.0,2819400.0,6334900.0,-350.0,arz,0.0,245.0,Fault 3,226.0,365.0,1789.0,226.0,Tarawera River,1337.0,5904.0,False,226.0,arz38,True

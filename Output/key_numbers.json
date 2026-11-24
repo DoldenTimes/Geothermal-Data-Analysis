@@ -1,0 +1,47 @@
+{
+  "field_ratio_cold": 1.0253,
+  "field_ratio_all": 1.0554,
+  "band_ratio_cold": {
+    "full run": 1.0253,
+    "shallow (bottom >= -450 mRL)": 1.0545,
+    "spanning": 1.0382,
+    "deep (top <= -450 mRL)": 1.0180500000000001
+  },
+  "implied_g": 10.054758245,
+  "ref": {
+    "heat_flux_default_Wm2": 0.1,
+    "rain_default_mm": 1000.0,
+    "infiltration": 0.1,
+    "lake_columns": [
+      "aab",
+      "aaq",
+      "aar",
+      "aas",
+      "aat"
+    ],
+    "n_heat_gen": 398,
+    "total_heat_MW": 15.6,
+    "n_mass_gen": 398,
+    "n_deep_mass_gen": 0
+  },
+  "fault_x": {
+    "Fault 1 x Fault 3": [
+      2819778.542010639,
+      6335556.527198632
+    ],
+    "Fault 2 x Fault 3": [
+      2821188.8,
+      6336858.3030536985
+    ]
+  },
+  "fz_fit": [
+    2.4636972260246903e-06,
+    -0.08188821886587778,
+    34.987283906717074
+  ],
+  "dd_2020": {
+    "WELL-2": 15.099999999999994,
+    "WELL-3": 14.200000000000003,
+    "WELL-9": 17.60000000000001
+  }
+}

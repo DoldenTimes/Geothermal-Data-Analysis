@@ -1,0 +1,22 @@
+well,band,n,ratio_median,ratio_min,ratio_max
+WELL-1,deep (top <= -450 mRL),3,1.0236,1.0055,1.0852
+WELL-1,shallow (bottom >= -450 mRL),1,1.0696,1.0696,1.0696
+WELL-1,spanning,1,1.0382,1.0382,1.0382
+WELL-2,deep (top <= -450 mRL),5,1.083,1.0782,1.0998
+WELL-2,shallow (bottom >= -450 mRL),2,1.2924,1.2401,1.3447
+WELL-3,deep (top <= -450 mRL),6,1.024,1.0115,1.0649
+WELL-3,shallow (bottom >= -450 mRL),2,1.414,1.2877,1.5402
+WELL-4,deep (top <= -450 mRL),1,0.992,0.992,0.992
+WELL-4,shallow (bottom >= -450 mRL),2,1.0304,1.0064,1.0545
+WELL-5,deep (top <= -450 mRL),5,1.0029,0.998,1.0475
+WELL-5,shallow (bottom >= -450 mRL),1,1.223,1.223,1.223
+WELL-5,spanning,1,1.157,1.157,1.157
+WELL-6,deep (top <= -450 mRL),4,0.9998,0.9965,1.0048
+WELL-6,shallow (bottom >= -450 mRL),1,1.3101,1.3101,1.3101
+WELL-6,spanning,1,1.192,1.192,1.192
+WELL-7,deep (top <= -450 mRL),6,1.0012,0.9998,1.0746
+WELL-7,shallow (bottom >= -450 mRL),2,1.1744,1.1675,1.1814
+WELL-8,deep (top <= -450 mRL),6,1.0181,0.9944,1.0249
+WELL-8,shallow (bottom >= -450 mRL),2,1.0588,1.0544,1.0633
+WELL-9,deep (top <= -450 mRL),5,1.0252,1.0197,1.0645
+WELL-9,shallow (bottom >= -450 mRL),2,1.2092,1.1814,1.2371

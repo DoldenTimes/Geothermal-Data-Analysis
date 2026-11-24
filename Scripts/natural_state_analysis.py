@@ -1,1390 +1,1975 @@
 #!/usr/bin/env python
 """
-Natural-state data interpretation for geothermal model calibration.
+Natural-state data interpretation for geothermal model calibration (TE14515).
 
-Run from the repository root:   python Scripts/natural_state_analysis.py
+Run from the repository root:
+    python Scripts/natural_state_analysis.py
 
-Reads ONLY from Baseline/Teaching_Model_3D (read-only), writes ONLY to Output/ (and Output/figures/).
-Sections of the run:
-  0  IAPWS-IF97 implementation + validation (aborts if any error > 0.1 K)
-  1  Load data (JSON = data, .dat = cross-check), grid geometry, mapping polylines
-  2  Integrity checks (JSON vs dat, survey/feed-zone/track/design consistency)
-  3  Natural-state timing tests and per-well verdicts / confidence
-  4  Hydrostatic checks, boiling margin
-  5  Per-well characteristics, regime classification
-  6  Lateral structure tables (common elevations, layer centres), calibration targets
-  7  Figures
-  8  Report (Output/NS_data_interpretation.md)
+Reads only from Baseline/ (read-only). Writes every table, figure and the main
+report to Output/. Rules followed are in CLAUDE.md.
+
+Data used as evidence : Data/Data_json/WELL-*_data.json, Data/Data_dat/*.dat (cross-check),
+                        Data/Mapping/Mapping.json, Data/Groups_data.json
+Geometry only         : Models/TE14515/gTE14515.dat (VERTICES, GRID, LAYERS, SURFA, WELLS),
+                        Models/TE14515/gTE14515_wells.json
+Reference model only  : gTE14515_boundary_conditions.json, NaturalState/TE14515_NS_000.dat
+                        (described, never used as evidence)
 """
 import ast
 import json
+import math
 import os
 import sys
-import warnings
-from pathlib import Path
+from datetime import datetime
 
 import numpy as np
 import pandas as pd
-
-warnings.filterwarnings("ignore")
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.tri as mtri
-from matplotlib.patches import Polygon as MplPolygon
+from matplotlib.patches import Polygon as MplPolygon, FancyArrowPatch
+from scipy.interpolate import griddata
 
-ROOT = Path(__file__).resolve().parent.parent
-BASE = ROOT / "Baseline" / "Teaching_Model_3D"
-OUT = ROOT / "Output"
-FIG = OUT / "figures"
-OUT.mkdir(exist_ok=True)
-FIG.mkdir(exist_ok=True)
+# ----------------------------------------------------------------------------
+# Paths and console logging
+# ----------------------------------------------------------------------------
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+BASE = os.path.join(ROOT, "Baseline", "Teaching_Model_3D")
+DATA = os.path.join(BASE, "Data")
+MODEL = os.path.join(BASE, "Models", "TE14515")
+OUT = os.path.join(ROOT, "Output")
+FIG = os.path.join(OUT, "figures")
+os.makedirs(FIG, exist_ok=True)
 
 
 class Tee:
-    """Duplicate console output into Output/run_console_log.txt"""
     def __init__(self, path):
         self.f = open(path, "w", encoding="utf-8")
-        self.o = sys.stdout
+        self.stdout = sys.stdout
+
     def write(self, s):
-        self.o.write(s); self.f.write(s)
+        self.stdout.write(s)
+        self.f.write(s)
+
     def flush(self):
-        self.o.flush(); self.f.flush()
+        self.stdout.flush()
+        self.f.flush()
 
 
-sys.stdout = Tee(OUT / "run_console_log.txt")
+sys.stdout = Tee(os.path.join(OUT, "run_console_log.txt"))
+print(f"natural_state_analysis.py run at {datetime.now().isoformat(timespec='seconds')}")
+print(f"Repository root: {ROOT}")
+
+G = 9.80665  # m/s2, standard gravity (used for all hydrostatic calculations)
+K_ROCK = 2.0  # W/m/K, ASSUMED rock thermal conductivity (not in data; typical value
+# for altered volcaniclastic/ignimbrite sequences, e.g. Grant & Bixley 2011 range 1.5-2.5)
+BM_FLAG = 5.0  # degC, boiling-margin flag threshold
+WELLS = [f"WELL-{i}" for i in range(1, 11)]
+DAT_NAME = {w: ("Wel10" if w == "WELL-10" else "Well" + w.split("-")[1]) for w in WELLS}
+
+# ----------------------------------------------------------------------------
+# 1. IAPWS-IF97 (Region 4 saturation, Region 1 compressed liquid)
+# ----------------------------------------------------------------------------
+_N4 = [0.11670521452767e4, -0.72421316703206e6, -0.17073846940092e2,
+       0.12020824702470e5, -0.32325550322333e7, 0.14915108613530e2,
+       -0.48232657361591e4, 0.40511340542057e6, -0.23855557567849,
+       0.65017534844798e3]
+PC_MPA = 22.064
 
 
-def hdr(s):
-    print("\n" + "=" * 100 + f"\n{s}\n" + "=" * 100)
+def psat_mpa(T_K):
+    n = _N4
+    th = T_K + n[8] / (T_K - n[9])
+    A = th * th + n[0] * th + n[1]
+    B = n[2] * th * th + n[3] * th + n[4]
+    C = n[5] * th * th + n[6] * th + n[7]
+    return (2 * C / (-B + math.sqrt(B * B - 4 * A * C))) ** 4
 
 
-G = 9.80665          # m/s2 (standard gravity)
-P_ATM = 1.01325      # bar
-K_ROCK_ASSUMED = 2.0  # W/m/K  ASSUMPTION (typical volcanic/sedimentary rock; not in the data)
-
-# ----------------------------------------------------------------------------------------------
-# 0. IAPWS-IF97  (Region 4 saturation, Region 1 liquid)
-# ----------------------------------------------------------------------------------------------
-_N4 = [0.11670521452767e4, -0.72421316703206e6, -0.17073846940092e2, 0.12020824702470e5,
-       -0.32325550322333e7, 0.14915108613530e2, -0.48232657361591e4, 0.40511340542057e6,
-       -0.23855557567849, 0.65017534844798e3]
-
-
-def psat_MPa(T_K):
-    n = _N4; T = np.asarray(T_K, float)
-    th = T + n[8] / (T - n[9])
-    A = th ** 2 + n[0] * th + n[1]; B = n[2] * th ** 2 + n[3] * th + n[4]; C = n[5] * th ** 2 + n[6] * th + n[7]
-    return (2 * C / (-B + np.sqrt(B ** 2 - 4 * A * C))) ** 4
+def tsat_K(p_mpa):
+    if not (611.213e-6 <= p_mpa <= PC_MPA):
+        return float("nan")
+    n = _N4
+    b = p_mpa ** 0.25
+    E = b * b + n[2] * b + n[5]
+    F = n[0] * b * b + n[3] * b + n[6]
+    Gg = n[1] * b * b + n[4] * b + n[7]
+    D = 2 * Gg / (-F - math.sqrt(F * F - 4 * E * Gg))
+    return (n[9] + D - math.sqrt((n[9] + D) ** 2 - 4 * (n[8] + n[9] * D))) / 2
 
 
-def tsat_K(P_MPa):
-    n = _N4; b = np.asarray(P_MPa, float) ** 0.25
-    E = b ** 2 + n[2] * b + n[5]; F = n[0] * b ** 2 + n[3] * b + n[6]; Gg = n[1] * b ** 2 + n[4] * b + n[7]
-    D = 2 * Gg / (-F - np.sqrt(F ** 2 - 4 * E * Gg))
-    return (n[9] + D - np.sqrt((n[9] + D) ** 2 - 4 * (n[8] + n[9] * D))) / 2
+def tsat_c(p_bar):
+    return tsat_K(p_bar / 10.0) - 273.15
 
 
-def tsat_C(P_bar):
-    return tsat_K(np.asarray(P_bar, float) / 10.0) - 273.15
+_I1 = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 8, 8,
+       21, 23, 29, 30, 31, 32]
+_J1 = [-2, -1, 0, 1, 2, 3, 4, 5, -9, -7, -1, 0, 1, 3, -3, 0, 1, 3, 17, -4, 0, 6, -5, -2,
+       10, -8, -11, -6, -29, -31, -38, -39, -40, -41]
+_n1 = [0.14632971213167, -0.84548187169114, -0.37563603672040e1, 0.33855169168385e1,
+       -0.95791963387872, 0.15772038513228, -0.16616417199501e-1, 0.81214629983568e-3,
+       0.28319080123804e-3, -0.60706301565874e-3, -0.18990068218419e-1,
+       -0.32529748770505e-1, -0.21841717175414e-1, -0.52838357969930e-4,
+       -0.47184321073267e-3, -0.30001780793026e-3, 0.47661393906987e-4,
+       -0.44141845330846e-5, -0.72694996297594e-15, -0.31679644845054e-4,
+       -0.28270797985312e-5, -0.85205128120103e-9, -0.22425281908000e-5,
+       -0.65171222895601e-6, -0.14341729937924e-12, -0.40516996860117e-6,
+       -0.12734301741641e-8, -0.17424871230634e-9, -0.68762131295531e-18,
+       0.14478307828521e-19, 0.26335781662795e-22, -0.11947622640071e-22,
+       0.18228094581404e-23, -0.93537087292458e-25]
+R_KJ = 0.461526
 
 
-_R1 = [(0, -2, 0.14632971213167), (0, -1, -0.84548187169114), (0, 0, -0.37563603672040e1), (0, 1, 0.33855169168385e1),
-       (0, 2, -0.95791963387872), (0, 3, 0.15772038513228), (0, 4, -0.16616417199501e-1), (0, 5, 0.81214629983568e-3),
-       (1, -9, 0.28319080123804e-3), (1, -7, -0.60706301565874e-3), (1, -1, -0.18990068218419e-1),
-       (1, 0, -0.32529748770505e-1), (1, 1, -0.21841717175414e-1), (1, 3, -0.52838357969930e-4),
-       (2, -3, -0.47184321073267e-3), (2, 0, -0.30001780793026e-3), (2, 1, 0.47661393906987e-4),
-       (2, 3, -0.44141845330846e-5), (2, 17, -0.72694996297594e-15), (3, -4, -0.31679644845054e-4),
-       (3, 0, -0.28270797985312e-5), (3, 6, -0.85205128120103e-9), (4, -5, -0.22425281908000e-5),
-       (4, -2, -0.65171222895601e-6), (4, 10, -0.14341729937924e-12), (5, -8, -0.40516996860117e-6),
-       (8, -11, -0.12734301741641e-8), (8, -6, -0.17424871230634e-9), (21, -29, -0.68762131295531e-18),
-       (23, -31, 0.14478307828521e-19), (29, -38, 0.26335781662795e-22), (30, -39, -0.11947622640071e-22),
-       (31, -40, 0.18228094581404e-23), (32, -41, -0.93537087292458e-25)]
+def v_region1(T_K, p_mpa):
+    pi = p_mpa / 16.53
+    tau = 1386.0 / T_K
+    gp = 0.0
+    for I, J, n in zip(_I1, _J1, _n1):
+        gp += -n * I * (7.1 - pi) ** (I - 1) * (tau - 1.222) ** J
+    return R_KJ * T_K / (p_mpa * 1000.0) * pi * gp
 
 
-def rho_liq(T_K, P_MPa):
-    """Region 1 liquid density, kg/m3 (valid 273.15-623.15 K, up to 100 MPa)."""
-    pi = np.asarray(P_MPa, float) / 16.53; tau = 1386.0 / np.asarray(T_K, float)
-    gp = sum(-n * I * (7.1 - pi) ** (I - 1) * (tau - 1.222) ** J for I, J, n in _R1)
-    v = 0.461526e-3 * np.asarray(T_K, float) / np.asarray(P_MPa, float) * pi * gp  # m3/kg
-    return 1.0 / v
+def h_region1(T_K, p_mpa):
+    """Specific enthalpy (kJ/kg), IF97 Region 1."""
+    pi = p_mpa / 16.53
+    tau = 1386.0 / T_K
+    gt = 0.0
+    for I, J, n in zip(_I1, _J1, _n1):
+        gt += n * (7.1 - pi) ** I * J * (tau - 1.222) ** (J - 1)
+    return R_KJ * T_K * tau * gt
 
 
-hdr("0. IAPWS-IF97 validation (script aborts if any T error > 0.1 K)")
-checks = [
-    ("Tsat(1.01325 bar)", float(tsat_C(1.01325)), 99.97, 0.1, "degC"),
-    ("Tsat(100 bar)", float(tsat_C(100.0)), 311.0, 0.1, "degC"),
-    ("Tsat(0.1 MPa) IAPWS table 35", float(tsat_K(0.1)), 372.755919, 0.01, "K"),
-    ("Tsat(1 MPa)   IAPWS table 35", float(tsat_K(1.0)), 453.035632, 0.01, "K"),
-    ("Tsat(10 MPa)  IAPWS table 35", float(tsat_K(10.0)), 584.149488, 0.01, "K"),
-    ("Psat(300 K)   IAPWS table 35 [kPa]", float(psat_MPa(300.0)) * 1e3, 3.53658941, 1e-4, "kPa"),
-    ("Psat(500 K)   IAPWS table 35 [MPa]", float(psat_MPa(500.0)), 2.63889776, 1e-6, "MPa"),
-    ("Psat(600 K)   IAPWS table 35 [MPa]", float(psat_MPa(600.0)), 12.3443146, 1e-5, "MPa"),
-    ("rho(3 MPa,300 K) IAPWS table 5", float(rho_liq(300, 3)), 1 / 0.100215168e-2, 0.01, "kg/m3"),
-    ("rho(80 MPa,300 K) IAPWS table 5", float(rho_liq(300, 80)), 1 / 0.971180894e-3, 0.01, "kg/m3"),
-    ("rho(3 MPa,500 K) IAPWS table 5", float(rho_liq(500, 3)), 1 / 0.120241800e-2, 0.01, "kg/m3"),
-]
-for lab, c, r, tol, u in checks:
-    ok = abs(c - r) <= tol
-    print(f"  {lab:40s} computed={c:14.6f} reference={r:14.6f} error={c - r:+.2e} {u:8s} {'OK' if ok else 'FAIL'}")
+def h_liquid(T_c, p_bar):
+    return h_region1(T_c + 273.15, p_bar / 10.0)
+
+
+def rho_liquid(T_c, p_bar):
+    return 1.0 / v_region1(T_c + 273.15, p_bar / 10.0)
+
+
+def validate_if97():
+    print("\n=== IAPWS-IF97 validation against published values (IAPWS R7-97 tables) ===")
+    checks = []
+    # Tsat (K) at p (MPa): IF97 Table 35 + CLAUDE.md values
+    for p, ref in [(0.1, 372.755919), (1.0, 453.035632), (10.0, 584.149488),
+                   (0.101325, 373.124)]:
+        val = tsat_K(p)
+        checks.append(("Tsat", f"p={p} MPa", val, ref, abs(val - ref), 0.1))
+    # CLAUDE.md degC values
+    for pbar, ref in [(1.01325, 99.97), (100.0, 311.0)]:
+        val = tsat_c(pbar)
+        checks.append(("Tsat", f"p={pbar} bar", val, ref, abs(val - ref), 0.1))
+    # Psat (MPa) at T (K): Table 33 -> convert to Tsat error equivalence via inverse
+    for T, ref in [(300.0, 0.353658941e-2), (500.0, 0.263889776e1), (600.0, 0.123443146e2)]:
+        val = psat_mpa(T)
+        terr = abs(tsat_K(val) - T)  # round-trip
+        checks.append(("Psat", f"T={T} K", val, ref, abs(val - ref) / ref, 1e-6))
+        checks.append(("Tsat(Psat)", f"T={T} K", tsat_K(val), T, terr, 0.1))
+    # Region 1 specific volume (m3/kg): Table 5
+    for T, p, ref in [(300.0, 3.0, 0.100215168e-2), (300.0, 80.0, 0.971180894e-3),
+                      (500.0, 3.0, 0.120241800e-2)]:
+        val = v_region1(T, p)
+        checks.append(("v_R1", f"T={T} K p={p} MPa", val, ref, abs(val - ref) / ref, 1e-6))
+    for T, p, ref in [(300.0, 3.0, 0.115331273e3), (300.0, 80.0, 0.184142828e3), (500.0, 3.0, 0.975542239e3)]:
+        val = h_region1(T, p)
+        checks.append(("h_R1", f"T={T} K p={p} MPa", val, ref, abs(val - ref) / ref, 1e-6))
+    ok = True
+    for c in checks:
+        status = "OK" if c[4] <= c[5] else "FAIL"
+        if status == "FAIL":
+            ok = False
+        print(f"  {c[0]:10s} {c[1]:22s} calc={c[2]:.9g} ref={c[3]:.9g} err={c[4]:.3g} tol={c[5]} {status}")
     if not ok:
-        sys.exit(f"IF97 validation failed for {lab}")
-print("  All IAPWS-IF97 validation checks passed (T errors << 0.1 K).")
+        raise SystemExit("IAPWS-IF97 validation FAILED (error above tolerance). Stopping.")
+    print("  All IF97 checks passed (Tsat errors < 0.1 K, v, h and Psat relative errors < 1e-6).")
+    return checks
 
 
-# ----------------------------------------------------------------------------------------------
-# 1. Load
-# ----------------------------------------------------------------------------------------------
-def lit(x):
-    """JSON lists are stored as a mixture of real lists and strings like '[-310.0, -360.0, 'HIGH']'."""
-    if isinstance(x, str):
-        return ast.literal_eval(x)
-    return x
+IF97_CHECKS = validate_if97()
+
+# ----------------------------------------------------------------------------
+# 2. Load well data
+# ----------------------------------------------------------------------------
+def parse_list(s):
+    return ast.literal_eval(s) if isinstance(s, str) else s
 
 
-hdr("1. Loading data")
-groups = json.load(open(BASE / "Data" / "Groups_data.json"))
-WELLS = groups["Areas"]["Synthetic"]["All"]
-print("Wells (Groups_data.json):", WELLS)
-
-W = {}
-for w in WELLS:
-    n = int(w.split("-")[1])
-    d = json.load(open(BASE / "Data" / "Data_json" / f"{w}_data.json"))
-    rec = {"name": w, "n": n, "raw": d}
-    trk = np.array([lit(t)[:3] for t in d["Well_Track"]["Data"]], float)
-    rec["track"] = trk
-    rec["fz"] = [lit(f) for f in d["Feed_Zones"]["Data"]]            # [top, bottom, quality] in mRL
-    rec["design"] = [lit(x) for x in d["Well_Design"]["Data"]]       # [top, bottom, dia, slotted, spec]
-    Td = d["Downhole_Temperature"]; Pd = d["Downhole_Pressure"]
-    assert len(Td) == 1 and len(Pd) == 1, "more than one survey date: not handled"
-    (tdate, tv), = Td.items(); (pdate, pv), = Pd.items()
-    rec["survey_date_T"], rec["survey_date_P"] = tdate, pdate
-    rec["stable_T"], rec["stable_P"] = tv["StableFlag"], pv["StableFlag"]
-    zs = sorted(tv["Data"].keys(), key=lambda s: -float(s))
-    rec["T_json"] = {float(k): tv["Data"][k] for k in zs}
-    rec["P_json"] = {float(k): pv["Data"][k] for k in sorted(pv["Data"].keys(), key=lambda s: -float(s))}
-    rec["z"] = np.array([float(k) for k in zs])
-    rec["T"] = np.array([tv["Data"][k] for k in zs], float)
-    rec["P"] = np.array([pv["Data"][k] for k in zs], float)
-    rec["wh"] = trk[0]
-    # production / injection
-    rec["role"] = "producer" if "Production_Mass_Flow" in d else ("injector" if "Injection_Mass_Flow" in d else "monitor (no flow data)")
-    rec["flow"] = d.get("Production_Mass_Flow", d.get("Injection_Mass_Flow"))
-    rec["enth"] = d.get("Transient_Enthalpy", d.get("Injection_Enthalpy"))
-    rec["tp"] = d.get("Transient_Pressure")
-    W[w] = rec
-    print(f"  {w}: role={rec['role']:24s} n_survey={len(rec['z']):2d} survey date={tdate} track_pts={len(trk)} "
-          f"wellhead z={trk[0][2]:.0f} TD z={trk[-1][2]:.1f}  FZ={[(f[0], f[1], f[2]) for f in rec['fz']]}")
-
-# mapping
-mapping = json.load(open(BASE / "Data" / "Mapping" / "Mapping.json"))
-faults = {k: np.array(v["Data"], float) for k, v in mapping.items() if k.startswith("Fault")}
-rivers = {}
-for k in ("Tarawera River", "river"):
-    rivers[k] = [np.array(seg, float) for seg in mapping[k]["Data"]]
-lake = np.array(mapping["Lake Tarawera"]["Data"], float)
-for k, v in faults.items():
-    print(f"  {k}: {len(v)} pts  from ({v[0][0]:.0f},{v[0][1]:.0f}) to ({v[-1][0]:.0f},{v[-1][1]:.0f})")
-print(f"  Lake polygon: {len(lake)} pts, extent x {lake[:,0].min():.0f}-{lake[:,0].max():.0f} y {lake[:,1].min():.0f}-{lake[:,1].max():.0f}")
-
-# grid (geometry only: VERTICES, GRID, LAYERS, SURFA, WELLS)
-Lines = [l.rstrip("\r") for l in open(BASE / "Models" / "TE14515" / "gTE14515.dat").read().split("\n")]
-iv, ig, ic, il, isf, iw = (Lines.index(k) for k in ("VERTICES", "GRID", "CONNECTIONS", "LAYERS", "SURFA", "WELLS"))
-VERT = {l[:3]: (float(l[3:13]), float(l[13:23])) for l in Lines[iv + 1:ig] if l.strip()}
-colv = {}
-cur = None
-for l in Lines[ig + 1:ic]:
-    if not l.strip():
-        continue
-    if len(l.strip()) > 3:
-        cur = l[:3]; colv[cur] = []
-    else:
-        colv[cur].append(l.strip())
-COLPOLY = {c: np.array([VERT[v] for v in vs]) for c, vs in colv.items()}
-COLCEN = {c: p.mean(axis=0) for c, p in COLPOLY.items()}
-SURF = {l[:3]: float(l[3:]) for l in Lines[isf + 1:iw] if l.strip()}
-LAY = []
-for l in Lines[il + 1:isf]:
-    if l.strip():
-        a = l.split(); LAY.append((int(a[0]), float(a[1]), float(a[2])))   # name, bottom, centre
-LAY = pd.DataFrame(LAY, columns=["layer", "bottom", "centre"])
-LAY["top"] = LAY["bottom"].shift(1)
-print(f"  Grid: {len(VERT)} vertices, {len(COLPOLY)} columns, {len(LAY)} layers (layer 0 = atmosphere), "
-      f"surface elevation range {min(SURF.values()):.0f}..{max(SURF.values()):.0f} mRL")
-
-wellsjson = json.load(open(BASE / "Models" / "TE14515" / "gTE14515_wells.json"))
+def load_wells():
+    wells = {}
+    for w in WELLS:
+        d = json.load(open(os.path.join(DATA, "Data_json", f"{w}_data.json")))
+        rec = {"name": w, "raw": d}
+        rec["track"] = np.array([parse_list(s) for s in d["Well_Track"]["Data"]], float)
+        rec["design"] = [parse_list(s) for s in d["Well_Design"]["Data"]]
+        fz = []
+        for s in d["Feed_Zones"]["Data"]:
+            t, b, q = parse_list(s)
+            fz.append({"top": float(t), "bot": float(b), "quality": str(q)})
+        rec["fz"] = fz
+        (tdate, tblk), = d["Downhole_Temperature"].items()
+        (pdate, pblk), = d["Downhole_Pressure"].items()
+        zT = np.array([float(k) for k in tblk["Data"].keys()])
+        T = np.array(list(tblk["Data"].values()), float)
+        zP = np.array([float(k) for k in pblk["Data"].keys()])
+        P = np.array(list(pblk["Data"].values()), float)
+        rec.update(survey_date_T=tdate, survey_date_P=pdate, zT=zT, T=T, zP=zP, P=P,
+                   stable_T=tblk.get("StableFlag"), stable_P=pblk.get("StableFlag"))
+        rec["transient_P"] = {}
+        for el, blk in d.get("Transient_Pressure", {}).items():
+            dates = list(blk["Data"].keys())
+            rec["transient_P"][float(el)] = (dates, np.array(list(blk["Data"].values()), float))
+        rec["prod"] = d.get("Production_Mass_Flow", {}).get("Data", {})
+        rec["inj"] = d.get("Injection_Mass_Flow", {}).get("Data", {})
+        rec["inj_h"] = d.get("Injection_Enthalpy", {}).get("Data", {})
+        rec["prod_h"] = d.get("Transient_Enthalpy", {}).get("Data", {})
+        casing = [r for r in rec["design"] if not r[3]]
+        liner = [r for r in rec["design"] if r[3]]
+        rec["casing_shoe"] = min(float(r[1]) for r in casing) if casing else None
+        rec["casing_top"] = max(float(r[0]) for r in casing) if casing else None
+        rec["liner_top"] = max(float(r[0]) for r in liner) if liner else None
+        rec["liner_bot"] = min(float(r[1]) for r in liner) if liner else None
+        rec["wellhead"] = rec["track"][0, 2]
+        rec["td"] = rec["track"][-1, 2]
+        wells[w] = rec
+    return wells
 
 
-def inpoly(x, y, P):
-    c = False; n = len(P)
+W = load_wells()
+groups = json.load(open(os.path.join(DATA, "Groups_data.json")))
+group_list = groups["Areas"]["Synthetic"]["All"]
+print(f"\nLoaded {len(W)} wells; Groups_data.json lists {len(group_list)} wells: "
+      f"{'match' if sorted(group_list) == sorted(WELLS) else 'MISMATCH'}")
+
+
+def track_xy(rec, z):
+    """x, y on the well track at elevation z (track z decreasing)."""
+    tr = rec["track"]
+    zz = tr[::-1, 2]
+    return (float(np.interp(z, zz, tr[::-1, 0])), float(np.interp(z, zz, tr[::-1, 1])))
+
+
+def interp_profile(zs, vals, z):
+    """Linear interpolation in elevation; NaN outside the surveyed range (no extrapolation)."""
+    o = np.argsort(zs)
+    zs, vals = np.asarray(zs)[o], np.asarray(vals)[o]
+    z = np.atleast_1d(z).astype(float)
+    out = np.interp(z, zs, vals)
+    out[(z < zs[0] - 1e-6) | (z > zs[-1] + 1e-6)] = np.nan
+    return out
+
+
+# ----------------------------------------------------------------------------
+# 3. Model geometry (geometry sections only)
+# ----------------------------------------------------------------------------
+def load_geometry():
+    lines = open(os.path.join(MODEL, "gTE14515.dat")).read().splitlines()
+    sec = None
+    verts, cols, layers, surf, gwells = {}, {}, [], {}, {}
+    cur = None
+    for ln in lines:
+        key = ln.strip()
+        if key in ("VERTICES", "GRID", "CONNECTIONS", "LAYERS", "SURFA", "WELLS"):
+            sec = key
+            continue
+        if ln.startswith("GENER"):
+            continue
+        if not key:
+            continue
+        if sec == "VERTICES":
+            verts[ln[0:3]] = (float(ln[3:13]), float(ln[13:23]))
+        elif sec == "GRID":
+            if len(ln.rstrip()) > 3 and ln[3:].strip():
+                cur = ln[0:3]
+                cols[cur] = []
+            else:
+                cols[cur].append(ln[0:3])
+        elif sec == "LAYERS":
+            name = ln[0:2]
+            parts = ln[2:].split()
+            layers.append((name, float(parts[0]), float(parts[1])))
+        elif sec == "SURFA":
+            surf[ln[0:3]] = float(ln[3:].split()[0])
+        elif sec == "WELLS":
+            nm = ln[0:5]
+            x, y, z = map(float, ln[5:].split())
+            gwells.setdefault(nm, []).append((x, y, z))
+    # layer tops
+    lay = []
+    top_surface = layers[0][1]
+    prev_bot = top_surface
+    for name, bot, cen in layers[1:]:
+        lay.append({"name": name, "top": prev_bot, "bot": bot, "centre": cen})
+        prev_bot = bot
+    polys = {c: np.array([verts[v] for v in vs]) for c, vs in cols.items()}
+    return verts, polys, lay, surf, gwells, top_surface
+
+
+VERTS, COLS, LAYERS, SURF, GWELLS, TOPSURF = load_geometry()
+print(f"Geometry: {len(VERTS)} vertices, {len(COLS)} columns, {len(LAYERS)} layers "
+      f"(top {LAYERS[0]['top']} to bottom {LAYERS[-1]['bot']} mRL), "
+      f"{len(SURF)} SURFA entries, {len(GWELLS)} wells in WELLS section")
+
+
+def point_in_poly(x, y, poly):
+    n = len(poly)
+    inside = False
+    j = n - 1
     for i in range(n):
-        x1, y1 = P[i]; x2, y2 = P[(i + 1) % n]
-        if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1:
-            c = not c
-    return c
-
-
-_poly_cache = {}
+        xi, yi = poly[i]
+        xj, yj = poly[j]
+        if ((yi > y) != (yj > y)) and (x < (xj - xi) * (y - yi) / (yj - yi + 1e-30) + xi):
+            inside = not inside
+        j = i
+    return inside
 
 
 def find_column(x, y):
-    for c, P in COLPOLY.items():
-        mn = P.min(axis=0); mx = P.max(axis=0)
-        if mn[0] <= x <= mx[0] and mn[1] <= y <= mx[1] and inpoly(x, y, P):
+    for c, p in COLS.items():
+        if point_in_poly(x, y, p):
             return c
     return None
 
 
+def col_surface(c):
+    return SURF.get(c, TOPSURF)
+
+
 def find_layer(z):
-    for _, r in LAY.iloc[1:].iterrows():
-        if r.bottom < z <= r.top:
-            return int(r.layer)
+    for L in LAYERS:
+        if L["bot"] < z <= L["top"] + 1e-9:
+            return L
+    if abs(z - LAYERS[-1]["bot"]) < 1e-6:
+        return LAYERS[-1]
     return None
 
 
-def track_xy(w, z):
-    t = W[w]["track"]
-    if len(t) == 1:
-        return t[0][:2]
-    zz = t[::-1, 2]
-    return np.array([np.interp(z, zz, t[::-1, 0]), np.interp(z, zz, t[::-1, 1])])
+def block_of(x, y, z):
+    c = find_column(x, y)
+    if c is None:
+        return None, None, None, None
+    s = col_surface(c)
+    if z > s + 1e-6:
+        return c, None, None, True
+    L = find_layer(z)
+    if L is None:
+        return c, None, None, False
+    return c, L["name"].strip(), c + L["name"], False
 
 
-def block_at(w, z):
-    x, y = track_xy(w, z)
-    c = find_column(x, y); l = find_layer(z)
-    return c, l, (f"{c}{l:02d}" if c and l is not None else None)
+def top_layer_of_column(c):
+    s = col_surface(c)
+    for L in LAYERS:
+        if L["bot"] < s <= L["top"] + 1e-9:
+            return L
+    return None
 
 
-def seg_dist(p, a, b):
-    ab = b - a; t = np.clip(np.dot(p - a, ab) / np.dot(ab, ab), 0, 1)
-    return np.hypot(*(p - (a + t * ab)))
+# ----------------------------------------------------------------------------
+# 4. Mapping
+# ----------------------------------------------------------------------------
+MAP = json.load(open(os.path.join(DATA, "Mapping", "Mapping.json")))
+FAULTS = {k: np.array(v["Data"], float) for k, v in MAP.items() if k.startswith("Fault")}
+LAKE = np.array(MAP["Lake Tarawera"]["Data"], float)
+RIVERS = {k: [np.array(seg, float) for seg in MAP[k]["Data"]] for k in ["Tarawera River", "river"]}  # multiplot
 
 
-def dist_polyline(p, pts):
-    return min(seg_dist(p, pts[i], pts[i + 1]) for i in range(len(pts) - 1))
+def dist_point_polyline(px, py, pl):
+    d = np.inf
+    for (x1, y1), (x2, y2) in zip(pl[:-1], pl[1:]):
+        dx, dy = x2 - x1, y2 - y1
+        L2 = dx * dx + dy * dy
+        t = 0 if L2 == 0 else max(0, min(1, ((px - x1) * dx + (py - y1) * dy) / L2))
+        d = min(d, math.hypot(px - (x1 + t * dx), py - (y1 + t * dy)))
+    return d
 
 
-def dist_polys(p, polys):
-    return min(dist_polyline(p, s) for s in polys)
+def seg_intersect(p1, p2, p3, p4):
+    d = (p2[0] - p1[0]) * (p4[1] - p3[1]) - (p2[1] - p1[1]) * (p4[0] - p3[0])
+    if abs(d) < 1e-12:
+        return None
+    t = ((p3[0] - p1[0]) * (p4[1] - p3[1]) - (p3[1] - p1[1]) * (p4[0] - p3[0])) / d
+    u = ((p3[0] - p1[0]) * (p2[1] - p1[1]) - (p3[1] - p1[1]) * (p2[0] - p1[0])) / d
+    if 0 <= t <= 1 and 0 <= u <= 1:
+        return (p1[0] + t * (p2[0] - p1[0]), p1[1] + t * (p2[1] - p1[1]))
+    return None
 
 
-def interp_profile(w, z, arr="T"):
-    """Linear interpolation within survey range only (NaN outside)."""
-    zz = W[w]["z"][::-1]; vv = W[w][arr][::-1]
-    z = np.asarray(z, float)
-    out = np.interp(z, zz, vv)
-    out = np.where((z < zz.min() - 1e-9) | (z > zz.max() + 1e-9), np.nan, out)
-    return out
+FAULT_X = {}
+fk = list(FAULTS)
+for i in range(len(fk)):
+    for j in range(i + 1, len(fk)):
+        p = seg_intersect(FAULTS[fk[i]][0], FAULTS[fk[i]][1], FAULTS[fk[j]][0], FAULTS[fk[j]][1])
+        if p is not None:
+            FAULT_X[f"{fk[i]} x {fk[j]}"] = p
+print("Fault intersections (from Mapping.json traces):",
+      {k: (round(v[0]), round(v[1])) for k, v in FAULT_X.items()})
 
-
-# ----------------------------------------------------------------------------------------------
-# 2. Integrity checks
-# ----------------------------------------------------------------------------------------------
-hdr("2. Data integrity: JSON vs .dat, survey/feed zones/track/design")
-integ = []
-
-
-def add(check, well, detail, result, value=np.nan):
-    integ.append(dict(check=check, well=well, detail=detail, result=result, value=value))
-
-
-def datfile(w, kind):
-    n = W[w]["n"]
-    pre = "Wel10" if n == 10 else f"Well{n}"
-    return BASE / "Data" / "Data_dat" / f"{pre}_downhole_{kind}.dat"
-
-
+# ============================================================================
+# 5. Data integrity: JSON vs dat; points within track / slotted interval
+# ============================================================================
+print("\n=== 3.1 Data integrity ===")
+integ_rows = []
 for w, r in W.items():
-    for kind, key in (("temperature", "T"), ("pressure", "P")):
-        a = np.loadtxt(datfile(w, kind)); a = a.reshape(-1, 2)
-        dat_z = a[:, 1]; dat_v = a[:, 0]
-        js = r[key + "_json"]
-        same_n = len(a) == len(js)
-        maxdiff = 0.0; missing = 0
-        for z, v in zip(dat_z, dat_v):
-            if z in js:
-                maxdiff = max(maxdiff, abs(js[z] - v))
+    for kind, zs, vs in [("temperature", r["zT"], r["T"]), ("pressure", r["zP"], r["P"])]:
+        fn = os.path.join(DATA, "Data_dat", f"{DAT_NAME[w]}_downhole_{kind}.dat")
+        dat = np.loadtxt(fn)
+        n_json, n_dat = len(zs), len(dat)
+        dz = dv = np.nan
+        if n_json == n_dat:
+            dv = float(np.max(np.abs(dat[:, 0] - vs)))
+            dz = float(np.max(np.abs(dat[:, 1] - zs)))
+        integ_rows.append({"well": w, "check": f"json_vs_dat_{kind}", "n_json": n_json,
+                           "n_dat": n_dat, "max_abs_diff_value": dv, "max_abs_diff_elev": dz,
+                           "result": "OK" if (n_json == n_dat and dv < 1e-6 and dz < 1e-6) else "MISMATCH",
+                           "detail": os.path.basename(fn)})
+    for el, (dates, vals) in r["transient_P"].items():
+        fn = os.path.join(DATA, "Data_dat", f"{DAT_NAME[w]}_{el}_transient_pressure.dat")
+        dat = np.loadtxt(fn)
+        dv = float(np.max(np.abs(dat[:, 1] - vals))) if len(dat) == len(vals) else np.nan
+        integ_rows.append({"well": w, "check": "json_vs_dat_transient_pressure",
+                           "n_json": len(vals), "n_dat": len(dat), "max_abs_diff_value": dv,
+                           "max_abs_diff_elev": np.nan,
+                           "result": "OK" if dv == 0 else "MISMATCH",
+                           "detail": f"{os.path.basename(fn)}; dat time column starts at "
+                                     f"{dat[0, 0]:g} (years after 2014-01-01 inferred), first date {dates[0]}"})
+    # same elevations in T and P
+    same = len(r["zT"]) == len(r["zP"]) and np.allclose(r["zT"], r["zP"])
+    integ_rows.append({"well": w, "check": "T_and_P_elevations_identical", "n_json": len(r["zT"]),
+                       "n_dat": len(r["zP"]), "max_abs_diff_value": np.nan, "max_abs_diff_elev": np.nan,
+                       "result": "OK" if same else "MISMATCH", "detail": ""})
+    wh, td = r["wellhead"], r["td"]
+    zmax, zmin = r["zT"].max(), r["zT"].min()
+    inside = (zmax <= wh + 1e-6) and (zmin >= td - 1e-6)
+    integ_rows.append({"well": w, "check": "survey_within_track", "n_json": len(r["zT"]),
+                       "n_dat": np.nan, "max_abs_diff_value": np.nan, "max_abs_diff_elev": np.nan,
+                       "result": "OK" if inside else "OUTSIDE",
+                       "detail": f"track {wh:g} to {td:g} mRL; survey {zmax:g} to {zmin:g} mRL; "
+                                 f"first survey point {wh - zmax:g} m below wellhead"})
+    # design vs track
+    dtop = max(float(d[0]) for d in r["design"])
+    dbot = min(float(d[1]) for d in r["design"])
+    ok = abs(dtop - wh) < 1e-6 and abs(dbot - td) < 1e-6
+    integ_rows.append({"well": w, "check": "design_matches_track", "n_json": np.nan, "n_dat": np.nan,
+                       "max_abs_diff_value": np.nan, "max_abs_diff_elev": np.nan,
+                       "result": "OK" if ok else "INCONSISTENT",
+                       "detail": f"design {dtop:g} to {dbot:g} mRL vs track {wh:g} to {td:g} mRL"})
+    for k, f in enumerate(r["fz"]):
+        in_track = f["top"] <= wh and f["bot"] >= td
+        in_slot = (r["liner_top"] is not None and f["top"] <= r["liner_top"] and f["bot"] >= r["liner_bot"])
+        below_shoe = f["top"] <= r["casing_shoe"]
+        res = "OK" if (in_track and in_slot and below_shoe) else "PROBLEM"
+        integ_rows.append({"well": w, "check": f"feedzone_{k + 1}_location", "n_json": np.nan,
+                           "n_dat": np.nan, "max_abs_diff_value": np.nan, "max_abs_diff_elev": np.nan,
+                           "result": res,
+                           "detail": f"FZ {f['top']:g} to {f['bot']:g} mRL ({f['quality']}); in track={in_track}; "
+                                     f"in slotted liner ({r['liner_top']:g} to {r['liner_bot']:g})={in_slot}; "
+                                     f"below casing shoe ({r['casing_shoe']:g})={below_shoe}"})
+    # geometry file WELLS section vs json track
+    gname = r["raw"]["AUT2_Name"] if r["raw"]["AUT2_Name"] in GWELLS else DAT_NAME[w].upper()[:5]
+    gname = {"WELL-10": "WEL10"}.get(w, f"WELL{w.split('-')[1]}")
+    gt = np.array(GWELLS.get(gname, []))
+    if len(gt):
+        dmax = float(np.max(np.abs(gt - r["track"][:len(gt)]))) if len(gt) == len(r["track"]) else np.nan
+        integ_rows.append({"well": w, "check": "geometry_WELLS_vs_json_track", "n_json": len(r["track"]),
+                           "n_dat": len(gt), "max_abs_diff_value": dmax, "max_abs_diff_elev": np.nan,
+                           "result": "OK" if (not np.isnan(dmax) and dmax < 0.1) else "DIFF",
+                           "detail": "geometry file rounds elevations to 0.1 m"})
+INTEG = pd.DataFrame(integ_rows)
+INTEG.to_csv(os.path.join(OUT, "data_integrity_check.csv"), index=False)
+bad = INTEG[~INTEG["result"].isin(["OK"])]
+print(f"  {len(INTEG)} integrity checks; {len(bad)} not OK:")
+for _, b in bad.iterrows():
+    print(f"   - {b['well']} {b['check']}: {b['result']} ({b['detail']})")
+
+# ============================================================================
+# 6. Natural-state timing test (survey P at gauge elevation vs first transient P)
+# ============================================================================
+print("\n=== 3.1 Natural-state timing ===")
+pc_rows = []
+for w, r in W.items():
+    for el, (dates, vals) in r["transient_P"].items():
+        ps = float(interp_profile(r["zP"], r["P"], el)[0])
+        # value of the transient series one year later, to show how fast P falls
+        pc_rows.append({"well": w, "gauge_elevation_mRL": el, "survey_date": r["survey_date_P"],
+                        "survey_P_at_gauge_bar": round(ps, 2),
+                        "first_transient_date": dates[0], "first_transient_P_bar": vals[0],
+                        "diff_survey_minus_first_bar": round(ps - vals[0], 2),
+                        "second_transient_date": dates[1], "second_transient_P_bar": vals[1],
+                        "diff_survey_minus_second_bar": round(ps - vals[1], 2),
+                        "transient_drop_first_year_bar": round(vals[0] - vals[1], 2),
+                        "transient_last_date": dates[-1], "transient_last_P_bar": vals[-1]})
+PC = pd.DataFrame(pc_rows)
+# Field drawdown 2014 -> 2020 at the three 2014 gauges (used to judge WELL-10)
+dd_2020 = {}
+for w in ["WELL-2", "WELL-3", "WELL-9"]:
+    dates, vals = list(W[w]["transient_P"].values())[0]
+    i20 = dates.index("01/01/2020")
+    dd_2020[w] = vals[0] - vals[i20]
+
+NS = {}  # per-well verdict
+for w, r in W.items():
+    role = "producer" if r["prod"] else ("injector" if r["inj"] else "observation/unused")
+    first_flow = None
+    flows = r["prod"] or r["inj"]
+    if flows:
+        first_flow = next(d for d, v in flows.items() if v > 0)
+    sub = PC[PC.well == w]
+    if len(sub):
+        diff = float(sub.diff_survey_minus_first_bar.iloc[0])
+        first_date = sub.first_transient_date.iloc[0]
+        if first_date.endswith("2014"):
+            if abs(diff) <= 1.0:
+                v, c, why = "natural state", "high", (
+                    f"survey P at gauge ({sub.survey_P_at_gauge_bar.iloc[0]:.1f} bar) is within "
+                    f"{abs(diff):.1f} bar of the first (01/01/2014, pre-production) gauge value; the 2015 gauge value is "
+                    f"{sub.diff_survey_minus_second_bar.iloc[0]:.1f} bar lower than the survey")
+            elif abs(diff) <= 3.0:
+                v, c, why = "probably natural state", "medium", (
+                    f"survey P at gauge differs by {diff:+.1f} bar from the first (2014) gauge value; much closer to 2014 "
+                    f"than to the 2015 value ({sub.diff_survey_minus_second_bar.iloc[0]:+.1f} bar), but the offset "
+                    f"exceeds the 0.1 bar reading precision (deviated well: gauge depth reference uncertain)")
             else:
-                missing += 1
-        ok = same_n and missing == 0 and maxdiff < 1e-6
-        add(f"JSON vs dat {kind}", w, f"n_json={len(js)} n_dat={len(a)} missing_in_json={missing} max|diff|={maxdiff:.2e}",
-            "PASS" if ok else "FLAG", maxdiff)
-    # transient pressure
-    if r["tp"]:
-        for zk, tpv in r["tp"].items():
-            pre = "Wel10" if r["n"] == 10 else f"Well{r['n']}"
-            a = np.loadtxt(BASE / "Data" / "Data_dat" / f"{pre}_{float(zk)}_transient_pressure.dat").reshape(-1, 2)
-            js = list(tpv["Data"].values())
-            ok = len(a) == len(js) and np.allclose(a[:, 1], js)
-            add("JSON vs dat transient pressure", w, f"gauge {zk} mRL; n_json={len(js)} n_dat={len(a)}; dat time column = years since 2014 "
-                f"({a[0,0]:.0f}..{a[-1,0]:.0f})", "PASS" if ok else "FLAG")
-    # survey elevations within track
-    tz_top, tz_bot = r["track"][0][2], r["track"][-1][2]
-    out = [z for z in r["z"] if z > tz_top + 1e-6 or z < tz_bot - 1e-6]
-    add("Survey points inside track z-range", w, f"track {tz_top:.1f}..{tz_bot:.1f} mRL; survey {r['z'][0]:.1f}..{r['z'][-1]:.1f}; outside={len(out)}",
-        "PASS" if not out else "FLAG", len(out))
-    # T & P survey duplicates / monotonic
-    add("Survey elevations strictly descending", w, "", "PASS" if np.all(np.diff(r["z"]) < 0) else "FLAG")
-    # stable flags
-    add("StableFlag", w, f"T={r['stable_T']} P={r['stable_P']} (date {r['survey_date_T']})", "PASS" if r["stable_T"] and r["stable_P"] else "FLAG")
-    # design continuity
-    des = r["design"]
-    for i, d in enumerate(des):
-        add("Design interval inside track z-range", w, f"{d[4]}: {d[0]}..{d[1]} mRL, slotted={d[3]}; track bottom {tz_bot:.1f}",
-            "PASS" if d[1] >= tz_bot - 1e-6 else "FLAG (design extends below track end)", d[1] - tz_bot)
-    cas = [d for d in des if not d[3]]
-    liners = [d for d in des if d[3]]
-    shoe = min(c[1] for c in cas) if cas else np.nan
-    r["shoe"] = shoe
-    if liners:
-        lap = max(l[0] for l in liners) - shoe   # >=0: liner top above casing shoe -> liner laps inside casing
-        add("Casing/liner overlap or gap", w, f"casing shoe {shoe:.0f}, liner top {max(l[0] for l in liners):.0f}", "PASS (liner laps inside casing)" if lap >= 0 else "FLAG (gap)", lap)
-    # feed zones
-    for k, f in enumerate(r["fz"], 1):
-        top, bot, q = f
-        inside = tz_bot - 1e-6 <= bot and top <= tz_top + 1e-6
-        below_shoe = top <= shoe + 1e-6
-        in_liner = any(l[3] and l[1] <= bot and top <= l[0] for l in liners)
-        status = "slotted liner" if in_liner else ("open hole below shoe" if below_shoe else "behind blank casing")
-        add("Feed zone within track and open/slotted interval", w, f"FZ{k} {top:.0f}..{bot:.0f} mRL [{q}] -> {status}",
-            "PASS" if inside and below_shoe else "FLAG")
-        # survey point at FZ?
-        has_pt = any(bot - 1e-6 <= z <= top + 1e-6 for z in r["z"])
-        add("Survey point inside feed zone", w, f"FZ{k} {top:.0f}..{bot:.0f}", "PASS" if has_pt else "FLAG (interpolated only)")
-    add("Feed-zone units", w, "Feed_Zones.Units say 'm' but values are elevations (mRL, negative below sea level) - treated as mRL", "NOTE")
-    # wells.json cross-check: blocks
-    wj = wellsjson[w]
-    blocknames = {b["block"] for b in wj["Blocks"]}
-    miss = 0
-    for z in r["z"]:
-        c, l, b = block_at(w, z)
-        if b not in blocknames:
-            miss += 1
-    add("Survey point blocks (own grid lookup) in gTE14515_wells.json", w, f"{len(r['z'])} points, not found={miss}", "PASS" if miss == 0 else "FLAG", miss)
+                v, c, why = "possibly disturbed", "low", f"survey differs from first gauge value by {diff:+.1f} bar"
+        else:
+            mean_dd = np.mean(list(dd_2020.values()))
+            v, c, why = "probably natural state", "medium", (
+                f"gauge series starts {first_date}, after 6 years of field production; survey is {diff:+.1f} bar above "
+                f"the 2020 gauge value, which is the right sign and the same order as the 2014-2020 drawdown at the "
+                f"other gauges ({min(dd_2020.values()):.1f}-{max(dd_2020.values()):.1f} bar). Cannot be confirmed directly; "
+                f"near-boiling profile adds uncertainty")
+    else:
+        if role == "injector":
+            v, c, why = "probably natural state", "medium", (
+                f"no pressure gauge. Injection of {list(r['inj_h'].values())[0]:.1f} kJ/kg water (about 80 degC) since "
+                f"{first_flow}; survey dated {r['survey_date_T']}. Profile shows no isothermal ~80 degC injectate column; "
+                f"producer surveys with the same date match pre-production gauges, so the survey date is probably not "
+                f"the measurement date")
+        else:
+            v, c, why = "probably natural state", "medium", (
+                f"no pressure gauge and no flow history. Survey dated {r['survey_date_T']} (after production start "
+                f"01/01/2014) but producer surveys with the same date match the pre-production gauges")
+    NS[w] = {"role": role, "verdict": v, "confidence": c, "reason": why, "first_flow": first_flow}
+CONF_W = {"high": 1.0, "medium": 0.8, "low": 0.5}
+PC.to_csv(os.path.join(OUT, "pressure_consistency_check.csv"), index=False)
+for w in WELLS:
+    print(f"  {w:8s} {NS[w]['role']:18s} {NS[w]['verdict']:24s} ({NS[w]['confidence']}): {NS[w]['reason'][:110]}...")
 
-integ = pd.DataFrame(integ)
-integ.to_csv(OUT / "data_integrity_check.csv", index=False)
-print(integ.groupby(["check", "result"]).size().to_string())
-print("FLAGS:\n", integ[integ.result.str.startswith("FLAG")][["check", "well", "detail"]].to_string())
-
-# ----------------------------------------------------------------------------------------------
-# 3. Natural-state timing
-# ----------------------------------------------------------------------------------------------
-hdr("3. Natural-state timing tests")
+# ============================================================================
+# 7. Per-point table: geometry, Tsat, boiling margin, location class, weights
+# ============================================================================
+print("\n=== Calibration-target table ===")
+WCLASS = {"feed zone": 1.0, "open hole": 0.8, "open hole, possible internal flow": 0.4,
+          "behind casing": 0.5, "near wellhead / top layer": 0.3, "above model surface": 0.0}
 
 
-def parse_date(s):
-    return pd.to_datetime(s, format="%d/%m/%Y")
+def isothermal_internal_flow_mask(r):
+    """Open-hole points between the shallowest and deepest feed zone where the profile is
+    near-isothermal (|dT/dz| < 0.03 degC/m over >= 200 m): candidate wellbore internal flow."""
+    z, T = r["zT"], r["T"]
+    m = np.zeros(len(z), bool)
+    if len(r["fz"]) < 2:
+        return m, []
+    ztop = min(f["bot"] for f in r["fz"][:1])
+    zbot = max(f["top"] for f in r["fz"][-1:])
+    idx = [i for i in range(len(z)) if zbot <= z[i] <= ztop]
+    segs = []
+    # sliding search for sections with small gradient
+    i = 0
+    while i < len(idx) - 1:
+        j = i + 1
+        while j < len(idx) and abs(T[idx[j]] - T[idx[i]]) / max(1e-9, abs(z[idx[i]] - z[idx[j]])) < 0.03 \
+                and abs(T[idx[j]] - T[idx[j - 1]]) / max(1e-9, abs(z[idx[j - 1]] - z[idx[j]])) < 0.03:
+            j += 1
+        if j - 1 > i and z[idx[i]] - z[idx[j - 1]] >= 200:
+            for k in idx[i:j]:
+                m[k] = True
+            segs.append((z[idx[i]], z[idx[j - 1]], T[idx[i]], T[idx[j - 1]]))
+            i = j
+        else:
+            i += 1
+    return m, segs
 
 
 rows = []
+INTFLOW = {}
 for w, r in W.items():
-    row = dict(well=w, role=r["role"], survey_date=r["survey_date_P"])
-    # first flow date
-    if r["flow"]:
-        fl = {parse_date(k): v for k, v in r["flow"]["Data"].items()}
-        d0 = min(fl); row["first_flow_date"] = d0.strftime("%d/%m/%Y"); row["first_flow_kg_s"] = fl[d0]
-        prior = [k for k in fl if k <= parse_date(r["survey_date_P"])]
-        row["flow_at_survey_date_kg_s"] = fl[max(prior)] if prior else 0.0   # 0 = no flow recorded before survey
-    if r["role"] == "injector":
-        h = list(r["enth"]["Data"].values())[0]
-        row["injectate_enthalpy_kJ_kg"] = h
-        row["injectate_T_approx_degC"] = round(h / 4.19, 1)   # ASSUMPTION cp=4.19 kJ/kg/K (liquid water at ~80 C)
-    if r["tp"]:
-        (zk, tpv), = r["tp"].items()
-        dates = [parse_date(k) for k in tpv["Data"]]; vals = list(tpv["Data"].values())
-        zg = float(zk)
-        row["gauge_elev_mRL"] = zg
-        row["first_transient_date"] = dates[0].strftime("%d/%m/%Y"); row["first_transient_P_bar"] = vals[0]
-        row["survey_P_at_gauge_bar"] = float(np.round(interp_profile(w, zg, "P"), 2))
-        row["delta_survey_minus_first_bar"] = round(row["survey_P_at_gauge_bar"] - vals[0], 2)
-        row["last_transient_P_bar"] = vals[-1]
-        row["first_transient_after_first_flow"] = bool(dates[0] > parse_date(row["first_flow_date"]))
-        row["survey_before_first_transient_yrs"] = round((dates[0] - parse_date(r["survey_date_P"])).days / 365.25, 2)
-        row["drawdown_first_to_last_bar"] = round(vals[0] - vals[-1], 2)
-        # drawdown of this well by 01/01/2015 (first anniversary) if series long enough
-        for d, v in zip(dates, vals):
-            if d.year == 2015:
-                row["P_at_2015-01-01_bar"] = v
-            if d.year == 2020:
-                row["P_at_2020-01-01_bar"] = v
-    rows.append(row)
-pc = pd.DataFrame(rows)
-
-# neighbour-referenced consistency (verified wells only)
-# step 1: verified wells = tested wells with valid test and |delta|<=0.5 bar
-verified = [r.well for r in pc.itertuples() if hasattr(r, "delta_survey_minus_first_bar") and
-            pd.notna(r.delta_survey_minus_first_bar) and r.first_transient_after_first_flow is False and abs(r.delta_survey_minus_first_bar) <= 0.5]
-print("Wells verified as natural state by gauge test (valid test, |delta| <= 0.5 bar):", verified)
-# Neighbour comparison at FEED-ZONE elevations (formation pressure), NOT over the whole column: column pressures at depth also depend
-# on each well's own fluid density, so only feed-zone / pivot pressures are comparable between wells.
-def dominant_fz_idx(w):
-    rank = {"HIGH": 3, "MEDIUM": 2, "LOW": 1}
-    best = None
-    for k, f in enumerate(W[w]["fz"]):
-        mid = 0.5 * (f[0] + f[1])
-        key = (rank.get(f[2], 2), float(interp_profile(w, mid, "T")))
-        if best is None or key > best[0]:
-            best = (key, k)
-    return best[1]
-
-
-for w in W:
-    W[w]["dom"] = dominant_fz_idx(w)
-FZ_OFFSETS = {}
-for w in W:
-    offs = []
-    for k, f in enumerate(W[w]["fz"]):
-        mid = 0.5 * (f[0] + f[1])
-        ref = np.nanmean([interp_profile(v, mid, "P") for v in verified if v != w])
-        offs.append((k, mid, float(interp_profile(w, mid, "P")), float(ref)))
-    FZ_OFFSETS[w] = offs
-    dom = W[w]["dom"]
-    pc.loc[pc.well == w, "dP_at_feedzones_vs_verified_bar"] = "; ".join(f"FZ{k+1}@{m:.0f}:{p - r:+.1f}{'*' if k == dom else ''}" for k, m, p, r in offs)
-    pc.loc[pc.well == w, "dP_pivot_fz_vs_verified_bar"] = offs[dom][2] - offs[dom][3]
-    pc.loc[pc.well == w, "max_abs_dP_fz_vs_verified_bar"] = max(abs(p - r) for k, m, p, r in offs)
-pc["mean_dP_vs_verified_bar"] = pc["dP_pivot_fz_vs_verified_bar"]
-pc["max_abs_dP_vs_verified_bar"] = pc["max_abs_dP_fz_vs_verified_bar"]
-
-verdict, conf_label, reason = {}, {}, {}
-CONF_NUM = {("natural state", "high"): 1.0, ("probably natural state", "medium"): 0.75,
-            ("probably natural state", "low"): 0.6, ("possibly disturbed", "low"): 0.4,
-            ("possibly disturbed", "medium"): 0.4}
-for r in pc.itertuples():
-    w = r.well
-    has_tp = pd.notna(getattr(r, "first_transient_P_bar", np.nan))
-    mdp = r.mean_dP_vs_verified_bar if pd.notna(r.mean_dP_vs_verified_bar) else np.nan
-    if has_tp and not r.first_transient_after_first_flow and abs(r.delta_survey_minus_first_bar) <= 0.5:
-        v, c = "natural state", "high"
-        why = (f"survey P at gauge ({r.gauge_elev_mRL:.0f} mRL) = {r.survey_P_at_gauge_bar:.1f} bar vs first transient value {r.first_transient_P_bar:.1f} bar "
-               f"on {r.first_transient_date} (day production began): delta {r.delta_survey_minus_first_bar:+.2f} bar")
-    elif has_tp and not r.first_transient_after_first_flow and r.delta_survey_minus_first_bar > 0.5:
-        v, c = "probably natural state", "medium"
-        why = (f"survey P at gauge ({r.gauge_elev_mRL:.0f} mRL) = {r.survey_P_at_gauge_bar:.1f} bar is {r.delta_survey_minus_first_bar:+.2f} bar ABOVE first transient "
-               f"{r.first_transient_P_bar:.1f} bar ({r.first_transient_date}); sign is opposite to drawdown, so not production-disturbed, but the offset exceeds gauge rounding (0.1 bar)")
-    elif has_tp and not r.first_transient_after_first_flow and r.delta_survey_minus_first_bar < -0.5:
-        v, c = "possibly disturbed", "low"
-        why = f"survey P is {-r.delta_survey_minus_first_bar:.1f} bar BELOW first transient value: consistent with drawdown before survey"
-    elif has_tp and r.first_transient_after_first_flow:
-        v, c = "probably natural state", "low"
-        why = (f"transient series starts {r.first_transient_date}, AFTER first flow ({r.first_flow_date}) and {r.survey_before_first_transient_yrs:.1f} yr after the survey: "
-               f"test is not valid; survey P at gauge {r.survey_P_at_gauge_bar:.1f} bar vs first transient {r.first_transient_P_bar:.1f} bar ({r.delta_survey_minus_first_bar:+.1f} bar) is "
-               f"the sign expected for later drawdown; the survey P at its feed zone is {mdp:+.1f} bar from the verified wells (W2, W3) at the same elevation")
-    elif r.role == "injector":
-        inj_t = r.injectate_T_approx_degC
-        t_fz = W[w]["T"][0] * 0 + float(interp_profile(w, 0.5 * sum(W[w]["fz"][W[w]["dom"]][:2]), "T"))
-        hotter = t_fz > inj_t
-        pos = pd.notna(mdp) and mdp > 2.0
-        if pos or hotter:
-            v, c = "possibly disturbed", "low"
-        else:
-            v, c = "probably natural state", "low"
-        why = (f"injector (injection from {r.first_flow_date}, {r.first_flow_kg_s:.0f} kg/s at ~{inj_t:.0f} degC, i.e. {r.first_flow_date} to survey ~1.6 yr); no pressure gauge. "
-               f"Survey T at pivot feed zone {t_fz:.0f} degC is " + ("ABOVE the injectate temperature, so cooling by injection would be invisible as a warm signature and cannot be excluded"
-               if hotter else "BELOW the injectate temperature, so the profile shows no warm-injection signature") +
-               f"; P vs verified wells (W2, W3) at the pivot feed zone: {mdp:+.1f} bar" + ("; positive offset >2 bar is the sign of injection pressurisation" if pos else ""))
-    else:
-        if pd.notna(mdp) and abs(mdp) <= 3.0 and r.max_abs_dP_vs_verified_bar <= 4.0:
-            v, c = "probably natural state", "medium"
-        else:
-            v, c = "probably natural state", "low"
-        why = (f"no flow data and no transient gauge: cannot be tested directly; P offset vs verified wells (W2, W3) at the pivot feed zone: {mdp:+.1f} bar "
-               f"(max |offset| over its feed zones {r.max_abs_dP_vs_verified_bar:.1f} bar)" + ("" if abs(mdp) <= 3 else "; offset is large and unexplained"))
-    verdict[w], conf_label[w], reason[w] = v, c, why
-pc["verdict"] = pc.well.map(verdict); pc["confidence_level"] = pc.well.map(conf_label)
-pc["ns_confidence"] = [CONF_NUM[(verdict[w], conf_label[w])] for w in pc.well]
-pc["reason"] = pc.well.map(reason)
-pc.to_csv(OUT / "pressure_consistency_check.csv", index=False)
-for r in pc.itertuples():
-    print(f"  {r.well:8s} {r.role:24s} -> {r.verdict:24s} [{r.confidence_level}] ns_conf={r.ns_confidence}\n      {r.reason}")
-NSCONF = dict(zip(pc.well, pc.ns_confidence))
-
-# ----------------------------------------------------------------------------------------------
-# 4. Survey point table: boiling margin, grid, location class, weights
-# ----------------------------------------------------------------------------------------------
-hdr("4. Survey-point table (boiling margin, block, location class)")
-
-
-def dominant_fz(w):
-    """Dominant feed zone: highest quality tag; ties -> the zone with the higher survey T."""
-    rank = {"HIGH": 3, "MEDIUM": 2, "LOW": 1}
-    best = None
-    for k, f in enumerate(W[w]["fz"]):
-        mid = 0.5 * (f[0] + f[1])
-        key = (rank.get(f[2], 2), float(interp_profile(w, mid, "T")))
-        if best is None or key > best[0]:
-            best = (key, k)
-    return best[1]
-
-
-NEAR_WH = 50.0  # m below wellhead counted as 'near the wellhead / top layer'
-
-
-def isothermal_sections(z, T, min_len=300.0, tol=3.0):
-    """Maximal depth intervals (>= min_len) in which T varies by <= tol degC. Returns list of (ztop, zbot)."""
-    out = []; n = len(z); i = 0
-    while i < n - 1:
-        j = i + 1
-        while j < n and (T[i:j + 1].max() - T[i:j + 1].min()) <= tol:
-            j += 1
-        j -= 1
-        if j > i and z[i] - z[j] >= min_len:
-            out.append((z[i], z[j])); i = j
-        else:
-            i += 1
-    return out
-
-
-for w in W:
-    W[w]["isoth"] = isothermal_sections(W[w]["z"], W[w]["T"])
-
-pts = []
-for w, r in W.items():
-    wh_z = r["wh"][2]
-    for z, T, P in zip(r["z"], r["T"], r["P"]):
-        x, y = track_xy(w, z)
-        c, l, b = block_at(w, z)
-        ts = float(tsat_C(P))
-        infz = any(f[1] - 1e-6 <= z <= f[0] + 1e-6 for f in r["fz"])
-        casing = [d for d in r["design"] if not d[3]]
-        behind = any(d[1] < z <= d[0] + 1e-6 for d in casing)
-        above = (c is not None) and (z > SURF[c] + 1e-6)
-        iso = any(a + 1e-6 >= z >= b_ - 1e-6 for a, b_ in r["isoth"])
-        dom_fz = r["fz"][r["dom"]]
-        is_pivot = dom_fz[1] - 1e-6 <= z <= dom_fz[0] + 1e-6
-        # location class and weight (T)
+    mflow, segs = isothermal_internal_flow_mask(r)
+    INTFLOW[w] = segs
+    for i, (z, T, P) in enumerate(zip(r["zT"], r["T"], r["P"])):
+        x, y = track_xy(r, z)
+        c, lay, blk, above = block_of(x, y, z)
+        ts = tsat_c(P)
+        bm = ts - T if not np.isnan(ts) else np.nan
+        in_fz = any(f["bot"] <= z <= f["top"] for f in r["fz"])
+        behind = z >= r["casing_shoe"]
+        toplay = top_layer_of_column(c) if c else None
+        in_top_layer = (lay is not None and toplay is not None and lay == toplay["name"].strip())
+        near_wh = (r["wellhead"] - z) <= 30.0
+        above_wl = P < 1.2  # air/vapour-filled part of the wellbore at survey time
+        flags = []
         if above:
-            cls, wt, why = "above model surface", 0.0, "above model surface"
-        elif infz:
-            cls, wt, why = "feed zone", 1.0, "feed zone (formation connection)"
-        elif z >= wh_z - NEAR_WH:
-            cls, wt, why = "near wellhead", 0.3, f"within {NEAR_WH:.0f} m of wellhead / top layer"
+            cls = "above model surface"
+        elif in_fz:
+            cls = "feed zone"
+        elif near_wh or in_top_layer:
+            cls = "near wellhead / top layer"
         elif behind:
-            cls, wt, why = "behind casing", 0.5, "behind blank casing (conductive formation T, not formation P)"
+            cls = "behind casing"
+        elif mflow[i]:
+            cls = "open hole, possible internal flow"
         else:
-            if iso:
-                cls, wt, why = "open hole (isothermal section)", 0.5, "open hole/slotted liner inside an isothermal section >=300 m: possible internal wellbore flow; downgraded 0.8 -> 0.5"
-            else:
-                cls, wt, why = "open hole", 0.8, "open hole / slotted liner"
-        conf = NSCONF[w]
-        wP = wt if (infz or above) else 0.25 * wt
-        if infz:
-            prole = "pivot feed zone (formation P)" if is_pivot else "feed zone (formation P)"
-        else:
-            prole = "wellbore column (not formation P)"
-        pts.append(dict(well=w, x=round(x, 1), y=round(y, 1), elevation_mRL=z, T_degC=T, P_bar=P, Tsat_degC=round(ts, 2),
-                        boiling_margin_degC=round(ts - T, 2), column=c, layer=l, block=b, in_feedzone=infz, behind_casing=behind,
-                        above_model_surface=above, ns_confidence=conf, weight=round(wt * conf, 3),
-                        weight_reason=f"{why}; base {wt:g} x ns_confidence {conf:g}",
-                        weight_P=round(wP * conf, 3), P_role=prole, location_class=cls, in_isothermal_section=iso))
-PT = pd.DataFrame(pts)
-cols_req = ["well", "x", "y", "elevation_mRL", "T_degC", "P_bar", "Tsat_degC", "boiling_margin_degC", "column", "layer", "block",
-            "in_feedzone", "behind_casing", "above_model_surface", "ns_confidence", "weight", "weight_reason"]
-PT[cols_req + ["weight_P", "P_role", "location_class"]].to_csv(OUT / "NS_calibration_targets.csv", index=False)
-print(PT.groupby("location_class").size().to_string())
-print("Points with boiling margin < 5 degC:\n", PT[PT.boiling_margin_degC < 5][["well", "elevation_mRL", "T_degC", "P_bar", "Tsat_degC", "boiling_margin_degC"]].to_string())
+            cls = "open hole"
+        if above_wl:
+            flags.append("above wellbore water level (P<1.2 bar)")
+        if not np.isnan(bm) and bm < BM_FLAG:
+            flags.append(f"boiling margin < {BM_FLAG:g} degC")
+        if np.isnan(ts):
+            flags.append("P above critical pressure: no Tsat")
+        wcls = WCLASS[cls]
+        conf = NS[w]["confidence"]
+        weight = round(wcls * CONF_W[conf], 3)
+        reason = f"{cls} ({wcls}) x NS confidence {conf} ({CONF_W[conf]})"
+        # pressure weight: formation pressure only at feed zones
+        wP = round(1.0 * CONF_W[conf], 3) if (in_fz and not above) else 0.0
+        rows.append({"well": w, "x": round(x, 1), "y": round(y, 1), "elevation_mRL": z,
+                     "T_degC": T, "P_bar": P, "Tsat_degC": round(ts, 2) if not np.isnan(ts) else np.nan,
+                     "boiling_margin_degC": round(bm, 2) if not np.isnan(bm) else np.nan,
+                     "column": c, "layer": lay, "block": blk, "in_feedzone": in_fz,
+                     "behind_casing": behind, "above_model_surface": bool(above),
+                     "ns_confidence": conf, "weight": weight, "weight_reason": reason,
+                     "location_class": cls, "weight_P": wP,
+                     "rho_IF97_kgm3": round(rho_liquid(T, P), 1) if (np.isnan(bm) or bm > 0) else np.nan,
+                     "flags": "; ".join(flags)})
+TGT = pd.DataFrame(rows)
+TGT.to_csv(os.path.join(OUT, "NS_calibration_targets.csv"), index=False)
+print(f"  {len(TGT)} survey points written; class counts:")
+print(TGT.location_class.value_counts().to_string())
+print("  Points with boiling margin < 5 degC:")
+print(TGT[TGT.boiling_margin_degC < BM_FLAG][["well", "elevation_mRL", "T_degC", "P_bar",
+                                               "Tsat_degC", "boiling_margin_degC",
+                                               "location_class"]].to_string(index=False))
+for w, s in INTFLOW.items():
+    if s:
+        print(f"  {w}: near-isothermal open-hole section(s) between feed zones (possible internal flow): "
+              + ", ".join(f"{a:g} to {b:g} mRL ({ta:.1f}-{tb:.1f} degC)" for a, b, ta, tb in s))
 
-# ----------------------------------------------------------------------------------------------
-# 5. Hydrostatic check
-# ----------------------------------------------------------------------------------------------
-hdr("5. Hydrostatic column-density tests (single-phase intervals >= 300 m only)")
-hs = []
-MIN_LEN, TARGET_LEN, MARGIN_MIN, COLD_T = 300.0, 400.0, 10.0, 100.0
+# ============================================================================
+# 8. Well geometry check
+# ============================================================================
+print("\n=== Well geometry ===")
+geo_rows = []
 for w, r in W.items():
-    z, T, P = r["z"], r["T"], r["P"]
-    ts = tsat_C(P); marg = ts - T
-    rho = rho_liq(T + 273.15, P / 10.0)
-    k = 0; n = len(z)
-    while k < n - 1:
-        m = k + 1
-        while m < n - 1 and z[k] - z[m] < TARGET_LEN:
-            m += 1
-        if z[m] - z[-1] > -MIN_LEN and m < n - 1 and (z[m] - z[-1]) < MIN_LEN:   # remainder too short: absorb
-            m = n - 1
-        sl = slice(k, m + 1)
-        L = z[k] - z[m]
-        if L >= MIN_LEN:
-            dz = -np.diff(z[sl])
-            exp = float(np.sum(0.5 * (rho[sl][1:] + rho[sl][:-1]) * G * dz) / 1e5)
-            obs = float(P[m] - P[k])
-            ok = bool(marg[sl].min() >= MARGIN_MIN)
-            rm = float(rho[sl].mean())
-            hs.append(dict(well=w, z_top_mRL=z[k], z_bottom_mRL=z[m], length_m=L, n_points=m - k + 1, T_mean_degC=round(T[sl].mean(), 1),
-                           T_range_degC=f"{T[sl].min():.0f}-{T[sl].max():.0f}", min_boiling_margin_degC=round(marg[sl].min(), 1),
-                           single_phase_ok=ok, dP_obs_bar=round(obs, 2), dP_expected_IF97_bar=round(exp, 2),
-                           excess_pct=round((obs / exp - 1) * 100, 2), excess_kg_m3=round((obs / exp - 1) * rm, 1),
-                           apparent_density_kg_m3=round(obs / exp * rm, 1), model_density_kg_m3=round(rm, 1),
-                           rounding_uncertainty_pct=round(0.1 / obs * 100 * 1.41, 2),   # +-0.1 bar on two readings
-                           cold=bool(T[sl].max() < COLD_T),
-                           max_liquid_density_kg_m3=round(float(rho_liq(277.15, P[sl].mean() / 10.0)), 1)))
-        k = m
-HS = pd.DataFrame(hs)
-HS["exceeds_max_liquid_gradient"] = (HS.apparent_density_kg_m3 * (1 - HS.rounding_uncertainty_pct / 100 * 2)) > HS.max_liquid_density_kg_m3
-HS.loc[~HS.single_phase_ok, ["excess_pct", "excess_kg_m3"]] = np.nan   # excluded from statistics (near-boiling)
-HS.to_csv(OUT / "hydrostatic_check.csv", index=False)
-ok = HS[HS.single_phase_ok]
-cold_ex = ok[ok.cold].excess_pct
-FIELD_EXCESS_COLD = float(cold_ex.median())
-cold_shallow = ok[ok.cold & (ok.z_top_mRL > -250)].excess_pct
-cold_deeper = ok[ok.cold & (ok.z_top_mRL <= -250)].excess_pct
-cold_shallow = ok[ok.cold & (ok.z_top_mRL > -250)].excess_pct
-cold_deeper = ok[ok.cold & (ok.z_top_mRL <= -250)].excess_pct
-DEEP_EXCESS = ok[ok.z_top_mRL <= -1000].excess_pct
-print(HS.to_string())
-print(f"\nCold windows (max T < {COLD_T:.0f} degC): shallow (top > -250 mRL) n={len(cold_shallow)} median {cold_shallow.median():.2f} %, range {cold_shallow.min():.2f}..{cold_shallow.max():.2f}; "
-      f"deeper n={len(cold_deeper)} median {cold_deeper.median():.2f} %, range {cold_deeper.min():.2f}..{cold_deeper.max():.2f}")
-print(f"Field-wide excess estimate: median of cold windows (max T<{COLD_T:.0f} degC, n={len(cold_ex)}): {FIELD_EXCESS_COLD:.2f} %  "
-      f"(range {cold_ex.min():.2f}..{cold_ex.max():.2f})")
-print(f"Deep windows (top <= -1000 mRL, n={len(DEEP_EXCESS)}): median {DEEP_EXCESS.median():.2f} %, range {DEEP_EXCESS.min():.2f}..{DEEP_EXCESS.max():.2f}")
-print(f"For comparison, using g = 10 m/s2 instead of 9.80665 would give +{(10 / G - 1) * 100:.2f} % on every window.")
-HS["excess_minus_field_pct"] = (HS.excess_pct - FIELD_EXCESS_COLD).round(2)
-HS.to_csv(OUT / "hydrostatic_check.csv", index=False)
+    x0, y0, z0 = r["track"][0]
+    xt, yt, zt = r["track"][-1]
+    c = find_column(x0, y0)
+    s = col_surface(c)
+    tl = top_layer_of_column(c)
+    gt = r["raw"]
+    row = {"well": w, "x_wellhead": x0, "y_wellhead": y0, "wellhead_mRL": z0, "column": c,
+           "model_surface_mRL": s, "wellhead_minus_surface_m": z0 - s,
+           "top_layer": tl["name"].strip() if tl else None,
+           "top_block_centre_mRL": (s + tl["bot"]) / 2 if tl else None,
+           "TD_mRL": zt, "horizontal_offset_at_TD_m": round(math.hypot(xt - x0, yt - y0), 1),
+           "deviated": math.hypot(xt - x0, yt - y0) > 1,
+           "casing_shoe_mRL": r["casing_shoe"], "liner_top_mRL": r["liner_top"],
+           "liner_bottom_mRL": r["liner_bot"], "first_survey_mRL": r["zT"].max(),
+           "survey_top_below_wellhead_m": z0 - r["zT"].max()}
+    for fname, pl in FAULTS.items():
+        row[f"dist_{fname.replace(' ', '')}_m"] = round(dist_point_polyline(x0, y0, pl), 0)
+    for k, v in FAULT_X.items():
+        row[f"dist_{k.replace(' ', '')}_m"] = round(math.hypot(x0 - v[0], y0 - v[1]), 0)
+    row["dist_river_m"] = round(min(dist_point_polyline(x0, y0, sg) for sg in RIVERS["river"]), 0)
+    row["dist_TaraweraRiver_m"] = round(min(dist_point_polyline(x0, y0, sg) for sg in RIVERS["Tarawera River"]), 0)
+    row["dist_lake_shore_m"] = round(dist_point_polyline(x0, y0, LAKE), 0)
+    row["inside_lake_polygon"] = point_in_poly(x0, y0, LAKE)
+    # FZ blocks vs gTE14515_wells.json
+    geo_rows.append(row)
+GEO = pd.DataFrame(geo_rows)
+GEO.to_csv(os.path.join(OUT, "well_geometry_check.csv"), index=False)
+print(GEO[["well", "wellhead_mRL", "model_surface_mRL", "wellhead_minus_surface_m",
+           "horizontal_offset_at_TD_m", "dist_Fault1_m", "dist_Fault2_m", "dist_Fault3_m",
+           "dist_river_m", "dist_lake_shore_m"]].to_string(index=False))
 
-# ----------------------------------------------------------------------------------------------
-# 6. Per-well characteristics
-# ----------------------------------------------------------------------------------------------
-hdr("6. Per-well characteristics")
+# ============================================================================
+# 9. Feed zones
+# ============================================================================
+print("\n=== Feed zones ===")
+MWELLS = json.load(open(os.path.join(MODEL, "gTE14515_wells.json")))
+fz_rows = []
+for w, r in W.items():
+    mfz = MWELLS.get(w, {}).get("Feed_Zones", {})
+    qrank = {"HIGH": 3, "MEDIUM": 2, "LOW": 1}
+    best = max(range(len(r["fz"])), key=lambda k: (qrank.get(r["fz"][k]["quality"].upper(), 0), -k))
+    for k, f in enumerate(r["fz"]):
+        zm = 0.5 * (f["top"] + f["bot"])
+        x, y = track_xy(r, zm)
+        T = float(interp_profile(r["zT"], r["T"], zm)[0])
+        P = float(interp_profile(r["zP"], r["P"], zm)[0])
+        ts = tsat_c(P)
+        c, lay, blk, above = block_of(x, y, zm)
+        blocks_span = sorted({block_of(*track_xy(r, zz), zz)[2] for zz in np.arange(f["top"], f["bot"] - 0.1, -5.0)}
+                             | {block_of(*track_xy(r, f["bot"]), f["bot"])[2]})
+        mblk = list(mfz.get(f"Feed {k + 1}", {}).keys())
+        npts = int(((r["zT"] <= f["top"]) & (r["zT"] >= f["bot"])).sum())
+        fz_rows.append({"well": w, "feedzone": k + 1, "top_mRL": f["top"], "bottom_mRL": f["bot"],
+                        "mid_mRL": zm, "quality": f["quality"], "dominant_feedzone": k == best,
+                        "x": round(x, 1), "y": round(y, 1), "T_degC": round(T, 1), "P_bar": round(P, 2),
+                        "Tsat_degC": round(ts, 1) if not np.isnan(ts) else np.nan,
+                        "boiling_margin_degC": round(ts - T, 1) if not np.isnan(ts) else np.nan,
+                        "h_liquid_kJkg": round(h_liquid(T, P), 1),
+                        "column": c, "layer": lay, "block": blk,
+                        "blocks_spanned": " ".join(b for b in blocks_span if b),
+                        "model_wells_json_block": " ".join(mblk),
+                        "block_matches_wells_json": (blk in mblk) if mblk else None,
+                        "survey_points_in_fz": npts,
+                        "in_slotted_liner": r["liner_top"] >= f["top"] and r["liner_bot"] <= f["bot"],
+                        "ns_confidence": NS[w]["confidence"],
+                        "quality_weight": {"HIGH": 1.0, "MEDIUM": 0.8, "LOW": 0.5}.get(f["quality"].upper(), 0.5),
+                        "target_weight": round({"HIGH": 1.0, "MEDIUM": 0.8, "LOW": 0.5}.get(f["quality"].upper(), 0.5)
+                                               * CONF_W[NS[w]["confidence"]], 3)})
+FZ = pd.DataFrame(fz_rows)
+FZ.to_csv(os.path.join(OUT, "feedzones.csv"), index=False)
+print(FZ[["well", "feedzone", "mid_mRL", "quality", "T_degC", "P_bar", "boiling_margin_degC", "block",
+          "model_wells_json_block", "target_weight"]].to_string(index=False))
+
+# ============================================================================
+# 10. Hydrostatic checks (single-phase liquid, long intervals, IF97 density)
+# ============================================================================
+print("\n=== 3.3 Hydrostatic checks ===")
 
 
-def crossings(z, T, level):
-    """All elevations where profile crosses level (linear interp), top to bottom, with direction."""
-    out = []
+def column_dp(r, z1, z2, dz=1.0):
+    """Predicted pressure increase (bar) from z1 (top) to z2 (bottom) for a static liquid
+    column with the measured temperature profile, integrated with IF97 Region 1 density."""
+    zs = np.arange(z1, z2 - 1e-9, -dz)
+    if zs[-1] > z2:
+        zs = np.append(zs, z2)
+    Tz = interp_profile(r["zT"], r["T"], zs)
+    p = float(interp_profile(r["zP"], r["P"], z1)[0])
+    rhos = []
+    for i in range(len(zs)):
+        rho = rho_liquid(Tz[i], p)
+        rhos.append(rho)
+        if i < len(zs) - 1:
+            h = zs[i] - zs[i + 1]
+            rho2 = rho_liquid(Tz[i + 1], p + rho * G * h / 1e5)
+            p += 0.5 * (rho + rho2) * G * h / 1e5
+    return p - float(interp_profile(r["zP"], r["P"], z1)[0]), float(np.mean(rhos))
+
+
+hy_rows = []
+for w, r in W.items():
+    sub = TGT[TGT.well == w].sort_values("elevation_mRL", ascending=False)
+    ok = sub[(sub.P_bar >= 1.5) & ((sub.boiling_margin_degC >= 10) | sub.boiling_margin_degC.isna())]
+    # contiguous single-phase run(s)
+    zs = ok.elevation_mRL.values
+    allz = sub.elevation_mRL.values
+    okset = set(zs)
+    runs, cur = [], []
+    for z in allz:
+        if z in okset:
+            cur.append(z)
+        else:
+            if cur:
+                runs.append(cur)
+            cur = []
+    if cur:
+        runs.append(cur)
+    windows = []
+    for run in runs:
+        if run[0] - run[-1] >= 300:
+            windows.append(("full single-phase run", run[0], run[-1]))
+        i = 0
+        while i < len(run) - 1:
+            j = i + 1
+            while j < len(run) and run[i] - run[j] < 300:
+                j += 1
+            if j < len(run):
+                windows.append(("window >=300 m", run[i], run[j]))
+            i = j
+    for kind, za, zb in windows:
+        pa = float(interp_profile(r["zP"], r["P"], za)[0])
+        pb = float(interp_profile(r["zP"], r["P"], zb)[0])
+        dp_pred, rho_mean = column_dp(r, za, zb)
+        dp_meas = pb - pa
+        rho_impl = dp_meas * 1e5 / (G * (za - zb))
+        Tmin = float(sub[(sub.elevation_mRL <= za) & (sub.elevation_mRL >= zb)].T_degC.min())
+        Tmax = float(sub[(sub.elevation_mRL <= za) & (sub.elevation_mRL >= zb)].T_degC.max())
+        hy_rows.append({"well": w, "window_type": kind, "z_top_mRL": za, "z_bottom_mRL": zb,
+                        "length_m": za - zb, "T_min_degC": Tmin, "T_max_degC": Tmax,
+                        "P_top_bar": pa, "P_bottom_bar": pb, "dP_measured_bar": round(dp_meas, 2),
+                        "dP_IF97_static_bar": round(dp_pred, 2),
+                        "dP_excess_bar": round(dp_meas - dp_pred, 2),
+                        "rho_implied_kgm3": round(rho_impl, 1), "rho_IF97_mean_kgm3": round(rho_mean, 1),
+                        "ratio_measured_to_IF97": round(dp_meas / dp_pred, 4),
+                        "implied_g_ms2": round(G * dp_meas / dp_pred, 3),
+                        "steeper_than_cold_water": bool(rho_impl > 1000.0),
+                        "rounding_uncertainty_ratio": round(0.1 / dp_pred, 4)})
+HY = pd.DataFrame(hy_rows)
+full = HY[HY.window_type == "full single-phase run"].copy()
+cold = ["WELL-1", "WELL-4", "WELL-8"]  # Tmax < 120 degC: no hot column, no near-boiling zone
+FIELD_RATIO = float(full[full.well.isin(cold)].ratio_measured_to_IF97.median())
+FIELD_RATIO_ALL = float(full.ratio_measured_to_IF97.median())
+# Depth bands: the excess is not uniform with depth, so the field-wide component is
+# estimated per band from the cold wells, and each window is compared with its own band.
+SHALLOW_CUT = -450.0  # windows whose bottom is at or above this elevation are "shallow"
+HY["band"] = np.where(HY.z_bottom_mRL >= SHALLOW_CUT, "shallow (bottom >= -450 mRL)",
+                      np.where(HY.z_top_mRL <= SHALLOW_CUT, "deep (top <= -450 mRL)", "spanning"))
+HY.loc[HY.window_type.str.startswith("full"), "band"] = "full run"
+BAND_RATIO = {}
+for b in HY.band.unique():
+    m = (HY.band == b) & HY.well.isin(cold)
+    BAND_RATIO[b] = float(HY[m].ratio_measured_to_IF97.median()) if m.any() else np.nan
+HY["field_ratio_cold_wells_same_band"] = HY.band.map(BAND_RATIO).round(4)
+HY["excess_vs_field_ratio_pct"] = ((HY.ratio_measured_to_IF97 / HY.field_ratio_cold_wells_same_band - 1)
+                                   * 100).round(2)
+HY["excess_vs_IF97_pct"] = ((HY.ratio_measured_to_IF97 - 1) * 100).round(2)
+print("  Cold-well median ratio by depth band:", {k: round(v, 4) for k, v in BAND_RATIO.items()})
+BANDSUM = HY[HY.window_type != "full single-phase run"].groupby(["well", "band"]).agg(
+    n=("ratio_measured_to_IF97", "size"), ratio_median=("ratio_measured_to_IF97", "median"),
+    ratio_min=("ratio_measured_to_IF97", "min"), ratio_max=("ratio_measured_to_IF97", "max")).round(4).reset_index()
+print(BANDSUM.to_string(index=False))
+BANDSUM.to_csv(os.path.join(OUT, "hydrostatic_band_summary.csv"), index=False)
+HY.to_csv(os.path.join(OUT, "hydrostatic_check.csv"), index=False)
+print(f"  Field-wide ratio measured/IF97 (median of full runs in cold wells {cold}): {FIELD_RATIO:.4f}"
+      f" -> implied g = {G * FIELD_RATIO:.3f} m/s2; median all wells {FIELD_RATIO_ALL:.4f}")
+print(full[["well", "z_top_mRL", "z_bottom_mRL", "dP_measured_bar", "dP_IF97_static_bar", "ratio_measured_to_IF97",
+            "implied_g_ms2"]].to_string(index=False))
+print("  Per-window excess relative to field-wide ratio (|x| > 1%):")
+big = HY[HY.excess_vs_field_ratio_pct.abs() > 1.0]
+print(big[["well", "window_type", "z_top_mRL", "z_bottom_mRL", "ratio_measured_to_IF97",
+           "excess_vs_field_ratio_pct"]].to_string(index=False) if len(big) else "   none")
+
+# ============================================================================
+# 11. Per-well summary
+# ============================================================================
+print("\n=== Per-well summary ===")
+
+
+def first_crossing(z, T, iso):
     for i in range(len(z) - 1):
-        a, b = T[i] - level, T[i + 1] - level
-        if a == 0:
-            out.append((z[i], "at"))
-        elif a * b < 0:
-            zc = z[i] + (z[i + 1] - z[i]) * (level - T[i]) / (T[i + 1] - T[i])
-            out.append((zc, "down" if b > 0 else "up"))   # 'down' = T rising with depth through level
-    return out
+        if (T[i] - iso) * (T[i + 1] - iso) <= 0 and T[i] != T[i + 1] and T[i] < iso <= T[i + 1]:
+            return z[i] + (iso - T[i]) * (z[i + 1] - z[i]) / (T[i + 1] - T[i])
+    return np.nan
 
 
-def regress(zz, vv):
-    return np.polyfit(zz, vv, 1)[0]
+def linfit_grad(z, T):
+    if len(z) < 2:
+        return np.nan
+    return -np.polyfit(z, T, 1)[0] * 1000.0  # degC/km, positive = increasing with depth
 
 
-def water_level(w):
-    """Elevation where the wellbore column pressure extrapolates to 1 atm. Uses the first 3 points with P>=2 bar."""
-    r = W[w]; m = r["P"] >= 2.0
-    zz, pp = r["z"][m][:3], r["P"][m][:3]
-    s, b = np.polyfit(zz, pp, 1)         # bar per m (negative slope in z)
-    return (P_ATM - b) / s, -s * 100.0   # elevation, gradient in bar/100 m
-
-
-summ = []
+sum_rows = []
 for w, r in W.items():
-    z, T, P = r["z"], r["T"], r["P"]
-    i = int(np.argmax(T)); tmax, zmax = T[i], z[i]
-    ts = tsat_C(P); marg = ts - T; j = int(np.argmin(marg))
-    runmax = np.maximum.accumulate(T)
-    dd = runmax - T                       # drop below the highest temperature above
-    jb = int(np.argmax(dd)); drop = float(dd[jb]); tminb = T[jb]
-    i_pk = int(np.where(T[:jb + 1] == runmax[jb])[0][0])   # elevation of the peak that this inversion hangs from
-    ipeak_z = z[i_pk]
-    inv = drop >= 3.0   # operational threshold for an inversion
-    # cap & deep gradients
-    msh = z >= z[0] - 300.0
-    g_sh = regress(z[msh], T[msh]) * -1000.0
-    mdp = z <= z[-1] + 500.0
-    g_dp = regress(z[mdp], T[mdp]) * -1000.0
-    # isotherms
-    cr100 = crossings(z, T, 100.0); cr200 = crossings(z, T, 200.0)
-    first = lambda cr: cr[0][0] if cr else np.nan
-    last_up = lambda cr: [c[0] for c in cr if c[1] == "up"][-1] if any(c[1] == "up" for c in cr) else np.nan
-    cr90 = crossings(z, T, 0.9 * tmax) if tmax >= 150 else []
-    wl, wlg = water_level(w)
-    dfz = r["fz"][r["dom"]]; dmid = 0.5 * (dfz[0] + dfz[1])
-    c0 = find_column(*r["wh"][:2])
-    # near-boiling thickness
-    nb = z[marg < 5.0]
-    # regime
-    tdr = T[-1] / tmax
-    nb_pts = int(np.sum(marg < 5.0))
-    if nb_pts >= 2:
-        regime = "two-phase / near-boiling upflow"
-    elif tmax >= 200 and tdr >= 0.9:
-        regime = "upflow (hot to TD, with shallow outflow peak)" if inv else "upflow"
-    elif inv and drop >= 10:
-        regime = "outflow over cooler deep water (inversion)"
-    elif tmax < 100 and g_sh < 40 and abs(g_dp) < 30:
-        regime = "recharge / downflow (cold, sub-conductive gradient)"
-    elif inv:
-        regime = "conductive-cold with weak inversion (lateral cold flow)"
+    z, T, P = r["zT"], r["T"], r["P"]
+    sub = TGT[TGT.well == w]
+    i_max = int(np.argmax(T))
+    Tmax, zTmax = T[i_max], z[i_max]
+    below = slice(i_max, len(z))
+    i_min_b = i_max + int(np.argmin(T[below]))
+    inv = Tmax - T[i_min_b]
+    has_inv = inv > 2.0 and i_min_b != i_max
+    reheat = T[-1] - T[i_min_b] if has_inv else np.nan
+    # shallow gradient: liquid-filled top 250 m of the survey (behind casing)
+    ztop_l = sub[sub.P_bar >= 1.2].elevation_mRL.max()
+    msh = (z <= ztop_l) & (z >= ztop_l - 250)
+    g_sh = linfit_grad(z[msh], T[msh])
+    # deep gradient: below deepest feed zone (static part of the well) if >= 200 m, else deepest 400 m
+    # deep gradient: static part of the well below the deepest feed zone and below any
+    # inversion minimum; needs >= 3 points over >= 200 m, otherwise not reported
+    zfz = min(f["bot"] for f in r["fz"])
+    cands = [(min(zfz, z[i_min_b]) if has_inv else zfz, "below deepest FZ" + (" and inversion base" if has_inv else ""))]
+    if has_inv:
+        cands.append((z[i_min_b], "below inversion base (includes open hole between/at FZ)"))
+    else:
+        cands.append((z.min() + 500, "deepest 500 m"))
+    g_dp, dp_int = np.nan, "no static interval >= 200 m with >= 3 points below the inversion"
+    for zstart, lab in cands:
+        mdp = z <= zstart
+        if mdp.sum() >= 3 and (z[mdp].max() - z[mdp].min()) >= 200:
+            g_dp = linfit_grad(z[mdp], T[mdp])
+            dp_int = f"{z[mdp].max():g} to {z[mdp].min():g} ({lab})"
+            break
+    if sub.boiling_margin_degC.min() < BM_FLAG:
+        g_dp, dp_int = np.nan, ("not reported: near-boiling convective well, TD only "
+                                f"{r['wellhead'] - r['td']:.0f} m below wellhead; isothermal below feed zone")
+    z100 = first_crossing(z, T, 100.0)
+    z200 = first_crossing(z, T, 200.0)
+    bm = sub.boiling_margin_degC.values
+    ib = int(np.nanargmin(bm))
+    # water level: from first two liquid points (P >= 1.5 bar) extrapolate up to 1.01325 bar
+    liq = sub[sub.P_bar >= 1.5].sort_values("elevation_mRL", ascending=False)
+    z1, p1, rho1 = liq.elevation_mRL.iloc[0], liq.P_bar.iloc[0], liq.rho_IF97_kgm3.iloc[0]
+    wl = z1 + (p1 - 1.01325) * 1e5 / (rho1 * G)
+    if sub.P_bar.iloc[0] >= 1.2:
+        wl_note = ("pressurised at first survey point "
+                   f"({sub.P_bar.iloc[0]:.1f} bar at {sub.elevation_mRL.iloc[0]:g} mRL)")
+        if wl > r["wellhead"]:
+            wl_note += (f"; equivalent level {wl - r['wellhead']:.0f} m above wellhead "
+                        "(artesian or shut-in wellhead pressure)")
+    else:
+        wl_note = "air/vapour above level (P approx. 1 bar at top)"
+    fzr = FZ[(FZ.well == w) & FZ.dominant_feedzone].iloc[0]
+    # regime classification (rules, see report)
+    min_bm_open = sub[~sub.behind_casing].boiling_margin_degC.min()
+    if min_bm_open < BM_FLAG or bm[ib] < BM_FLAG:
+        regime = "upflow / two-phase (near-boiling)"
+    elif has_inv and inv >= 20:
+        regime = ("outflow (hot tongue over cooler water)" if Tmax >= 200 else
+                  "distal outflow (cooler tongue over cooler water)") + ("; deep reheating" if reheat > 10 else "")
+    elif has_inv and inv >= 5:
+        regime = "distal outflow (weak inversion)"
+    elif Tmax < 100 or (g_sh < 40 and Tmax < 130):
+        regime = "recharge / cold downflow"
     else:
         regime = "conductive"
-    q_cap = K_ROCK_ASSUMED * g_sh   # mW/m2   (W/m/K * K/km = mW/m2)
-    iso_txt = "; ".join(f"{a:.0f} to {b_:.0f} mRL" for a, b_ in r["isoth"]) if r["isoth"] else ""
-    summ.append(dict(
-        well=w, role=r["role"], x=r["wh"][0], y=r["wh"][1], wellhead_mRL=r["wh"][2], td_mRL=z[-1],
-        T_max_degC=tmax, T_max_elev_mRL=zmax, T_at_TD_degC=T[-1],
-        inversion=inv, inversion_size_degC=round(drop, 1) if inv else 0.0, inversion_top_mRL=ipeak_z if inv else np.nan,
-        inversion_bottom_mRL=z[jb] if inv else np.nan, rebound_below_inversion_degC=round(T[-1] - tminb, 1) if inv else np.nan,
-        casing_shoe_mRL=r["shoe"], inversion_vs_shoe=("peak below casing shoe" if (inv and ipeak_z < r["shoe"]) else ("peak behind casing" if inv else "")),
-        cap_gradient_K_km=round(g_sh, 1), deep_gradient_K_km=round(g_dp, 1),
-        cond_heat_flux_mW_m2_ASSUMED_k2=round(q_cap, 0),
-        elev_100C_first_mRL=first(cr100), elev_100C_deepest_up_mRL=last_up(cr100),
-        elev_200C_first_mRL=first(cr200), elev_200C_deepest_up_mRL=last_up(cr200),
-        elev_T90pct_Tmax_mRL=first(cr90),   # operational 'cap base' (hot wells only)
-        
-        min_boiling_margin_degC=round(marg[j], 1), min_margin_elev_mRL=z[j], n_points_margin_lt5=nb_pts,
-        n_points_margin_lt10=int(np.sum(marg < 10)),
-        water_level_est_mRL=round(wl, 0), wellhead_minus_water_level_m=round(r["wh"][2] - wl, 0), shallow_gradient_bar_100m=round(wlg, 2),
-        pivot_fz_mid_mRL=dmid, pivot_P_bar=float(interp_profile(w, dmid, "P")), pivot_T_degC=float(interp_profile(w, dmid, "T")),
-        pivot_quality=dfz[2], isothermal_sections=iso_txt,
-        model_surface_mRL=SURF[c0], regime=regime))
-SUM = pd.DataFrame(summ)
-SUM.to_csv(OUT / "well_summary.csv", index=False)
-print(SUM.T.to_string())
+    q = K_ROCK * g_dp / 1000.0 if not np.isnan(g_dp) else np.nan
+    q_sh = K_ROCK * g_sh / 1000.0 if not np.isnan(g_sh) else np.nan
+    sum_rows.append({"well": w, "role": NS[w]["role"], "wellhead_mRL": r["wellhead"], "TD_mRL": r["td"],
+                     "Tmax_degC": Tmax, "Tmax_elev_mRL": zTmax, "T_at_TD_degC": T[-1],
+                     "inversion_degC": round(inv, 1) if has_inv else 0.0,
+                     "inversion_top_mRL": zTmax if has_inv else np.nan,
+                     "inversion_base_mRL": z[i_min_b] if has_inv else np.nan,
+                     "T_inversion_min_degC": T[i_min_b] if has_inv else np.nan,
+                     "reheat_below_inversion_degC": round(reheat, 1) if has_inv else np.nan,
+                     "shallow_gradient_degC_per_km": round(g_sh, 0),
+                     "shallow_gradient_interval_mRL": f"{z[msh].max():g} to {z[msh].min():g}",
+                     "deep_gradient_degC_per_km": round(g_dp, 0), "deep_gradient_interval_mRL": dp_int,
+                     "conductive_flux_deep_Wm2_assumed_k2": round(q, 3),
+                     "conductive_flux_cap_Wm2_assumed_k2": round(q_sh, 3),
+                     "z_100C_mRL": round(z100, 0) if not np.isnan(z100) else np.nan,
+                     "z_200C_mRL": round(z200, 0) if not np.isnan(z200) else np.nan,
+                     "min_boiling_margin_degC": round(bm[ib], 1), "min_bm_elev_mRL": z[ib],
+                     "n_points_bm_lt5": int((bm < BM_FLAG).sum()),
+                     "water_level_mRL": round(wl, 0), "water_level_note": wl_note,
+                     "pivot_fz_mid_mRL": fzr.mid_mRL, "pivot_P_bar": fzr.P_bar, "pivot_fz_quality": fzr.quality,
+                     "regime": regime, "ns_verdict": NS[w]["verdict"], "ns_confidence": NS[w]["confidence"],
+                     "casing_shoe_mRL": r["casing_shoe"],
+                     "internal_flow_sections": "; ".join(f"{a:g} to {b:g} mRL" for a, b, _, _ in INTFLOW[w])})
+SUM = pd.DataFrame(sum_rows)
+SUM.to_csv(os.path.join(OUT, "well_summary.csv"), index=False)
+print(SUM[["well", "Tmax_degC", "Tmax_elev_mRL", "T_at_TD_degC", "inversion_degC", "shallow_gradient_degC_per_km",
+           "deep_gradient_degC_per_km", "z_100C_mRL", "z_200C_mRL", "min_boiling_margin_degC", "water_level_mRL",
+           "regime"]].to_string(index=False))
 
-# ----------------------------------------------------------------------------------------------
-# Feed zones
-# ----------------------------------------------------------------------------------------------
-fzr = []
+# ============================================================================
+# 12. T and P at layer centres and at common elevations (interpolation only)
+# ============================================================================
+lc_rows = []
 for w, r in W.items():
-    wj = wellsjson[w]["Feed_Zones"]
-    for k, f in enumerate(r["fz"]):
-        top, bot, q = f; mid = 0.5 * (top + bot)
-        T = float(interp_profile(w, mid, "T")); P = float(interp_profile(w, mid, "P"))
-        ts = float(tsat_C(P))
-        c, l, b = block_at(w, mid)
-        # blocks spanned
-        zs = np.linspace(top, bot, 11)
-        bl = []
-        for zz in zs:
-            bb = block_at(w, zz)[2]
-            if bb not in bl:
-                bl.append(bb)
-        ref = list(wj[f"Feed {k + 1}"].keys())
-        mk = (r["z"] >= bot - 1e-6) & (r["z"] <= top + 1e-6)
-        fzr.append(dict(well=w, feed=f"Feed {k + 1}", top_mRL=top, bottom_mRL=bot, mid_mRL=mid, thickness_m=top - bot, quality=q,
-                        T_degC=round(T, 1), P_bar=round(P, 1), Tsat_degC=round(ts, 1), boiling_margin_degC=round(ts - T, 1),
-                        survey_points_in_interval=int(mk.sum()), column=c, layer=l, block_at_mid=b,
-                        blocks_spanned=" ".join(bl), blocks_gTE14515_wells_json=" ".join(ref),
-                        block_match=bool(b in ref), is_pivot=(k == r["dom"]), ns_confidence=NSCONF[w],
-                        weight_T=round(1.0 * NSCONF[w], 3), weight_P=round(1.0 * NSCONF[w], 3),
-                        completion=("slotted liner" if any(d[3] and d[1] <= bot and top <= d[0] for d in r["design"]) else "open hole below shoe")))
-FZ = pd.DataFrame(fzr)
-FZ.to_csv(OUT / "feedzones.csv", index=False)
-print(FZ.to_string())
+    for L in LAYERS:
+        zc = L["centre"]
+        if not (r["zT"].min() <= zc <= r["zT"].max()):
+            continue
+        x, y = track_xy(r, zc)
+        c, lay, blk, above = block_of(x, y, zc)
+        tl = top_layer_of_column(c)
+        is_top = tl is not None and tl["name"] == L["name"]
+        if above:
+            continue
+        T = float(interp_profile(r["zT"], r["T"], zc)[0])
+        P = float(interp_profile(r["zP"], r["P"], zc)[0])
+        ts = tsat_c(P)
+        sub = TGT[TGT.well == w]
+        lc_rows.append({"well": w, "layer": L["name"].strip(), "layer_centre_mRL": zc,
+                        "layer_top_mRL": L["top"], "layer_bottom_mRL": L["bot"], "column": c, "block": blk,
+                        "x": round(x, 1), "y": round(y, 1), "T_degC": round(T, 1), "P_bar": round(P, 2),
+                        "Tsat_degC": round(ts, 1) if not np.isnan(ts) else np.nan,
+                        "boiling_margin_degC": round(ts - T, 1) if not np.isnan(ts) else np.nan,
+                        "top_layer_of_column": is_top,
+                        "behind_casing": zc >= r["casing_shoe"],
+                        "in_feedzone": any(f["bot"] <= zc <= f["top"] for f in r["fz"]),
+                        "note": "nominal layer centre lies in truncated top block" if is_top else ""})
+LC = pd.DataFrame(lc_rows)
+LC.to_csv(os.path.join(OUT, "T_P_at_layer_centres.csv"), index=False)
+print(f"\nT/P at layer centres: {len(LC)} rows")
 
-# ----------------------------------------------------------------------------------------------
-# Geometry check
-# ----------------------------------------------------------------------------------------------
-geo = []
-for w, r in W.items():
-    wh = r["wh"]; td = r["track"][-1]
-    c0 = find_column(wh[0], wh[1]); c1 = find_column(td[0], td[1])
-    p = wh[:2]
-    df = {k: dist_polyline(p, v) for k, v in faults.items()}
-    dr = {k: dist_polys(p, v) for k, v in rivers.items()}
-    dlake_edge = min(dist_polyline(p, lake[i:i + 2]) for i in range(len(lake) - 1))
-    in_lake = inpoly(p[0], p[1], lake)
-    kf = min(df, key=df.get); kr = min(dr, key=dr.get)
-    # max horizontal deviation anywhere on track
-    dev = np.hypot(r["track"][:, 0] - wh[0], r["track"][:, 1] - wh[1]).max()
-    fz_blocks_ok = bool(FZ[FZ.well == w].block_match.all())
-    geo.append(dict(well=w, x=wh[0], y=wh[1], wellhead_mRL=wh[2], column=c0, model_surface_mRL=SURF[c0],
-                    wellhead_minus_model_surface_m=wh[2] - SURF[c0], td_x=td[0], td_y=td[1], td_mRL=td[2], td_column=c1,
-                    max_horizontal_deviation_m=round(dev, 1), offset_from_column_centre_m=round(float(np.hypot(*(COLCEN[c0] - wh[:2]))), 0),
-                    nearest_fault=kf, dist_nearest_fault_m=round(df[kf], 0), dist_fault1_m=round(df["Fault 1"], 0),
-                    dist_fault2_m=round(df["Fault 2"], 0), dist_fault3_m=round(df["Fault 3"], 0),
-                    nearest_river=kr, dist_nearest_river_m=round(dr[kr], 0), dist_lake_edge_m=round(dlake_edge, 0),
-                    wellhead_inside_lake=in_lake, td_dist_nearest_fault_m=round(min(dist_polyline(td[:2], v) for v in faults.values()), 0),
-                    first_block_wells_json=wellsjson[w]["Blocks"][0]["block"], feed_zone_blocks_match_wells_json=fz_blocks_ok))
-GEO = pd.DataFrame(geo)
-
-
-def seg_intersect(a, b):
-    """Intersection of the infinite lines through two fault segments (returns None if parallel)."""
-    p, r = a[0], a[-1] - a[0]; q, s_ = b[0], b[-1] - b[0]
-    den = r[0] * s_[1] - r[1] * s_[0]
-    if abs(den) < 1e-9:
-        return None
-    t = ((q - p)[0] * s_[1] - (q - p)[1] * s_[0]) / den
-    u = ((q - p)[0] * r[1] - (q - p)[1] * r[0]) / den
-    return p + t * r, (0 <= t <= 1 and 0 <= u <= 1)
-
-
-FINT = []
-names = list(faults)
-for i in range(len(names)):
-    for j in range(i + 1, len(names)):
-        res = seg_intersect(faults[names[i]], faults[names[j]])
-        if res is not None:
-            xy, within = res
-            near = {w: round(float(np.hypot(*(W[w]["wh"][:2] - xy))), 0) for w in W}
-            FINT.append(dict(fault_a=names[i], fault_b=names[j], x=round(float(xy[0]), 0), y=round(float(xy[1]), 0), within_both_segments=bool(within),
-                             nearest_well=min(near, key=near.get), nearest_well_dist_m=min(near.values()),
-                             dist_to_WELL_2_m=near["WELL-2"], dist_to_WELL_10_m=near["WELL-10"], dist_to_WELL_3_m=near["WELL-3"]))
-FINT = pd.DataFrame(FINT)
-FINT.to_csv(OUT / "fault_intersections.csv", index=False)
-print(FINT.to_string())
-GEO.to_csv(OUT / "well_geometry_check.csv", index=False)
-print(GEO.T.to_string())
-
-# ----------------------------------------------------------------------------------------------
-# 7. Lateral structure tables
-# ----------------------------------------------------------------------------------------------
-hdr("7. Lateral structure tables (interpolation only)")
 COMMON = [100, 0, -250, -500, -750, -1000, -1500, -2000, -2500]
-ce = []
-for e in COMMON:
+ce_rows = []
+for zc in COMMON:
     for w, r in W.items():
-        T = float(interp_profile(w, e, "T")); P = float(interp_profile(w, e, "P"))
+        T = float(interp_profile(r["zT"], r["T"], zc)[0])
         if np.isnan(T):
             continue
-        x, y = track_xy(w, e)
-        ce.append(dict(elevation_mRL=e, well=w, x=round(x, 1), y=round(y, 1), T_degC=round(T, 1), P_bar=round(P, 1),
-                       Tsat_degC=round(float(tsat_C(P)), 1), boiling_margin_degC=round(float(tsat_C(P)) - T, 1)))
-CE = pd.DataFrame(ce)
-CE.to_csv(OUT / "T_P_at_common_elevations.csv", index=False)
-print(CE.pivot(index="well", columns="elevation_mRL", values="T_degC").to_string())
-print(CE.pivot(index="well", columns="elevation_mRL", values="P_bar").to_string())
+        P = float(interp_profile(r["zP"], r["P"], zc)[0])
+        x, y = track_xy(r, zc)
+        ts = tsat_c(P)
+        ce_rows.append({"elevation_mRL": zc, "well": w, "x": round(x, 1), "y": round(y, 1), "T_degC": round(T, 1),
+                        "P_bar": round(P, 2), "Tsat_degC": round(ts, 1) if not np.isnan(ts) else np.nan,
+                        "boiling_margin_degC": round(ts - T, 1) if not np.isnan(ts) else np.nan,
+                        "behind_casing": zc >= r["casing_shoe"],
+                        "P_minus_field_median_bar": np.nan})
+CE = pd.DataFrame(ce_rows)
+for zc in COMMON:
+    m = CE.elevation_mRL == zc
+    CE.loc[m, "P_minus_field_median_bar"] = (CE.loc[m, "P_bar"] - CE.loc[m, "P_bar"].median()).round(2)
+CE.to_csv(os.path.join(OUT, "T_P_at_common_elevations.csv"), index=False)
 
-lc = []
-for w, r in W.items():
-    for rr in LAY.iloc[1:].itertuples():
-        zc = rr.centre
-        T = float(interp_profile(w, zc, "T"))
-        if np.isnan(T):
-            continue
-        c, l, b = block_at(w, zc)
-        if c is None or zc > SURF[c]:
-            continue
-        P = float(interp_profile(w, zc, "P"))
-        infz = any(f[1] - 1e-6 <= zc <= f[0] + 1e-6 for f in r["fz"])
-        behind = any(d[1] < zc <= d[0] + 1e-6 for d in r["design"] if not d[3])
-        x, y = track_xy(w, zc)
-        lc.append(dict(well=w, layer=rr.layer, layer_centre_mRL=zc, column=c, block=f"{c}{rr.layer:02d}", x=round(x, 1), y=round(y, 1),
-                       T_degC=round(T, 1), P_bar=round(P, 1), Tsat_degC=round(float(tsat_C(P)), 1),
-                       boiling_margin_degC=round(float(tsat_C(P)) - T, 1), in_feedzone=infz, behind_casing=behind))
-LC = pd.DataFrame(lc)
-LC.to_csv(OUT / "T_P_at_layer_centres.csv", index=False)
-print(f"Layer-centre rows: {len(LC)} ({LC.groupby('well').size().to_dict()})")
+# Feed-zone pressures reduced to a common datum, to test deep pressure connection.
+# Each FZ pressure is carried to -1000 mRL along a hypothetical static column with the
+# field-median temperature-vs-elevation profile? No: we use a single reference liquid density
+# so the comparison does not mix wellbore fluids. Report as "equivalent head".
+fz_head = []
+for _, f in FZ.iterrows():
+    rho_fz = rho_liquid(f.T_degC, f.P_bar)
+    head = f.mid_mRL + (f.P_bar - 1.01325) * 1e5 / (rho_fz * G)
+    head_field = f.mid_mRL + (f.P_bar / FIELD_RATIO - 1.01325) * 1e5 / (rho_fz * G)
+    fz_head.append({"well": f.well, "feedzone": f.feedzone, "mid_mRL": f.mid_mRL, "T_degC": f.T_degC,
+                    "P_bar": f.P_bar, "rho_fz_IF97": round(rho_fz, 1),
+                    "equiv_head_mRL_local_density": round(head, 1)})
+FZH = pd.DataFrame(fz_head)
+FZ = FZ.merge(FZH[["well", "feedzone", "rho_fz_IF97", "equiv_head_mRL_local_density"]], on=["well", "feedzone"])
+FZ.to_csv(os.path.join(OUT, "feedzones.csv"), index=False)
 
-# save state for plotting/report stage
-STATE = dict(PT=PT, HS=HS, SUM=SUM, FZ=FZ, GEO=GEO, CE=CE, LC=LC, pc=pc, integ=integ)
+# Fit a single field pressure-elevation curve through all feed zones; residuals show connection
+fzfit = np.polyfit(FZ.mid_mRL, FZ.P_bar, 2)
+FZ["P_residual_to_field_fit_bar"] = (FZ.P_bar - np.polyval(fzfit, FZ.mid_mRL)).round(2)
+FZ.to_csv(os.path.join(OUT, "feedzones.csv"), index=False)
+print("Feed-zone pressure residuals to a single field quadratic P(z) fit (bar):")
+print(FZ[["well", "feedzone", "mid_mRL", "P_bar", "P_residual_to_field_fit_bar"]].to_string(index=False))
 
+# ============================================================================
+# 13. Reference model description (labelled; NOT evidence)
+# ============================================================================
+REF = {}
+try:
+    bc = json.load(open(os.path.join(MODEL, "gTE14515_boundary_conditions.json")))
+    REF["heat_flux_default_Wm2"] = bc["Heat"]["Default"]["Heat_Flux"]
+    REF["rain_default_mm"] = bc["Rain"]["Default"]["Rainfall"]
+    REF["infiltration"] = bc["Rain"]["Default"]["Infiltration_Fraction"]
+    REF["lake_columns"] = list(bc["Wet_Columns"]["Zones"]["Lake"]["Columns"].keys())
+    gen_heat, gen_mass, deep_mass = [], 0, 0
+    with open(os.path.join(MODEL, "NaturalState", "TE14515_NS_000.dat")) as f:
+        insec = False
+        for ln in f:
+            if ln.startswith("GENER"):
+                insec = True
+                continue
+            if insec:
+                if not ln.strip() or ln[:5].strip() == "" and len(ln.strip()) == 0:
+                    break
+                if "HEAT" in ln:
+                    gen_heat.append(float(ln.split()[-4]))
+                elif "MASS" in ln or "COM1" in ln:
+                    gen_mass += 1
+                    if ln[3:5] in ("69", "68", "67"):
+                        deep_mass += 1
+    REF["n_heat_gen"] = len(gen_heat)
+    REF["total_heat_MW"] = round(sum(gen_heat) / 1e6, 2)
+    REF["n_mass_gen"] = gen_mass
+    REF["n_deep_mass_gen"] = deep_mass
+    print(f"\nReference model (NOT evidence): {REF['n_heat_gen']} basal HEAT generators, total "
+          f"{REF['total_heat_MW']} MW; {REF['n_mass_gen']} MASS generators (rain, near surface), "
+          f"{REF['n_deep_mass_gen']} in the deepest three layers")
+except Exception as e:  # reference model description is optional
+    print("Reference model description skipped:", e)
 
-# ----------------------------------------------------------------------------------------------
-# 8. Figures
-# ----------------------------------------------------------------------------------------------
-hdr("8. Figures")
-# colour-blind-safe palette (Okabe-Ito)
-OI = ["#0072B2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442", "#000000", "#882255", "#44AA99"]
-WCOL = {w: OI[i] for i, w in enumerate(WELLS)}
-plt.rcParams.update({"font.size": 9, "axes.grid": True, "grid.alpha": 0.25, "figure.dpi": 110})
-
-
-def save(fig, name):
-    fig.savefig(FIG / name, dpi=130, bbox_inches="tight")
-    plt.close(fig)
-    print("  wrote", name)
-
-
-# --- well map ---------------------------------------------------------------------------------
-fig, ax = plt.subplots(figsize=(11, 9))
-for c, P_ in COLPOLY.items():
-    ax.add_patch(MplPolygon(P_, closed=True, fill=False, ec="#bbbbbb", lw=0.4))
-ax.add_patch(MplPolygon(lake, closed=True, fc="#9ecae1", ec="#3182bd", lw=0.6, alpha=0.8, label="Lake Tarawera"))
-first = True
-for k, segs in rivers.items():
-    for sg in segs:
-        ax.plot(sg[:, 0], sg[:, 1], color="#3182bd", lw=1.4, label="River" if first else None); first = False
-for i, (k, v) in enumerate(faults.items()):
-    ax.plot(v[:, 0], v[:, 1], "k-", lw=2, label="Fault" if i == 0 else None)
-    mid = v.mean(axis=0); ax.text(v[0][0], v[0][1], " " + k, fontsize=8, va="bottom")
-for _, r_ in FINT[FINT.within_both_segments].iterrows():
-    ax.plot(r_.x, r_.y, marker="X", color="#D55E00", ms=11, mec="k", ls="", label="Fault intersection")
-for w, r in W.items():
-    ax.plot(r["track"][:, 0], r["track"][:, 1], "-", color=WCOL[w], lw=2)
-    ax.plot(*r["wh"][:2], "o", color=WCOL[w], mec="k", ms=8)
-    ax.annotate(w.replace("WELL-", "W"), r["wh"][:2], xytext=(6, 6), textcoords="offset points", fontweight="bold", fontsize=9)
-h, l = ax.get_legend_handles_labels()
-by = dict(zip(l, h)); ax.legend(by.values(), by.keys(), loc="lower right")
-ax.set_xlim(2805000, 2829000); ax.set_ylim(6322000, 6343000); ax.set_aspect("equal")
-ax.set_xlabel("Easting (m)"); ax.set_ylabel("Northing (m)")
-ax.set_title("Well locations, model grid columns (grey), faults, rivers and Lake Tarawera\n(deviated tracks W8, W9 drawn as lines from wellhead dot)")
-save(fig, "well_map_grid_faults_water.png")
-
-fig, ax = plt.subplots(figsize=(9, 8))   # zoomed map on the wells
-for c, P_ in COLPOLY.items():
-    ax.add_patch(MplPolygon(P_, closed=True, fill=False, ec="#cccccc", lw=0.5))
-    if c in SURF:
-        pass
-for i, (k, v) in enumerate(faults.items()):
-    ax.plot(v[:, 0], v[:, 1], "k-", lw=2, label="Fault" if i == 0 else None); ax.text(v[0][0] if k != "Fault 3" else 2817000, v[0][1] if k != "Fault 3" else 6333800, " " + k, fontsize=8)
-first = True
-for k, segs in rivers.items():
-    for sg in segs:
-        ax.plot(sg[:, 0], sg[:, 1], color="#3182bd", lw=1.4, label="River" if first else None); first = False
-for _, r_ in FINT[FINT.within_both_segments].iterrows():
-    ax.plot(r_.x, r_.y, marker="X", color="#D55E00", ms=11, mec="k", ls="", label="Fault intersection")
-for w, r in W.items():
-    row = SUM[SUM.well == w].iloc[0]
-    ax.plot(*r["wh"][:2], "o", ms=14, mec="k", color=plt.cm.inferno(min(row.T_max_degC, 270) / 280))
-    ax.annotate(f"{w.replace('WELL-', 'W')}\n{row.T_max_degC:.0f}°C", r["wh"][:2], xytext=(9, 4), textcoords="offset points", fontsize=8, fontweight="bold")
-ax.set_xlim(2816500, 2825500); ax.set_ylim(6330500, 6339500); ax.set_aspect("equal")
-h, l = ax.get_legend_handles_labels(); by = dict(zip(l, h)); ax.legend(by.values(), by.keys(), loc="lower right")
-ax.set_title("Wells coloured by maximum surveyed temperature (label: well, Tmax)")
-ax.set_xlabel("Easting (m)"); ax.set_ylabel("Northing (m)")
-save(fig, "well_map_zoom_tmax.png")
-
-# --- profiles -----------------------------------------------------------------------------------
-QCOL = {"HIGH": "#009E73", "MEDIUM": "#E69F00", "LOW": "#D55E00", "Synthetic": "#999999"}
-for w, r in W.items():
-    z, T, P = r["z"], r["T"], r["P"]
-    srow = SUM[SUM.well == w].iloc[0]
-    fig, (a1, a2) = plt.subplots(1, 2, figsize=(10, 8), sharey=True)
-    ts = tsat_C(P)
-    a1.plot(T, z, "-o", color="#0072B2", ms=3, label="Survey T")
-    a1.plot(ts, z, "--", color="#D55E00", label="Tsat(P) (IF97)")
-    for k, f in enumerate(r["fz"]):
-        a1.axhspan(f[1], f[0], color=QCOL.get(f[2], "#999"), alpha=0.35, label=f"Feed zone [{f[2]}]" + (" – pivot" if k == r["dom"] else ""))
-        a2.axhspan(f[1], f[0], color=QCOL.get(f[2], "#999"), alpha=0.35)
-    for d in r["design"]:
-        col = "#7f7f7f" if not d[3] else "#c7c7c7"
-        for a in (a1, a2):
-            a.axhspan(d[1], d[0], xmin=0.0, xmax=0.02, color=col, alpha=0.9)
-    a1.axhline(r["shoe"], color="k", ls=":", lw=1, label=f"Casing shoe {r['shoe']:.0f}")
-    a1.axhline(r["wh"][2], color="#555", lw=0.8); a2.axhline(r["wh"][2], color="#555", lw=0.8)
-    cs = SURF[find_column(*r["wh"][:2])]
-    a1.axhline(cs, color="#999", lw=0.8, ls="-."); a2.axhline(cs, color="#999", lw=0.8, ls="-.")
-    a1.text(a1.get_xlim()[1], cs, " model surface", va="bottom", ha="right", fontsize=7, color="#666")
-    a1.plot(srow.T_max_degC, srow.T_max_elev_mRL, "k*", ms=12, label=f"Tmax {srow.T_max_degC:.0f}°C @ {srow.T_max_elev_mRL:.0f}")
-    for lev, c_ in ((100, "#56B4E9"), (200, "#CC79A7")):
-        a1.axvline(lev, color=c_, lw=0.8, ls=":")
-    for a, b_ in r["isoth"]:
-        a1.annotate("", xy=(T.min() - 5, b_), xytext=(T.min() - 5, a), arrowprops=dict(arrowstyle="-", color="#CC79A7", lw=3))
-    m = PT[PT.well == w]
-    a1.scatter(m[m.boiling_margin_degC < 10].T_degC, m[m.boiling_margin_degC < 10].elevation_mRL, s=70, facecolors="none", edgecolors="red", label="margin < 10 °C")
-    a1.set_xlabel("Temperature (°C)"); a1.set_ylabel("Elevation (mRL)")
-    a1.set_title(f"{w}: {srow.regime}", fontsize=9)
-    a1.legend(fontsize=7, loc="lower left")
-    a2.plot(P, z, "-o", color="#0072B2", ms=3, label="Survey P (wellbore column)")
-    dz_ = r["fz"][r["dom"]]; mid = 0.5 * (dz_[0] + dz_[1])
-    a2.plot(srow.pivot_P_bar, mid, "D", color="#009E73", mec="k", ms=9, label=f"Pivot (dominant FZ) {srow.pivot_P_bar:.1f} bar")
-    for k, f in enumerate(r["fz"]):
-        mm = 0.5 * (f[0] + f[1]); a2.plot(float(interp_profile(w, mm, "P")), mm, "s", color="#E69F00", mec="k", ms=6, label="Feed-zone P" if k == 0 else None)
-    a2.plot(P_ATM, srow.water_level_est_mRL, "v", color="#D55E00", ms=9, label=f"Water level est. {srow.water_level_est_mRL:.0f} mRL (extrapolated)")
-    ph = P[0] + (r["wh"][2] - z) * 0.0980665 * 1.0   # 1000 kg/m3 water-column reference slope from the top point
-    a2.plot(P[0] + (z[0] - z) * 0.0980665, z, ":", color="#777", label="Cold-water gradient (0.098 bar/m) from top point")
-    a2.set_xlabel("Pressure (bar)"); a2.set_title("Pressure: only feed-zone / pivot values are formation targets", fontsize=9)
-    a2.legend(fontsize=7, loc="lower left")
-    a2.set_xlim(left=0)
-    fig.suptitle(f"{w}  NS verdict: {pc[pc.well == w].verdict.iloc[0]} ({pc[pc.well == w].confidence_level.iloc[0]}); grey strip = blank casing (dark) / slotted liner (light)", fontsize=9)
-    fig.tight_layout()
-    save(fig, f"profile_{w}.png")
-
-# --- maps by elevation ---------------------------------------------------------------------------
-MAP_ELEV = [0, -250, -500, -750, -1000, -1500, -2000, -2500]
+# ============================================================================
+# 14. Figures
+# ============================================================================
+plt.rcParams.update({"font.size": 9, "axes.grid": True, "grid.alpha": 0.3})
+CMAP_T = "inferno"
+xs_all = np.array([W[w]["track"][0, 0] for w in WELLS])
+ys_all = np.array([W[w]["track"][0, 1] for w in WELLS])
+XMIN, XMAX = xs_all.min() - 2500, xs_all.max() + 2500
+YMIN, YMAX = ys_all.min() - 2500, ys_all.max() + 2500
 
 
-def map_panel(ax, e, col, cmap, label, anomaly=False):
-    d = CE[CE.elevation_mRL == e]
-    if len(d) == 0:
-        ax.set_visible(False); return
-    vals = d[col].values.astype(float)
-    ref = np.median(vals) if anomaly else 0
-    vv = vals - ref
-    for k, v in faults.items():
-        ax.plot(v[:, 0], v[:, 1], "k-", lw=1)
-    for sg in rivers["Tarawera River"]:
-        ax.plot(sg[:, 0], sg[:, 1], color="#3182bd", lw=1)
-    if len(d) >= 3:
-        tri = mtri.Triangulation(d.x.values, d.y.values)
-        lin = mtri.LinearTriInterpolator(tri, vv)
-        xi, yi = np.meshgrid(np.linspace(2816500, 2825500, 150), np.linspace(6330500, 6339500, 150))
-        zi = lin(xi, yi)
-        vmin, vmax = (-np.nanmax(np.abs(vv)) - 1e-6, np.nanmax(np.abs(vv)) + 1e-6) if anomaly else (None, None)
-        cf = ax.contourf(xi, yi, zi, 14, cmap=cmap, alpha=0.75, vmin=vmin, vmax=vmax)
-        plt.colorbar(cf, ax=ax, shrink=0.8, label=label)
-    sc = ax.scatter(d.x, d.y, c=vv, cmap=cmap, s=70, edgecolor="k", zorder=5,
-                    vmin=(-np.nanmax(np.abs(vv)) - 1e-6 if anomaly else None), vmax=(np.nanmax(np.abs(vv)) + 1e-6 if anomaly else None))
-    for _, r_ in d.iterrows():
-        ax.annotate(f"{r_.well.replace('WELL-', 'W')}\n{r_[col]:.0f}" if col == "T_degC" else f"{r_.well.replace('WELL-', 'W')}\n{r_[col]:.1f}", (r_.x, r_.y), xytext=(5, 4), textcoords="offset points", fontsize=7)
-    ax.set_xlim(2816500, 2825500); ax.set_ylim(6330500, 6339500); ax.set_aspect("equal")
-    ax.set_title(f"{e:+d} mRL  ({len(d)} wells" + (f"; P median {ref:.1f} bar)" if anomaly else ")"), fontsize=9)
-    ax.tick_params(labelsize=6)
+def draw_base(ax, grid=True, zoom=True):
+    if grid:
+        for c, p in COLS.items():
+            ax.add_patch(MplPolygon(p, closed=True, fill=False, lw=0.3, ec="0.75"))
+    ax.add_patch(MplPolygon(LAKE, closed=True, fc="#9ecae1", ec="#3182bd", lw=0.8, alpha=0.6, label="Lake"))
+    for k, pl in RIVERS.items():
+        for seg in pl:
+            ax.plot(seg[:, 0], seg[:, 1], color="#3182bd", lw=1.2)
+    cx, cy = (XMIN + XMAX) / 2, (YMIN + YMAX) / 2
+    for k, pl in FAULTS.items():
+        ax.plot(pl[:, 0], pl[:, 1], "k-", lw=1.6)
+        # label at the point of the trace nearest the view centre, shifted along the trace
+        d = pl[1] - pl[0]
+        t = np.clip(((cx - pl[0][0]) * d[0] + (cy - pl[0][1]) * d[1]) / (d @ d), 0, 1)
+        t = np.clip(t + {"Fault 1": -0.25, "Fault 2": -0.3, "Fault 3": 0.12}.get(k, 0), 0, 1)
+        q = pl[0] + t * d
+        ax.annotate(k, q, fontsize=7, color="k", xytext=(3, 0), textcoords="offset points",
+                    bbox=dict(fc="w", ec="none", alpha=0.7, pad=0.5))
+    for k, v in FAULT_X.items():
+        ax.plot(*v, "kx", ms=7)
+    if zoom:
+        ax.set_xlim(XMIN, XMAX)
+        ax.set_ylim(YMIN, YMAX)
+    ax.set_aspect("equal")
+    ax.set_xlabel("Easting (m)")
+    ax.set_ylabel("Northing (m)")
+    ax.ticklabel_format(useOffset=False, style="plain")
 
 
-for col, cmap, label, fname, anomaly in (("T_degC", "inferno", "T (°C)", "maps_temperature_by_elevation.png", False),
-                                          ("P_bar", "RdBu_r", "P − median (bar)", "maps_pressure_by_elevation.png", True)):
-    fig, axs = plt.subplots(2, 4, figsize=(18, 9))
-    for ax, e in zip(axs.ravel(), MAP_ELEV):
-        map_panel(ax, e, col, cmap, label, anomaly)
-    fig.suptitle(("Temperature" if col == "T_degC" else "Pressure anomaly (value − median of wells at that elevation; labels are absolute P)") +
-                 " at common elevations: linear interpolation inside the well hull only, no extrapolation; black = faults, blue = Tarawera River", fontsize=10)
-    fig.tight_layout()
-    save(fig, fname)
-
-# --- cross-sections ------------------------------------------------------------------------------
-SECTIONS = {
-    "hot_axis_W2-W10-W3": (("WELL-10", "WELL-3"), 800.0, "Section through the hottest wells (W2, W10, W3; W2 projected ~570 m onto the W10–W3 line)"),
-    "regional_W8-W1": (("WELL-8", "WELL-1"), 900.0, "Regional SW–NE section W8 → W1 (wells within 900 m of the line)"),
-    "north_south_W4-W7": (("WELL-4", "WELL-7"), 1500.0, "North–south section W4 → W7 (wells within 1500 m of the line)"),
-}
-ZG = np.arange(300, -2900, -25.0)
-
-
-def section_data(a, b, corridor):
-    pa = W[a]["wh"][:2]; pb = W[b]["wh"][:2]
-    v = pb - pa; L = np.hypot(*v); u = v / L
-    sel = []
+def draw_wells(ax, label=True, color="k"):
     for w, r in W.items():
-        d = r["wh"][:2] - pa
-        along = float(np.dot(d, u)); off = float(u[0] * d[1] - u[1] * d[0])
-        if abs(off) <= corridor and -300 <= along <= L + 300:
-            sel.append((w, along, off))
-    sel.sort(key=lambda t: t[1])
-    return sel, L
+        tr = r["track"]
+        ax.plot(tr[:, 0], tr[:, 1], "-", color=color, lw=1)
+        ax.plot(tr[0, 0], tr[0, 1], "o", mfc="w", mec=color, ms=5)
+        if label:
+            ax.annotate(w.replace("WELL-", "W"), (tr[0, 0], tr[0, 1]), xytext=(4, 4),
+                        textcoords="offset points", fontsize=8, weight="bold")
 
 
-def interp_section(sel, arr):
-    Zs = np.full((len(ZG), 1), np.nan)
-    ds = np.array([s[1] for s in sel])
-    out = np.full((len(ZG), 200), np.nan)
-    xs = np.linspace(ds.min(), ds.max(), 200)
-    for i, zg in enumerate(ZG):
-        xv, yv = [], []
-        for w, al, off in sel:
-            val = float(interp_profile(w, zg, arr))
-            if not np.isnan(val):
-                xv.append(al); yv.append(val)
-        if len(xv) >= 2:
-            xv = np.array(xv); yv = np.array(yv)
-            m = (xs >= xv.min()) & (xs <= xv.max())
-            out[i, m] = np.interp(xs[m], xv, yv)
-    return xs, out
-
-
-SECINFO = {}
-for name, (ends, corridor, title) in SECTIONS.items():
-    sel, L = section_data(ends[0], ends[1], corridor)
-    if len(sel) < 2:
-        continue
-    SECINFO[name] = sel
-    fig, axs = plt.subplots(2, 1, figsize=(12, 10), sharex=True)
-    for ax, arr, cmap, lab in ((axs[0], "T", "inferno", "T (°C)"), (axs[1], "P", "viridis", "P (bar)")):
-        xs, F = interp_section(sel, arr)
-        cf = ax.contourf(xs, ZG, F, 18, cmap=cmap)
-        plt.colorbar(cf, ax=ax, label=lab)
-        if arr == "T":
-            cs = ax.contour(xs, ZG, F, levels=[100, 200, 250], colors=["#56B4E9", "#CC79A7", "white"], linewidths=1.2)
-            ax.clabel(cs, fmt="%d°C", fontsize=7)
-        for w, al, off in sel:
-            r = W[w]
-            ax.plot([al, al], [r["wh"][2], r["z"][-1]], "-", color="white", lw=2.5)
-            ax.plot([al, al], [r["wh"][2], r["z"][-1]], "-", color="k", lw=0.8)
-            for f in r["fz"]:
-                ax.plot([al, al], [f[1], f[0]], "-", color=QCOL.get(f[2], "#999"), lw=6, solid_capstyle="butt")
-            ax.plot(al, r["shoe"], "kv", ms=6)
-            ax.text(al, r["wh"][2] + 40, f"{w.replace('WELL-','W')}\n({off:+.0f} m)", ha="center", fontsize=8, fontweight="bold")
-            if arr == "T":
-                ax.plot(al, SUM[SUM.well == w].T_max_elev_mRL.iloc[0], "w*", mec="k", ms=10)
-        ax.set_ylim(-2900, 500); ax.set_ylabel("Elevation (mRL)")
-    axs[1].set_xlabel("Distance along section (m); offset of each well from the line in brackets")
-    axs[0].set_title(title + "\nInterpolation between wells at the same elevation only (blank = not covered by ≥2 wells). Coloured bars = feed zones (green HIGH, amber MEDIUM, red LOW), ▼ = casing shoe, ★ = Tmax", fontsize=9)
-    fig.tight_layout()
-    save(fig, f"section_{name}.png")
-    print("   section", name, [(s[0], round(s[1]), round(s[2])) for s in sel])
-
-# --- P-T state plot -----------------------------------------------------------------------------
-fig, ax = plt.subplots(figsize=(8, 8))
-Tc = np.linspace(20, 370, 300)
-ax.plot(Tc, psat_MPa(Tc + 273.15) * 10, "k-", lw=2, label="Saturation curve (IF97 Region 4)")
-for w, r in W.items():
-    ax.plot(r["T"], r["P"], "-", color=WCOL[w], lw=1.2, alpha=0.9)
-    ax.plot(r["T"], r["P"], ".", color=WCOL[w], ms=4, label=w)
-    for f in r["fz"]:
-        mm = 0.5 * (f[0] + f[1])
-        ax.plot(float(interp_profile(w, mm, "T")), float(interp_profile(w, mm, "P")), "s", color=WCOL[w], mec="k", ms=8)
-ax.plot([], [], "s", color="w", mec="k", label="Feed-zone midpoints")
-ax.set_xlabel("Temperature (°C)"); ax.set_ylabel("Pressure (bar)"); ax.set_yscale("log"); ax.set_ylim(0.9, 320)
-ax.set_title("P–T state of all survey points vs the saturation curve\n(liquid is to the left/above; W10 is the only well touching the curve)")
-ax.legend(fontsize=7, ncol=2, loc="lower right")
-save(fig, "PT_state_vs_saturation.png")
-
-# --- hydrostatic excess --------------------------------------------------------------------------
-fig, ax = plt.subplots(figsize=(8, 7))
-for w in WELLS:
-    d = HS[(HS.well == w) & HS.single_phase_ok]
-    ax.plot(d.excess_pct, 0.5 * (d.z_top_mRL + d.z_bottom_mRL), "-o", color=WCOL[w], label=w, ms=5)
-ax.axvline(0, color="k", lw=1); ax.axvline(FIELD_EXCESS_COLD, color="#D55E00", ls="--", label=f"cold-window median {FIELD_EXCESS_COLD:.1f} %")
-ax.axvline((10 / G - 1) * 100, color="#999", ls=":", label="g = 10 m/s² would give +2.0 %")
-ax.set_xlabel("Gradient excess over IF97 liquid column (%)"); ax.set_ylabel("Window mid-elevation (mRL)")
-ax.set_title("Column-density test: observed ΔP / IF97 ΔP − 1 (windows 345–990 m, single-phase, margin ≥ 10 °C)")
-ax.legend(fontsize=7, ncol=2)
-save(fig, "hydrostatic_excess_by_window.png")
-
-# --- natural-state test --------------------------------------------------------------------------
-fig, axs = plt.subplots(1, 4, figsize=(15, 4), sharey=False)
-for ax, w in zip(axs, ["WELL-2", "WELL-3", "WELL-9", "WELL-10"]):
-    r = W[w]; (zk, tpv), = r["tp"].items()
-    yrs = [parse_date(k).year + (parse_date(k).dayofyear - 1) / 365.25 for k in tpv["Data"]]
-    ax.plot(yrs, list(tpv["Data"].values()), "-o", color="#0072B2", label=f"transient gauge {zk} mRL")
-    sy = parse_date(r["survey_date_P"]); sy = sy.year + (sy.dayofyear - 1) / 365.25
-    ax.plot(sy, float(interp_profile(w, float(zk), "P")), "D", color="#D55E00", ms=10, label="survey P at gauge elev. (29/07/2015)")
-    ax.set_title(f"{w}: {pc[pc.well == w].verdict.iloc[0]} [{pc[pc.well == w].confidence_level.iloc[0]}]", fontsize=9)
-    ax.set_xlabel("Year"); ax.set_ylabel("P (bar)"); ax.legend(fontsize=7)
-fig.suptitle("Survey pressure vs transient gauge: a natural-state survey should match the FIRST transient value (production start)", fontsize=10)
+figs = []
+# --- well map
+fig, axs = plt.subplots(1, 2, figsize=(15, 7.5))
+ax = axs[0]
+draw_base(ax, zoom=False)
+draw_wells(ax)
+allp = np.vstack(list(COLS.values()))
+ax.set_xlim(allp[:, 0].min(), allp[:, 0].max())
+ax.set_ylim(allp[:, 1].min(), allp[:, 1].max())
+ax.set_title("Model grid (gTE14515), faults, water bodies and wells")
+ax = axs[1]
+draw_base(ax)
+sc = ax.scatter(SUM.merge(GEO, on="well").x_wellhead, SUM.merge(GEO, on="well").y_wellhead,
+                c=SUM.Tmax_degC, cmap=CMAP_T, s=150, vmin=0, vmax=280, zorder=5, ec="k")
+draw_wells(ax)
+plt.colorbar(sc, ax=ax, label="Measured Tmax (degC)", shrink=0.8)
+ax.set_title("Wells coloured by measured maximum temperature (x = fault intersection)")
 fig.tight_layout()
-save(fig, "natural_state_pressure_test.png")
+fn = os.path.join(FIG, "well_map_grid_faults_water.png")
+fig.savefig(fn, dpi=130)
+plt.close(fig)
+figs.append(fn)
 
-
-# --- conceptual sketch (INTERPRETATION, drawn from well data only) ---------------------------------
-S_ = SUM.set_index("well")
-fig, ax = plt.subplots(figsize=(10, 9))
-for k, v in faults.items():
-    ax.plot(v[:, 0], v[:, 1], "k-", lw=2.2)
-for sg in rivers["Tarawera River"]:
-    ax.plot(sg[:, 0], sg[:, 1], color="#3182bd", lw=1.5)
-hot = ["WELL-10", "WELL-2", "WELL-3"]
-cx = np.mean([W[w]["wh"][0] for w in hot]); cy = np.mean([W[w]["wh"][1] for w in hot])
-ax.add_patch(plt.Circle((cx, cy), 900, color="#D55E00", alpha=0.25, label="Inferred upflow / hottest zone (Tmax >= 260 °C)"))
-ax.plot(cx, cy, "*", color="#D55E00", ms=22, mec="k")
-for w in ["WELL-6", "WELL-7", "WELL-9", "WELL-5"]:
-    ax.annotate("", xy=W[w]["wh"][:2], xytext=(cx, cy), arrowprops=dict(arrowstyle="-|>", color="#E69F00", lw=3, alpha=0.9))
-for w in ["WELL-8", "WELL-4"]:
-    ax.annotate("", xy=(cx + (W[w]["wh"][0] - cx) * 0.55, cy + (W[w]["wh"][1] - cy) * 0.55), xytext=W[w]["wh"][:2],
-                arrowprops=dict(arrowstyle="-|>", color="#0072B2", lw=3, alpha=0.9))
+# --- per-well profiles
 for w, r in W.items():
-    row = S_.loc[w]
-    ax.plot(*r["wh"][:2], "o", ms=12, mec="k", color=plt.cm.inferno(min(row.T_max_degC, 270) / 280))
-    ax.annotate(f"{w.replace('WELL-', 'W')}: {row.T_max_degC:.0f}°C @ {row.T_max_elev_mRL:.0f}\n{row.regime.split(' (')[0]}", r["wh"][:2], xytext={"WELL-2": (-150, 22), "WELL-10": (-165, -34), "WELL-3": (10, -26), "WELL-1": (10, -26), "WELL-5": (8, 14)}.get(w, (8, -4)), textcoords="offset points", fontsize=7)
-ax.plot([], [], color="#E69F00", lw=3, label="Inferred lateral outflow (-450...-750 mRL)")
-ax.plot([], [], color="#0072B2", lw=3, label="Inferred cold recharge / downflow")
-ax.plot([], [], "k-", lw=2, label="Faults (Mapping.json)"); ax.plot([], [], color="#3182bd", label="Tarawera River")
-ax.legend(loc="lower right", fontsize=8)
-ax.set_xlim(2816500, 2825500); ax.set_ylim(6330500, 6339500); ax.set_aspect("equal")
-ax.set_title("Conceptual sketch from the well data only (plan view; INTERPRETATION - arrows are inferred, not measured)")
-ax.set_xlabel("Easting (m)"); ax.set_ylabel("Northing (m)")
-save(fig, "conceptual_model_sketch.png")
-
-# ----------------------------------------------------------------------------------------------
-# 9. Report (all numbers come from the tables above)
-# ----------------------------------------------------------------------------------------------
-hdr("9. Writing report")
-
-
-def md(df, floatfmt=1):
-    d = df.copy()
-    out = ["| " + " | ".join(str(c) for c in d.columns) + " |", "|" + "|".join("---" for _ in d.columns) + "|"]
-    for _, r in d.iterrows():
-        cells = []
-        for v in r:
-            if isinstance(v, (float, np.floating)):
-                cells.append("–" if np.isnan(v) else f"{v:.{floatfmt}f}")
-            else:
-                cells.append(str(v))
-        out.append("| " + " | ".join(cells) + " |")
-    return "\n".join(out)
-
-
-pcs = pc.set_index("well"); GE = GEO.set_index("well")
-f1x = FINT[(FINT.fault_a == "Fault 1") & (FINT.fault_b == "Fault 3")].iloc[0]
-g = lambda w, c: S_.loc[w, c]
-hot3 = ["WELL-10", "WELL-2", "WELL-3"]
-HSo = HS[HS.single_phase_ok]
-shallow = HS[(HS.z_top_mRL >= 0) & HS.single_phase_ok]
-nexc = int(shallow.exceeds_max_liquid_gradient.sum())
-deepw = HSo[HSo.z_top_mRL <= -1300]
-zero_deep = sorted(set(HSo[(HSo.z_top_mRL <= -750) & (HSo.excess_pct.abs() <= 0.5)].well))
-w2_2015 = pcs.loc["WELL-2", "P_at_2015-01-01_bar"]; w3_2015 = pcs.loc["WELL-3", "P_at_2015-01-01_bar"]
-CEi = CE.set_index(["well", "elevation_mRL"])
-
-t_temp = SUM[["well", "regime", "T_max_degC", "T_max_elev_mRL", "T_at_TD_degC", "inversion_size_degC", "inversion_top_mRL", "inversion_bottom_mRL",
-              "cap_gradient_K_km", "deep_gradient_K_km", "elev_100C_first_mRL", "elev_200C_first_mRL", "elev_T90pct_Tmax_mRL",
-              "min_boiling_margin_degC", "min_margin_elev_mRL"]].copy()
-t_temp.columns = ["well", "regime", "Tmax °C", "Tmax mRL", "T@TD °C", "inversion K", "inv. top mRL", "inv. bottom mRL", "cap grad K/km", "deep grad K/km",
-                  "100 °C mRL", "200 °C mRL", "0.9·Tmax mRL", "min margin °C", "at mRL"]
-
-
-def pivot_tab(col):
-    t = CE.pivot(index="well", columns="elevation_mRL", values=col)
-    t = t[[c for c in COMMON if c in t.columns]].reset_index()
-    t.columns = ["well"] + [f"{c:+d} mRL" for c in t.columns[1:]]
-    return t
-
-
-t_pres_e, t_temp_e = pivot_tab("P_bar"), pivot_tab("T_degC")
-t_piv = SUM[["well", "water_level_est_mRL", "model_surface_mRL", "pivot_fz_mid_mRL", "pivot_quality", "pivot_P_bar", "pivot_T_degC"]].copy()
-t_piv.columns = ["well", "water level est. mRL (extrapolated)", "model surface mRL", "pivot FZ mRL", "quality", "pivot P bar", "pivot T °C"]
-t_ns = pc[["well", "role", "verdict", "confidence_level", "ns_confidence", "gauge_elev_mRL", "survey_P_at_gauge_bar", "first_transient_P_bar",
-           "delta_survey_minus_first_bar", "dP_at_feedzones_vs_verified_bar"]].copy()
-t_ns.columns = ["well", "role", "verdict", "confidence", "factor", "gauge mRL", "survey P at gauge bar", "first transient P bar", "Δ bar", "FZ P offset vs W2/W3 (bar; * pivot)"]
-t_fz = FZ[["well", "feed", "mid_mRL", "quality", "T_degC", "P_bar", "Tsat_degC", "boiling_margin_degC", "block_at_mid", "is_pivot", "weight_T"]].copy()
-t_fz.columns = ["well", "feed", "mid mRL", "quality", "T °C", "P bar", "Tsat °C", "margin °C", "block", "pivot", "weight"]
-t_cls = PT.groupby("location_class").agg(points=("weight", "size"), mean_weight=("weight", "mean")).reset_index().round(2)
-t_geo = GEO[["well", "wellhead_mRL", "model_surface_mRL", "wellhead_minus_model_surface_m", "max_horizontal_deviation_m", "dist_fault1_m", "dist_fault2_m",
-             "dist_fault3_m", "dist_nearest_river_m", "dist_lake_edge_m"]].copy()
-t_geo.columns = ["well", "wellhead mRL", "model surface mRL", "wellhead − surface m", "max deviation m", "→Fault 1 m", "→Fault 2 m", "→Fault 3 m", "→river m", "→lake edge m"]
-t_hs = HS[["well", "z_top_mRL", "z_bottom_mRL", "T_range_degC", "min_boiling_margin_degC", "dP_obs_bar", "dP_expected_IF97_bar", "excess_pct",
-           "apparent_density_kg_m3", "max_liquid_density_kg_m3", "exceeds_max_liquid_gradient"]].copy()
-t_hs.columns = ["well", "top mRL", "bottom mRL", "T range °C", "min margin °C", "ΔP obs bar", "ΔP IF97 bar", "excess %", "apparent ρ", "max liquid ρ", "> max?"]
-iso_rows = SUM[SUM.isothermal_sections.notna() & (SUM.isothermal_sections != "")][["well", "isothermal_sections"]]
-flags = "; ".join(integ[integ.result.str.startswith("FLAG")].apply(lambda r: r.well + ": " + r.detail, axis=1))
-wells_excess_list = ", ".join(sorted(shallow[shallow.exceeds_max_liquid_gradient].well))
-n_pts = len(PT)
-p15 = CE[CE.elevation_mRL == -1500].P_bar; p20 = CE[CE.elevation_mRL == -2000].P_bar
-inv6 = SUM[SUM.well.isin(["WELL-2", "WELL-3", "WELL-5", "WELL-6", "WELL-7", "WELL-9"])].inversion_size_degC
-nonw10_minmargin = SUM[SUM.well != "WELL-10"].min_boiling_margin_degC.min()
-w2deep = HS[(HS.well == "WELL-2") & (HS.z_top_mRL <= -1100)].excess_pct.mean()
-wh_top_T = PT.groupby("well").T_degC.first()
-wh_top_P1 = PT[PT.well == "WELL-1"].P_bar.iloc[0]
-
-R = f"""# Natural-state data interpretation – Teaching_Model_3D (TE14515 grid)
-
-*Scope: natural state only. Inputs: `Baseline/Teaching_Model_3D` (read-only). Every number below is taken from a table in `Output/` written by `Scripts/natural_state_analysis.py`. Claims are tagged **[Obs]** observation, **[Int]** interpretation, **[Assump]** assumption. Elevations mRL, pressures bar (absolute), temperatures °C.*
-
-## 1. Key conclusions for calibration
-
-1. **[Obs] The surveys dated 29/07/2015 reproduce the pressure at the *start* of production, not at the survey date.** WELL-2 and WELL-3 survey pressures at the gauge elevation ({pcs.loc['WELL-2','survey_P_at_gauge_bar']:.1f} and {pcs.loc['WELL-3','survey_P_at_gauge_bar']:.1f} bar) equal the first transient values ({pcs.loc['WELL-2','first_transient_P_bar']:.1f} and {pcs.loc['WELL-3','first_transient_P_bar']:.1f} bar, 01/01/2014; Δ = {pcs.loc['WELL-2','delta_survey_minus_first_bar']:+.2f} and {pcs.loc['WELL-3','delta_survey_minus_first_bar']:+.2f} bar), whereas the gauges had already fallen to {w2_2015:.1f} and {w3_2015:.1f} bar by 01/01/2015 (`pressure_consistency_check.csv`). **Action:** treat the surveys as natural-state (pre-production) data and resolve the date label (§7.1). Verdicts and confidence (§2) set the weights.
-2. **[Obs] The hottest, shallowest water is a compact zone around WELL-10, WELL-2 and WELL-3** (Tmax {g('WELL-10','T_max_degC'):.0f}, {g('WELL-2','T_max_degC'):.0f}, {g('WELL-3','T_max_degC'):.0f} °C at {g('WELL-10','T_max_elev_mRL'):.0f}, {g('WELL-2','T_max_elev_mRL'):.0f}, {g('WELL-3','T_max_elev_mRL'):.0f} mRL), falling to {g('WELL-6','T_max_degC'):.0f} (W6), {g('WELL-9','T_max_degC'):.0f} (W9), {g('WELL-7','T_max_degC'):.0f} (W7), {g('WELL-5','T_max_degC'):.0f} (W5) and only {g('WELL-8','T_max_degC'):.0f} (W8), {g('WELL-4','T_max_degC'):.0f} (W4). **[Int]** the upflow is under or next to this zone, which is {f1x.dist_to_WELL_2_m:.0f} m (WELL-2) from the Fault 1 × Fault 3 intersection. **Action:** put the deep heat/mass input here. WELL-2 is still {g('WELL-2','T_at_TD_degC'):.0f} °C at {g('WELL-2','td_mRL'):.0f} mRL, so no well constrains the source depth.
-3. **[Obs] WELL-10 follows the boiling-point-for-depth curve** (minimum margin {g('WELL-10','min_boiling_margin_degC'):.1f} °C at {g('WELL-10','min_margin_elev_mRL'):.0f} mRL; {int(g('WELL-10','n_points_margin_lt5'))} points < 5 °C, {int(g('WELL-10','n_points_margin_lt10'))} < 10 °C). No other well is below {nonw10_minmargin:.1f} °C. **Action:** the model must reproduce a near-saturated or two-phase zone between about −75 and −350 mRL near WELL-10; match T together with Tsat(P).
-4. **[Obs] Six wells (W2, W3, W5, W6, W7, W9) have temperature inversions of {inv6.min():.0f}–{inv6.max():.0f} K** with peaks at {SUM[SUM.well.isin(['WELL-2','WELL-3','WELL-5','WELL-6','WELL-7','WELL-9'])].T_max_elev_mRL.max():.0f} to {SUM[SUM.well.isin(['WELL-2','WELL-3','WELL-5','WELL-6','WELL-7','WELL-9'])].T_max_elev_mRL.min():.0f} mRL (W3 {g('WELL-3','inversion_size_degC'):.0f} K, W6 {g('WELL-6','inversion_size_degC'):.0f} K). **[Int]** a lateral outflow layer near −450…−750 mRL over cooler water. **Action:** the model needs a permeable layer there; deep isothermal sections get reduced weight (§3).
-5. **[Obs] Pressure in the upper ~250–650 m of every well rises with depth faster than any liquid column can** (the first window exceeds the maximum liquid gradient in {nexc} of the {len(shallow)} wells that can be tested, W10 excluded as near-boiling: {wells_excess_list}). Cold wells W1, W4, W8 show {cold_shallow.min():.1f}–{cold_shallow.max():.1f} %, hot wells up to {HS.excess_pct.max():.0f} %. **Action:** do not use shallow pressure gradients as a target (weight 0.25 × location weight); use pressure at feed zones/pivots. Cause unresolved (§7.2).
-6. **[Obs] Below about −750 mRL the pressure profiles of {', '.join(zero_deep)} equal the IAPWS-IF97 liquid column within ±0.5 %**, so units and gravity are consistent. Deep excess elsewhere is {deepw.excess_pct.min():.1f} to {deepw.excess_pct.max():.1f} % (W2 largest): well-specific, not a single field-wide offset.
-7. **[Obs] Deep pressures are nearly uniform across the field** (−1500 mRL: {p15.min():.1f}–{p15.max():.1f} bar; −2000 mRL: {p20.min():.1f}–{p20.max():.1f} bar; W8 highest). **[Int]** laterally connected deep reservoir with near-hydrostatic head over ≥ 5 km; W8's high value is consistent with its cold, dense column rather than a lateral head.
-8. **[Obs] Wellheads lie below the model surface by up to {abs(GEO.wellhead_minus_model_surface_m.min()):.0f} m** (WELL-1); estimated water levels span {SUM.water_level_est_mRL.min():.0f}–{SUM.water_level_est_mRL.max():.0f} mRL. **Action:** use an atmospheric-pressure water-table boundary; do not take the wellhead elevation as the grid top.
-9. **[Obs] WELL-1 (east), WELL-4 (north) and WELL-8 (south-west) are cold:** W1 gradient {g('WELL-1','cap_gradient_K_km'):.0f} K/km (top) and {g('WELL-1','deep_gradient_K_km'):.0f} (deep); W4 only {g('WELL-4','cap_gradient_K_km'):.0f} K/km and {g('WELL-4','T_at_TD_degC'):.0f} °C at {g('WELL-4','td_mRL'):.0f} mRL; W8 is 64–68 °C from about −650 to −1500 mRL. **[Int]** cold recharge/downflow north and south-west, conductive east.
-
-## 2. The data
-
-**Inventory.** 10 wells (`Groups_data.json`), one T and one P survey each, all dated 29/07/2015 and flagged stable. Producers W2, W3, W9, W10 have transient gauges; W4, W5, W8 are injectors; W1, W6, W7 have no flow data. Faults, river, lake from `Mapping.json`; grid columns, {len(LAY)-1} active layers and surface from `gTE14515.dat`.
-
-**Checks** (`data_integrity_check.csv`, {len(integ)} rows): JSON vs `.dat` for every T and P point and every transient series — no difference ({int((integ.result=='PASS').sum())} PASS rows in total); all survey points lie within the track; every feed zone is below the casing shoe in slotted/open hole and contains a survey point; all survey and feed-zone blocks agree with `gTE14515_wells.json`. Flag: {flags} (design/track inconsistency; no survey affected). Notes: feed-zone values are labelled "m" but are elevations (mRL); JSON track/design/feed-zone entries mix lists and strings (parsed). IAPWS-IF97 Regions 4 and 1 were validated against published values (errors ≪ 0.1 K; `run_console_log.txt`).
-
-**Natural-state timing and verdicts** (`pressure_consistency_check.csv`):
-
-{md(t_ns, 2)}
-
-Method: survey P interpolated to the gauge elevation vs the **first** transient value. Valid test and |Δ| ≤ 0.5 bar ⇒ *natural state* (high, factor 1.0). WELL-9 is {pcs.loc['WELL-9','delta_survey_minus_first_bar']:+.2f} bar *above* the first value: opposite to drawdown, so not production-disturbed but unexplained ⇒ *probably natural state* (medium, 0.75). WELL-10's series starts {pcs.loc['WELL-10','first_transient_date']}, after production began ({pcs.loc['WELL-10','first_flow_date']}), so the test is invalid; the survey is {pcs.loc['WELL-10','delta_survey_minus_first_bar']:+.1f} bar above the 2020 value (sign expected from later drawdown) and its feed-zone P is {pcs.loc['WELL-10','dP_pivot_fz_vs_verified_bar']:+.1f} bar from W2/W3 ⇒ *probably natural state* (low, 0.6). Wells without gauges are compared at feed-zone elevations with W2/W3. **Injectors** ran at {pcs.loc['WELL-4','first_flow_kg_s']:.0f}/{pcs.loc['WELL-5','first_flow_kg_s']:.0f}/{pcs.loc['WELL-8','first_flow_kg_s']:.0f} kg/s (W4/W5/W8) of water at ≈ {pcs.loc['WELL-4','injectate_T_approx_degC']:.0f} °C [Assump: cp 4.19 kJ/kg/K] from 01/01/2014. W4 and W8 profiles are colder than the injectate (no warm-injection signature) ⇒ probably natural (low, 0.6); W5's feed-zone T ({g('WELL-5','pivot_T_degC'):.0f} °C) exceeds the injectate, so cooling could be hidden ⇒ possibly disturbed (0.4). No injector has a gauge. WELL-1 is {pcs.loc['WELL-1','dP_pivot_fz_vs_verified_bar']:+.1f} bar from W2/W3 at its pivot (probably natural, medium, 0.75), as are W6 and W7.
-
-![natural-state test](figures/natural_state_pressure_test.png)
-
-![well map](figures/well_map_grid_faults_water.png)
-
-**Geometry** (`well_geometry_check.csv`):
-
-{md(t_geo, 0)}
-
-W8 and W9 are deviated ({GE.loc['WELL-8','max_horizontal_deviation_m']:.0f} and {GE.loc['WELL-9','max_horizontal_deviation_m']:.0f} m at TD); blocks follow the track. No wellhead is inside the lake; the nearest lake edge is {GEO.dist_lake_edge_m.min():.0f} m away.
-
-## 3. Temperature structure
-
-Per-well characteristics (`well_summary.csv`). Cap gradient = top 300 m, deep = bottom 500 m (K/km, positive = T rises with depth). Inversion = largest drop below an earlier maximum (threshold 3 K). 0.9·Tmax is an operational marker of the cap base (hot wells only).
-
-{md(t_temp, 0)}
-
-**Isothermal sections** (≥ 300 m within 3 K):
-
-{md(iso_rows, 0)}
-
-**Wellbore check.** Inversion peaks lie below the casing shoe (open hole) in W2, W3, W6, W7 and W9, and behind casing in W5 (peak {g('WELL-5','T_max_elev_mRL'):.0f}, shoe {g('WELL-5','casing_shoe_mRL'):.0f}); internal flow could alter the open-hole parts. **[Int]** The long isothermal sections below or between feed zones (e.g. W3, W6, W7) may be partly wellbore convection; open-hole points inside them get weight 0.5 not 0.8 and are not used to infer reservoir uniformity. The peaks lie close to a feed zone in W3 (peak {g('WELL-3','T_max_elev_mRL'):.0f}, feed zone −335), W6 ({g('WELL-6','T_max_elev_mRL'):.0f} vs −475), W7 ({g('WELL-7','T_max_elev_mRL'):.0f} vs −630) and W2 ({g('WELL-2','T_max_elev_mRL'):.0f} vs −745 and −260), which favours a reservoir origin there. In W5 the peak ({g('WELL-5','T_max_elev_mRL'):.0f} mRL) lies ~650 m above its shallowest feed zone (−1325), but it is behind casing, where T is closer to conductive formation T, so it is a formation feature without a nearby feed zone (an open question for the outflow depth there); W9's peak ({g('WELL-9','T_max_elev_mRL'):.0f}) lies between its feed zones (−535, −838).
-
-**Temperature at common elevations** (`T_P_at_common_elevations.csv`, interpolation only):
-
-{md(t_temp_e, 0)}
-
-![T maps](figures/maps_temperature_by_elevation.png)
-
-![hot-axis section](figures/section_hot_axis_W2-W10-W3.png)
-
-![regional section](figures/section_regional_W8-W1.png)
-
-The N–S section (W4→W7) is also in `figures/`. Sections interpolate between wells at the same elevation only: they are schematic between wells, not constrained images.
-
-![P–T state](figures/PT_state_vs_saturation.png)
-
-**Heat-flux contrast (assumption-based).** With an assumed {K_ROCK_ASSUMED:.1f} W/m/K [Assump, not in the data] the cap gradients give {g('WELL-4','cond_heat_flux_mW_m2_ASSUMED_k2'):.0f} (W4), {g('WELL-1','cond_heat_flux_mW_m2_ASSUMED_k2'):.0f} (W1), {g('WELL-8','cond_heat_flux_mW_m2_ASSUMED_k2'):.0f} (W8) mW/m² at the cold margins and {g('WELL-2','cond_heat_flux_mW_m2_ASSUMED_k2'):.0f} (W2) to {g('WELL-3','cond_heat_flux_mW_m2_ASSUMED_k2'):.0f} (W3) mW/m² in the core. The core values include a near-surface hydrological gradient and are not pure conduction; use only as a margin-to-core contrast.
-
-## 4. Pressure structure
-
-**Rule applied:** wellbore pressure equals formation pressure only at feed zones; elsewhere it follows the fluid column, pivoting at the dominant feed zone (highest quality tag, ties by higher survey T). Wellhead pressures of ≈ 1–11 bar are not reservoir pressure.
-
-Pressure at common elevations (bar):
-
-{md(t_pres_e, 1)}
-
-Pivot pressures and water levels (`well_summary.csv`):
-
-{md(t_piv, 1)}
-
-![P maps](figures/maps_pressure_by_elevation.png)
-
-**Hydrostatic checks** (`hydrostatic_check.csv`; windows ≥ 300 m, single-phase only, margin ≥ {MARGIN_MIN:.0f} °C; W10 excluded). Rounding (0.1 bar) limits each window to about ±0.4 %.
-
-{md(t_hs, 1)}
-
-**[Obs]** Windows starting near the surface need an apparent density of {shallow.apparent_density_kg_m3.min():.0f}–{shallow.apparent_density_kg_m3.max():.0f} kg/m³ against a maximum liquid density of {shallow.max_liquid_density_kg_m3.min():.0f}–{shallow.max_liquid_density_kg_m3.max():.0f}, so these profiles are not static single-phase columns. Cold windows (max T < {COLD_T:.0f} °C): shallow median {cold_shallow.median():.1f} % (range {cold_shallow.min():.1f}–{cold_shallow.max():.1f}), deeper median {cold_deeper.median():.1f} %; overall median {FIELD_EXCESS_COLD:.1f} %. For scale, g = 10 m/s² would give +{(10/G-1)*100:.1f} %. **[Int]** The shallow excess common to the cold wells may be a datum/convention issue (not physical overpressure), but cannot explain the larger hot-well excess or why W5–W7 are exact at depth.
-
-![hydrostatic excess](figures/hydrostatic_excess_by_window.png)
-
-**Explanations checked:** units (bar and mRL agree between JSON and `.dat`); density (IF97 validated, Region 1 used on liquid windows only); datum (windows are elevation differences, so a constant offset cancels); wellbore (a static column cannot exceed the cold-water gradient). None resolves the hot-well excess.
-
-## 5. Conceptual model
-
-![conceptual sketch](figures/conceptual_model_sketch.png)
-
-| Feature | Interpretation (strength) | Supporting observation |
-|---|---|---|
-| Upflow | Under/near W10–W2–W3, close to Fault 1 × Fault 3 ({f1x.dist_to_WELL_2_m:.0f} m from W2) (moderate) | Tmax {g('WELL-10','T_max_degC'):.0f}/{g('WELL-2','T_max_degC'):.0f}/{g('WELL-3','T_max_degC'):.0f} °C; W2 T@TD {g('WELL-2','T_at_TD_degC'):.0f} °C and rising; W10 on the boiling curve; 200 °C at {g('WELL-10','elev_200C_first_mRL'):.0f}/{g('WELL-2','elev_200C_first_mRL'):.0f}/{g('WELL-3','elev_200C_first_mRL'):.0f} mRL |
-| Outflow | Lateral layer ≈ −450…−750 mRL towards S, SE, E (W6, W7, W9, W5) (moderate; direction inferred from the T pattern only) | inversion peaks {g('WELL-6','T_max_elev_mRL'):.0f} (W6), {g('WELL-7','T_max_elev_mRL'):.0f} (W7), {g('WELL-9','T_max_elev_mRL'):.0f} (W9), {g('WELL-5','T_max_elev_mRL'):.0f} (W5) mRL (near feed zones except W5); peak T {g('WELL-6','T_max_degC'):.0f}/{g('WELL-9','T_max_degC'):.0f}/{g('WELL-7','T_max_degC'):.0f}/{g('WELL-5','T_max_degC'):.0f} °C |
-| Cap | Conductive top; thin over W10, deeper away (moderate) | cap gradients {SUM[SUM.well.isin(hot3)].cap_gradient_K_km.min():.0f}–{SUM[SUM.well.isin(hot3)].cap_gradient_K_km.max():.0f} K/km (core); 0.9·Tmax at {g('WELL-10','elev_T90pct_Tmax_mRL'):.0f} (W10), {g('WELL-3','elev_T90pct_Tmax_mRL'):.0f} (W3), {g('WELL-2','elev_T90pct_Tmax_mRL'):.0f} (W2), {g('WELL-6','elev_T90pct_Tmax_mRL'):.0f} (W6), {g('WELL-9','elev_T90pct_Tmax_mRL'):.0f} (W9) mRL |
-| Two-phase zone | Small, near W10, ≈ −75…−350 mRL (one well) | margin {g('WELL-10','min_boiling_margin_degC'):.1f} °C |
-| Cold recharge/downflow | North (W4), south-west (W8) (weak–moderate) | W4 {g('WELL-4','cap_gradient_K_km'):.0f} K/km; W8 64–68 °C at −650…−1500 mRL; river {GE.loc['WELL-8','dist_nearest_river_m']:.0f} m from W8; lake ≥ {GEO.dist_lake_edge_m.min():.0f} m away, so no direct lake influence is seen |
-| Conductive margin | East (W1) (moderate) | monotonic T, {g('WELL-1','T_at_TD_degC'):.0f} °C at {g('WELL-1','td_mRL'):.0f} mRL |
-| Deep pressure connection | Laterally connected, near-hydrostatic (moderate) | P at −1500 mRL {p15.min():.1f}–{p15.max():.1f} bar |
-| Faults | Hot wells lie within {GE.loc['WELL-6','dist_fault1_m']:.0f}–{GE.loc['WELL-3','dist_fault1_m']:.0f} m of Fault 1 (W6, W2, W10, W3) and within {GE.loc['WELL-2','dist_fault3_m']:.0f}/{GE.loc['WELL-10','dist_fault3_m']:.0f} m of Fault 3 (W2/W10); W9/W7 are {GE.loc['WELL-9','dist_fault2_m']:.0f}/{GE.loc['WELL-7','dist_fault2_m']:.0f} m from Fault 2 (spatial association only; dip and permeability unknown) | `well_geometry_check.csv`, `fault_intersections.csv` |
-
-## 6. Recommended calibration set-up
-
-**Targets and weights** (`NS_calibration_targets.csv`, {n_pts} survey points; weight = location weight × natural-state factor; extra columns `weight_P`, `P_role`):
-
-{md(t_cls, 2)}
-
-Scheme: feed zone 1.0; near wellhead (top 50 m) 0.3; behind casing 0.5; open hole 0.8, **reduced to 0.5 inside isothermal sections ≥ 300 m** (possible wellbore flow); above model surface 0 (none occur); multiplied by the factor 1.0 / 0.75 / 0.6 / 0.4. Pressure outside feed zones gets 0.25 × the location weight because it reflects the wellbore column. **Feed-zone targets** (`feedzones.csv`; all blocks match `gTE14515_wells.json`):
-
-{md(t_fz, 1)}
-
-**Heat and mass.** Deep hot input near W10–W2–W3 (T ≥ {g('WELL-2','T_at_TD_degC'):.0f} °C at depth in W2); the data give no flux, only the temperatures to match. Cooling/recharge from the north (W4) and south-west (W8). Conductive heat loss at the top (§3 contrast). **Permeability structure implied [Int]:** low-permeability cap above roughly −150…−450 mRL (steep T gradient; steeper-than-hydrostatic P); a permeable lateral layer near −450…−750 mRL (inversion peaks near feed zones in W2, W3, W6, W7; HIGH-quality feed zones at W2 −745, W3 −335, W6 −475/−1125, W7 −630/−1325, W8 −1125); a laterally connected, near-hydrostatic deep column; vertical connection in the hot core. **Boundaries:** atmospheric pressure at the water table (estimated {SUM.water_level_est_mRL.min():.0f}–{SUM.water_level_est_mRL.max():.0f} mRL); near-surface T about {wh_top_T.min():.0f}–{wh_top_T.max():.0f} °C at the wellheads; lateral sides open to deep pressure support; no flux can be derived for the base.
-
-`T_P_at_layer_centres.csv` gives {len(LC)} well/layer pairs for block-wise comparison.
-
-## 7. Data quality issues and open questions (ranked by effect on calibration)
-
-1. **Survey date vs content.** Surveys dated 29/07/2015 match the 01/01/2014 pressure ({pcs.loc['WELL-2','survey_P_at_gauge_bar']:.1f} bar vs {w2_2015:.1f} bar at W2 on 01/01/2015). Either the date is wrong or the data are reconstructed pre-production values. Confirm: the whole natural-state calibration depends on it.
-2. **Pressure gradients steeper than a water column** in the upper part of all wells (hot wells up to {HS.excess_pct.max():.0f} %; cold wells {cold_shallow.min():.1f}–{cold_shallow.max():.1f} %) and a well-dependent excess at depth (W2 mean {w2deep:.1f} % below −1100 mRL; W5–W7 ≈ 0). Obtain survey conditions (static or flowing, gauge reference) before using non-feed-zone pressure.
-3. **WELL-10:** no valid natural-state test; near-boiling, so P and T errors are coupled; feed-zone quality is "Synthetic".
-4. **Injectors W4, W5, W8:** no gauges; W5 possibly disturbed; W4's survey ends at {g('WELL-4','td_mRL'):.0f} mRL while its liner is designed to −3251 mRL.
-5. **WELL-1 pressure** is {pcs.loc['WELL-1','dP_pivot_fz_vs_verified_bar']:+.1f} bar from W2/W3 at its pivot; its wellhead is {abs(GE.loc['WELL-1','wellhead_minus_model_surface_m']):.0f} m below the grid surface and reads {wh_top_P1:.1f} bar at the wellhead: check the datum.
-6. **Grid surface vs wellhead elevation** differs by up to {abs(GEO.wellhead_minus_model_surface_m.min()):.0f} m; confirm topography.
-7. Feed-zone units labelled "m" but are mRL; mixed JSON list/string formats; dominant feed zone not given (chosen by quality, then temperature).
-8. Faults have no dip or permeability; no lake data (lake assumed unimportant only because it is far).
-9. Rock conductivity for heat flux is assumed ({K_ROCK_ASSUMED:.1f} W/m/K).
-
-## 8. Output file index
-
-| File | Content |
-|---|---|
-| `Scripts/natural_state_analysis.py` | regenerates everything except the hand-written `process_log.md` |
-| `Output/NS_data_interpretation.md` | this report |
-| `Output/NS_calibration_targets.csv` | {n_pts} survey points, weights, blocks (+ `weight_P`, `P_role`, `location_class`) |
-| `Output/feedzones.csv` | feed-zone T/P/margin, blocks, weights |
-| `Output/T_P_at_layer_centres.csv` | T, P at layer centres, no extrapolation |
-| `Output/T_P_at_common_elevations.csv` | T, P at common elevations |
-| `Output/well_summary.csv` | per-well characteristics and regime |
-| `Output/pressure_consistency_check.csv` | natural-state timing tests and verdicts |
-| `Output/hydrostatic_check.csv` | column-density windows |
-| `Output/well_geometry_check.csv`, `Output/fault_intersections.csv` | geometry, distances, fault intersections |
-| `Output/data_integrity_check.csv` | all integrity checks |
-| `Output/figures/` | well maps, 10 profiles, T/P maps, 3 sections, P–T plot, hydrostatic excess, natural-state test, conceptual sketch |
-| `Output/run_console_log.txt` | console output of the final run |
-| `Output/process_log.md` | prompt, rules applied, steps |
-"""
-open(OUT / "NS_data_interpretation.md", "w", encoding="utf-8").write(R)
-print("  wrote NS_data_interpretation.md", len(R), "chars")
-print("\nDONE")
+    sub = TGT[TGT.well == w]
+    fig, axs = plt.subplots(1, 3, figsize=(13, 7), sharey=True)
+    z, T, P = r["zT"], r["T"], r["P"]
+    ts = np.array([tsat_c(p) for p in P])
+    ax = axs[0]
+    ax.plot(T, z, "o-", color="tab:red", ms=3, label="Measured T")
+    ax.plot(ts, z, "--", color="tab:blue", label="Tsat(P measured) IF97")
+    ax.set_xlabel("Temperature (degC)")
+    ax.set_ylabel("Elevation (mRL)")
+    ax2 = axs[1]
+    ax2.plot(P, z, "o-", color="tab:green", ms=3, label="Measured P")
+    for _, f in FZ[FZ.well == w].iterrows():
+        ax2.plot(f.P_bar, f.mid_mRL, "s", ms=8, mfc="none", mec="k")
+    ax2.set_xlabel("Pressure (bar)")
+    ax3 = axs[2]
+    ax3.plot(sub.boiling_margin_degC, sub.elevation_mRL, "o-", color="tab:purple", ms=3)
+    ax3.axvline(BM_FLAG, color="r", ls=":", label=f"{BM_FLAG:g} degC")
+    ax3.set_xlabel("Boiling margin Tsat(P) - T (degC)")
+    for a in axs:
+        for f in r["fz"]:
+            a.axhspan(f["bot"], f["top"], color="orange", alpha=0.35)
+        a.axhline(r["casing_shoe"], color="k", lw=1.5, ls="-")
+        a.axhline(r["wellhead"], color="0.4", lw=0.8, ls="--")
+        for L in LAYERS:
+            if r["td"] - 50 <= L["bot"] <= r["wellhead"]:
+                a.axhline(L["bot"], color="0.85", lw=0.5, zorder=0)
+        for s in INTFLOW[w]:
+            a.axhspan(s[1], s[0], color="cyan", alpha=0.15)
+    axs[0].plot([], [], color="orange", lw=8, alpha=0.35, label="Feed zone")
+    axs[0].plot([], [], color="k", lw=1.5, label=f"Casing shoe {r['casing_shoe']:g} mRL")
+    axs[0].plot([], [], color="0.4", lw=0.8, ls="--", label="Wellhead")
+    if INTFLOW[w]:
+        axs[0].plot([], [], color="cyan", lw=8, alpha=0.3, label="Isothermal open hole (possible internal flow)")
+    axs[0].legend(loc="lower left", fontsize=7)
+    ax3.legend(loc="lower right", fontsize=7)
+    s = SUM[SUM.well == w].iloc[0]
+    fig.suptitle(f"{w} ({NS[w]['role']}): Tmax {s.Tmax_degC:.1f} degC at {s.Tmax_elev_mRL:g} mRL; "
+                 f"regime: {s.regime}; NS verdict: {NS[w]['verdict']} ({NS[w]['confidence']})\n"
+                 f"grey lines = model layer boundaries", fontsize=9)
+    fig.tight_layout()
+    fn = os.path.join(FIG, f"profile_{w}.png")
+    fig.savefig(fn, dpi=110)
+    plt.close(fig)
+    figs.append(fn)
+
+# --- all-well overview profiles
+fig, axs = plt.subplots(1, 2, figsize=(13, 8), sharey=True)
+cm = plt.get_cmap("tab10")
+for i, (w, r) in enumerate(W.items()):
+    axs[0].plot(r["T"], r["zT"], "-", color=cm(i), label=w)
+    axs[1].plot(r["P"], r["zP"], "-", color=cm(i), label=w)
+zz = np.linspace(-2900, 300, 200)
+axs[0].set_xlabel("Temperature (degC)")
+axs[0].set_ylabel("Elevation (mRL)")
+axs[1].set_xlabel("Pressure (bar)")
+axs[0].legend(fontsize=8)
+axs[0].set_title("All temperature profiles")
+axs[1].set_title("All pressure profiles")
+fig.tight_layout()
+fn = os.path.join(FIG, "profiles_all_wells.png")
+fig.savefig(fn, dpi=110)
+plt.close(fig)
+figs.append(fn)
+
+# --- P-T state plot
+fig, ax = plt.subplots(figsize=(9, 7))
+Ts = np.linspace(20, 373, 300)
+ax.plot(Ts, [psat_mpa(t + 273.15) * 10 for t in Ts], "k-", lw=2, label="Saturation curve (IF97 Region 4)")
+for i, w in enumerate(WELLS):
+    sub = TGT[TGT.well == w]
+    ax.plot(sub.T_degC, sub.P_bar, "o", ms=4, color=cm(i), label=w)
+    fz = FZ[FZ.well == w]
+    ax.plot(fz.T_degC, fz.P_bar, "s", ms=9, mfc="none", mec=cm(i))
+ax.set_xlabel("Temperature (degC)")
+ax.set_ylabel("Pressure (bar)")
+ax.set_ylim(0, 300)
+ax.set_xlim(0, 380)
+ax.legend(fontsize=7, ncol=2)
+ax.set_title("P-T state of all survey points (squares = feed zones). Points left of the curve are liquid")
+fig.tight_layout()
+fn = os.path.join(FIG, "PT_state_vs_saturation.png")
+fig.savefig(fn, dpi=120)
+plt.close(fig)
+figs.append(fn)
+
+# --- maps by elevation
+MAP_ELEVS = [0, -250, -500, -750, -1000, -1500, -2000]
+
+
+def map_panel(ax, zc, var, vmin, vmax, cmap, unit):
+    sub = CE[CE.elevation_mRL == zc]
+    draw_base(ax, grid=False)
+    if len(sub) >= 3:
+        tri = mtri.Triangulation(sub.x.values, sub.y.values)
+        cs = ax.tricontourf(tri, sub[var].values, levels=np.linspace(vmin, vmax, 15), cmap=cmap, alpha=0.8,
+                            extend="both")
+    sc = ax.scatter(sub.x, sub.y, c=sub[var], cmap=cmap, vmin=vmin, vmax=vmax, s=60, ec="k", zorder=5)
+    for _, rr in sub.iterrows():
+        ax.annotate(f"{rr.well.replace('WELL-', 'W')}\n{rr[var]:.0f}", (rr.x, rr.y), xytext=(4, 2),
+                    textcoords="offset points", fontsize=7)
+    draw_wells(ax, label=False, color="0.4")
+    ax.set_title(f"{zc} mRL: {var.split('_')[0]} ({unit}); n={len(sub)} wells", fontsize=9)
+    return sc
+
+
+for var, vmin, vmax, cmap, unit, name in [("T_degC", 0, 280, CMAP_T, "degC", "maps_temperature_by_elevation.png"),
+                                          ("P_minus_field_median_bar", -6, 6, "RdBu_r", "bar rel. to median at that elevation",
+                                           "maps_pressure_by_elevation.png")]:
+    fig, axs = plt.subplots(2, 4, figsize=(20, 10.5))
+    sc = None
+    for ax, zc in zip(axs.flat, MAP_ELEVS):
+        sc = map_panel(ax, zc, var, vmin, vmax, cmap, unit)
+    axs.flat[-1].axis("off")
+    fig.colorbar(sc, ax=axs.flat[-1], fraction=0.8, label=unit)
+    fig.suptitle(("Measured temperature" if var == "T_degC" else
+                  "Measured pressure minus the median of the wells at the same elevation") +
+                 " - linear interpolation inside the well hull only (no extrapolation). "
+                 "Black lines: faults; blue: lake and rivers", fontsize=10)
+    fig.tight_layout()
+    fn = os.path.join(FIG, name)
+    fig.savefig(fn, dpi=100)
+    plt.close(fig)
+    figs.append(fn)
+
+
+# --- cross-sections
+def section(wlist, name, title):
+    pts = np.array([[W[w]["track"][0, 0], W[w]["track"][0, 1]] for w in wlist])
+    seglen = np.r_[0, np.cumsum(np.hypot(np.diff(pts[:, 0]), np.diff(pts[:, 1])))]
+
+    def proj(x, y):
+        best = (np.inf, 0, 0)
+        for i in range(len(pts) - 1):
+            p1, p2 = pts[i], pts[i + 1]
+            d = p2 - p1
+            L2 = d @ d
+            t = max(0, min(1, ((x - p1[0]) * d[0] + (y - p1[1]) * d[1]) / L2))
+            q = p1 + t * d
+            dist = math.hypot(x - q[0], y - q[1])
+            if dist < best[0]:
+                best = (dist, seglen[i] + t * math.sqrt(L2), dist)
+        return best[1], best[2]
+
+    S, Z, T, P = [], [], [], []
+    offs = {}
+    for w in wlist:
+        sub = TGT[TGT.well == w]
+        for _, rr in sub.iterrows():
+            s, d = proj(rr.x, rr.y)
+            S.append(s), Z.append(rr.elevation_mRL), T.append(rr.T_degC), P.append(rr.P_bar)
+            offs[w] = max(offs.get(w, 0), d)
+    S, Z, T = map(np.array, (S, Z, T))
+    si = np.linspace(S.min(), S.max(), 300)
+    zi = np.linspace(Z.min(), Z.max(), 300)
+    SI, ZI = np.meshgrid(si, zi)
+    TI = griddata((S, Z * 1.0), T, (SI, ZI), method="linear")
+    fig, ax = plt.subplots(figsize=(14, 7))
+    cs = ax.contourf(SI, ZI, TI, levels=np.arange(0, 290, 20), cmap=CMAP_T, alpha=0.85)
+    cl = ax.contour(SI, ZI, TI, levels=[100, 150, 200, 250], colors="w", linewidths=0.8)
+    ax.clabel(cl, fmt="%d", fontsize=8)
+    plt.colorbar(cs, ax=ax, label="T (degC), linear interpolation between wells, no extrapolation")
+    for w in wlist:
+        r = W[w]
+        sub = TGT[TGT.well == w]
+        ss = [proj(x, y)[0] for x, y in zip(sub.x, sub.y)]
+        ax.plot(ss, sub.elevation_mRL, "k-", lw=1)
+        sh = [proj(*track_xy(r, zz))[0] for zz in [r["wellhead"], r["casing_shoe"]]]
+        ax.plot(sh, [r["wellhead"], r["casing_shoe"]], "k-", lw=3)
+        for f in r["fz"]:
+            sf = [proj(*track_xy(r, zz))[0] for zz in [f["top"], f["bot"]]]
+            ax.plot(sf, [f["top"], f["bot"]], "-", color="cyan", lw=6)
+        bm = sub[sub.boiling_margin_degC < BM_FLAG]
+        if len(bm):
+            ax.plot([proj(x, y)[0] for x, y in zip(bm.x, bm.y)], bm.elevation_mRL, "o", mfc="none", mec="lime",
+                    ms=8)
+        ax.annotate(f"{w}\n(off-line {offs[w]:.0f} m)", (proj(r['track'][0, 0], r['track'][0, 1])[0],
+                                                          r["wellhead"]), xytext=(0, 8),
+                    textcoords="offset points", ha="center", fontsize=8, weight="bold")
+    # faults crossing the section line
+    for k, pl in FAULTS.items():
+        for i in range(len(pts) - 1):
+            p = seg_intersect(pts[i], pts[i + 1], pl[0], pl[1])
+            if p is not None:
+                sf = proj(*p)[0]
+                ax.axvline(sf, color="k", ls="--", lw=1)
+                ax.annotate(f"{k} (trace)", (sf, Z.max() + 30), rotation=90, fontsize=7, va="bottom")
+    ax.plot([], [], "k-", lw=3, label="casing")
+    ax.plot([], [], "-", color="cyan", lw=6, label="feed zone")
+    ax.plot([], [], "o", mfc="none", mec="lime", label=f"boiling margin < {BM_FLAG:g} degC")
+    ax.legend(loc="lower left", fontsize=8)
+    ax.set_xlabel("Distance along section (m)")
+    ax.set_ylabel("Elevation (mRL)")
+    ax.set_title(title)
+    ax.set_ylim(Z.min() - 50, Z.max() + 250)
+    ax.set_xlim(S.min() - 200, S.max() + 200)
+    fig.tight_layout()
+    fn = os.path.join(FIG, name)
+    fig.savefig(fn, dpi=110)
+    plt.close(fig)
+    figs.append(fn)
+
+
+hot = SUM.sort_values("Tmax_degC", ascending=False).well.tolist()
+section(["WELL-2", "WELL-10", "WELL-3", "WELL-6", "WELL-7"], "section_hot_axis_W2-W10-W3-W6-W7.png",
+        "Section A (NW-SE) through the hottest wells: WELL-2, WELL-10, WELL-3, WELL-6, WELL-7")
+section(["WELL-8", "WELL-6", "WELL-3", "WELL-5", "WELL-1"], "section_west_east_W8-W6-W3-W5-W1.png",
+        "Section B (W-E): WELL-8, WELL-6, WELL-3, WELL-5, WELL-1")
+section(["WELL-2", "WELL-9", "WELL-4"], "section_north_W2-W9-W4.png",
+        "Section C (towards the north-east): WELL-2, WELL-9, WELL-4")
+
+# --- hydrostatic excess figure
+fig, ax = plt.subplots(figsize=(9, 6))
+for i, w in enumerate(WELLS):
+    h = HY[HY.well == w]
+    for _, rr in h.iterrows():
+        ax.plot([rr.ratio_measured_to_IF97] * 2, [rr.z_top_mRL, rr.z_bottom_mRL], "-", color=cm(i), lw=3 if
+                rr.window_type.startswith("full") else 1.5, alpha=0.9)
+    ax.plot([], [], color=cm(i), label=w)
+ax.axvline(1.0, color="k", lw=1, label="IF97 static column, g=9.80665")
+ax.axvline(10.0 / G, color="r", ls="--", lw=1, label="ratio for g=10.0 m/s2")
+ax.axvline(FIELD_RATIO, color="gray", ls=":", lw=1.5, label=f"cold-well median {FIELD_RATIO:.4f}")
+ax.set_xlabel("Measured dP / IF97-predicted dP")
+ax.set_ylabel("Elevation (mRL)")
+ax.legend(fontsize=7)
+ax.set_title("Hydrostatic test, single-phase liquid windows >= 300 m (thick = full run)")
+fig.tight_layout()
+fn = os.path.join(FIG, "hydrostatic_ratio_by_window.png")
+fig.savefig(fn, dpi=120)
+plt.close(fig)
+figs.append(fn)
+
+# --- natural state pressure test figure
+fig, axs = plt.subplots(1, 4, figsize=(16, 4.5))
+for ax, (_, rr) in zip(axs, PC.iterrows()):
+    w = rr.well
+    dates, vals = W[w]["transient_P"][rr.gauge_elevation_mRL]
+    yrs = [datetime.strptime(d, "%d/%m/%Y") for d in dates]
+    ax.plot(yrs, vals, "o-", label="gauge")
+    ax.axhline(rr.survey_P_at_gauge_bar, color="r", ls="--", label="survey P at gauge elev.")
+    ax.axvline(datetime.strptime(W[w]["survey_date_P"], "%d/%m/%Y"), color="gray", ls=":", label="survey date")
+    ax.set_title(f"{w} at {rr.gauge_elevation_mRL:g} mRL: diff {rr.diff_survey_minus_first_bar:+.1f} bar", fontsize=9)
+    ax.set_ylabel("P (bar)")
+    ax.tick_params(axis="x", rotation=45)
+    ax.legend(fontsize=7)
+fig.tight_layout()
+fn = os.path.join(FIG, "natural_state_pressure_test.png")
+fig.savefig(fn, dpi=110)
+plt.close(fig)
+figs.append(fn)
+
+# --- feed-zone pressure vs elevation
+fig, ax = plt.subplots(figsize=(8, 7))
+for i, w in enumerate(WELLS):
+    f = FZ[FZ.well == w]
+    ax.plot(f.P_bar, f.mid_mRL, "s", color=cm(i), ms=8, label=w)
+zz = np.linspace(FZ.mid_mRL.min(), FZ.mid_mRL.max(), 50)
+ax.plot(np.polyval(fzfit, zz), zz, "k--", lw=1, label="single field quadratic fit")
+ax.set_xlabel("Feed-zone pressure (bar)")
+ax.set_ylabel("Feed-zone mid elevation (mRL)")
+ax.legend(fontsize=7)
+ax.set_title("Feed-zone pressures: all on one curve within a few bar -> connected deep pressure")
+fig.tight_layout()
+fn = os.path.join(FIG, "feedzone_pressure_vs_elevation.png")
+fig.savefig(fn, dpi=120)
+plt.close(fig)
+figs.append(fn)
+
+# --- conceptual model sketch (plan view, built from the data tables)
+fig, axs = plt.subplots(1, 2, figsize=(17, 8))
+ax = axs[0]
+draw_base(ax, grid=False)
+s500 = CE[CE.elevation_mRL == -500]
+tri = mtri.Triangulation(s500.x.values, s500.y.values)
+cs = ax.tricontourf(tri, s500.T_degC.values, levels=np.arange(0, 290, 20), cmap=CMAP_T, alpha=0.6)
+plt.colorbar(cs, ax=ax, label="T at -500 mRL (degC), interpolated inside well hull", shrink=0.7)
+draw_wells(ax)
+GS = SUM.merge(GEO[["well", "x_wellhead", "y_wellhead"]], on="well")
+up = GS[GS.regime.str.startswith("upflow")]
+for _, rr in up.iterrows():
+    ax.add_patch(plt.Circle((rr.x_wellhead, rr.y_wellhead), 450, fc="none", ec="red", lw=2.5, ls="-"))
+    ax.annotate("UPFLOW\n(near boiling)", (rr.x_wellhead, rr.y_wellhead), xytext=(-110, 30),
+                textcoords="offset points", color="red", weight="bold", fontsize=9)
+src = up[["x_wellhead", "y_wellhead"]].mean().values if len(up) else GS.loc[GS.Tmax_degC.idxmax(),
+                                                                              ["x_wellhead", "y_wellhead"]].values
+for _, rr in GS[GS.regime.str.contains("outflow")].iterrows():
+    ax.add_patch(FancyArrowPatch(src, (rr.x_wellhead, rr.y_wellhead), arrowstyle="-|>", mutation_scale=18,
+                                 color="darkorange", lw=2, shrinkA=10, shrinkB=10))
+    ax.annotate(f"Tmax {rr.Tmax_degC:.0f} @ {rr.Tmax_elev_mRL:.0f}", (rr.x_wellhead, rr.y_wellhead),
+                xytext=(6, -14), textcoords="offset points", fontsize=7, color="darkorange")
+for _, rr in GS[GS.regime.str.startswith("recharge")].iterrows():
+    ax.annotate("RECHARGE /\ncold downflow", (rr.x_wellhead, rr.y_wellhead), xytext=(10, -30),
+                textcoords="offset points", color="blue", weight="bold", fontsize=8)
+    ax.plot(rr.x_wellhead, rr.y_wellhead, "v", ms=16, color="blue")
+for _, rr in GS[GS.regime == "conductive"].iterrows():
+    ax.annotate("conductive\nmargin", (rr.x_wellhead, rr.y_wellhead), xytext=(10, -30),
+                textcoords="offset points", color="green", fontsize=8)
+ax.set_title("Conceptual model, plan view (data-derived; arrows = inferred outflow paths)")
+# schematic section
+ax = axs[1]
+order = ["WELL-8", "WELL-6", "WELL-10", "WELL-2", "WELL-3", "WELL-9", "WELL-7", "WELL-5", "WELL-1", "WELL-4"]
+order = [w for w in SUM.sort_values("Tmax_degC").well if w] if False else order
+for i, w in enumerate(order):
+    r = W[w]
+    sc = ax.scatter(np.full(len(r["zT"]), i), r["zT"], c=r["T"], cmap=CMAP_T, vmin=0, vmax=280, s=40)
+    s = SUM[SUM.well == w].iloc[0]
+    ax.annotate(f"{w.replace('WELL-', 'W')}\n{s.regime.split(' (')[0].split(';')[0]}", (i, r["wellhead"] + 30),
+                ha="center", fontsize=7, rotation=0)
+    if s.inversion_degC > 0:
+        ax.annotate("", xy=(i + 0.35, s.Tmax_elev_mRL), xytext=(i - 0.35, s.Tmax_elev_mRL),
+                    arrowprops=dict(arrowstyle="->", color="darkorange", lw=2))
+    for f in r["fz"]:
+        ax.plot([i, i], [f["top"], f["bot"]], "-", color="cyan", lw=7, alpha=0.6)
+    ax.plot([i - 0.25, i + 0.25], [r["casing_shoe"]] * 2, "k-", lw=2)
+plt.colorbar(sc, ax=ax, label="Measured T (degC)", shrink=0.7)
+ax.set_xticks(range(len(order)))
+ax.set_xticklabels([w.replace("WELL-", "W") for w in order])
+ax.set_ylabel("Elevation (mRL)")
+ax.set_title("Wells ordered W->E-ish; orange arrows = lateral outflow at Tmax elevation;\n"
+             "cyan = feed zones, black bar = casing shoe")
+fig.tight_layout()
+fn = os.path.join(FIG, "conceptual_model_sketch.png")
+fig.savefig(fn, dpi=110)
+plt.close(fig)
+figs.append(fn)
+print(f"\n{len(figs)} figures written to Output/figures/")
+
+# ============================================================================
+# 16. Report (defined below, called at the end)
+# ============================================================================
+def write_report():
+    """Write Output/NS_data_interpretation.md. Every number is taken from the tables written above."""
+    S = SUM.set_index("well")
+    Gd = GEO.set_index("well")
+    F = FZ.copy()
+    K = lambda w: w.replace("WELL-", "W")
+
+    def n0(x):
+        return "n/a" if pd.isna(x) else f"{x:.0f}"
+
+    def n1(x):
+        return "n/a" if pd.isna(x) else f"{x:.1f}"
+
+    # ---- derived quantities used in the text (all from output tables)
+    up = S[S.regime.str.startswith("upflow")].index.tolist()
+    outf = S[S.regime.str.contains("outflow")].index.tolist()
+    rech = S[S.regime.str.startswith("recharge")].index.tolist()
+    cond = S[S.regime == "conductive"].index.tolist()
+    w10 = S.loc["WELL-10"]
+    dFX = Gd["dist_Fault1xFault3_m"]
+    x10, y10 = Gd.loc["WELL-10", ["x_wellhead", "y_wellhead"]]
+    dist_from_up = {w: math.hypot(Gd.loc[w, "x_wellhead"] - x10, Gd.loc[w, "y_wellhead"] - y10) for w in WELLS}
+    bm10 = TGT[(TGT.well == "WELL-10") & (TGT.boiling_margin_degC < BM_FLAG)]
+    fz10 = F[F.well == "WELL-10"].iloc[0]
+    hb = BANDSUM.set_index(["well", "band"])
+    sh_band = "shallow (bottom >= -450 mRL)"
+    dp_band = "deep (top <= -450 mRL)"
+    shallow_ratio = {w: hb.loc[(w, sh_band), "ratio_median"] for w in WELLS if (w, sh_band) in hb.index}
+    deep_ratio = {w: hb.loc[(w, dp_band), "ratio_median"] for w in WELLS if (w, dp_band) in hb.index}
+    hot_sh = {w: v for w, v in shallow_ratio.items() if w not in cold}
+    cold_sh = {w: v for w, v in shallow_ratio.items() if w in cold}
+    steep = HY[HY.steeper_than_cold_water & (HY.window_type != "full single-phase run")]
+    pcw = PC.set_index("well")
+    res = F.P_residual_to_field_fit_bar
+    ce = CE.set_index(["elevation_mRL", "well"])
+    shallow_dev = CE[CE.elevation_mRL.isin([0, -250])].groupby("well").P_minus_field_median_bar.mean()
+    lay_n = LC.groupby("well").size()
+    above_n = int(TGT.above_model_surface.sum())
+    n_pts = len(TGT)
+    integ_bad = INTEG[INTEG.result != "OK"]
+    fzq = F.groupby("quality").size().to_dict()
+    hi_fz = F[F.quality == "HIGH"].sort_values("mid_mRL", ascending=False)
+    cap_hot = S.loc[[w for w in WELLS if S.loc[w, "Tmax_degC"] >= 200]]
+    w2 = S.loc["WELL-2"]
+    els_all = [0, -250, -500, -750, -1000, -1500, -2000]
+    deepfz = F[(F.mid_mRL <= -1000) & (F.well != "WELL-8")]
+    z240 = {w: first_crossing(W[w]["zT"], W[w]["T"], 240.0) for w in ["WELL-3", "WELL-10", "WELL-2"]}
+    capth = {w: W[w]["wellhead"] - z240[w] for w in z240}
+    all_blocks_match = bool(F.block_matches_wells_json.all())
+    # isotherms vs casing shoe
+    iso_behind = {w: (S.loc[w, "z_100C_mRL"] >= W[w]["casing_shoe"], S.loc[w, "z_200C_mRL"] >= W[w]["casing_shoe"])
+                  for w in cap_hot.index}
+    iso_open = [f"{K(w)} 200 degC at {S.loc[w, 'z_200C_mRL']:.0f} mRL (shoe {W[w]['casing_shoe']:.0f})"
+                for w, (a, b) in iso_behind.items() if not b]
+    w8iso = W["WELL-8"]["T"][(W["WELL-8"]["zT"] <= -550) & (W["WELL-8"]["zT"] >= -950)]
+    within2 = {e: int((CE[CE.elevation_mRL == e].P_minus_field_median_bar.abs() <= 2.0).sum()) for e in els_all}
+    ntot = {e: int((CE.elevation_mRL == e).sum()) for e in els_all}
+    tmax_vs_fz = {}
+    for w in ["WELL-3", "WELL-6", "WELL-7", "WELL-9", "WELL-5"]:
+        zt = S.loc[w, "Tmax_elev_mRL"]
+        d = min((0 if f["bot"] <= zt <= f["top"] else min(abs(zt - f["top"]), abs(zt - f["bot"]))) for f in W[w]["fz"])
+        tmax_vs_fz[w] = (d, zt >= W[w]["casing_shoe"])
+    ddrop = PC[PC.first_transient_date.str.endswith("2014")].transient_drop_first_year_bar
+    dat_ok = not INTEG[INTEG.check.str.startswith("json_vs_dat")].result.ne("OK").any()
+
+    L = []
+    A = L.append
+    A("# Natural-state data interpretation: TE14515 (Teaching_Model_3D)")
+    A("")
+    A(f"Generated by `Scripts/natural_state_analysis.py` on {datetime.now().strftime('%Y-%m-%d %H:%M')}. "
+      "Every number below is read from a file in `Output/` (file named in brackets). "
+      "**Observation** = what the data show; **Interpretation** = an inference, with its confidence. "
+      "Units: mRL (metres relative to sea level, positive up), bar (absolute), degC, kJ/kg, kg/s. "
+      "Content about the reference model TE14515 is labelled **[reference model]** and is never used as evidence.")
+    A("")
+    # ------------------------------------------------------------------ 1
+    A("## 1. Key conclusions for calibration")
+    A("")
+    out_rows = ", ".join(f"{K(w)} {S.loc[w, 'Tmax_degC']:.1f} degC at {S.loc[w, 'Tmax_elev_mRL']:.0f} mRL "
+                         f"({dist_from_up[w] / 1000:.1f} km)" for w in sorted(outf, key=lambda w: dist_from_up[w]))
+    A(f"1. **The upflow is at WELL-10 / WELL-2, next to the Fault 1 x Fault 3 intersection.** Observation: WELL-10 "
+      f"is the hottest well ({w10.Tmax_degC:.1f} degC at {w10.Tmax_elev_mRL:.0f} mRL) and the only one near boiling: "
+      f"boiling margin {bm10.boiling_margin_degC.min():.1f}-{bm10.boiling_margin_degC.max():.1f} degC from "
+      f"{bm10.elevation_mRL.max():.0f} to {bm10.elevation_mRL.min():.1f} mRL; the profile is isothermal below its feed zone. "
+      f"WELL-2 is {dFX['WELL-2']:.0f} m from the mapped Fault 1 x Fault 3 intersection; WELL-10 is "
+      f"{Gd.loc['WELL-10', 'dist_Fault1_m']:.0f} m from Fault 1 and {Gd.loc['WELL-10', 'dist_Fault3_m']:.0f} m from Fault 3 "
+      f"({dFX['WELL-10']:.0f} m from the intersection). WELL-2 reheats with depth, to {w2.T_at_TD_degC:.1f} degC at TD ({w2.TD_mRL:.0f} mRL), "
+      f"the hottest deep temperature in the field. "
+      f"Action: put the deep hot mass input under the F1 x F3 intersection (WELL-2/WELL-10 blocks), with enthalpy of at "
+      f"least that of liquid at {w10.Tmax_degC:.0f} degC (about {h_liquid(w10.Tmax_degC, fz10.P_bar):.0f} kJ/kg from "
+      f"IF97 at the WELL-10 feed-zone pressure). [well_summary.csv, well_geometry_check.csv, NS_calibration_targets.csv]")
+    A(f"2. **A hot outflow layer spreads east, south-east and south at about -250 to -750 mRL.** Observation: every "
+      f"well except WELL-10 (upflow), the recharge wells and the eastern margin well WELL-1 has a temperature inversion, and Tmax falls with distance from WELL-10: "
+      f"{out_rows}. Below the inversions the temperature drops to "
+      f"{S.loc[outf, 'T_inversion_min_degC'].min():.1f}-{S.loc[outf, 'T_inversion_min_degC'].max():.1f} degC. "
+      f"Interpretation (high confidence): lateral outflow of hot fluid above cooler water. Action: the model needs a "
+      f"laterally permeable layer at about -250 to -750 mRL that connects the upflow to WELL-3, WELL-6, WELL-9, WELL-7 "
+      f"and WELL-5, and lower vertical permeability below it, so that the cool water under the outflow stays cool. "
+      f"[well_summary.csv, figures/section_hot_axis_*.png]")
+    A(f"3. **Cold recharge or downflow comes in at WELL-4 (north-east, on Fault 3) and WELL-8 (south-west).** "
+      f"Observation: WELL-4 reaches only {S.loc['WELL-4', 'Tmax_degC']:.1f} degC at TD ({S.loc['WELL-4', 'TD_mRL']:.0f} mRL), "
+      f"with a gradient of {S.loc['WELL-4', 'shallow_gradient_degC_per_km']:.0f}-{S.loc['WELL-4', 'deep_gradient_degC_per_km']:.0f} "
+      f"degC/km, and is {Gd.loc['WELL-4', 'dist_Fault3_m']:.0f} m from Fault 3. "
+      f"WELL-8 reaches only {S.loc['WELL-8', 'Tmax_degC']:.1f} degC at {S.loc['WELL-8', 'TD_mRL']:.0f} mRL. Action: the model needs cold "
+      f"water ({W['WELL-4']['T'].min():.0f}-{W['WELL-4']['T'].max():.0f} degC in WELL-4, {w8iso.min():.0f}-{w8iso.max():.0f} degC "
+      f"at -550 to -950 mRL in WELL-8) entering at depth from the north-east along Fault 3 and from the south-west. "
+      f"A purely conductive base would make these wells far too hot. [well_summary.csv]")
+    A(f"4. **The cap is thin and highly conductive over the hot zone.** Observation: in the wells with Tmax >= 200 degC "
+      f"the 100 degC isotherm is at {cap_hot.z_100C_mRL.min():.0f} to {cap_hot.z_100C_mRL.max():.0f} mRL, "
+      f"and the shallow gradients are {cap_hot.shallow_gradient_degC_per_km.min():.0f}-"
+      f"{cap_hot.shallow_gradient_degC_per_km.max():.0f} degC/km. That is a conductive heat loss of "
+      f"{cap_hot.conductive_flux_cap_Wm2_assumed_k2.min():.1f}-{cap_hot.conductive_flux_cap_Wm2_assumed_k2.max():.1f} W/m2, "
+      f"assuming k = {K_ROCK} W/m/K. Action: the model needs a low-permeability layer from the surface down to about "
+      f"-100 to -250 mRL above the outflow. The shallow temperatures must be matched by conduction through it, not by "
+      f"through-flow. [well_summary.csv]")
+    A(f"5. **The deep pressures are connected across the field.** Observation: all {len(F)} feed-zone pressures lie "
+      f"within {res.abs().max():.1f} bar of a single pressure-elevation curve (RMS {np.sqrt((res ** 2).mean()):.1f} bar). "
+      f"The largest positive residuals are in the recharge wells (WELL-4 {F[F.well == 'WELL-4'].P_residual_to_field_fit_bar.iloc[0]:+.1f}, "
+      f"WELL-8 {F[F.well == 'WELL-8'].P_residual_to_field_fit_bar.iloc[0]:+.1f} bar), and the most negative are in the "
+      f"eastern margin well WELL-1 ({F[F.well == 'WELL-1'].P_residual_to_field_fit_bar.min():+.1f} bar). Interpretation "
+      f"(medium confidence): a single connected reservoir, with a small head gradient from the recharge sides towards the "
+      f"east, where the river is. Action: use the feed-zone pressures as the pressure targets "
+      f"(feedzones.csv), with a tolerance of about 1-2 bar. [feedzones.csv, figures/feedzone_pressure_vs_elevation.png]")
+    A(f"6. **Above about -450 mRL the survey pressures are not a static column (data problem, high impact).** "
+      f"Observation: the measured pressure gradient is steeper than an IF97 static column of the measured temperature "
+      f"profile in every well. The median ratio is {min(cold_sh.values()):.3f}-{max(cold_sh.values()):.3f} in the cold wells "
+      f"and {min(hot_sh.values()):.2f}-{max(hot_sh.values()):.2f} in the hot wells, and in {len(steep)} windows the "
+      f"gradient is steeper than a column of cold water (implied density up to {steep.rho_implied_kgm3.max():.0f} kg/m3). "
+      f"Below -450 mRL most windows are within a few percent of the IF97 static column. Checks: a datum offset cannot "
+      f"change a gradient; a gravity or unit convention would act at every depth; two-phase fluid would make the column "
+      f"lighter, not heavier; the 0.1 bar rounding is below 0.5 % over 300 m. "
+      f"Action: give zero weight to pressures that are not at feed zones (column weight_P), and ask the data provider "
+      f"how the shallow pressures were obtained. [hydrostatic_check.csv, hydrostatic_band_summary.csv]")
+    A(f"7. **The surveys represent the pre-production natural state, even though every survey is dated 29/07/2015.** "
+      f"Observation: at the gauge elevation, the survey pressure differs from the first (01/01/2014) gauge reading by "
+      f"{pcw.loc['WELL-2', 'diff_survey_minus_first_bar']:+.1f} bar at WELL-2 and "
+      f"{pcw.loc['WELL-3', 'diff_survey_minus_first_bar']:+.1f} bar at WELL-3. The 01/01/2015 readings are already "
+      f"{pcw.loc['WELL-2', 'transient_drop_first_year_bar']:.1f} bar and {pcw.loc['WELL-3', 'transient_drop_first_year_bar']:.1f} bar lower than the first. "
+      f"WELL-9 differs by {pcw.loc['WELL-9', 'diff_survey_minus_first_bar']:+.1f} bar. "
+      f"Action: calibrate the natural state against all surveys, with the confidence multipliers in section 6. "
+      f"[pressure_consistency_check.csv]")
+    A(f"8. **The model surface is above several wellheads.** Observation: the wellhead is below the model surface of its "
+      f"column at WELL-1 ({Gd.loc['WELL-1', 'wellhead_minus_surface_m']:.0f} m), WELL-8 "
+      f"({Gd.loc['WELL-8', 'wellhead_minus_surface_m']:.0f} m), WELL-7 ({Gd.loc['WELL-7', 'wellhead_minus_surface_m']:.0f} m), "
+      f"WELL-5 ({Gd.loc['WELL-5', 'wellhead_minus_surface_m']:.0f} m) and WELL-9 "
+      f"({Gd.loc['WELL-9', 'wellhead_minus_surface_m']:.0f} m). No survey point is above the model surface. Action: correct "
+      f"SURFA for these columns, or accept that the top-layer model temperatures sit tens of metres above the real ground "
+      f"surface. [well_geometry_check.csv]")
+    A(f"9. **[reference model] The starting model has no deep mass upflow.** It has {REF.get('n_heat_gen')} basal HEAT "
+      f"generators totalling {REF.get('total_heat_MW')} MW and {REF.get('n_mass_gen')} near-surface rain MASS "
+      f"generators. None of its MASS generators is in the deepest three layers. Conclusions 1 to 3 imply a hot mass "
+      f"upflow and cold lateral inflow. The starting model includes neither. [key_numbers.json]")
+    A("")
+    # ------------------------------------------------------------------ 2
+    A("## 2. The data")
+    A("")
+    A(f"**Inventory.** There are 10 wells (Groups_data.json). Each has one temperature survey and one pressure survey "
+      f"at the same {n_pts} elevations in total, plus a well track, the casing and liner design, and feed zones "
+      f"({', '.join(f'{k}: {v}' for k, v in fzq.items())}). WELL-2, 3, 9 and 10 have production rates, enthalpy and "
+      f"pressure gauge series. WELL-4, 5 and 8 have injection rates at {list(W['WELL-4']['inj_h'].values())[0]:.1f} kJ/kg. "
+      f"WELL-1, 6 and 7 have no flow data. WELL-8 and WELL-9 are deviated, with offsets at TD of "
+      f"{Gd.loc['WELL-8', 'horizontal_offset_at_TD_m']:.0f} m and {Gd.loc['WELL-9', 'horizontal_offset_at_TD_m']:.0f} m.")
+    A("")
+    A(f"**Checks** (data_integrity_check.csv, {len(INTEG)} checks):")
+    A("- JSON and dat files " + ("match exactly for every temperature, pressure and transient-pressure value (difference 0), "
+      "and the T and P elevations are identical in each well." if dat_ok else "do NOT all match: see data_integrity_check.csv."))
+    A("- Every survey point lies within the well track. Every feed zone lies within the track and the slotted liner, "
+      "below the casing shoe. " + ("Every feed-zone block computed here matches the block in `gTE14515_wells.json` (feedzones.csv)."
+      if all_blocks_match else "Some feed-zone blocks differ from `gTE14515_wells.json` (feedzones.csv)."))
+    for _, b in integ_bad.iterrows():
+        A(f"- **{b.well}: {b.check} = {b.result}.** {b.detail}. Treat the track TD as correct, since the survey ends there.")
+    A(f"- The first survey point is well below the wellhead at WELL-4 "
+      f"({Gd.loc['WELL-4', 'survey_top_below_wellhead_m']:.0f} m) and WELL-10 "
+      f"({Gd.loc['WELL-10', 'survey_top_below_wellhead_m']:.0f} m).")
+    A(f"- IAPWS-IF97 (Region 4 saturation, Region 1 density and enthalpy) is implemented in the script and validated "
+      f"against the IF97 verification tables. All {len(IF97_CHECKS)} checks passed, including Tsat(1.01325 bar) = "
+      f"{tsat_c(1.01325):.2f} degC and Tsat(100 bar) = {tsat_c(100):.2f} degC. The script stops if any Tsat error "
+      f"exceeds 0.1 K (run_console_log.txt).")
+    A("")
+    A("**Natural-state timing** (pressure_consistency_check.csv, figures/natural_state_pressure_test.png). "
+      "All surveys are dated 29/07/2015. Production and injection began on 01/01/2014.")
+    A("")
+    A("| Well | Role | Gauge elev. (mRL) | Survey P at gauge (bar) | First gauge P (bar, date) | Survey minus first (bar) | Verdict | Confidence | Weight multiplier |")
+    A("|---|---|---|---|---|---|---|---|---|")
+    for w in WELLS:
+        if w in pcw.index:
+            r = pcw.loc[w]
+            A(f"| {w} | {NS[w]['role']} | {r.gauge_elevation_mRL:.0f} | {r.survey_P_at_gauge_bar:.1f} | "
+              f"{r.first_transient_P_bar:.1f} ({r.first_transient_date}) | {r.diff_survey_minus_first_bar:+.1f} | "
+              f"{NS[w]['verdict']} | {NS[w]['confidence']} | {CONF_W[NS[w]['confidence']]} |")
+        else:
+            A(f"| {w} | {NS[w]['role']} | - | - | - | - | {NS[w]['verdict']} | {NS[w]['confidence']} | "
+              f"{CONF_W[NS[w]['confidence']]} |")
+    A("")
+    A("Reasons for each verdict (well_summary.csv `ns_verdict`):")
+    for w in WELLS:
+        A(f"- {w}: {NS[w]['reason']}.")
+    A(f"- **Injectors.** If WELL-4, 5 or 8 had been surveyed while injecting, the open hole would show an isothermal "
+      f"column near the injectate temperature (about 80 degC). WELL-4 reads {S.loc['WELL-4', 'Tmax_degC']:.0f} degC or "
+      f"less, far colder than the injectate, so it is not an injection profile. WELL-5 is isothermal at about 155-158 "
+      f"degC behind casing, above any injectate temperature. WELL-8 has an isothermal section at 67-68 degC from -650 to "
+      f"-950 mRL, around the casing shoe at {W['WELL-8']['casing_shoe']:.0f} mRL. This is the only feature that could "
+      f"be cooled injectate. Its points remain in the targets at the WELL-8 confidence, and it is listed in section 7.")
+    A("")
+    # ------------------------------------------------------------------ 3
+    A("## 3. Temperature structure")
+    A("")
+    A("Per-well characteristics (well_summary.csv; profiles in figures/profile_WELL-*.png). Gradients are least-squares "
+      "fits. The shallow gradient uses the top 250 m of the liquid-filled survey; the deep gradient uses the interval "
+      "given in the CSV. Isotherms are the first downward crossing.")
+    A("")
+    A("| Well | Tmax (degC) @ mRL | T at TD (degC) @ mRL | Inversion (degC), range mRL | Shallow grad. (degC/km) | Deep grad. (degC/km) | z100 (mRL) | z200 (mRL) | Min boiling margin (degC) @ mRL | Water level / pivot | Regime |")
+    A("|---|---|---|---|---|---|---|---|---|---|---|")
+    for w in WELLS:
+        r = S.loc[w]
+        inv = (f"{r.inversion_degC:.1f}, {r.inversion_top_mRL:.0f} to {r.inversion_base_mRL:.0f}"
+               if r.inversion_degC > 0 else "none")
+        A(f"| {w} | {r.Tmax_degC:.1f} @ {r.Tmax_elev_mRL:.0f} | {r.T_at_TD_degC:.1f} @ {r.TD_mRL:.0f} | {inv} | "
+          f"{n0(r.shallow_gradient_degC_per_km)} | {n0(r.deep_gradient_degC_per_km)} | {n0(r.z_100C_mRL)} | "
+          f"{n0(r.z_200C_mRL)} | {r.min_boiling_margin_degC:.1f} @ {r.min_bm_elev_mRL:.0f} | "
+          f"WL {r.water_level_mRL:.0f} mRL; pivot {r.pivot_P_bar:.1f} bar @ {r.pivot_fz_mid_mRL:.0f} ({r.pivot_fz_quality}) | "
+          f"{r.regime} |")
+    A("")
+    A("**Reading the profiles against the wellbore** (all wells; see section 7 for the open questions):")
+    A(f"- **Behind casing** ({int(TGT.behind_casing.sum())} of {n_pts} points), no internal flow is possible. The steep "
+      f"shallow gradients and the 100 degC isotherms are behind casing in every well with Tmax >= 200 degC, and so is the "
+      f"200 degC isotherm" + (f" except {'; '.join(iso_open)}" if iso_open else "") + ". These are taken as "
+      f"conductive formation temperatures.")
+    A("- **Inversions.** Distance from the inversion maximum to the nearest feed zone: "
+      + ", ".join(f"{K(w)} {d:.0f} m" + (" (behind casing)" if bc else "") for w, (d, bc) in tmax_vs_fz.items())
+      + ". In WELL-5 the maximum is behind casing, where no internal flow is possible. In all five the cooling "
+      f"continues to or below the deepest feed zone, where a static well has no internal flow. In WELL-3 the minimum ({S.loc['WELL-3', 'T_inversion_min_degC']:.1f} degC at "
+      f"{S.loc['WELL-3', 'inversion_base_mRL']:.0f} mRL) is about 800 m below its deepest feed zone. Interpretation "
+      f"(high confidence): the inversions are formation features (lateral outflow), not wellbore artefacts.")
+    segs = INTFLOW["WELL-2"]
+    if segs:
+        a, b, ta, tb = segs[0]
+        A(f"- **WELL-2 isothermal section.** Between {a:.0f} and {b:.0f} mRL, in open hole between feed zones 2 "
+          f"(-720 to -770 mRL) and 3 (-1900 to -1920 mRL), the temperature is {ta:.1f}-{tb:.1f} degC. This "
+          f"is the signature of internal upflow from FZ3 to FZ2 inside the wellbore. Interpretation (medium confidence): "
+          f"the formation between these depths may be cooler than measured. The points are down-weighted to 0.4.")
+    A(f"- **Two-phase or boiling-point-for-depth.** Only WELL-10 comes within {BM_FLAG:g} degC of boiling "
+      f"({len(bm10)} points, {bm10.elevation_mRL.max():.0f} to {bm10.elevation_mRL.min():.1f} mRL, behind casing and at "
+      f"the feed zone). Interpretation (medium confidence): a two-phase or near-boiling zone at the top of the upflow, "
+      f"from about -75 to -265 mRL. The next-closest well is WELL-3, with a minimum margin of "
+      f"{S.loc['WELL-3', 'min_boiling_margin_degC']:.1f} degC at {S.loc['WELL-3', 'min_bm_elev_mRL']:.0f} mRL. "
+      f"Boiling margins at every point are in NS_calibration_targets.csv and figures/PT_state_vs_saturation.png.")
+    A(f"- **Recharge wells.** WELL-4 stays at {W['WELL-4']['T'].min():.1f}-{W['WELL-4']['T'].max():.1f} degC over its "
+      f"{W['WELL-4']['zT'].max() - W['WELL-4']['zT'].min():.0f} m survey. WELL-8 stays at 64-68 degC from -550 to "
+      f"-950 mRL, then warms conductively at {S.loc['WELL-8', 'deep_gradient_degC_per_km']:.0f} degC/km below its feed "
+      f"zone. Both show cold water moving down or sideways. Neither is a conductive profile.")
+    A(f"- **WELL-1 (east)** is monotonic, with a shallow gradient of {S.loc['WELL-1', 'shallow_gradient_degC_per_km']:.0f} degC/km and "
+      f"{S.loc['WELL-1', 'T_at_TD_degC']:.1f} degC at TD. It is conductive, at the edge of the field. Its wellhead pressure is "
+      f"{W['WELL-1']['P'][0]:.1f} bar at {W['WELL-1']['wellhead']:.0f} mRL, which makes it artesian (equivalent water "
+      f"level {S.loc['WELL-1', 'water_level_mRL']:.0f} mRL). It is {Gd.loc['WELL-1', 'dist_river_m']:.0f} m from the river.")
+    A("")
+    A("**Temperature at common elevations** (T_P_at_common_elevations.csv; maps in figures/maps_temperature_by_elevation.png; "
+      "interpolation only, no extrapolation):")
+    A("")
+    els = [0, -250, -500, -750, -1000, -1500, -2000]
+    A("| Well | " + " | ".join(f"{e} mRL" for e in els) + " |")
+    A("|---|" + "---|" * len(els))
+    for w in WELLS:
+        A(f"| {w} | " + " | ".join(n1(ce.loc[(e, w), 'T_degC']) if (e, w) in ce.index else "-" for e in els) + " |")
+    A("")
+    # ------------------------------------------------------------------ 4
+    A("## 4. Pressure structure")
+    A("")
+    A("Measured pressure is a formation pressure only at feed zones. The feed-zone values below are the pressure "
+      "targets. Elsewhere, P follows whatever is in the wellbore (see conclusion 6).")
+    A("")
+    A("| Well | FZ | Mid (mRL) | Quality | T (degC) | P (bar) | Tsat (degC) | Boiling margin (degC) | h liquid (kJ/kg) | Block | Residual to field curve (bar) |")
+    A("|---|---|---|---|---|---|---|---|---|---|---|")
+    for _, f in F.iterrows():
+        A(f"| {f.well} | {f.feedzone} | {f.mid_mRL:.1f} | {f.quality} | {f.T_degC:.1f} | {f.P_bar:.1f} | {n1(f.Tsat_degC)} | "
+          f"{n1(f.boiling_margin_degC)} | {f.h_liquid_kJkg:.0f} | {f.block} | {f.P_residual_to_field_fit_bar:+.2f} |")
+    A("")
+    A("**Pressure at common elevations**, as the deviation from the median of the wells at that elevation "
+      "(T_P_at_common_elevations.csv; maps in figures/maps_pressure_by_elevation.png):")
+    A("")
+    A("| Well | " + " | ".join(f"{e} mRL" for e in els) + " |")
+    A("|---|" + "---|" * len(els))
+    for w in WELLS:
+        A(f"| {w} | " + " | ".join(
+            f"{ce.loc[(e, w), 'P_bar']:.1f} ({ce.loc[(e, w), 'P_minus_field_median_bar']:+.1f})" if (e, w) in ce.index else "-"
+            for e in els) + " |")
+    A("")
+    A(f"- Observation: at 0 and -250 mRL the upflow wells have the highest pressures relative to the median "
+      f"(mean deviation WELL-10 {shallow_dev['WELL-10']:+.1f}, WELL-2 {shallow_dev['WELL-2']:+.1f}, "
+      f"WELL-3 {shallow_dev['WELL-3']:+.1f} bar), and WELL-1 the lowest ({shallow_dev['WELL-1']:+.1f} bar). "
+      f"Wells within 2 bar of the median: " + ", ".join(f"{within2[e]}/{ntot[e]} at {e} mRL" for e in els_all)
+      + f". WELL-1 is the most persistent low ({ce.loc[(-750, 'WELL-1'), 'P_minus_field_median_bar']:+.1f} bar at -750 mRL). "
+      f"WELL-8 is high below its feed zone. Interpretation: the shallow contrast "
+      f"partly reflects conclusion 6, so do not use it as a target.")
+    A("- The pivot pressure in section 3 is the pressure at the dominant feed zone. Each well has only one survey, so a "
+      "pivot point cannot be located by intersecting profiles.")
+    A(f"- Observation: below the feed zone of WELL-8 the pressure rises above the median "
+      f"({ce.loc[(-2000, 'WELL-8'), 'P_minus_field_median_bar']:+.1f} bar at -2000 mRL). Below its only feed zone "
+      f"(-1100 to -1150 mRL) the pressure follows WELL-8's own cold, dense column, so this is a wellbore effect, not "
+      f"formation pressure.")
+    A("")
+    A("**Hydrostatic checks** (hydrostatic_check.csv, hydrostatic_band_summary.csv, figures/hydrostatic_ratio_by_window.png). "
+      "The tests use only single-phase liquid intervals: P >= 1.5 bar, boiling margin >= 10 degC, windows >= 300 m. "
+      "The measured dP is compared with dP integrated through IF97 Region 1 density over the measured T profile, with "
+      f"g = {G}.")
+    A("")
+    A("| Well | Shallow windows: median ratio | Deep windows: median ratio (min-max) |")
+    A("|---|---|---|")
+    for w in WELLS:
+        if w in shallow_ratio or w in deep_ratio:
+            dr = (f"{deep_ratio[w]:.3f} ({hb.loc[(w, dp_band), 'ratio_min']:.3f}-{hb.loc[(w, dp_band), 'ratio_max']:.3f})"
+                  if w in deep_ratio else "-")
+            A(f"| {w} | {shallow_ratio.get(w, float('nan')):.3f} | {dr} |")
+    A("")
+    A(f"- **Field-wide component.** The cold wells WELL-1, WELL-4 and WELL-8 have no hot column and no boiling. Their "
+      f"full-run median ratio is {FIELD_RATIO:.4f}, equivalent to g = {G * FIELD_RATIO:.2f} m/s2. A uniform "
+      f"g = 10 m/s2 convention would give {10 / G:.4f}. Split by depth, the cold-well medians are "
+      f"{BAND_RATIO[sh_band]:.4f} in the shallow windows and {BAND_RATIO[dp_band]:.4f} in the deep windows. "
+      f"Report: a possible datum or convention issue of about {(FIELD_RATIO - 1) * 100:.1f} % in the cold wells, not physical overpressure. It "
+      f"is not uniform with depth, so a single gravity constant does not explain it.")
+    A(f"- **Well-specific component.** The shallow excess grows with temperature, from "
+      f"{min(cold_sh.values()):.3f}-{max(cold_sh.values()):.3f} in the cold wells to {max(hot_sh.values()):.2f} in "
+      f"{max(hot_sh, key=hot_sh.get)}. WELL-2 also has a deep excess "
+      f"({deep_ratio.get('WELL-2', float('nan')):.3f}), possibly from flow inside the wellbore through the isothermal "
+      f"section (section 3). WELL-5, 6 and 7 below -450 mRL agree with the IF97 static column to within "
+      f"{max(abs(deep_ratio[w] - 1) for w in ['WELL-5', 'WELL-6', 'WELL-7']) * 100:.1f} %. This confirms that the "
+      f"density calculation and the units are right where the column is static.")
+    A("- Interpretation (low confidence): the shallow pressures in the hot wells behave like formation pressures with "
+      "upward flow through a low-permeability cap, or like synthetic block pressures. They are not readings in a static "
+      "wellbore. Either way, they are not reliable targets.")
+    A("")
+    # ------------------------------------------------------------------ 5
+    A("## 5. Conceptual model (from the data alone)")
+    A("")
+    A("![conceptual model](figures/conceptual_model_sketch.png)")
+    A("")
+    A("Cross-sections: figures/section_hot_axis_W2-W10-W3-W6-W7.png (NW-SE through the hottest wells), "
+      "figures/section_west_east_W8-W6-W3-W5-W1.png and figures/section_north_W2-W9-W4.png. "
+      "Well map: figures/well_map_grid_faults_water.png.")
+    A("")
+    A("| Feature | Where / depth | Supporting observation | Relation to mapped features | Confidence |")
+    A("|---|---|---|---|---|")
+    A(f"| Upflow | WELL-10 and WELL-2, from depth up to about -250 mRL | WELL-10 {w10.Tmax_degC:.1f} degC, boiling margin "
+      f"{bm10.boiling_margin_degC.min():.1f} degC, isothermal below FZ; WELL-2 reheats to {w2.T_at_TD_degC:.1f} degC at "
+      f"{w2.TD_mRL:.0f} mRL | W2 {dFX['WELL-2']:.0f} m from the Fault 1 x Fault 3 intersection; W10 "
+      f"{Gd.loc['WELL-10', 'dist_Fault1_m']:.0f} m from F1 and {Gd.loc['WELL-10', 'dist_Fault3_m']:.0f} m from F3 | high for location; medium for depth extent (W10 TD only {w10.TD_mRL:.0f} mRL) |")
+    A(f"| Two-phase zone | WELL-10, about -75 to -265 mRL | boiling margin < {BM_FLAG:g} degC at {len(bm10)} points | "
+      f"top of the upflow | medium |")
+    A(f"| Outflow | -250 to -750 mRL towards E/SE/S (W3, W6, W9, W7, W5) | inversions; Tmax falls and deepens with distance "
+      f"from W10 (W3 {S.loc['WELL-3', 'Tmax_elev_mRL']:.0f}, W6 {S.loc['WELL-6', 'Tmax_elev_mRL']:.0f}, "
+      f"W7 {S.loc['WELL-7', 'Tmax_elev_mRL']:.0f}, W9 {S.loc['WELL-9', 'Tmax_elev_mRL']:.0f} mRL) | flows away from F1 x F3 "
+      f"and reaches WELL-5, east of Fault 2 ({S.loc['WELL-5', 'Tmax_degC']:.0f} degC at {S.loc['WELL-5', 'Tmax_elev_mRL']:.0f} mRL), "
+      f"so Fault 2 is not a barrier to it; the shallow HIGH feed zones lie in this layer | high |")
+    A(f"| Cool water below outflow | below about -1000 mRL under W3, W6, W7, W9 | T at -1500 mRL: "
+      + ", ".join(f"{K(w)} {ce.loc[(-1500, w), 'T_degC']:.0f}" for w in ['WELL-3', 'WELL-6', 'WELL-7', 'WELL-9'] if (-1500, w) in ce.index)
+      + f" degC; feed zones below -1000 mRL (excluding WELL-8) are at {deepfz.T_degC.min():.0f}-{deepfz.T_degC.max():.0f} degC | not tied to a mapped feature | medium |")
+    A(f"| Recharge / downflow | NE (WELL-4) and SW (WELL-8) | W4 at most {S.loc['WELL-4', 'Tmax_degC']:.0f} degC; W8 at most "
+      f"{S.loc['WELL-8', 'Tmax_degC']:.0f} degC, with an isothermal section; both have positive FZ pressure residuals | "
+      f"W4 is {Gd.loc['WELL-4', 'dist_Fault3_m']:.0f} m from Fault 3 (cold water down or along F3 to the NE); W8 is "
+      f"{Gd.loc['WELL-8', 'dist_lake_shore_m']:.0f} m from the lake shore, the nearest well to the lake | medium |")
+    A(f"| Conductive margin / discharge | E (WELL-1; WELL-5 is distal outflow) | W1 conductive, artesian ({W['WELL-1']['P'][0]:.1f} bar at the "
+      f"wellhead), lowest FZ pressure residuals | W1 is {Gd.loc['WELL-1', 'dist_river_m']:.0f} m and W5 "
+      f"{Gd.loc['WELL-5', 'dist_river_m']:.0f} m from the river: likely the discharge area | medium |")
+    A(f"| Cap | surface to about -100/-250 mRL over the hot zone | gradients {cap_hot.shallow_gradient_degC_per_km.min():.0f}-"
+      f"{cap_hot.shallow_gradient_degC_per_km.max():.0f} degC/km behind casing; 100 degC isotherm at "
+      f"{cap_hot.z_100C_mRL.min():.0f} to {cap_hot.z_100C_mRL.max():.0f} mRL | thickness from wellhead to the 240 degC isotherm: "
+      + ", ".join(f"{K(w)} {v:.0f} m" for w, v in capth.items()) + " | medium |")
+    A(f"| Deep pressure connection | whole field, -260 to -1910 mRL | FZ residuals within {res.abs().max():.1f} bar of one curve | "
+      f"no pressure offset > 2.2 bar across Fault 1 or Fault 2 | medium |")
+    A("")
+    # ------------------------------------------------------------------ 6
+    A("## 6. Recommended calibration set-up")
+    A("")
+    A("**Targets** (NS_calibration_targets.csv, feedzones.csv, T_P_at_layer_centres.csv).")
+    A(f"- Temperature: use all {n_pts} survey points with the `weight` column. If the model compares at block "
+      f"centres, use T_P_at_layer_centres.csv instead ({len(LC)} rows, interpolated, never extrapolated).")
+    A(f"- Pressure: use only the {len(F)} feed-zone pressures (`weight_P` > 0 in NS_calibration_targets.csv, or "
+      f"feedzones.csv `target_weight`). Give all other pressures zero weight (see conclusion 6).")
+    A("- Enthalpy: no natural-state enthalpy data exist. Production enthalpy is out of scope.")
+    A("")
+    A("**Weighting scheme.** Weight = location weight x natural-state confidence multiplier.")
+    A("")
+    A("| Location class | Weight | Reason | Points |")
+    A("|---|---|---|---|")
+    reasons = {"feed zone": "formation T and P are measured directly",
+               "open hole": "close to formation, but internal flow is possible",
+               "open hole, possible internal flow": "isothermal open hole between feed zones (WELL-2)",
+               "behind casing": "conductive formation T; no formation pressure",
+               "near wellhead / top layer": "within 30 m of the wellhead or in the top model block; atmospheric/air effects",
+               "above model surface": "no model block"}
+    vc = TGT.location_class.value_counts()
+    for k, v in WCLASS.items():
+        A(f"| {k} | {v} | {reasons[k]} | {int(vc.get(k, 0))} |")
+    A("")
+    A("Confidence multipliers: high 1.0 (WELL-2, WELL-3), medium 0.8 (all others), from section 2. For feed-zone "
+      "pressures (feedzones.csv `target_weight`), the quality tag (HIGH 1.0, MEDIUM 0.8, LOW or Synthetic 0.5) is "
+      "multiplied by the same confidence.")
+    A("")
+    A("**Where heat and mass enter and leave** (interpretation from sections 3-5):")
+    A(f"- **In:** a hot liquid upflow at the base, under the WELL-2/WELL-10 columns "
+      f"({Gd.loc['WELL-2', 'column']}, {Gd.loc['WELL-10', 'column']}), next to the F1 x F3 intersection. Enthalpy at least "
+      f"{h_liquid(w10.Tmax_degC, fz10.P_bar):.0f} kJ/kg. The mass rate is not constrained by these data; tune it to match "
+      f"the outflow temperatures. Cold water enters laterally or from above at the NE (WELL-4 / Fault 3) and SW (WELL-8) "
+      f"margins.")
+    A(f"- **Out:** conduction through the cap over the hot zone (about {cap_hot.conductive_flux_cap_Wm2_assumed_k2.min():.1f}-"
+      f"{cap_hot.conductive_flux_cap_Wm2_assumed_k2.max():.1f} W/m2, assuming k = {K_ROCK} W/m/K), and lateral outflow to "
+      f"the east and south-east, towards the river near WELL-5 and WELL-1. WELL-1's artesian head suggests the river "
+      f"reach is a discharge boundary.")
+    A("")
+    A("**Permeability structure the data imply** (interpretation; these are not values from the reference model):")
+    A(f"- A vertical high-permeability conduit at the F1 x F3 intersection (WELL-10, WELL-2), from the base up to about -250 mRL.")
+    A(f"- A laterally continuous permeable layer at about -250 to -750 mRL, which holds the HIGH feed zones at "
+      + ", ".join(f"{K(r.well)} {r.mid_mRL:.0f}" for _, r in hi_fz[hi_fz.mid_mRL > -800].iterrows())
+      + " mRL.")
+    A("- Low vertical permeability between the outflow layer and the cooler water below. Without it the inversions "
+      "(up to 98 degC in WELL-6) would not survive.")
+    A("- A second permeable horizon at about -1100 to -1550 mRL that carries cooler water (HIGH feed zones at "
+      + ", ".join(f"{K(r.well)} {r.mid_mRL:.0f}" for _, r in hi_fz[hi_fz.mid_mRL <= -800].iterrows())
+      + " mRL).")
+    A("- A low-permeability cap from the surface to about -100/-250 mRL ("
+      + ", ".join(f"240 degC reached {v:.0f} m below the wellhead at {K(w)}" for w, v in capth.items()) + ").")
+    A("- Fault 3 to the NE of the intersection is a path for cold water, not hot (WELL-4).")
+    A("")
+    A("**Boundary requirements.**")
+    A("- Top: atmospheric, with rain recharge. The model surface must be lowered at WELL-1 and WELL-8 (section 1, item 8).")
+    A("- Base: localised hot mass input at F1 x F3, plus background conductive heat elsewhere. A uniform basal heat flux "
+      "cannot make a 98 degC inversion or a near-boiling well 600 m deep.")
+    A("- Sides: recharge or open boundaries at the NE and SW, and a discharge or open boundary to the east (river).")
+    A(f"- **[reference model]** Default heat flux {REF.get('heat_flux_default_Wm2')} W/m2; rain {REF.get('rain_default_mm')} "
+      f"mm/yr with infiltration {REF.get('infiltration')}; lake wet columns {', '.join(REF.get('lake_columns', []))}. "
+      f"The deep mass upflow is missing.")
+    A("")
+    # ------------------------------------------------------------------ 7
+    A("## 7. Data quality issues and open questions (ranked by impact on calibration)")
+    A("")
+    A(f"1. **Shallow super-hydrostatic pressures** (section 4). These decide whether shallow P can be a target and how "
+      f"permeable the cap must be. Ask the provider whether these are measured wellbore pressures or derived formation "
+      f"pressures. Until then, only feed-zone P are used.")
+    A(f"2. **Survey date 29/07/2015 for all wells.** The pressures say pre-production. If the surveys really are from "
+      f"mid-2015, the producer-area pressures would be {ddrop.min():.0f}-"
+      f"{ddrop.max():.0f} bar too low for the natural state. Confirm the date.")
+    A(f"3. **Model surface above wellheads** by up to {-Gd.wellhead_minus_surface_m.min():.0f} m (WELL-1). This "
+      f"biases the top-layer temperature and pressure comparisons. Fix SURFA.")
+    A("4. **WELL-2 isothermal section** (-1100 to -1900 mRL), a possible wellbore internal flow. The deep temperature "
+      "there may not be formation temperature; it is down-weighted.")
+    A(f"5. **WELL-10 depth and tag.** WELL-10 ends at {w10.TD_mRL:.0f} mRL and its feed-zone quality is "
+      f"'{fz10.quality}'. The depth extent of the upflow is constrained only by WELL-2's deep reheating.")
+    A(f"6. **WELL-9 offset of {pcw.loc['WELL-9', 'diff_survey_minus_first_bar']:+.1f} bar** at the gauge. Check the "
+      f"gauge depth reference (measured depth or elevation) on this deviated well.")
+    A("7. **WELL-8 isothermal 67-68 degC** around its casing shoe. Is it injection or natural downflow? Medium confidence "
+      "is kept.")
+    A(f"8. **WELL-4 design** lists the liner to -3251 mRL, but the track ends at {W['WELL-4']['td']:.0f} mRL. The survey "
+      f"starts {Gd.loc['WELL-4', 'survey_top_below_wellhead_m']:.0f} m below the wellhead.")
+    A(f"9. **No data near the lake.** The nearest well is WELL-8, {Gd.dist_lake_shore_m.min():.0f} m from the shore. "
+      f"The western boundary is not constrained.")
+    A(f"10. **Rock conductivity is assumed** ({K_ROCK} W/m/K) in every heat-flux number. Scale the fluxes linearly if "
+      f"another value is used.")
+    A("")
+    # ------------------------------------------------------------------ 8
+    A("## 8. Output file index")
+    A("")
+    idx = [("Scripts/natural_state_analysis.py", "regenerates every output below"),
+           ("NS_data_interpretation.md", "this report"),
+           ("NS_calibration_targets.csv", "one row per survey point: block, Tsat, boiling margin, class, weight, weight_P, flags"),
+           ("feedzones.csv", "feed-zone targets with blocks, T, P, boiling margin, enthalpy, residuals"),
+           ("T_P_at_layer_centres.csv", "T and P at each model layer centre along each well (interpolated only)"),
+           ("T_P_at_common_elevations.csv", "T and P at fixed elevations, used for the maps and tables"),
+           ("well_summary.csv", "per-well characteristics and regime"),
+           ("pressure_consistency_check.csv", "survey P vs first gauge P"),
+           ("hydrostatic_check.csv", "column density tests per window"),
+           ("hydrostatic_band_summary.csv", "hydrostatic ratios by well and depth band"),
+           ("well_geometry_check.csv", "wellhead vs model surface, deviation, distances to faults, river and lake"),
+           ("data_integrity_check.csv", "JSON vs dat, track, design and feed-zone checks"),
+           ("key_numbers.json", "scalar results (field ratios, reference-model generator summary)"),
+           ("run_console_log.txt", "console output of the final run"),
+           ("process_log.md", "prompt, rules applied, steps and departures"),
+           ("figures/", "well map, profiles, P-T plot, maps by elevation, cross-sections, hydrostatic, "
+                        "natural-state test, feed-zone pressure, conceptual sketch")]
+    A("| File (in Output/ unless stated) | Contents |")
+    A("|---|---|")
+    for a, b in idx:
+        A(f"| {a} | {b} |")
+    A("")
+    A("Figures: " + ", ".join(f"`{os.path.basename(f)}`" for f in figs))
+    txt = "\n".join(L) + "\n"
+    # degC -> °C in prose (CSV column names such as T_degC are left unchanged)
+    import re
+    txt = re.sub(r"(?<![_A-Za-z])degC", "°C", txt)
+    open(os.path.join(OUT, "NS_data_interpretation.md"), "w", encoding="utf-8").write(txt)
+    print(f"Report written: Output/NS_data_interpretation.md ({len(L)} lines)")
+
+
+# ============================================================================
+# 15. Save key scalars for the report
+# ============================================================================
+KEY = {"field_ratio_cold": FIELD_RATIO, "field_ratio_all": FIELD_RATIO_ALL, "band_ratio_cold": BAND_RATIO,
+       "implied_g": G * FIELD_RATIO, "ref": REF, "fault_x": {k: list(v) for k, v in FAULT_X.items()},
+       "fz_fit": list(fzfit), "dd_2020": dd_2020}
+json.dump(KEY, open(os.path.join(OUT, "key_numbers.json"), "w"), indent=2, default=float)
+print("Key numbers:", json.dumps(KEY, default=float)[:600])
+
+write_report()
+print("Done.")

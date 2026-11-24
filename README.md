@@ -229,18 +229,3 @@ An agent run, following `CLAUDE.md`:
 
 The required output files and their exact columns are defined in `CLAUDE.md` §5, and are not repeated here, so that there is one source of truth. The main report is `Output/NS_data_interpretation.md`.
 
-## 6. Current dataset: departures from this standard
-
-The dataset now in `Baseline/` predates this standard. The agent rules tolerate the following points, but each one costs effort in every run and should be fixed when the data are next revised.
-
-| Departure | Standard (§) |
-|---|---|
-| One well's dat files use a shortened, re-cased name (`Wel10_*` instead of the JSON well name) | 2 |
-| Feed-zone `Top`/`Bottom` are labelled "m" although they are mRL; the track `z` is labelled "masl" | 3.1 |
-| JSON rows are stored as strings containing Python literals | 3.1 |
-| Every survey carries the same date, which conflicts with the gauge records | 3.1 |
-| One feed zone has the quality tag `Synthetic`; every `Well_Design.Source` reads "Synthetic data" without further explanation | 3.1 |
-| One well's design lists a liner deeper than its track | 3.1 |
-| The dat time-axis reference date is not documented | 3.2 |
-| Several wellheads lie below the model surface | 3.5 |
-| Extra, unstandardised items: `Data/Area_data.json`, `Data/Plotting/`, an empty `Data/Make_up_json/`, `Models/<model>/g<model>.auxjson`, `currentGeomSetup.json`, and a `.DS_Store` under `Parameters/` | 2 |

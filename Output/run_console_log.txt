@@ -1,74 +1,56 @@
-== IF97 validation (every equivalent error must be <= 0.1 K)
-   Tsat(1 bar) [K]                            expected 372.755919     computed 372.755919     equivalent error 3.89e-07
-   Tsat(10 bar) [K]                           expected 453.035632     computed 453.035632     equivalent error 3.91e-07
-   Tsat(100 bar) [K]                          expected 584.149488     computed 584.149488     equivalent error 1.47e-09
-   Tsat(1.01325 bar) [degC]                   expected 99.97          computed 99.9743        equivalent error 4.30e-03
-   Tsat(100 bar) [degC]                       expected 311            computed 310.999488     equivalent error 5.12e-04
-   Psat(300 K) [MPa]                          expected 0.00353658941  computed 0.00353658941  equivalent error 1.14e-13
-   Psat(500 K) [MPa]                          expected 2.63889776     computed 2.63889776     equivalent error 2.27e-13
-   Psat(600 K) [MPa]                          expected 12.3443146     computed 12.3443146     equivalent error 6.82e-13
-   Region1 v(300 K,3 MPa) [m3/kg]             expected 0.00100215168  computed 0.00100215168  equivalent error 3.13e-07
-   Region1 h(300 K,3 MPa) [kJ/kg]             expected 115.331273     computed 115.331273     equivalent error 5.10e-09
-   Region1 v(300 K,80 MPa) [m3/kg]            expected 0.000971180894 computed 0.000971180894 equivalent error 2.23e-08
-   Region1 h(300 K,80 MPa) [kJ/kg]            expected 184.142828     computed 184.142828     equivalent error 6.33e-08
-   Region1 v(500 K,3 MPa) [m3/kg]             expected 0.001202418    computed 0.001202418    equivalent error 2.81e-06
-   Region1 h(500 K,3 MPa) [kJ/kg]             expected 975.542239     computed 975.542239     equivalent error 2.31e-08
-== input inventory
-   geometry_dat       Baseline/Teaching_Model_3D/Models/TE14515/gTE14515.dat
-   mapping            Baseline/Teaching_Model_3D/Data/Mapping
-   out_of_scope       Baseline/Teaching_Model_3D/Data/Area_data.json
-   out_of_scope       Baseline/Teaching_Model_3D/Data/Make_up_json
-   out_of_scope       Baseline/Teaching_Model_3D/Models/TE14515/FutureScenarios
-   out_of_scope       Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/Reports
-   out_of_scope       Baseline/Teaching_Model_3D/Models/TE14515/Production
-   out_of_scope       Baseline/Teaching_Model_3D/Models/TE14515/Production/Reports
-   out_of_scope       Baseline/Teaching_Model_3D/Parameters/FutureScenarios
-   out_of_scope       Baseline/Teaching_Model_3D/Parameters/ProductionHistory
-   reference_bc       Baseline/Teaching_Model_3D/Models/TE14515/gTE14515_boundary_conditions.json
-   reference_other    Baseline/Teaching_Model_3D/Data/Plotting
-   reference_other    Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/currentNSSetup.json
-   reference_other    Baseline/Teaching_Model_3D/Models/TE14515/currentGeomSetup.json
-   reference_other    Baseline/Teaching_Model_3D/Models/TE14515/gTE14515.auxjson
-   reference_results  Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/TE14515_NS_000.incon
-   reference_rock     Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/TE14515_NS_000.dat
-   reference_rock     Baseline/Teaching_Model_3D/Models/TE14515/gTE14515_dict_rocktype.json
-   well_blocks_json   Baseline/Teaching_Model_3D/Models/TE14515/gTE14515_wells.json
-   well_data_dat      Baseline/Teaching_Model_3D/Data/Data_dat
-   well_data_json     Baseline/Teaching_Model_3D/Data/Data_json
-   well_groups        Baseline/Teaching_Model_3D/Data/Groups_data.json
-== grid: 385 vertices, 398 columns, 69 layers, top surface 1000 mRL; well-to-block file: 10 wells
-== 10 well JSON files read: WELL-1, WELL-2, WELL-3, WELL-4, WELL-5, WELL-6, WELL-7, WELL-8, WELL-9, WELL-10
-== hydrostatic windows: 25 tested; pieces not tested because shorter than 300 m:
-   WELL-2: cased piece 190 to -100 mRL is 290 m (< 300 m), not tested
-   WELL-4: open piece -500 to -750 mRL is 250 m (< 300 m), not tested
-   WELL-10: cased piece 190 to 30 mRL is 160 m (< 300 m), not tested
-   WELL-10: open piece -350 to -350 mRL is 0 m (< 300 m), not tested
-== outputs written
-   Output/NS_calibration_targets.csv
-   Output/NS_data_interpretation.md
-   Output/TP_at_common_elevations.csv
-   Output/T_P_at_layer_centres.csv
-   Output/acceptance_check.txt
-   Output/analysis_parameters.csv
-   Output/boiling_margin_flags.csv
-   Output/dat_json_crosscheck.csv
-   Output/feedzones.csv
-   Output/figures
-   Output/hydrostatic_check.csv
-   Output/hydrostatic_summary.csv
-   Output/if97_validation.csv
-   Output/input_inventory.csv
-   Output/integrity_checks.csv
-   Output/isothermal_sections.csv
-   Output/pressure_at_common_elevations.csv
-   Output/pressure_consistency_check.csv
-   Output/pressure_trend_check.csv
-   Output/provenance_labels.csv
-   Output/reference_model_summary.csv
-   Output/report_derived_numbers.csv
-   Output/run_console_log.txt
-   Output/temperature_at_common_elevations.csv
-   Output/weights_by_well.csv
-   Output/well_geometry_check.csv
-   Output/well_summary.csv
-   Output/figures: 23 figures
+Natural-state analysis -- run from GDA Files
+IF97 validation passed (14 checks; max Tsat error 0.0043 K)
+Inventory: 75 files under Baseline/ in 18 rows
+  geometry_dat       Baseline/Teaching_Model_3D/Models/TE14515/gTE14515.dat
+  mapping            Baseline/Teaching_Model_3D/Data/Mapping/Mapping.json
+  out_of_scope       Baseline/Teaching_Model_3D/Data/Area_data.json
+  out_of_scope       Baseline/Teaching_Model_3D/Models/TE14515/FutureScenarios/000/currentFSSetup.json
+  out_of_scope       Baseline/Teaching_Model_3D/Models/TE14515/Production/currentPRSetup.json
+  out_of_scope       Baseline/Teaching_Model_3D/Parameters/ProductionHistory
+  reference_bc       Baseline/Teaching_Model_3D/Models/TE14515/gTE14515_boundary_conditions.json
+  reference_other    Baseline/Teaching_Model_3D/Data/Plotting
+  reference_other    Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/TE14515_NS_000.dat
+  reference_other    Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/currentNSSetup.json
+  reference_other    Baseline/Teaching_Model_3D/Models/TE14515/currentGeomSetup.json
+  reference_other    Baseline/Teaching_Model_3D/Models/TE14515/gTE14515.auxjson
+  reference_results  Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/TE14515_NS_000.incon
+  reference_rock     Baseline/Teaching_Model_3D/Models/TE14515/gTE14515_dict_rocktype.json
+  well_blocks_json   Baseline/Teaching_Model_3D/Models/TE14515/gTE14515_wells.json
+  well_data_dat      Baseline/Teaching_Model_3D/Data/Data_dat
+  well_data_json     Baseline/Teaching_Model_3D/Data/Data_json
+  well_groups        Baseline/Teaching_Model_3D/Data/Groups_data.json
+Wells: ['WELL-1', 'WELL-2', 'WELL-3', 'WELL-4', 'WELL-5', 'WELL-6', 'WELL-7', 'WELL-8', 'WELL-9', 'WELL-10']
+Geometry: 385 vertices, 398 columns, 69 layers, 398 surface entries, 10 wells
+dat cross-check: 38 files; irregular names: ['Wel10_-250.0_transient_pressure.dat', 'Wel10_downhole_pressure.dat', 'Wel10_downhole_temperature.dat', 'Wel10_production_mass_flow.dat', 'Wel10_transient_enthalpy.dat']
+Own point-in-polygon column vs block file: 276/276 agree
+WELL-4: mean injectate enthalpy 335.0 kJ/kg -> 79.8 degC (IF97 Region 1 at 10.0 bar)
+WELL-5: mean injectate enthalpy 335.0 kJ/kg -> 79.8 degC (IF97 Region 1 at 10.0 bar)
+WELL-8: mean injectate enthalpy 335.0 kJ/kg -> 79.8 degC (IF97 Region 1 at 10.0 bar)
+WELL-1: probably natural state / medium -- no gauge and no production/injection record; feed-zone pressures lie -3.3 to -2.5 bar from the trend of the gauge-passed wells (no drawdown signature)
+WELL-2: natural state / high -- survey P at the gauge (98.20 bar) matches the first gauge reading (98.3 bar, 01/01/2014, the date production started) within the 0.1 bar reading precision; the next reading is 89.2 bar, so a survey made after production started could not match
+WELL-3: natural state / high -- survey P at the gauge (80.70 bar) matches the first gauge reading (80.8 bar, 01/01/2014, the date production started) within the 0.1 bar reading precision; the next reading is 72.6 bar, so a survey made after production started could not match
+WELL-4: probably natural state / medium -- injector; profile is colder than the injectate (80 degC) at every feed zone (max 27 degC) with no isothermal section near the injectate temperature: evidence against an injection-affected survey; no gauge; feed-zone P residuals vs the passed-well trend +1.5 to +1.5 bar
+WELL-5: probably natural state / low -- injector with no isothermal section at the injectate temperature (80 degC), but the formation at the feed zones (145-147 degC) is hotter than the injectate, so injection cooling could be hidden; feed-zone P residuals vs the passed-well trend -0.8 to -0.2 bar
+WELL-6: probably natural state / medium -- no gauge and no production/injection record; feed-zone pressures lie -0.9 to -0.9 bar from the trend of the gauge-passed wells (no drawdown signature)
+WELL-7: probably natural state / medium -- no gauge and no production/injection record; feed-zone pressures lie -2.0 to -0.2 bar from the trend of the gauge-passed wells (no drawdown signature)
+WELL-8: probably natural state / medium -- injector; profile is colder than the injectate (80 degC) at every feed zone (max 64 degC) with no isothermal section near the injectate temperature: evidence against an injection-affected survey; no gauge; feed-zone P residuals vs the passed-well trend +0.6 to +0.6 bar
+WELL-9: probably natural state / medium -- survey P at the gauge (91.25 bar) is 2.05 bar ABOVE the first gauge reading (89.2 bar on 01/01/2014, the date production started) and far above the next reading (77.7 bar); production lowers pressure, so the survey pre-dates the drawdown, but the mismatch exceeds the reading precision
+WELL-10: probably natural state / medium -- gauge starts 01/01/2020, 6.0 yr after field production began, so the gauge test cannot be applied; the survey is 8.0 bar above the first gauge reading, less than the 14.2-15.1 bar drawdown at the passed gauges over the same period, but the feed-zone pressure lies +1.9 bar from the pre-production trend of the passed wells, whereas a survey taken after production began would sit several bar below it
+Feed-zone quality tags: {'HIGH': (1.0, 'highest grade in dataset'), 'LOW': (0.5, 'lowest grade in dataset'), 'MEDIUM': (0.8, 'intermediate grade'), 'Synthetic': (0.5, 'not a quality grade -> lowest factor')}
+Calibration targets: 266 survey points
+Hydrostatic: 23 windows; cold wells ['WELL-4', 'WELL-8']; cold-well median ratio {'cased': 1.04195, 'open': 1.00775}
+Integrity checks: 194 checks, 11 issues
+  ISSUE WELL-4: survey starts at wellhead -- first survey point 230.0 mRL is 110.0 m below the wellhead 340.0
+  ISSUE WELL-4: design bottom = track bottom -- design bottom -3251.0, track bottom -750.0
+  ISSUE WELL-10: survey starts at wellhead -- first survey point 210.0 mRL is 50.0 m below the wellhead 260.0
+  ISSUE WELL-1: wellhead vs model surface -- wellhead 15.0, model surface 120.0 mRL
+  ISSUE WELL-2: wellhead vs model surface -- wellhead 225.0, model surface 260.0 mRL
+  ISSUE WELL-3: wellhead vs model surface -- wellhead 164.0, model surface 180.0 mRL
+  ISSUE WELL-5: wellhead vs model surface -- wellhead 93.0, model surface 140.0 mRL
+  ISSUE WELL-6: wellhead vs model surface -- wellhead 147.0, model surface 160.0 mRL
+  ISSUE WELL-7: wellhead vs model surface -- wellhead 190.0, model surface 240.0 mRL
+  ISSUE WELL-8: wellhead vs model surface -- wellhead 176.0, model surface 260.0 mRL
+  ISSUE WELL-9: wellhead vs model surface -- wellhead 174.0, model surface 220.0 mRL
+Section through hottest wells ['WELL-10', 'WELL-2', 'WELL-3', 'WELL-6', 'WELL-9']: wells within 1200 m: ['WELL-8', 'WELL-6', 'WELL-3', 'WELL-10', 'WELL-2', 'WELL-9']
+Report written: Output/NS_data_interpretation.md
+Done.

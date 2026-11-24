@@ -1,39 +1,39 @@
-file,well_in_name,content_well,kind,irregular_name,n_dat,n_json,max_abs_diff,max_axis_diff,ref_date,sign,status
-Wel10_-250.0_transient_pressure.dat,WELL-10,WELL-10,transient_pressure,yes: prefix 'Wel',6,6,0.0,0.0014,2014-01-01,same sign,OK
-Wel10_downhole_pressure.dat,WELL-10,WELL-10,downhole_pressure,yes: prefix 'Wel',17,17,0.0,0.0,,,OK
-Wel10_downhole_temperature.dat,WELL-10,WELL-10,downhole_temperature,yes: prefix 'Wel',17,17,0.0,0.0,,,OK
-Wel10_production_mass_flow.dat,WELL-10,WELL-10,production_mass_flow,yes: prefix 'Wel',62,62,0.0,0.0041,2014-01-01,dat value = -json,OK
-Wel10_transient_enthalpy.dat,WELL-10,WELL-10,transient_enthalpy,yes: prefix 'Wel',11,11,0.0,0.0024,2014-01-01,same sign,OK
-Well1_downhole_pressure.dat,WELL-1,WELL-1,downhole_pressure,,19,19,0.0,0.0,,,OK
-Well1_downhole_temperature.dat,WELL-1,WELL-1,downhole_temperature,,19,19,0.0,0.0,,,OK
-Well2_-750.0_transient_pressure.dat,WELL-2,WELL-2,transient_pressure,,12,12,0.0,0.0014,2014-01-01,same sign,OK
-Well2_downhole_pressure.dat,WELL-2,WELL-2,downhole_pressure,,33,33,0.0,0.0,,,OK
-Well2_downhole_temperature.dat,WELL-2,WELL-2,downhole_temperature,,33,33,0.0,0.0,,,OK
-Well2_production_mass_flow.dat,WELL-2,WELL-2,production_mass_flow,,133,133,0.0,0.0041,2014-01-01,dat value = -json,OK
-Well2_transient_enthalpy.dat,WELL-2,WELL-2,transient_enthalpy,,23,23,0.0,0.0024,2014-01-01,same sign,OK
-Well3_-550.0_transient_pressure.dat,WELL-3,WELL-3,transient_pressure,,12,12,0.0,0.0014,2014-01-01,same sign,OK
-Well3_downhole_pressure.dat,WELL-3,WELL-3,downhole_pressure,,30,30,0.0,0.0,,,OK
-Well3_downhole_temperature.dat,WELL-3,WELL-3,downhole_temperature,,30,30,0.0,0.0,,,OK
-Well3_production_mass_flow.dat,WELL-3,WELL-3,production_mass_flow,,133,133,0.0,0.0041,2014-01-01,dat value = -json,OK
-Well3_transient_enthalpy.dat,WELL-3,WELL-3,transient_enthalpy,,23,23,0.0,0.0024,2014-01-01,same sign,OK
-Well4_downhole_pressure.dat,WELL-4,WELL-4,downhole_pressure,,22,22,0.0,0.0,,,OK
-Well4_downhole_temperature.dat,WELL-4,WELL-4,downhole_temperature,,22,22,0.0,0.0,,,OK
-Well4_injection_enthalpy.dat,WELL-4,WELL-4,injection_enthalpy,,133,133,0.0,0.0041,2014-01-01,same sign,OK
-Well4_injection_mass_flow.dat,WELL-4,WELL-4,injection_mass_flow,,133,133,0.0,0.0041,2014-01-01,same sign,OK
-Well5_downhole_pressure.dat,WELL-5,WELL-5,downhole_pressure,,26,26,0.0,0.0,,,OK
-Well5_downhole_temperature.dat,WELL-5,WELL-5,downhole_temperature,,26,26,0.0,0.0,,,OK
-Well5_injection_enthalpy.dat,WELL-5,WELL-5,injection_enthalpy,,133,133,0.0,0.0041,2014-01-01,same sign,OK
-Well5_injection_mass_flow.dat,WELL-5,WELL-5,injection_mass_flow,,133,133,0.0,0.0041,2014-01-01,same sign,OK
-Well6_downhole_pressure.dat,WELL-6,WELL-6,downhole_pressure,,28,28,0.0,0.0,,,OK
-Well6_downhole_temperature.dat,WELL-6,WELL-6,downhole_temperature,,28,28,0.0,0.0,,,OK
-Well7_downhole_pressure.dat,WELL-7,WELL-7,downhole_pressure,,32,32,0.0,0.0,,,OK
-Well7_downhole_temperature.dat,WELL-7,WELL-7,downhole_temperature,,32,32,0.0,0.0,,,OK
-Well8_downhole_pressure.dat,WELL-8,WELL-8,downhole_pressure,,29,29,0.0,0.0,,,OK
-Well8_downhole_temperature.dat,WELL-8,WELL-8,downhole_temperature,,29,29,0.0,0.0,,,OK
-Well8_injection_enthalpy.dat,WELL-8,WELL-8,injection_enthalpy,,133,133,0.0,0.0041,2014-01-01,same sign,OK
-Well8_injection_mass_flow.dat,WELL-8,WELL-8,injection_mass_flow,,133,133,0.0,0.0041,2014-01-01,same sign,OK
-Well9_-675.0_transient_pressure.dat,WELL-9,WELL-9,transient_pressure,,12,12,0.0,0.0014,2014-01-01,same sign,OK
-Well9_downhole_pressure.dat,WELL-9,WELL-9,downhole_pressure,,30,30,0.0,0.0,,,OK
-Well9_downhole_temperature.dat,WELL-9,WELL-9,downhole_temperature,,30,30,0.0,0.0,,,OK
-Well9_production_mass_flow.dat,WELL-9,WELL-9,production_mass_flow,,133,133,0.0,0.0041,2014-01-01,dat value = -json,OK
-Well9_transient_enthalpy.dat,WELL-9,WELL-9,transient_enthalpy,,23,23,0.0,0.0024,2014-01-01,same sign,OK
+well,dat_file,quantity,n_dat,n_json,n_unmatched,max_abs_diff,reference_date,note
+WELL-10,Wel10_-250.0_transient_pressure.dat,transient P at -250.0,6,6,0,0.0,01/01/2014 (max time misfit 0.001 yr),
+WELL-10,Wel10_downhole_pressure.dat,P,17,17,0,0.0,,
+WELL-10,Wel10_downhole_temperature.dat,T,17,17,0,0.0,,
+WELL-10,Wel10_production_mass_flow.dat,production mass flow,62,62,0,0.0,01/01/2014 (max time misfit 0.004 yr),dat value has opposite sign (generation convention: production negative)
+WELL-10,Wel10_transient_enthalpy.dat,production enthalpy,11,11,0,0.0,01/01/2014 (max time misfit 0.002 yr),
+WELL-1,Well1_downhole_pressure.dat,P,19,19,0,0.0,,
+WELL-1,Well1_downhole_temperature.dat,T,19,19,0,0.0,,
+WELL-2,Well2_-750.0_transient_pressure.dat,transient P at -750.0,12,12,0,0.0,01/01/2014 (max time misfit 0.001 yr),
+WELL-2,Well2_downhole_pressure.dat,P,33,33,0,0.0,,
+WELL-2,Well2_downhole_temperature.dat,T,33,33,0,0.0,,
+WELL-2,Well2_production_mass_flow.dat,production mass flow,133,133,0,0.0,01/01/2014 (max time misfit 0.004 yr),dat value has opposite sign (generation convention: production negative)
+WELL-2,Well2_transient_enthalpy.dat,production enthalpy,23,23,0,0.0,01/01/2014 (max time misfit 0.002 yr),
+WELL-3,Well3_-550.0_transient_pressure.dat,transient P at -550.0,12,12,0,0.0,01/01/2014 (max time misfit 0.001 yr),
+WELL-3,Well3_downhole_pressure.dat,P,30,30,0,0.0,,
+WELL-3,Well3_downhole_temperature.dat,T,30,30,0,0.0,,
+WELL-3,Well3_production_mass_flow.dat,production mass flow,133,133,0,0.0,01/01/2014 (max time misfit 0.004 yr),dat value has opposite sign (generation convention: production negative)
+WELL-3,Well3_transient_enthalpy.dat,production enthalpy,23,23,0,0.0,01/01/2014 (max time misfit 0.002 yr),
+WELL-4,Well4_downhole_pressure.dat,P,22,22,0,0.0,,
+WELL-4,Well4_downhole_temperature.dat,T,22,22,0,0.0,,
+WELL-4,Well4_injection_enthalpy.dat,injection enthalpy,133,133,0,0.0,01/01/2014 (max time misfit 0.004 yr),
+WELL-4,Well4_injection_mass_flow.dat,injection mass flow,133,133,0,0.0,01/01/2014 (max time misfit 0.004 yr),
+WELL-5,Well5_downhole_pressure.dat,P,26,26,0,0.0,,
+WELL-5,Well5_downhole_temperature.dat,T,26,26,0,0.0,,
+WELL-5,Well5_injection_enthalpy.dat,injection enthalpy,133,133,0,0.0,01/01/2014 (max time misfit 0.004 yr),
+WELL-5,Well5_injection_mass_flow.dat,injection mass flow,133,133,0,0.0,01/01/2014 (max time misfit 0.004 yr),
+WELL-6,Well6_downhole_pressure.dat,P,28,28,0,0.0,,
+WELL-6,Well6_downhole_temperature.dat,T,28,28,0,0.0,,
+WELL-7,Well7_downhole_pressure.dat,P,32,32,0,0.0,,
+WELL-7,Well7_downhole_temperature.dat,T,32,32,0,0.0,,
+WELL-8,Well8_downhole_pressure.dat,P,29,29,0,0.0,,
+WELL-8,Well8_downhole_temperature.dat,T,29,29,0,0.0,,
+WELL-8,Well8_injection_enthalpy.dat,injection enthalpy,133,133,0,0.0,01/01/2014 (max time misfit 0.004 yr),
+WELL-8,Well8_injection_mass_flow.dat,injection mass flow,133,133,0,0.0,01/01/2014 (max time misfit 0.004 yr),
+WELL-9,Well9_-675.0_transient_pressure.dat,transient P at -675.0,12,12,0,0.0,01/01/2014 (max time misfit 0.001 yr),
+WELL-9,Well9_downhole_pressure.dat,P,30,30,0,0.0,,
+WELL-9,Well9_downhole_temperature.dat,T,30,30,0,0.0,,
+WELL-9,Well9_production_mass_flow.dat,production mass flow,133,133,0,0.0,01/01/2014 (max time misfit 0.004 yr),dat value has opposite sign (generation convention: production negative)
+WELL-9,Well9_transient_enthalpy.dat,production enthalpy,23,23,0,0.0,01/01/2014 (max time misfit 0.002 yr),

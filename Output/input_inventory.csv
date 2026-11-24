@@ -1,23 +1,19 @@
 role,path,note
-geometry_dat,Baseline/Teaching_Model_3D/Models/TE14515/gTE14515.dat,"MULgraph model grid: vertices, grid, layers, surface, well tracks"
-mapping,Baseline/Teaching_Model_3D/Data/Mapping,"faults, rivers and lake outline polylines"
-out_of_scope,Baseline/Teaching_Model_3D/Data/Area_data.json,field-total steam flow and power history (production); not read
-out_of_scope,Baseline/Teaching_Model_3D/Data/Make_up_json,empty directory
-out_of_scope,Baseline/Teaching_Model_3D/Models/TE14515/FutureScenarios,production / forecast set-up; not read
-out_of_scope,Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/Reports,empty directory
-out_of_scope,Baseline/Teaching_Model_3D/Models/TE14515/Production,production / forecast set-up; not read
-out_of_scope,Baseline/Teaching_Model_3D/Models/TE14515/Production/Reports,empty directory
-out_of_scope,Baseline/Teaching_Model_3D/Parameters/FutureScenarios,production / forecast set-up; not read
-out_of_scope,Baseline/Teaching_Model_3D/Parameters/ProductionHistory,production / forecast set-up; not read
-reference_bc,Baseline/Teaching_Model_3D/Models/TE14515/gTE14515_boundary_conditions.json,"reference model boundary conditions (atmosphere, rain, heat, wet columns)"
-reference_other,Baseline/Teaching_Model_3D/Data/Plotting,plotting set-up with hard-coded paths from other machines; not data
-reference_other,Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/currentNSSetup.json,reference model set-up / configuration
-reference_other,Baseline/Teaching_Model_3D/Models/TE14515/currentGeomSetup.json,reference model set-up / configuration
-reference_other,Baseline/Teaching_Model_3D/Models/TE14515/gTE14515.auxjson,"viewer scene (GIS layers, slices, display settings); hard-coded paths"
-reference_results,Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/TE14515_NS_000.incon,reference natural-state initial conditions / results
-reference_rock,Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/TE14515_NS_000.dat,"reference natural-state model input (rock types and permeabilities, parameters)"
-reference_rock,Baseline/Teaching_Model_3D/Models/TE14515/gTE14515_dict_rocktype.json,reference model rock-type dictionary
-well_blocks_json,Baseline/Teaching_Model_3D/Models/TE14515/gTE14515_wells.json,"well-to-block intersections, feed-zone blocks, interpolation weights"
-well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat,plain-column copies of the well data (cross-check only)
-well_data_json,Baseline/Teaching_Model_3D/Data/Data_json,"per-well JSON: track, design, feed zones, T/P surveys, transients, flows"
-well_groups,Baseline/Teaching_Model_3D/Data/Groups_data.json,list of wells and their groups
+geometry_dat,Baseline/Teaching_Model_3D/Models/TE14515/gTE14515.dat,"MULgraph grid file. GEOMETRY ONLY (vertices, grid, layers, surface, wells)."
+mapping,Baseline/Teaching_Model_3D/Data/Mapping/Mapping.json,"Fault, lake and river polylines. DATA."
+out_of_scope,Baseline/Teaching_Model_3D/Data/Area_data.json,field-total steam flow and power output (production)
+out_of_scope,Baseline/Teaching_Model_3D/Models/TE14515/FutureScenarios/000/currentFSSetup.json,production / forecast set-up or history
+out_of_scope,Baseline/Teaching_Model_3D/Models/TE14515/Production/currentPRSetup.json,production / forecast set-up or history
+out_of_scope,Baseline/Teaching_Model_3D/Parameters/ProductionHistory,directory (4 files): production / forecast set-up or history
+reference_bc,Baseline/Teaching_Model_3D/Models/TE14515/gTE14515_boundary_conditions.json,Boundary conditions of the reference model. REFERENCE ONLY.
+reference_other,Baseline/Teaching_Model_3D/Data/Plotting,directory (9 files): plotting definition (contains hard-coded paths from other machines)
+reference_other,Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/TE14515_NS_000.dat,"reference natural-state simulator input (ROCKS = reference rock properties, GENER = reference heat/mass sources). REFERENCE ONLY"
+reference_other,Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/currentNSSetup.json,model set-up file
+reference_other,Baseline/Teaching_Model_3D/Models/TE14515/currentGeomSetup.json,model set-up file
+reference_other,Baseline/Teaching_Model_3D/Models/TE14515/gTE14515.auxjson,auxiliary geometry scene file (copy of mapping with hard-coded source path)
+reference_results,Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/TE14515_NS_000.incon,initial conditions of the reference natural-state model
+reference_rock,Baseline/Teaching_Model_3D/Models/TE14515/gTE14515_dict_rocktype.json,Rock-type dictionary of the reference model. REFERENCE ONLY.
+well_blocks_json,Baseline/Teaching_Model_3D/Models/TE14515/gTE14515_wells.json,Well-to-block intersections. GEOMETRY ONLY; authority for block assignment.
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat,"directory (38 files): Plain-column copies of well data. DATA, cross-check only."
+well_data_json,Baseline/Teaching_Model_3D/Data/Data_json,"directory (10 files): Per-well data (track, design, feed zones, T/P surveys, transients, flows). DATA."
+well_groups,Baseline/Teaching_Model_3D/Data/Groups_data.json,Well list and groupings. DATA.

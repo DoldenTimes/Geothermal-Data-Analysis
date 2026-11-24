@@ -1,166 +1,195 @@
 well,check,status,detail
-ALL,well list (groups file) equals the well data files,PASS,"10 wells in groups file, 10 well JSON files"
-WELL-1,T and P surveys share the same elevations,PASS,"19 T points, 19 P points"
-WELL-1,every survey point lies within the well track,PASS,15.0 to -1672.0 mRL inside 15.0 to -1672.0 mRL
-WELL-1,survey reaches the wellhead,PASS,top survey point 15.0 mRL is 0.0 m below the wellhead (15.0 mRL)
-WELL-1,survey reaches track bottom,PASS,deepest survey -1672.0 vs track bottom -1672.0 mRL
-WELL-1,feed zone 1 within the well track,PASS,-1320 to -1355 mRL
-WELL-1,feed zone 1 within the slotted/open interval,PASS,-1320 to -1355 mRL vs slotted -950 to -1672 mRL
-WELL-1,feed zone 1 quality tag is a quality grade,PASS,tag 'MEDIUM'
-WELL-1,feed zone 2 within the well track,PASS,-1440 to -1490 mRL
-WELL-1,feed zone 2 within the slotted/open interval,PASS,-1440 to -1490 mRL vs slotted -950 to -1672 mRL
-WELL-1,feed zone 2 quality tag is a quality grade,PASS,tag 'MEDIUM'
-WELL-1,casing top at wellhead,PASS,casing top 15 vs wellhead 15 mRL
-WELL-1,liner bottom at track bottom,PASS,liner bottom -1672.0 vs track bottom -1672.0 mRL (+0.0 m)
-WELL-1,liner overlaps the casing (hanger above shoe),PASS,"liner top -950, casing shoe -1000 mRL"
-WELL-1,track equals the grid-file well track,PASS,max coordinate difference 0.00 m (2 points)
-WELL-1,block file covers the track without gaps,PASS,"16 blocks, 15.0 to -1672.0 mRL"
-WELL-1,"feed zones equal the block-file feed zones (count, order, interval)",PASS,"2 in JSON, 2 in block file"
-WELL-1,own point-in-polygon and layer search agrees with the block file,PASS,19 of 19 survey points agree
-WELL-2,T and P surveys share the same elevations,PASS,"33 T points, 33 P points"
-WELL-2,every survey point lies within the well track,PASS,225.0 to -2348.0 mRL inside 225.0 to -2348.0 mRL
-WELL-2,survey reaches the wellhead,PASS,top survey point 225.0 mRL is 0.0 m below the wellhead (225.0 mRL)
-WELL-2,survey reaches track bottom,PASS,deepest survey -2348.0 vs track bottom -2348.0 mRL
-WELL-2,feed zone 1 within the well track,PASS,-250 to -270 mRL
-WELL-2,feed zone 1 within the slotted/open interval,PASS,-250 to -270 mRL vs slotted -50 to -2348 mRL
-WELL-2,feed zone 1 quality tag is a quality grade,PASS,tag 'LOW'
-WELL-2,feed zone 2 within the well track,PASS,-720 to -770 mRL
-WELL-2,feed zone 2 within the slotted/open interval,PASS,-720 to -770 mRL vs slotted -50 to -2348 mRL
-WELL-2,feed zone 2 quality tag is a quality grade,PASS,tag 'HIGH'
-WELL-2,feed zone 3 within the well track,PASS,-1900 to -1920 mRL
-WELL-2,feed zone 3 within the slotted/open interval,PASS,-1900 to -1920 mRL vs slotted -50 to -2348 mRL
-WELL-2,feed zone 3 quality tag is a quality grade,PASS,tag 'MEDIUM'
-WELL-2,casing top at wellhead,PASS,casing top 225 vs wellhead 225 mRL
-WELL-2,liner bottom at track bottom,PASS,liner bottom -2348.0 vs track bottom -2348.0 mRL (+0.0 m)
-WELL-2,liner overlaps the casing (hanger above shoe),PASS,"liner top -50, casing shoe -100 mRL"
-WELL-2,track equals the grid-file well track,PASS,max coordinate difference 0.00 m (2 points)
-WELL-2,block file covers the track without gaps,PASS,"29 blocks, 225.0 to -2348.0 mRL"
-WELL-2,"feed zones equal the block-file feed zones (count, order, interval)",PASS,"3 in JSON, 3 in block file"
-WELL-2,own point-in-polygon and layer search agrees with the block file,PASS,33 of 33 survey points agree
-WELL-3,T and P surveys share the same elevations,PASS,"30 T points, 30 P points"
-WELL-3,every survey point lies within the well track,PASS,164.0 to -2887.0 mRL inside 164.0 to -2887.0 mRL
-WELL-3,survey reaches the wellhead,PASS,top survey point 164.0 mRL is 0.0 m below the wellhead (164.0 mRL)
-WELL-3,survey reaches track bottom,PASS,deepest survey -2887.0 vs track bottom -2887.0 mRL
-WELL-3,feed zone 1 within the well track,PASS,-310 to -360 mRL
-WELL-3,feed zone 1 within the slotted/open interval,PASS,-310 to -360 mRL vs slotted -200 to -2887 mRL
-WELL-3,feed zone 1 quality tag is a quality grade,PASS,tag 'HIGH'
-WELL-3,feed zone 2 within the well track,PASS,-820 to -870 mRL
-WELL-3,feed zone 2 within the slotted/open interval,PASS,-820 to -870 mRL vs slotted -200 to -2887 mRL
-WELL-3,feed zone 2 quality tag is a quality grade,PASS,tag 'MEDIUM'
-WELL-3,casing top at wellhead,PASS,casing top 164 vs wellhead 164 mRL
-WELL-3,liner bottom at track bottom,PASS,liner bottom -2887.0 vs track bottom -2887.0 mRL (+0.0 m)
-WELL-3,liner overlaps the casing (hanger above shoe),PASS,"liner top -200, casing shoe -250 mRL"
-WELL-3,track equals the grid-file well track,PASS,max coordinate difference 0.00 m (2 points)
-WELL-3,block file covers the track without gaps,PASS,"27 blocks, 164.0 to -2887.0 mRL"
-WELL-3,"feed zones equal the block-file feed zones (count, order, interval)",PASS,"2 in JSON, 2 in block file"
-WELL-3,own point-in-polygon and layer search agrees with the block file,PASS,30 of 30 survey points agree
-WELL-4,T and P surveys share the same elevations,PASS,"22 T points, 22 P points"
-WELL-4,every survey point lies within the well track,PASS,230.0 to -750.0 mRL inside 340.0 to -750.0 mRL
-WELL-4,survey reaches the wellhead,NOTE,top survey point 230.0 mRL is 110.0 m below the wellhead (340.0 mRL)
-WELL-4,survey reaches track bottom,PASS,deepest survey -750.0 vs track bottom -750.0 mRL
-WELL-4,feed zone 1 within the well track,PASS,-630 to -680 mRL
-WELL-4,feed zone 1 within the slotted/open interval,PASS,-630 to -680 mRL vs slotted -450 to -3251 mRL
-WELL-4,feed zone 1 quality tag is a quality grade,PASS,tag 'MEDIUM'
-WELL-4,casing top at wellhead,PASS,casing top 340 vs wellhead 340 mRL
-WELL-4,liner bottom at track bottom,ISSUE,liner bottom -3251.0 vs track bottom -750.0 mRL (-2501.0 m)
-WELL-4,liner overlaps the casing (hanger above shoe),PASS,"liner top -450, casing shoe -500 mRL"
-WELL-4,track equals the grid-file well track,PASS,max coordinate difference 0.00 m (2 points)
-WELL-4,block file covers the track without gaps,PASS,"26 blocks, 340.0 to -750.0 mRL"
-WELL-4,"feed zones equal the block-file feed zones (count, order, interval)",PASS,"1 in JSON, 1 in block file"
-WELL-4,own point-in-polygon and layer search agrees with the block file,PASS,22 of 22 survey points agree
-WELL-5,T and P surveys share the same elevations,PASS,"26 T points, 26 P points"
-WELL-5,every survey point lies within the well track,PASS,93.0 to -2595.0 mRL inside 93.0 to -2595.0 mRL
-WELL-5,survey reaches the wellhead,PASS,top survey point 93.0 mRL is 0.0 m below the wellhead (93.0 mRL)
-WELL-5,survey reaches track bottom,PASS,deepest survey -2595.0 vs track bottom -2595.0 mRL
-WELL-5,feed zone 1 within the well track,PASS,-1300 to -1350 mRL
-WELL-5,feed zone 1 within the slotted/open interval,PASS,-1300 to -1350 mRL vs slotted -950 to -2595 mRL
-WELL-5,feed zone 1 quality tag is a quality grade,PASS,tag 'MEDIUM'
-WELL-5,feed zone 2 within the well track,PASS,-1500 to -1550 mRL
-WELL-5,feed zone 2 within the slotted/open interval,PASS,-1500 to -1550 mRL vs slotted -950 to -2595 mRL
-WELL-5,feed zone 2 quality tag is a quality grade,PASS,tag 'MEDIUM'
-WELL-5,casing top at wellhead,PASS,casing top 93 vs wellhead 93 mRL
-WELL-5,liner bottom at track bottom,PASS,liner bottom -2595.0 vs track bottom -2595.0 mRL (+0.0 m)
-WELL-5,liner overlaps the casing (hanger above shoe),PASS,"liner top -950, casing shoe -1000 mRL"
-WELL-5,track equals the grid-file well track,PASS,max coordinate difference 0.00 m (2 points)
-WELL-5,block file covers the track without gaps,PASS,"23 blocks, 93.0 to -2595.0 mRL"
-WELL-5,"feed zones equal the block-file feed zones (count, order, interval)",PASS,"2 in JSON, 2 in block file"
-WELL-5,own point-in-polygon and layer search agrees with the block file,PASS,26 of 26 survey points agree
-WELL-6,T and P surveys share the same elevations,PASS,"28 T points, 28 P points"
-WELL-6,every survey point lies within the well track,PASS,147.0 to -2359.0 mRL inside 147.0 to -2359.0 mRL
-WELL-6,survey reaches the wellhead,PASS,top survey point 147.0 mRL is 0.0 m below the wellhead (147.0 mRL)
-WELL-6,survey reaches track bottom,PASS,deepest survey -2359.0 vs track bottom -2359.0 mRL
-WELL-6,feed zone 1 within the well track,PASS,-460 to -490 mRL
-WELL-6,feed zone 1 within the slotted/open interval,PASS,-460 to -490 mRL vs slotted -390 to -2359 mRL
-WELL-6,feed zone 1 quality tag is a quality grade,PASS,tag 'HIGH'
-WELL-6,feed zone 2 within the well track,PASS,-1100 to -1150 mRL
-WELL-6,feed zone 2 within the slotted/open interval,PASS,-1100 to -1150 mRL vs slotted -390 to -2359 mRL
-WELL-6,feed zone 2 quality tag is a quality grade,PASS,tag 'HIGH'
-WELL-6,casing top at wellhead,PASS,casing top 147 vs wellhead 147 mRL
-WELL-6,liner bottom at track bottom,PASS,liner bottom -2359.0 vs track bottom -2359.0 mRL (+0.0 m)
-WELL-6,liner overlaps the casing (hanger above shoe),PASS,"liner top -390, casing shoe -440 mRL"
-WELL-6,track equals the grid-file well track,PASS,max coordinate difference 0.00 m (2 points)
-WELL-6,block file covers the track without gaps,PASS,"25 blocks, 147.0 to -2359.0 mRL"
-WELL-6,"feed zones equal the block-file feed zones (count, order, interval)",PASS,"2 in JSON, 2 in block file"
-WELL-6,own point-in-polygon and layer search agrees with the block file,PASS,28 of 28 survey points agree
-WELL-7,T and P surveys share the same elevations,PASS,"32 T points, 32 P points"
-WELL-7,every survey point lies within the well track,PASS,190.0 to -2762.0 mRL inside 190.0 to -2762.0 mRL
-WELL-7,survey reaches the wellhead,PASS,top survey point 190.0 mRL is 0.0 m below the wellhead (190.0 mRL)
-WELL-7,survey reaches track bottom,PASS,deepest survey -2762.0 vs track bottom -2762.0 mRL
-WELL-7,feed zone 1 within the well track,PASS,-610 to -650 mRL
-WELL-7,feed zone 1 within the slotted/open interval,PASS,-610 to -650 mRL vs slotted -390 to -2762 mRL
-WELL-7,feed zone 1 quality tag is a quality grade,PASS,tag 'HIGH'
-WELL-7,feed zone 2 within the well track,PASS,-1300 to -1350 mRL
-WELL-7,feed zone 2 within the slotted/open interval,PASS,-1300 to -1350 mRL vs slotted -390 to -2762 mRL
-WELL-7,feed zone 2 quality tag is a quality grade,PASS,tag 'HIGH'
-WELL-7,casing top at wellhead,PASS,casing top 190 vs wellhead 190 mRL
-WELL-7,liner bottom at track bottom,PASS,liner bottom -2762.0 vs track bottom -2762.0 mRL (+0.0 m)
-WELL-7,liner overlaps the casing (hanger above shoe),PASS,"liner top -390, casing shoe -440 mRL"
-WELL-7,track equals the grid-file well track,PASS,max coordinate difference 0.00 m (2 points)
-WELL-7,block file covers the track without gaps,PASS,"28 blocks, 190.0 to -2762.0 mRL"
-WELL-7,"feed zones equal the block-file feed zones (count, order, interval)",PASS,"2 in JSON, 2 in block file"
-WELL-7,own point-in-polygon and layer search agrees with the block file,PASS,32 of 32 survey points agree
-WELL-8,T and P surveys share the same elevations,PASS,"29 T points, 29 P points"
-WELL-8,every survey point lies within the well track,PASS,176.0 to -2716.1 mRL inside 176.0 to -2716.1 mRL
-WELL-8,survey reaches the wellhead,PASS,top survey point 176.0 mRL is 0.0 m below the wellhead (176.0 mRL)
-WELL-8,survey reaches track bottom,PASS,deepest survey -2716.1 vs track bottom -2716.1 mRL
-WELL-8,feed zone 1 within the well track,PASS,-1100 to -1150 mRL
-WELL-8,feed zone 1 within the slotted/open interval,PASS,-1100 to -1150 mRL vs slotted -650 to -2716 mRL
-WELL-8,feed zone 1 quality tag is a quality grade,PASS,tag 'HIGH'
-WELL-8,casing top at wellhead,PASS,casing top 176 vs wellhead 176 mRL
-WELL-8,liner bottom at track bottom,PASS,liner bottom -2716.1 vs track bottom -2716.1 mRL (+0.0 m)
-WELL-8,liner overlaps the casing (hanger above shoe),PASS,"liner top -650, casing shoe -700 mRL"
-WELL-8,track equals the grid-file well track,PASS,max coordinate difference 0.04 m (20 points)
-WELL-8,block file covers the track without gaps,PASS,"29 blocks, 176.0 to -2716.1 mRL"
-WELL-8,"feed zones equal the block-file feed zones (count, order, interval)",PASS,"1 in JSON, 1 in block file"
-WELL-8,own point-in-polygon and layer search agrees with the block file,PASS,29 of 29 survey points agree
-WELL-9,T and P surveys share the same elevations,PASS,"30 T points, 30 P points"
-WELL-9,every survey point lies within the well track,PASS,174.0 to -2427.1 mRL inside 174.0 to -2427.1 mRL
-WELL-9,survey reaches the wellhead,PASS,top survey point 174.0 mRL is 0.0 m below the wellhead (174.0 mRL)
-WELL-9,survey reaches track bottom,PASS,deepest survey -2427.1 vs track bottom -2427.1 mRL
-WELL-9,feed zone 1 within the well track,PASS,-520 to -550 mRL
-WELL-9,feed zone 1 within the slotted/open interval,PASS,-520 to -550 mRL vs slotted -350 to -2427 mRL
-WELL-9,feed zone 1 quality tag is a quality grade,PASS,tag 'LOW'
-WELL-9,feed zone 2 within the well track,PASS,-830 to -845 mRL
-WELL-9,feed zone 2 within the slotted/open interval,PASS,-830 to -845 mRL vs slotted -350 to -2427 mRL
-WELL-9,feed zone 2 quality tag is a quality grade,PASS,tag 'MEDIUM'
-WELL-9,casing top at wellhead,PASS,casing top 174 vs wellhead 174 mRL
-WELL-9,liner bottom at track bottom,PASS,liner bottom -2427.1 vs track bottom -2427.1 mRL (+0.0 m)
-WELL-9,liner overlaps the casing (hanger above shoe),PASS,"liner top -350, casing shoe -400 mRL"
-WELL-9,track equals the grid-file well track,PASS,max coordinate difference 0.05 m (25 points)
-WELL-9,block file covers the track without gaps,PASS,"29 blocks, 174.0 to -2427.1 mRL"
-WELL-9,"feed zones equal the block-file feed zones (count, order, interval)",PASS,"2 in JSON, 2 in block file"
-WELL-9,own point-in-polygon and layer search agrees with the block file,PASS,30 of 30 survey points agree
-WELL-10,T and P surveys share the same elevations,PASS,"17 T points, 17 P points"
-WELL-10,every survey point lies within the well track,PASS,210.0 to -350.0 mRL inside 260.0 to -350.0 mRL
-WELL-10,survey reaches the wellhead,NOTE,top survey point 210.0 mRL is 50.0 m below the wellhead (260.0 mRL)
-WELL-10,survey reaches track bottom,PASS,deepest survey -350.0 vs track bottom -350.0 mRL
-WELL-10,feed zone 1 within the well track,PASS,-250 to -275 mRL
-WELL-10,feed zone 1 within the slotted/open interval,PASS,-250 to -275 mRL vs slotted -175 to -350 mRL
-WELL-10,feed zone 1 quality tag is a quality grade,ISSUE,tag 'Synthetic'
-WELL-10,casing top at wellhead,PASS,casing top 260 vs wellhead 260 mRL
-WELL-10,liner bottom at track bottom,PASS,liner bottom -350.0 vs track bottom -350.0 mRL (+0.0 m)
-WELL-10,liner overlaps the casing (hanger above shoe),PASS,"liner top -175, casing shoe -200 mRL"
-WELL-10,track equals the grid-file well track,PASS,max coordinate difference 0.00 m (2 points)
-WELL-10,block file covers the track without gaps,PASS,"18 blocks, 260.0 to -350.0 mRL"
-WELL-10,"feed zones equal the block-file feed zones (count, order, interval)",PASS,"1 in JSON, 1 in block file"
-WELL-10,own point-in-polygon and layer search agrees with the block file,PASS,17 of 17 survey points agree
+WELL-1,T and P at same elevations,OK,"0 missing T, 0 missing P"
+WELL-1,survey points within track,OK,survey 15.0 to -1672.0 mRL; track 15.0 to -1672.0 mRL
+WELL-1,feed zone 1 within track,OK,-1320.0 to -1355.0
+WELL-1,feed zone 1 within slotted interval,OK,-1320.0 to -1355.0; slotted -950/-1672
+WELL-1,feed zone 2 within track,OK,-1440.0 to -1490.0
+WELL-1,feed zone 2 within slotted interval,OK,-1440.0 to -1490.0; slotted -950/-1672
+WELL-1,design top = wellhead,OK,"design top 15.0, wellhead 15.0"
+WELL-1,design bottom = track bottom,OK,"design bottom -1672.0, track bottom -1672.0"
+WELL-1,strings overlap (liner hung inside casing),OK,"Casing 13-3/8"" to -1000.0; Liner 8-5/8"" from -950.0"
+WELL-1,grid-file WELLS track = JSON track,OK,2 vs 2 points
+WELL-1,feed-zone count matches block file,OK,2 vs 2
+WELL-1,feed zone 1 interval = block file,OK,"-1320.0/-1355.0 vs [(-1355.0, -1320.0)]"
+WELL-1,feed zone 2 interval = block file,OK,"-1440.0/-1490.0 vs [(-1490.0, -1440.0)]"
+WELL-1,block-file top = wellhead,OK,"block-file top 15.0, wellhead 15.0"
+WELL-1,block-file bottom = track bottom,OK,"block-file bottom -1672.0, track bottom -1672.0"
+WELL-2,T and P at same elevations,OK,"0 missing T, 0 missing P"
+WELL-2,survey points within track,OK,survey 225.0 to -2348.0 mRL; track 225.0 to -2348.0 mRL
+WELL-2,feed zone 1 within track,OK,-250.0 to -270.0
+WELL-2,feed zone 1 within slotted interval,OK,-250.0 to -270.0; slotted -50/-2348
+WELL-2,feed zone 2 within track,OK,-720.0 to -770.0
+WELL-2,feed zone 2 within slotted interval,OK,-720.0 to -770.0; slotted -50/-2348
+WELL-2,feed zone 3 within track,OK,-1900.0 to -1920.0
+WELL-2,feed zone 3 within slotted interval,OK,-1900.0 to -1920.0; slotted -50/-2348
+WELL-2,design top = wellhead,OK,"design top 225.0, wellhead 225.0"
+WELL-2,design bottom = track bottom,OK,"design bottom -2348.0, track bottom -2348.0"
+WELL-2,strings overlap (liner hung inside casing),OK,"Casing 13-3/8"" to -100.0; Liner 8-5/8"" from -50.0"
+WELL-2,grid-file WELLS track = JSON track,OK,2 vs 2 points
+WELL-2,feed-zone count matches block file,OK,3 vs 3
+WELL-2,feed zone 1 interval = block file,OK,"-250.0/-270.0 vs [(-270.0, -250.0)]"
+WELL-2,feed zone 2 interval = block file,OK,"-720.0/-770.0 vs [(-770.0, -720.0)]"
+WELL-2,feed zone 3 interval = block file,OK,"-1900.0/-1920.0 vs [(-1920.0, -1900.0)]"
+WELL-2,block-file top = wellhead,OK,"block-file top 225.0, wellhead 225.0"
+WELL-2,block-file bottom = track bottom,OK,"block-file bottom -2348.0, track bottom -2348.0"
+WELL-3,T and P at same elevations,OK,"0 missing T, 0 missing P"
+WELL-3,survey points within track,OK,survey 164.0 to -2887.0 mRL; track 164.0 to -2887.0 mRL
+WELL-3,feed zone 1 within track,OK,-310.0 to -360.0
+WELL-3,feed zone 1 within slotted interval,OK,-310.0 to -360.0; slotted -200/-2887
+WELL-3,feed zone 2 within track,OK,-820.0 to -870.0
+WELL-3,feed zone 2 within slotted interval,OK,-820.0 to -870.0; slotted -200/-2887
+WELL-3,design top = wellhead,OK,"design top 164.0, wellhead 164.0"
+WELL-3,design bottom = track bottom,OK,"design bottom -2887.0, track bottom -2887.0"
+WELL-3,strings overlap (liner hung inside casing),OK,"Casing 13-3/8"" to -250.0; Liner 8-5/8"" from -200.0"
+WELL-3,grid-file WELLS track = JSON track,OK,2 vs 2 points
+WELL-3,feed-zone count matches block file,OK,2 vs 2
+WELL-3,feed zone 1 interval = block file,OK,"-310.0/-360.0 vs [(-360.0, -310.0)]"
+WELL-3,feed zone 2 interval = block file,OK,"-820.0/-870.0 vs [(-870.0, -820.0)]"
+WELL-3,block-file top = wellhead,OK,"block-file top 164.0, wellhead 164.0"
+WELL-3,block-file bottom = track bottom,OK,"block-file bottom -2887.0, track bottom -2887.0"
+WELL-4,T and P at same elevations,OK,"0 missing T, 0 missing P"
+WELL-4,survey points within track,OK,survey 230.0 to -750.0 mRL; track 340.0 to -750.0 mRL
+WELL-4,survey starts at wellhead,ISSUE,first survey point 230.0 mRL is 110.0 m below the wellhead 340.0
+WELL-4,feed zone 1 within track,OK,-630.0 to -680.0
+WELL-4,feed zone 1 within slotted interval,OK,-630.0 to -680.0; slotted -450/-3251
+WELL-4,design top = wellhead,OK,"design top 340.0, wellhead 340.0"
+WELL-4,design bottom = track bottom,ISSUE,"design bottom -3251.0, track bottom -750.0"
+WELL-4,strings overlap (liner hung inside casing),OK,"Casing 7"" to -500.0; Liner 4-1/2"" from -450.0"
+WELL-4,grid-file WELLS track = JSON track,OK,2 vs 2 points
+WELL-4,feed-zone count matches block file,OK,1 vs 1
+WELL-4,feed zone 1 interval = block file,OK,"-630.0/-680.0 vs [(-680.0, -630.0)]"
+WELL-4,block-file top = wellhead,OK,"block-file top 340.0, wellhead 340.0"
+WELL-4,block-file bottom = track bottom,OK,"block-file bottom -750.0, track bottom -750.0"
+WELL-5,T and P at same elevations,OK,"0 missing T, 0 missing P"
+WELL-5,survey points within track,OK,survey 93.0 to -2595.0 mRL; track 93.0 to -2595.0 mRL
+WELL-5,feed zone 1 within track,OK,-1300.0 to -1350.0
+WELL-5,feed zone 1 within slotted interval,OK,-1300.0 to -1350.0; slotted -950/-2595
+WELL-5,feed zone 2 within track,OK,-1500.0 to -1550.0
+WELL-5,feed zone 2 within slotted interval,OK,-1500.0 to -1550.0; slotted -950/-2595
+WELL-5,design top = wellhead,OK,"design top 93.0, wellhead 93.0"
+WELL-5,design bottom = track bottom,OK,"design bottom -2595.0, track bottom -2595.0"
+WELL-5,strings overlap (liner hung inside casing),OK,"Casing 7"" to -1000.0; Liner 4-1/2"" from -950.0"
+WELL-5,grid-file WELLS track = JSON track,OK,2 vs 2 points
+WELL-5,feed-zone count matches block file,OK,2 vs 2
+WELL-5,feed zone 1 interval = block file,OK,"-1300.0/-1350.0 vs [(-1350.0, -1300.0)]"
+WELL-5,feed zone 2 interval = block file,OK,"-1500.0/-1550.0 vs [(-1550.0, -1500.0)]"
+WELL-5,block-file top = wellhead,OK,"block-file top 93.0, wellhead 93.0"
+WELL-5,block-file bottom = track bottom,OK,"block-file bottom -2595.0, track bottom -2595.0"
+WELL-6,T and P at same elevations,OK,"0 missing T, 0 missing P"
+WELL-6,survey points within track,OK,survey 147.0 to -2359.0 mRL; track 147.0 to -2359.0 mRL
+WELL-6,feed zone 1 within track,OK,-460.0 to -490.0
+WELL-6,feed zone 1 within slotted interval,OK,-460.0 to -490.0; slotted -390/-2359
+WELL-6,feed zone 2 within track,OK,-1100.0 to -1150.0
+WELL-6,feed zone 2 within slotted interval,OK,-1100.0 to -1150.0; slotted -390/-2359
+WELL-6,design top = wellhead,OK,"design top 147.0, wellhead 147.0"
+WELL-6,design bottom = track bottom,OK,"design bottom -2359.0, track bottom -2359.0"
+WELL-6,strings overlap (liner hung inside casing),OK,"Casing 13-3/8"" to -440.0; Liner 8-5/8"" from -390.0"
+WELL-6,grid-file WELLS track = JSON track,OK,2 vs 2 points
+WELL-6,feed-zone count matches block file,OK,2 vs 2
+WELL-6,feed zone 1 interval = block file,OK,"-460.0/-490.0 vs [(-490.0, -460.0)]"
+WELL-6,feed zone 2 interval = block file,OK,"-1100.0/-1150.0 vs [(-1150.0, -1100.0)]"
+WELL-6,block-file top = wellhead,OK,"block-file top 147.0, wellhead 147.0"
+WELL-6,block-file bottom = track bottom,OK,"block-file bottom -2359.0, track bottom -2359.0"
+WELL-7,T and P at same elevations,OK,"0 missing T, 0 missing P"
+WELL-7,survey points within track,OK,survey 190.0 to -2762.0 mRL; track 190.0 to -2762.0 mRL
+WELL-7,feed zone 1 within track,OK,-610.0 to -650.0
+WELL-7,feed zone 1 within slotted interval,OK,-610.0 to -650.0; slotted -390/-2762
+WELL-7,feed zone 2 within track,OK,-1300.0 to -1350.0
+WELL-7,feed zone 2 within slotted interval,OK,-1300.0 to -1350.0; slotted -390/-2762
+WELL-7,design top = wellhead,OK,"design top 190.0, wellhead 190.0"
+WELL-7,design bottom = track bottom,OK,"design bottom -2762.0, track bottom -2762.0"
+WELL-7,strings overlap (liner hung inside casing),OK,"Casing 13-3/8"" to -440.0; Liner 8-5/8"" from -390.0"
+WELL-7,grid-file WELLS track = JSON track,OK,2 vs 2 points
+WELL-7,feed-zone count matches block file,OK,2 vs 2
+WELL-7,feed zone 1 interval = block file,OK,"-610.0/-650.0 vs [(-650.0, -610.0)]"
+WELL-7,feed zone 2 interval = block file,OK,"-1300.0/-1350.0 vs [(-1350.0, -1300.0)]"
+WELL-7,block-file top = wellhead,OK,"block-file top 190.0, wellhead 190.0"
+WELL-7,block-file bottom = track bottom,OK,"block-file bottom -2762.0, track bottom -2762.0"
+WELL-8,T and P at same elevations,OK,"0 missing T, 0 missing P"
+WELL-8,survey points within track,OK,survey 176.0 to -2716.1 mRL; track 176.0 to -2716.1 mRL
+WELL-8,feed zone 1 within track,OK,-1100.0 to -1150.0
+WELL-8,feed zone 1 within slotted interval,OK,-1100.0 to -1150.0; slotted -650/-2716
+WELL-8,design top = wellhead,OK,"design top 176.0, wellhead 176.0"
+WELL-8,design bottom = track bottom,OK,"design bottom -2716.1, track bottom -2716.1"
+WELL-8,strings overlap (liner hung inside casing),OK,"Casing 13-3/8"" to -700.0; Liner 8-5/8"" from -650.0"
+WELL-8,grid-file WELLS track = JSON track,OK,20 vs 20 points
+WELL-8,feed-zone count matches block file,OK,1 vs 1
+WELL-8,feed zone 1 interval = block file,OK,"-1100.0/-1150.0 vs [(-1150.0, -1100.0)]"
+WELL-8,block-file top = wellhead,OK,"block-file top 176.0, wellhead 176.0"
+WELL-8,block-file bottom = track bottom,OK,"block-file bottom -2716.1, track bottom -2716.1"
+WELL-9,T and P at same elevations,OK,"0 missing T, 0 missing P"
+WELL-9,survey points within track,OK,survey 174.0 to -2427.1 mRL; track 174.0 to -2427.1 mRL
+WELL-9,feed zone 1 within track,OK,-520.0 to -550.0
+WELL-9,feed zone 1 within slotted interval,OK,-520.0 to -550.0; slotted -350/-2427
+WELL-9,feed zone 2 within track,OK,-830.0 to -845.0
+WELL-9,feed zone 2 within slotted interval,OK,-830.0 to -845.0; slotted -350/-2427
+WELL-9,design top = wellhead,OK,"design top 174.0, wellhead 174.0"
+WELL-9,design bottom = track bottom,OK,"design bottom -2427.1, track bottom -2427.1"
+WELL-9,strings overlap (liner hung inside casing),OK,"Casing 13-3/8"" to -400.0; Liner 8-5/8"" from -350.0"
+WELL-9,grid-file WELLS track = JSON track,OK,25 vs 25 points
+WELL-9,feed-zone count matches block file,OK,2 vs 2
+WELL-9,feed zone 1 interval = block file,OK,"-520.0/-550.0 vs [(-550.0, -520.0)]"
+WELL-9,feed zone 2 interval = block file,OK,"-830.0/-845.0 vs [(-845.0, -830.0)]"
+WELL-9,block-file top = wellhead,OK,"block-file top 174.0, wellhead 174.0"
+WELL-9,block-file bottom = track bottom,OK,"block-file bottom -2427.1, track bottom -2427.1"
+WELL-10,T and P at same elevations,OK,"0 missing T, 0 missing P"
+WELL-10,survey points within track,OK,survey 210.0 to -350.0 mRL; track 260.0 to -350.0 mRL
+WELL-10,survey starts at wellhead,ISSUE,first survey point 210.0 mRL is 50.0 m below the wellhead 260.0
+WELL-10,feed zone 1 within track,OK,-250.0 to -275.0
+WELL-10,feed zone 1 within slotted interval,OK,-250.0 to -275.0; slotted -175/-350
+WELL-10,design top = wellhead,OK,"design top 260.0, wellhead 260.0"
+WELL-10,design bottom = track bottom,OK,"design bottom -350.0, track bottom -350.0"
+WELL-10,strings overlap (liner hung inside casing),OK,"Casing 13-3/8"" to -200.0; Liner 8-5/8"" from -175.0"
+WELL-10,grid-file WELLS track = JSON track,OK,2 vs 2 points
+WELL-10,feed-zone count matches block file,OK,1 vs 1
+WELL-10,feed zone 1 interval = block file,OK,"-250.0/-275.0 vs [(-275.0, -250.0)]"
+WELL-10,block-file top = wellhead,OK,"block-file top 260.0, wellhead 260.0"
+WELL-10,block-file bottom = track bottom,OK,"block-file bottom -350.0, track bottom -350.0"
+WELL-10,dat cross-check transient P at -250.0,OK,"Wel10_-250.0_transient_pressure.dat: max diff 0, unmatched 0"
+WELL-10,dat cross-check P,OK,"Wel10_downhole_pressure.dat: max diff 0, unmatched 0"
+WELL-10,dat cross-check T,OK,"Wel10_downhole_temperature.dat: max diff 0, unmatched 0"
+WELL-10,dat cross-check production mass flow,OK,"Wel10_production_mass_flow.dat: max diff 0, unmatched 0"
+WELL-10,dat cross-check production enthalpy,OK,"Wel10_transient_enthalpy.dat: max diff 0, unmatched 0"
+WELL-1,dat cross-check P,OK,"Well1_downhole_pressure.dat: max diff 0, unmatched 0"
+WELL-1,dat cross-check T,OK,"Well1_downhole_temperature.dat: max diff 0, unmatched 0"
+WELL-2,dat cross-check transient P at -750.0,OK,"Well2_-750.0_transient_pressure.dat: max diff 0, unmatched 0"
+WELL-2,dat cross-check P,OK,"Well2_downhole_pressure.dat: max diff 0, unmatched 0"
+WELL-2,dat cross-check T,OK,"Well2_downhole_temperature.dat: max diff 0, unmatched 0"
+WELL-2,dat cross-check production mass flow,OK,"Well2_production_mass_flow.dat: max diff 0, unmatched 0"
+WELL-2,dat cross-check production enthalpy,OK,"Well2_transient_enthalpy.dat: max diff 0, unmatched 0"
+WELL-3,dat cross-check transient P at -550.0,OK,"Well3_-550.0_transient_pressure.dat: max diff 0, unmatched 0"
+WELL-3,dat cross-check P,OK,"Well3_downhole_pressure.dat: max diff 0, unmatched 0"
+WELL-3,dat cross-check T,OK,"Well3_downhole_temperature.dat: max diff 0, unmatched 0"
+WELL-3,dat cross-check production mass flow,OK,"Well3_production_mass_flow.dat: max diff 0, unmatched 0"
+WELL-3,dat cross-check production enthalpy,OK,"Well3_transient_enthalpy.dat: max diff 0, unmatched 0"
+WELL-4,dat cross-check P,OK,"Well4_downhole_pressure.dat: max diff 0, unmatched 0"
+WELL-4,dat cross-check T,OK,"Well4_downhole_temperature.dat: max diff 0, unmatched 0"
+WELL-4,dat cross-check injection enthalpy,OK,"Well4_injection_enthalpy.dat: max diff 0, unmatched 0"
+WELL-4,dat cross-check injection mass flow,OK,"Well4_injection_mass_flow.dat: max diff 0, unmatched 0"
+WELL-5,dat cross-check P,OK,"Well5_downhole_pressure.dat: max diff 0, unmatched 0"
+WELL-5,dat cross-check T,OK,"Well5_downhole_temperature.dat: max diff 0, unmatched 0"
+WELL-5,dat cross-check injection enthalpy,OK,"Well5_injection_enthalpy.dat: max diff 0, unmatched 0"
+WELL-5,dat cross-check injection mass flow,OK,"Well5_injection_mass_flow.dat: max diff 0, unmatched 0"
+WELL-6,dat cross-check P,OK,"Well6_downhole_pressure.dat: max diff 0, unmatched 0"
+WELL-6,dat cross-check T,OK,"Well6_downhole_temperature.dat: max diff 0, unmatched 0"
+WELL-7,dat cross-check P,OK,"Well7_downhole_pressure.dat: max diff 0, unmatched 0"
+WELL-7,dat cross-check T,OK,"Well7_downhole_temperature.dat: max diff 0, unmatched 0"
+WELL-8,dat cross-check P,OK,"Well8_downhole_pressure.dat: max diff 0, unmatched 0"
+WELL-8,dat cross-check T,OK,"Well8_downhole_temperature.dat: max diff 0, unmatched 0"
+WELL-8,dat cross-check injection enthalpy,OK,"Well8_injection_enthalpy.dat: max diff 0, unmatched 0"
+WELL-8,dat cross-check injection mass flow,OK,"Well8_injection_mass_flow.dat: max diff 0, unmatched 0"
+WELL-9,dat cross-check transient P at -675.0,OK,"Well9_-675.0_transient_pressure.dat: max diff 0, unmatched 0"
+WELL-9,dat cross-check P,OK,"Well9_downhole_pressure.dat: max diff 0, unmatched 0"
+WELL-9,dat cross-check T,OK,"Well9_downhole_temperature.dat: max diff 0, unmatched 0"
+WELL-9,dat cross-check production mass flow,OK,"Well9_production_mass_flow.dat: max diff 0, unmatched 0"
+WELL-9,dat cross-check production enthalpy,OK,"Well9_transient_enthalpy.dat: max diff 0, unmatched 0"
+WELL-1,wellhead vs model surface,ISSUE,"wellhead 15.0, model surface 120.0 mRL"
+WELL-2,wellhead vs model surface,ISSUE,"wellhead 225.0, model surface 260.0 mRL"
+WELL-3,wellhead vs model surface,ISSUE,"wellhead 164.0, model surface 180.0 mRL"
+WELL-4,wellhead vs model surface,OK,"wellhead 340.0, model surface 340.0 mRL"
+WELL-5,wellhead vs model surface,ISSUE,"wellhead 93.0, model surface 140.0 mRL"
+WELL-6,wellhead vs model surface,ISSUE,"wellhead 147.0, model surface 160.0 mRL"
+WELL-7,wellhead vs model surface,ISSUE,"wellhead 190.0, model surface 240.0 mRL"
+WELL-8,wellhead vs model surface,ISSUE,"wellhead 176.0, model surface 260.0 mRL"
+WELL-9,wellhead vs model surface,ISSUE,"wellhead 174.0, model surface 220.0 mRL"
+WELL-10,wellhead vs model surface,OK,"wellhead 260.0, model surface 260.0 mRL"

@@ -1,35 +1,30 @@
-parameter,value
-gauge_match_bar,0.15
-survey_precision_bar,0.1
-iso_range_degC,5.0
-iso_min_length_m,300.0
-inversion_min_degC,3.0
-shallow_fit_m,300.0
-deep_min_length_m,300.0
-hydro_min_margin_degC,10.0
-hydro_min_P_bar,1.5
-hydro_min_length_m,300.0
-bpd_margin_degC,5.0
-top_block_m,30.0
-wl_points,3.0
-fz_trend_ok_bar,3.0
-fz_trend_flag_bar,6.0
-cold_well_Tmax_degC,100.0
-k_rock_W_mK,2.0
-hot_core_Tmax_degC,255.0
-hot_layer_drop_degC,15.0
-g_m_s2,9.80665
-P_critical_bar,220.64
-weights_feed_zone,1.0
-weights_open_hole,0.8
-weights_open_hole_isothermal,0.5
-weights_behind_casing,0.5
-weights_top_30m_or_top_block,0.3
-weights_above_surface,0.0
-confidence_factor_high,1.0
-confidence_factor_medium,0.75
-confidence_factor_low,0.5
-quality_factor_HIGH,1.0
-quality_factor_MEDIUM,0.8
-quality_factor_LOW,0.5
-quality_factor_Synthetic,0.5
+parameter,value,meaning
+g_m_s2,9.80665,gravity used for IF97 hydrostatic integration
+P_atm_bar,1.01325,atmospheric pressure (water-level extrapolation target)
+P_crit_bar,220.64,critical pressure; no Tsat above
+window_min_m,300.0,minimum hydrostatic window and gradient interval
+liquid_margin_degC,10.0,boiling margin required throughout a hydrostatic window
+liquid_P_bar,1.5,minimum P for liquid-filled points
+low_margin_flag_degC,5.0,boiling margin flag threshold
+inversion_min_degC,3.0,minimum inversion reported
+isothermal_grad_degC_per_km,10.0,|dT/dz| below which adjacent points are isothermal
+isothermal_len_m,300.0,isothermal length that triggers weight 0.5
+wellhead_dist_m,30.0,points within this of the wellhead get weight 0.3
+cold_Tmax_degC,100.0,cold-well definition
+gauge_tol_bar,0.1,gauge-test match tolerance (reading precision)
+pconn_tol_bar,2.0,P at -1000 mRL further below the median than this is reported separately
+trend_tol_bar,5.0,negative trend residual that flags possible drawdown
+cap_gradient_degC_per_km,100.0,local gradient above which an interval is counted as conductive cap
+k_rock_W_per_mK,2.5,ASSUMED rock conductivity (typical volcanic rock; not from the data)
+P_injectate_bar,10.0,pressure used to convert injectate enthalpy to temperature
+cold_column_T_degC,20.0,reference cold column for feed-zone overpressure
+inj_iso_tol_degC,10.0,isothermal section this close to injectate T = injection signature
+weight_above_surface,0.0,location weight
+weight_wellhead_or_top_block,0.3,location weight
+weight_feed_zone,1.0,location weight
+weight_behind_casing,0.5,location weight
+weight_open_hole_isothermal,0.5,location weight
+weight_open_hole,0.8,location weight
+conf_factor_high,1.0,natural-state confidence factor
+conf_factor_medium,0.75,natural-state confidence factor
+conf_factor_low,0.5,natural-state confidence factor

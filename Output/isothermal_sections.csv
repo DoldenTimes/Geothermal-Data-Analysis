@@ -1,9 +1,7 @@
-well,z_top_mRL,z_bottom_mRL,length_m,T_min_degC,T_max_degC,T_range_degC,location,feedzones_inside
-WELL-2,-1100.0,-1910.0,810.0,236.0,240.3,4.3,open hole,3
-WELL-3,-1100.0,-2250.0,1150.0,174.5,177.2,2.7,open hole,
-WELL-4,230.0,-250.0,480.0,12.3,19.4,7.1,behind casing,
-WELL-5,-550.0,-1100.0,550.0,153.6,158.0,4.4,spans the casing shoe,
-WELL-5,-1300.0,-2250.0,950.0,144.7,147.7,3.0,open hole,"1,2"
-WELL-6,-1500.0,-2359.0,859.0,122.4,126.7,4.3,open hole,
-WELL-7,-1300.0,-2250.0,950.0,130.7,134.0,3.3,open hole,2
-WELL-8,-550.0,-1700.0,1150.0,63.6,68.1,4.5,spans the casing shoe,1
+well,top_mRL,bottom_mRL,length_m,Tmin_degC,Tmax_degC,location,feedzones_inside,shoe_mRL,internal_flow_test
+WELL-2,-1100.00,-1700.00,600.00,236.00,237.80,open hole,,-100.00,"internal flow possible between feed zones 2 and 3; section T matches feed zone 1,3"
+WELL-3,-1100.00,-2250.00,1150.00,174.50,177.20,open hole,,-250.00,"no feed-zone pair brackets it: internal flow unlikely, probably a formation feature"
+WELL-5,-1500.00,-2250.00,750.00,144.70,147.40,open hole,2,-1000.00,"no feed-zone pair brackets it: internal flow unlikely, probably a formation feature"
+WELL-6,-1700.00,-2250.00,550.00,122.40,123.90,open hole,,-440.00,"no feed-zone pair brackets it: internal flow unlikely, probably a formation feature"
+WELL-7,-1300.00,-2250.00,950.00,130.70,134.00,open hole,2,-440.00,"no feed-zone pair brackets it: internal flow unlikely, probably a formation feature"
+WELL-8,-1100.00,-1500.00,400.00,63.60,64.50,open hole,1,-700.00,"no feed-zone pair brackets it: internal flow unlikely, probably a formation feature"

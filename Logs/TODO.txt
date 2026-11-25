@@ -1,0 +1,13 @@
+### V3 TODO ###
+- Go over analysis
+- Mark down potential improvements
+- Ensure proper write-up
+
+### V4 TODO ###
+- V3 improvements
+- Standardise graphical outputs:
+    - Get examples from xander
+    - Ensure human readability
+
+### V5 TODO ###
+- Skills?

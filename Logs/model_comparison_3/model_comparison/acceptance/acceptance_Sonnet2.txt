@@ -1,0 +1,22 @@
+FAIL  I1   Output/input_inventory.csv not found; geometry checks cannot run
+FAIL  F1   missing files: ['Output/input_inventory.csv']
+PASS  F1   all required figure types present
+PASS  S1   NS_calibration_targets.csv: columns OK
+FAIL  S1   feedzones.csv: missing columns ['feedzone', 'block']
+FAIL  S1   T_P_at_layer_centres.csv: required columns present but not first and in order
+FAIL  S1   well_summary.csv: missing columns ['Tmax_degC', 'Tmax_elev_mRL', 'TD_mRL', 'inversion_degC', 'inversion_base_mRL', 'shallow_gradient_degC_per_km', 'deep_gradient_degC_per_km', 'z_100C_mRL', 'z_200C_mRL', 'min_boiling_margin_elev_mRL', 'water_level_mRL', 'pivot_elev_mRL', 'ns_verdict', 'ns_confidence']
+FAIL  S1   pressure_consistency_check.csv: missing columns ['first_gauge_date', 'first_gauge_P_bar', 'diff_survey_minus_first_bar', 'confidence']
+FAIL  S1   hydrostatic_check.csv: missing columns ['band', 'dP_measured_bar', 'dP_IF97_bar', 'ratio_measured_to_IF97', 'rho_implied_kgm3']
+FAIL  S1   well_geometry_check.csv: missing columns ['wellhead_minus_surface_m', 'nearest_water_body', 'dist_nearest_water_body_m']
+PASS  S2   one pressure-consistency row per well
+PASS  T1   Tsat agrees with an independent IF97 Region 4 within 0.1 K at every point
+PASS  T2   boiling margins consistent
+FAIL  W1   weight_P > 0 at 234 points outside feed zones
+PASS  W2   ns_confidence takes 4 values across wells
+PASS  R1   6/1139 report numbers (1%) not found in any output table; first: ['0.25', '4.19', '0.76', '0.63', '0.25', '−3251']
+PASS  R2   analysis script writes the report
+WARN  P1   process log lacks: ['acceptance']
+FAIL  G*   geometry checks skipped: inventory lacks geometry_dat or well_blocks_json
+PASS  R3   re-run reproduces every CSV and the report
+
+10 FAIL, 1 WARN, 9 PASS

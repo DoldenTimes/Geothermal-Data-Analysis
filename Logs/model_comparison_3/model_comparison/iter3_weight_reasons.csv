@@ -1,0 +1,13 @@
+reason,Haiku,Opus,Sonnet
+behind casing,131,0,131
+behind_casing,0,131,0
+feed zone,32,0,32
+feed_zone,0,32,0
+open hole,65,0,55
+open hole in isothermal section >= 300 m,19,0,0
+open hole within an isothermal section >= 300 m long,0,0,29
+open_hole,0,62,0
+open_hole_isothermal,0,22,0
+wellhead_or_top_block,0,19,0
+within 30 m of the wellhead or in the top block of its column,0,0,19
+within 30 m of wellhead or in top block of column,19,0,0

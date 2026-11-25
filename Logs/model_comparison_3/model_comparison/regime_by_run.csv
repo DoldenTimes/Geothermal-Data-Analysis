@@ -1,0 +1,11 @@
+well,Haiku1,Sonnet1,Opus1,Haiku2,Sonnet2,Opus2,Haiku3,Sonnet3,Opus3
+WELL-1,,,conductive,conductive,conductive,conductive,conductive,conductive,conductive
+WELL-2,,,outflow,upflow,upflow,outflow,outflow,outflow,outflow
+WELL-3,,,outflow,upflow,outflow,outflow,outflow,outflow,outflow
+WELL-4,,,recharge/downflow,recharge/downflow,recharge/downflow,recharge/downflow,recharge/downflow,recharge/downflow,recharge/downflow
+WELL-5,,,outflow,other,outflow,outflow,outflow,outflow,outflow
+WELL-6,,,outflow,upflow,outflow,outflow,outflow,outflow,outflow
+WELL-7,,,outflow,upflow,outflow,outflow,outflow,outflow,outflow
+WELL-8,,,conductive,recharge/downflow,recharge/downflow,recharge/downflow,recharge/downflow,recharge/downflow,recharge/downflow
+WELL-9,,,outflow,upflow,outflow,outflow,outflow,outflow,outflow
+WELL-10,,,two-phase,two-phase,two-phase,two-phase,upflow,two-phase,upflow

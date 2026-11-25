@@ -1,0 +1,10 @@
+run,report_words,report_h2_sections,key_conclusions,obs_labels,interp_labels,action_lines,reference_model_mentions,script_lines,process_log_words,output_tables,output_files,figures,kell_density_in_outputs,files_present,files_required,columns_present,columns_required,figure_types_present,figure_types_required,pct_files,pct_columns,pct_figure_types,model,iteration,pct_pass
+Haiku1,1814,7,0,0,0,0,0,572,902,9,12,5,True,6,12,3,89,0,7,50.0,3.4,0.0,Haiku,1,0.0
+Sonnet1,2160,8,0,0,0,0,1,479,396,7,9,8,False,9,12,10,89,0,7,75.0,11.2,0.0,Sonnet,1,0.0
+Opus1,1908,7,7,0,0,0,1,527,450,6,8,8,False,9,12,20,89,0,7,75.0,22.5,0.0,Opus,1,0.0
+Haiku2,4165,8,10,16,19,0,0,1074,1235,9,12,15,False,11,12,47,89,6,7,91.7,52.8,85.7,Haiku,2,15.0
+Sonnet2,5697,8,9,11,0,6,0,1390,716,10,13,21,False,11,12,58,89,7,7,91.7,65.2,100.0,Sonnet,2,45.0
+Opus2,5961,8,9,0,0,0,5,1975,1284,11,14,22,False,11,12,71,89,7,7,91.7,79.8,100.0,Opus,2,38.095238095238095
+Haiku3,4247,8,11,19,14,1,0,1362,2288,13,17,22,False,12,12,89,89,7,7,100.0,100.0,100.0,Haiku,3,100.0
+Sonnet3,7792,8,9,18,16,8,3,2456,2249,23,27,23,False,12,12,89,89,7,7,100.0,100.0,100.0,Sonnet,3,100.0
+Opus3,7390,8,9,20,29,9,6,2301,2100,28,32,17,False,12,12,89,89,7,7,100.0,100.0,100.0,Opus,3,100.0

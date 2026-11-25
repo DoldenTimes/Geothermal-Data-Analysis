@@ -1,0 +1,7 @@
+model,band,count,median,min,max
+Haiku,cased,8,1.153,1.032,1.5507
+Haiku,open,16,1.0198,0.9944,1.164
+Opus,cased,8,1.157,1.0329,1.5522
+Opus,open,15,1.0211,0.9944,1.1622
+Sonnet,cased,8,1.1535,1.032,1.551
+Sonnet,open,17,1.019,0.997,1.192

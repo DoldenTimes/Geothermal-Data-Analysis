@@ -1,0 +1,13 @@
+extracted 9 runs
+status   PASS  WARN  FAIL
+run                      
+Haiku1      0     2    11
+Sonnet1     0     2    15
+Opus1       0     2    15
+Haiku2      3     2    15
+Sonnet2     9     1    10
+Opus2       8     2    11
+Haiku3     26     0     0
+Sonnet3    26     0     0
+Opus3      26     0     0
+tables in Output\model_comparison ; figures in Output\figures\model_comparison

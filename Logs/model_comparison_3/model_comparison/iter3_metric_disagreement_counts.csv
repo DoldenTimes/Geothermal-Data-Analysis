@@ -1,0 +1,16 @@
+metric,wells_where_models_differ
+T_at_TD_degC,0
+Tmax_degC,0
+Tmax_elev_mRL,0
+deep_gradient_degC_per_km,5
+inversion_degC,0
+min_boiling_margin_degC,1
+ns_confidence,5
+ns_verdict,1
+pivot_P_bar,0
+regime,1
+regime_class,1
+shallow_gradient_degC_per_km,5
+water_level_mRL,10
+z_100C_mRL,0
+z_200C_mRL,0

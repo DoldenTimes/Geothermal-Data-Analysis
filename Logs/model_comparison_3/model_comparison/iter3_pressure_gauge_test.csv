@@ -1,0 +1,31 @@
+model,well,gauge_elev_mRL,survey_P_at_gauge_bar,first_gauge_P_bar,diff_survey_minus_first_bar,verdict,confidence
+Haiku,WELL-10,-250.0,56.7,48.7,8.0,probably natural state,low
+Haiku,WELL-1,,,,,probably natural state,low
+Haiku,WELL-2,-750.0,98.2,98.3,-0.1,natural state,high
+Haiku,WELL-3,-550.0,80.7,80.8,-0.1,natural state,medium
+Haiku,WELL-4,,,,,probably natural state,medium
+Haiku,WELL-5,,,,,probably natural state,low
+Haiku,WELL-6,,,,,probably natural state,medium
+Haiku,WELL-7,,,,,probably natural state,medium
+Haiku,WELL-8,,,,,probably natural state,low
+Haiku,WELL-9,-675.0,91.25,89.2,2.05,possibly disturbed,low
+Sonnet,WELL-1,,,,,probably natural state,medium
+Sonnet,WELL-2,-750.0,98.2,98.3,-0.1,natural state,high
+Sonnet,WELL-3,-550.0,80.7,80.8,-0.1,natural state,high
+Sonnet,WELL-4,,,,,probably natural state,medium
+Sonnet,WELL-5,,,,,probably natural state,low
+Sonnet,WELL-6,,,,,probably natural state,medium
+Sonnet,WELL-7,,,,,probably natural state,medium
+Sonnet,WELL-8,,,,,probably natural state,medium
+Sonnet,WELL-9,-675.0,91.25,89.2,2.05,probably natural state,medium
+Sonnet,WELL-10,-250.0,56.7,48.7,8.0,probably natural state,medium
+Opus,WELL-1,,,,,probably natural state,medium
+Opus,WELL-2,-750.0,98.2,98.3,-0.1,natural state,high
+Opus,WELL-3,-550.0,80.7,80.8,-0.1,natural state,high
+Opus,WELL-4,,,,,probably natural state,medium
+Opus,WELL-5,,,,,probably natural state,low
+Opus,WELL-6,,,,,probably natural state,medium
+Opus,WELL-7,,,,,probably natural state,medium
+Opus,WELL-8,,,,,probably natural state,medium
+Opus,WELL-9,-675.0,91.25,89.2,2.05,probably natural state,medium
+Opus,WELL-10,-250.0,56.7,48.7,8.0,probably natural state,medium

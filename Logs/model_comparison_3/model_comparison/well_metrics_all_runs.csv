@@ -1,0 +1,91 @@
+run,well,Tmax_degC,Tmax_elev_mRL,T_at_TD_degC,inversion_degC,shallow_gradient_degC_per_km,deep_gradient_degC_per_km,z_100C_mRL,z_200C_mRL,min_boiling_margin_degC,water_level_mRL,pivot_P_bar,regime,ns_verdict,ns_confidence,regime_class
+Haiku1,WELL-1,118.6,,,,,,,,150.35753590153305,,,,,,
+Haiku1,WELL-2,266.9,,,,,,,,23.75741116709247,,,,,,
+Haiku1,WELL-3,261.4,,,,,,,,12.178165923583549,,,,,,
+Haiku1,WELL-4,29.0,,,,,,,,113.7736777538042,,,,,,
+Haiku1,WELL-5,158.0,,,,,,,,123.57663815735083,,,,,,
+Haiku1,WELL-6,220.5,,,,,,,,69.9778890480134,,,,,,
+Haiku1,WELL-7,176.7,,,,,,,,80.49227394669778,,,,,,
+Haiku1,WELL-8,93.1,,,,,,,,104.11240807955956,,,,,,
+Haiku1,WELL-9,217.7,,,,,,,,87.77058047427272,,,,,,
+Haiku1,WELL-10,268.7,,,,,,,,2.6460707109438886,,,,,,
+Sonnet1,WELL-1,118.6,-1672.0,118.6,0.0,,,-945.9183673469387,,150.4,115.4,,,,,
+Sonnet1,WELL-2,266.9,-550.0,253.7,30.9,,,128.15217391304347,-80.97014925373132,23.8,224.9,,,,,
+Sonnet1,WELL-3,261.4,-450.0,188.2,86.9,,,104.46640316205533,-13.715846994535518,12.2,168.0,,,,,
+Sonnet1,WELL-4,29.0,-750.0,29.0,0.0,,,,,113.8,244.2,,,,,
+Sonnet1,WELL-5,158.0,-650.0,154.7,13.3,,,-159.85221674876848,,123.6,132.8,,,,,
+Sonnet1,WELL-6,220.5,-550.0,126.1,98.1,,,13.018867924528294,-328.53107344632764,70.0,157.1,,,,,
+Sonnet1,WELL-7,176.7,-650.0,144.7,46.0,,,-113.70967741935482,,97.1,189.9,,,,,
+Sonnet1,WELL-8,93.1,-2716.1,93.1,0.0,,,,,104.1,184.0,,,,,
+Sonnet1,WELL-9,217.7,-750.0,161.6,57.7,,,-84.13284132841328,-496.10169491525426,87.8,178.0,,,,,
+Sonnet1,WELL-10,268.7,-250.0,268.5,0.2,,,164.67741935483872,45.55555555555556,2.6,209.9,,,,,
+Opus1,WELL-1,118.6,-1672.0,118.6,,,16.5,,,150.4,108.0,,Conductive / gently increasing - field margin,,,conductive
+Opus1,WELL-2,266.9,-550.0,253.7,,,31.4,,,23.8,204.0,,Temperature reversal of 31 C below -550 mRL - lateral hot outflow over cooler fluid,,,outflow
+Opus1,WELL-3,261.4,-450.0,188.2,,,19.7,,,12.2,148.0,,Temperature reversal of 87 C below -450 mRL - lateral hot outflow over cooler fluid,,,outflow
+Opus1,WELL-4,29.0,-750.0,29.0,,,,,,113.8,228.0,,"Cold, near-isothermal - downflow / recharge",,,recharge/downflow
+Opus1,WELL-5,158.0,-650.0,154.7,,,21.2,,,123.6,127.0,,"Weak reversal (13 C) below -650 mRL - distal outflow, conductive at depth",,,outflow
+Opus1,WELL-6,220.5,-550.0,126.1,,,7.1,,,70.0,144.0,,Temperature reversal of 98 C below -550 mRL - lateral hot outflow over cooler fluid,,,outflow
+Opus1,WELL-7,176.7,-650.0,144.7,,,25.0,,,80.5,153.0,,Temperature reversal of 46 C below -650 mRL - lateral hot outflow over cooler fluid,,,outflow
+Opus1,WELL-8,93.1,-2716.1,93.1,,,30.0,,,104.1,176.0,,Conductive / gently increasing - field margin,,,conductive
+Opus1,WELL-9,217.7,-750.0,161.6,,,9.0,,,87.8,160.0,,Temperature reversal of 58 C below -750 mRL - lateral hot outflow over cooler fluid,,,outflow
+Opus1,WELL-10,268.7,-250.0,268.5,,,,,,2.6,186.0,,At boiling point below -150 mRL - two-phase / steam zone (shallow upflow),,,two-phase
+Haiku2,WELL-1,118.6,-1672.0,118.6,0.0,140.0,16.54,-946.0,,150.36,115.28,,"conductive (T increases with depth, no inversion)",probably natural state,low,conductive
+Haiku2,WELL-2,266.9,-550.0,253.7,30.9,770.81,31.42,128.0,-81.0,23.76,224.86,,upflow with lateral outflow (interior T maximum; cooler below),possibly disturbed,low,upflow
+Haiku2,WELL-3,261.4,-450.0,188.2,86.9,1056.67,19.71,104.0,-14.0,12.18,167.97,,upflow with lateral outflow (interior T maximum; cooler below),possibly disturbed,low,upflow
+Haiku2,WELL-4,29.0,-750.0,29.0,0.0,13.71,19.61,,,113.77,244.15,,cold (<100 C): recharge/downflow or injection-cooled,possibly disturbed,low,recharge/downflow
+Haiku2,WELL-5,158.0,-650.0,154.7,13.3,327.61,21.16,-160.0,,123.58,132.77,,interior T maximum with weak cooling below (<10 K): mixed,possibly disturbed,low,other
+Haiku2,WELL-6,220.5,-550.0,126.1,98.1,590.51,7.14,13.0,-329.0,69.98,157.08,,upflow with lateral outflow (interior T maximum; cooler below),probably natural state,low,upflow
+Haiku2,WELL-7,176.7,-650.0,144.7,46.0,259.58,25.0,-114.0,,80.49,189.86,,upflow with lateral outflow (interior T maximum; cooler below),probably natural state,low,upflow
+Haiku2,WELL-8,93.1,-2716.1,93.1,0.0,80.63,30.04,,,104.11,184.03,,cold (<100 C): recharge/downflow or injection-cooled,possibly disturbed,low,recharge/downflow
+Haiku2,WELL-9,217.7,-750.0,161.6,57.7,247.11,9.03,-84.0,-496.0,87.77,177.95,,upflow with lateral outflow (interior T maximum; cooler below),possibly disturbed,low,upflow
+Haiku2,WELL-10,268.7,-250.0,268.5,0.2,948.95,284.97,165.0,46.0,2.65,209.86,,two-phase / near-boiling upflow (>=2 points with margin < 5 K),probably natural state,low,two-phase
+Sonnet2,WELL-1,118.6,-1672.0,118.6,0.0,73.2,16.5,-945.9183673469387,,150.4,113.0,158.7,conductive,probably natural state,medium,conductive
+Sonnet2,WELL-2,266.9,-550.0,253.7,30.9,664.4,31.4,128.15217391304347,-80.97014925373132,23.8,211.0,97.8,"upflow (hot to TD, with shallow outflow peak)",natural state,high,upflow
+Sonnet2,WELL-3,261.4,-450.0,188.2,86.9,860.4,19.7,104.46640316205533,-13.715846994535518,12.2,164.0,62.8,outflow over cooler deep water (inversion),natural state,high,outflow
+Sonnet2,WELL-4,29.0,-750.0,29.0,0.0,13.9,19.6,,,113.8,251.0,91.7,"recharge / downflow (cold, sub-conductive gradient)",probably natural state,low,recharge/downflow
+Sonnet2,WELL-5,158.0,-650.0,154.7,13.3,295.2,21.2,-159.85221674876848,,123.6,127.0,148.1,outflow over cooler deep water (inversion),possibly disturbed,low,outflow
+Sonnet2,WELL-6,220.5,-550.0,126.1,98.1,489.8,7.1,13.018867924528294,-328.53107344632764,70.0,157.0,73.5,outflow over cooler deep water (inversion),probably natural state,medium,outflow
+Sonnet2,WELL-7,176.7,-650.0,144.7,46.0,280.2,25.0,-113.70967741935482,,80.5,161.0,86.0,outflow over cooler deep water (inversion),probably natural state,medium,outflow
+Sonnet2,WELL-8,93.1,-2716.1,93.1,4.5,84.6,30.0,,,104.1,180.0,132.0,conductive-cold with weak inversion (lateral cold flow),probably natural state,low,recharge/downflow
+Sonnet2,WELL-9,217.7,-750.0,161.6,57.7,318.7,9.0,-84.13284132841328,-496.10169491525426,87.8,174.0,105.2,outflow over cooler deep water (inversion),probably natural state,medium,outflow
+Sonnet2,WELL-10,268.7,-250.0,268.5,0.0,760.4,285.0,164.67741935483872,45.55555555555556,2.6,192.0,57.7,two-phase / near-boiling upflow,probably natural state,low,two-phase
+Opus2,WELL-1,118.6,-1672.0,118.6,0.0,89.0,17.0,-946.0,,150.4,115.0,146.7,conductive,probably natural state,medium,conductive
+Opus2,WELL-2,266.9,-550.0,253.7,30.9,692.0,23.0,128.0,-81.0,23.8,211.0,97.8,outflow (hot tongue over cooler water); deep reheating,natural state,high,outflow
+Opus2,WELL-3,261.4,-450.0,188.2,86.9,860.0,12.0,104.0,-14.0,12.2,164.0,62.8,outflow (hot tongue over cooler water); deep reheating,natural state,high,outflow
+Opus2,WELL-4,29.0,-750.0,29.0,0.0,14.0,20.0,,,113.8,244.0,91.7,recharge / cold downflow,probably natural state,medium,recharge/downflow
+Opus2,WELL-5,158.0,-650.0,154.7,13.3,295.0,11.0,-160.0,,123.6,133.0,148.1,distal outflow (weak inversion),probably natural state,medium,outflow
+Opus2,WELL-6,220.5,-550.0,126.1,98.1,540.0,7.0,13.0,-329.0,70.0,157.0,73.5,outflow (hot tongue over cooler water),probably natural state,medium,outflow
+Opus2,WELL-7,176.7,-650.0,144.7,46.0,301.0,14.0,-114.0,,80.5,161.0,86.0,distal outflow (cooler tongue over cooler water); deep reheating,probably natural state,medium,outflow
+Opus2,WELL-8,93.1,-2716.1,93.1,0.0,83.0,21.0,,,104.1,184.0,132.0,recharge / cold downflow,probably natural state,medium,recharge/downflow
+Opus2,WELL-9,217.7,-750.0,161.6,57.7,319.0,,-84.0,-496.0,87.8,175.0,105.2,outflow (hot tongue over cooler water),probably natural state,medium,outflow
+Opus2,WELL-10,268.7,-250.0,268.5,0.0,792.0,,165.0,46.0,2.6,199.0,57.7,upflow / two-phase (near-boiling),probably natural state,medium,two-phase
+Haiku3,WELL-10,268.7,-250.0,268.5,,760.4,,164.7,45.6,2.6,191.3,57.7,upflow,probably natural state,low,upflow
+Haiku3,WELL-1,118.6,-1672.0,118.6,,73.2,,-945.9,,150.4,107.3,158.7,conductive,probably natural state,low,conductive
+Haiku3,WELL-2,266.9,-550.0,253.7,30.9,664.4,21.4,128.2,-81.0,23.8,200.7,97.8,outflow,natural state,high,outflow
+Haiku3,WELL-3,261.4,-450.0,188.2,86.9,860.4,14.3,104.5,-13.7,12.2,149.8,62.8,outflow,natural state,medium,outflow
+Haiku3,WELL-4,29.0,-750.0,29.0,,13.9,,,,113.8,232.4,91.7,recharge/downflow,probably natural state,medium,recharge/downflow
+Haiku3,WELL-5,158.0,-650.0,154.7,13.3,295.2,13.5,-159.9,,123.6,125.2,148.1,outflow,probably natural state,low,outflow
+Haiku3,WELL-6,220.5,-550.0,126.1,98.1,489.8,20.2,13.0,-328.5,70.0,145.7,130.5,outflow,probably natural state,medium,outflow
+Haiku3,WELL-7,176.7,-650.0,144.7,46.0,280.2,16.4,-113.7,,80.5,154.9,148.7,outflow,probably natural state,medium,outflow
+Haiku3,WELL-8,93.1,-2716.1,93.1,4.5,84.6,23.9,,,104.1,178.3,132.0,recharge/downflow,probably natural state,low,recharge/downflow
+Haiku3,WELL-9,217.7,-750.0,161.6,57.7,318.7,,-84.1,-496.1,87.8,164.7,105.2,outflow,possibly disturbed,low,outflow
+Sonnet3,WELL-1,118.6,-1672.0,118.6,,73.189,,-945.918,,150.358,112.868,158.7,conductive,probably natural state,medium,conductive
+Sonnet3,WELL-2,266.9,-550.0,253.7,30.9,653.006,21.429,128.152,-80.97,23.757,210.521,97.8,outflow,natural state,high,outflow
+Sonnet3,WELL-3,261.4,-450.0,188.2,86.9,835.853,12.11,104.466,-13.716,12.178,163.867,62.8,outflow,natural state,high,outflow
+Sonnet3,WELL-4,29.0,-750.0,29.0,,13.874,,,,113.774,250.791,91.7,recharge/downflow,probably natural state,medium,recharge/downflow
+Sonnet3,WELL-5,158.0,-650.0,154.7,13.3,295.217,10.889,-159.852,,123.577,127.0,148.1,outflow,probably natural state,low,outflow
+Sonnet3,WELL-6,220.5,-550.0,126.1,98.1,489.799,7.138,13.019,-328.531,69.978,156.868,130.5,outflow,probably natural state,medium,outflow
+Sonnet3,WELL-7,176.7,-650.0,144.7,46.0,300.71,14.056,-113.71,,80.492,160.534,148.7,outflow,probably natural state,medium,outflow
+Sonnet3,WELL-8,93.1,-2716.1,93.1,4.5,84.581,21.373,,,104.112,183.749,132.0,recharge/downflow,probably natural state,medium,recharge/downflow
+Sonnet3,WELL-9,217.7,-750.0,161.6,57.7,318.742,,-84.133,-496.102,87.771,175.372,105.2,outflow,probably natural state,medium,outflow
+Sonnet3,WELL-10,268.7,-250.0,268.5,,691.686,,164.677,45.556,2.646,197.513,57.7,two-phase,probably natural state,medium,two-phase
+Opus3,WELL-1,118.6,-1672.0,118.6,,73.2,,-945.9,,150.36,109.4,158.7,conductive,probably natural state,medium,conductive
+Opus3,WELL-2,266.9,-550.0,253.7,30.9,622.2,21.4,128.2,-81.0,23.76,210.6,97.8,outflow,natural state,high,outflow
+Opus3,WELL-3,261.4,-450.0,188.2,86.9,680.4,12.1,104.5,-13.7,12.18,164.2,62.8,outflow,natural state,high,outflow
+Opus3,WELL-4,29.0,-750.0,29.0,,13.9,,,,113.77,246.8,91.7,recharge/downflow,probably natural state,medium,recharge/downflow
+Opus3,WELL-5,158.0,-650.0,154.7,13.3,295.2,10.9,-159.9,,123.58,127.2,148.1,outflow,probably natural state,low,outflow
+Opus3,WELL-6,220.5,-550.0,126.1,98.1,489.8,7.1,13.0,-328.5,69.98,156.9,130.5,outflow,probably natural state,medium,outflow
+Opus3,WELL-7,176.7,-650.0,144.7,46.0,292.8,14.1,-113.7,,97.06,159.4,148.7,outflow,probably natural state,medium,outflow
+Opus3,WELL-8,93.1,-2716.1,93.1,4.5,84.6,21.4,,,104.11,182.0,132.0,recharge/downflow,probably natural state,medium,recharge/downflow
+Opus3,WELL-9,217.7,-750.0,161.6,57.7,336.1,,-84.1,-496.1,87.77,174.7,105.2,outflow,probably natural state,medium,outflow
+Opus3,WELL-10,268.7,-250.0,268.5,,691.7,,164.7,45.6,2.65,194.7,57.7,upflow,probably natural state,medium,upflow

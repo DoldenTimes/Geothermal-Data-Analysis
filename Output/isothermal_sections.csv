@@ -1,7 +1,0 @@
-well,top_mRL,bottom_mRL,length_m,Tmin_degC,Tmax_degC,location,feedzones_inside,shoe_mRL,internal_flow_test
-WELL-2,-1100.00,-1700.00,600.00,236.00,237.80,open hole,,-100.00,"internal flow possible between feed zones 2 and 3; section T matches feed zone 1,3"
-WELL-3,-1100.00,-2250.00,1150.00,174.50,177.20,open hole,,-250.00,"no feed-zone pair brackets it: internal flow unlikely, probably a formation feature"
-WELL-5,-1500.00,-2250.00,750.00,144.70,147.40,open hole,2,-1000.00,"no feed-zone pair brackets it: internal flow unlikely, probably a formation feature"
-WELL-6,-1700.00,-2250.00,550.00,122.40,123.90,open hole,,-440.00,"no feed-zone pair brackets it: internal flow unlikely, probably a formation feature"
-WELL-7,-1300.00,-2250.00,950.00,130.70,134.00,open hole,2,-440.00,"no feed-zone pair brackets it: internal flow unlikely, probably a formation feature"
-WELL-8,-1100.00,-1500.00,400.00,63.60,64.50,open hole,1,-700.00,"no feed-zone pair brackets it: internal flow unlikely, probably a formation feature"

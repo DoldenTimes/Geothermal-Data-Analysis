@@ -1,0 +1,19 @@
+FAIL  I1   Output/input_inventory.csv not found; geometry checks cannot run
+FAIL  F1   missing files: ['Output/input_inventory.csv', 'Output/T_P_at_layer_centres.csv', 'Output/run_console_log.txt']
+FAIL  F1   figures missing: ['well_map*.png: 0/1', 'profile_*.png: 0/10', 'PT_state*.png: 0/1', 'maps_temperature*.png: 0/1', 'maps_pressure*.png: 0/1', 'section_*.png: 0/1', 'conceptual_model*.png: 0/1']
+FAIL  S1   NS_calibration_targets.csv: missing columns ['x', 'y', 'elevation_mRL', 'T_degC', 'P_bar', 'Tsat_degC', 'boiling_margin_degC', 'in_feedzone', 'behind_casing', 'above_model_surface', 'ns_confidence', 'weight', 'weight_reason', 'weight_P']
+FAIL  S1   feedzones.csv: missing columns ['feedzone', 'top_mRL', 'bottom_mRL', 'mid_mRL', 'T_degC', 'P_bar', 'Tsat_degC', 'boiling_margin_degC', 'block', 'ns_confidence', 'weight_T', 'weight_P']
+FAIL  S1   well_summary.csv: missing columns ['Tmax_degC', 'Tmax_elev_mRL', 'T_at_TD_degC', 'TD_mRL', 'inversion_degC', 'inversion_top_mRL', 'inversion_base_mRL', 'shallow_gradient_degC_per_km', 'deep_gradient_degC_per_km', 'z_100C_mRL', 'z_200C_mRL', 'min_boiling_margin_degC', 'min_boiling_margin_elev_mRL', 'water_level_mRL', 'pivot_elev_mRL', 'pivot_P_bar', 'regime', 'ns_verdict', 'ns_confidence']
+FAIL  S1   pressure_consistency_check.csv: missing columns ['gauge_elev_mRL', 'survey_P_at_gauge_bar', 'first_gauge_date', 'first_gauge_P_bar', 'diff_survey_minus_first_bar', 'verdict', 'confidence']
+FAIL  S1   hydrostatic_check.csv: missing columns ['z_top_mRL', 'z_bottom_mRL', 'length_m', 'band', 'dP_measured_bar', 'dP_IF97_bar', 'ratio_measured_to_IF97', 'rho_implied_kgm3']
+FAIL  S1   well_geometry_check.csv: missing columns ['wellhead_mRL', 'model_surface_mRL', 'wellhead_minus_surface_m', 'max_horizontal_deviation_m', 'nearest_fault', 'dist_nearest_fault_m', 'nearest_water_body', 'dist_nearest_water_body_m']
+FAIL  S2   pressure_consistency_check.csv must have one row per well; mismatched: ['WELL-1', 'WELL-4', 'WELL-5', 'WELL-6', 'WELL-7', 'WELL-8']
+FAIL  check_thermo  check crashed: AttributeError: 'Series' object has no attribute 'P_bar'
+FAIL  check_weights  check crashed: AttributeError: 'DataFrame' object has no attribute 'weight'
+WARN  R1   22/250 report numbers (9%) not found in any output table; first: ['393', '−3500', '1.013', '2015', '2015', '2014', '80.8', '2020', '380', '2.8196', '2.8198', '2819780']
+FAIL  R2   analysis script never names NS_data_interpretation.md: the report is not generated
+WARN  P1   process log lacks: ['departure', 'acceptance']
+FAIL  G*   geometry checks skipped: inventory lacks geometry_dat or well_blocks_json
+FAIL  R3   re-run does not reproduce: ['NS_data_interpretation.md (not regenerated)']
+
+15 FAIL, 2 WARN, 0 PASS

@@ -1,0 +1,10 @@
+run,model,iteration,commit,commit_date,subject,files_unchanged_from_previous_commit
+Haiku1,Haiku,1,fe15a96,2026-11-23 13:34,Initial Analysis using Haiku 5.5,
+Sonnet1,Sonnet,1,4c18c22,2026-11-23 13:24,Initial Sonnet Analysis.,
+Opus1,Opus,1,3352c8a,2026-11-23 13:11,Initial analysis results using Opus 5.5,
+Haiku2,Haiku,2,0403a66,2026-11-24 12:45,Second iteration analysis with Haiku 5.5,
+Sonnet2,Sonnet,2,954fd4c,2026-11-24 13:09,Second iteration analysis with Sonnet 5.5,
+Opus2,Opus,2,98f5dc4,2026-11-24 13:37,Second iteration analysis with Opus 5.5,
+Haiku3,Haiku,3,92b4957,2026-11-25 09:31,Third iteration analysis with Haiku 5.5,
+Sonnet3,Sonnet,3,07b13ab,2026-11-25 10:02,Third iteration analysis using Sonnet 5.5,
+Opus3,Opus,3,2fa3728,2026-11-25 10:27,Third iteration analysis with Opus 5.5,Output/T_P_at_layer_centres.csv

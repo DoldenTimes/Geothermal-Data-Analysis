@@ -1,0 +1,28 @@
+PASS  I1   22 inventory rows, all roles valid and paths present
+PASS  I1   every Baseline file is covered by the inventory
+PASS  F1   all 12 required files present
+PASS  F1   all required figure types present
+PASS  S1   input_inventory.csv: columns OK
+PASS  S1   NS_calibration_targets.csv: columns OK
+PASS  S1   feedzones.csv: columns OK
+PASS  S1   T_P_at_layer_centres.csv: columns OK
+PASS  S1   well_summary.csv: columns OK
+PASS  S1   pressure_consistency_check.csv: columns OK
+PASS  S1   hydrostatic_check.csv: columns OK
+PASS  S1   well_geometry_check.csv: columns OK
+PASS  S2   one pressure-consistency row per well
+PASS  S2   hydrostatic band labels OK
+PASS  T1   Tsat agrees with an independent IF97 Region 4 within 0.1 K at every point
+PASS  T2   boiling margins consistent
+PASS  W1   weights valid
+PASS  W2   ns_confidence takes 3 values across wells
+PASS  R1   0/892 report numbers (0%) not found in any output table; first: []
+PASS  R2   analysis script writes the report
+PASS  P1   process log has prompt, departures and acceptance check
+PASS  G1   all 266 survey-point blocks match the well-to-block file
+PASS  G2   all 18 feed-zone blocks match
+PASS  G3   all 30 layer centres match the grid file
+PASS  G3   no layer-centre row lies outside its well's survey range
+FAIL  R3   re-run does not reproduce: ['NS_calibration_targets.csv (0 lines differ)', 'TP_at_common_elevations.csv (0 lines differ)', 'T_P_at_layer_centres.csv (0 lines differ)', 'analysis_parameters.csv (0 lines differ)', 'boiling_margin_flags.csv (0 lines differ)', 'dat_json_crosscheck.csv (0 lines differ)', 'feedzones.csv (0 lines differ)', 'hydrostatic_check.csv (0 lines differ)', 'hydrostatic_summary.csv (0 lines differ)', 'if97_validation.csv (0 lines differ)', 'integrity_checks.csv (0 lines differ)', 'isothermal_sections.csv (0 lines differ)', 'pressure_at_common_elevations.csv (0 lines differ)', 'pressure_consistency_check.csv (0 lines differ)', 'pressure_trend_check.csv (0 lines differ)', 'provenance_labels.csv (0 lines differ)', 'reference_model_summary.csv (0 lines differ)', 'report_derived_numbers.csv (0 lines differ)', 'temperature_at_common_elevations.csv (0 lines differ)', 'weights_by_well.csv (0 lines differ)', 'well_geometry_check.csv (0 lines differ)', 'well_summary.csv (0 lines differ)']
+
+1 FAIL, 0 WARN, 25 PASS

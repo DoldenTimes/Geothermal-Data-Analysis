@@ -22,10 +22,18 @@ This repository analyses geothermal well data with AI agents (Claude Code). It t
 ├── Scripts/
 │   ├── check_deliverables.py     Acceptance check (provided; agents must not edit it)
 │   └── natural_state_analysis.py Written by the agent in each run
-├── Output/                       Everything a run generates
-│   └── figures/
+├── Output/                       Everything a run generates (CLAUDE.md §5)
+│   ├── Calibration_Input/        What the calibrator needs: report, target tables,
+│   │   │                         figures_index.csv
+│   │   └── figures/              Standard figures F1–F7 only (CLAUDE.md §8)
+│   ├── Additional_Output/        Supporting checks, intermediate tables, logs,
+│   │   │                         process log, acceptance-check output
+│   │   └── figures/              Extra figures, including any "[reference model]" figures
+│   └── CHANGELOG.md              History of CLAUDE.md and checker versions (maintained by hand)
 └── Logs/                         Earlier reports and notes. Ignored by agents
 ```
+
+- **Output folders.** Agents write nothing loose in `Output/`: every generated file goes in `Calibration_Input/` or `Additional_Output/`. `Calibration_Input/` is the package to hand to whoever calibrates the model. Files you add by hand, such as `CHANGELOG.md`, may sit directly in `Output/`; the acceptance check ignores them.
 
 - **One project at a time.** Keep a single `<Project>/` under `Baseline/` per analysis. If there are several, the inventory step has to decide which one is meant.
 - **Earlier runs** are kept in git history and on branches. A new run never reuses them.
@@ -60,7 +68,7 @@ Baseline/<Project>/
 └── Parameters/                             Production histories, scenarios → out_of_scope
 ```
 
-The arrows give the role each item should receive in the agent's `Output/input_inventory.csv` (`CLAUDE.md` §2.2).
+The arrows give the role each item should receive in the agent's `Output/Additional_Output/input_inventory.csv` (`CLAUDE.md` §2.2).
 
 **Naming rules**
 
@@ -129,7 +137,7 @@ These formats are what `CLAUDE.md` §3 tells agents to expect. **"Required"** me
 | **Survey dates** are the actual logging date. A placeholder or file date is not acceptable: the natural-state test compares surveys with the gauge records | Required |
 | **`Source` and `Comment`** say where the data came from, and whether they are measured, processed or synthetic | Required |
 | Rows stored as **strings containing Python literals** (`"[-250, -270, 'LOW']"`) rather than JSON arrays | Tolerated. Prefer real JSON arrays |
-| Dates as `dd/mm/yyyy` | Required |
+| Dates as `dd/mm/yyyy` | Required. (Agent outputs use ISO dates, `YYYY-MM-DD`, by CLAUDE.md §5.4; the conversion is the agent's job) |
 
 ### 3.2 Plain-column copies: `Data/Data_dat/*.dat`
 
@@ -154,6 +162,9 @@ These are two whitespace-separated numeric columns, with no header. They must eq
 
 Every listed well must have a `<Well>_data.json`, and there must be no JSON file for a well that is not listed.
 
+- **Order matters.** The order of wells in this file sets the row order of every output table and each well's colour in every figure (CLAUDE.md §5.4, §8.1). List the wells in a sensible order, for example by area or by number, and keep it stable between datasets you want to compare.
+- **Groups.** Each group produces a small-multiples profile figure, `profile_panels_<group>.png` (CLAUDE.md §8, F2). Use short group names without spaces, and group wells that belong together spatially (for example by sector of the field).
+
 ### 3.4 Map features: `Data/Mapping/Mapping.json`
 
 ```jsonc
@@ -174,7 +185,8 @@ Every listed well must have a `<Well>_data.json`, and there must be no JSON file
 | `SURFA` | column id, surface elevation | Model surface vs wellhead |
 | `WELLS` | well name, then x y z per track point | Cross-check against the JSON track |
 
-- **Block names** are the column id followed by the layer number.
+- **Block names** are the column id followed by the layer number. **Column ids must all have the same width, or must not end in a digit**, so that the column can be recovered from a block name. The acceptance check relies on this (check G4).
+- **`SURFA` is the model surface.** Agents must take `model_surface_mRL` from it, and check G4 compares their value with it at each wellhead's column. Give every column that contains a wellhead an entry. A column without one falls back to the top of the grid (layer line 0).
 - **Wellheads.** The model surface should be at or below each wellhead. Where it is above one, either fix `SURFA` or expect the agent to report it as a data issue.
 
 ### 3.6 Well-to-block file: `Models/<model>/g<model>_wells.json`
@@ -203,7 +215,7 @@ Rock types, boundary conditions, natural-state input and results, and set-up fil
 4. Give real survey dates. Fill `Source` and `Comment`, including whether the data are measured or synthetic.
 5. Use `HIGH`/`MEDIUM`/`LOW` quality tags, or document any other tag.
 6. Make sure the dat files equal the JSON, and record the time-axis reference date in `Data/Data_dat/README.txt`.
-7. Regenerate `g<model>_wells.json` from the current grid and tracks.
+7. Regenerate `g<model>_wells.json` from the current grid and tracks. Check that `SURFA` has an entry for every wellhead column (§3.5).
 8. Remove plotting files, OS files and duplicates, or move them into a documented sub-folder.
 9. Commit `Baseline/` before the first run. Runs must never modify it.
 
@@ -212,20 +224,23 @@ Rock types, boundary conditions, natural-state input and results, and set-up fil
 **Requirements:** Python 3 with numpy, matplotlib and pandas. No IF97 package is needed: the analysis implements IAPWS-IF97 itself, and the acceptance check has its own independent implementation.
 
 An agent run, following `CLAUDE.md`:
-1. Lists `Baseline/` and writes `Output/input_inventory.csv`.
+1. Lists `Baseline/` and writes `Output/Additional_Output/input_inventory.csv`.
 2. Writes `Scripts/natural_state_analysis.py`, then runs it from the repository root:
 
    ```powershell
    python Scripts/natural_state_analysis.py
    ```
 
-3. Runs the acceptance check, which must finish with no FAIL:
+3. Runs the acceptance check, which must finish with no FAIL. It writes its result to `Output/Additional_Output/acceptance_check.txt`:
 
    ```powershell
    python Scripts/check_deliverables.py --rerun
    ```
 
-4. Writes `Output/process_log.md`, including the acceptance-check output.
+4. Writes `Output/Additional_Output/process_log.md`, including the acceptance-check output.
 
-The required output files and their exact columns are defined in `CLAUDE.md` §5, and are not repeated here, so that there is one source of truth. The main report is `Output/NS_data_interpretation.md`.
+The required output files, their folders and their exact columns are defined in `CLAUDE.md` §5, and the standard figures in §8. They are not repeated here, so that there is one source of truth.
+- **What to hand to the calibrator:** the folder `Output/Calibration_Input/`. Its main report, `NS_data_interpretation.md`, stands on its own.
+- **What to read to audit a run:** `Output/Additional_Output/`, starting with `process_log.md` and `acceptance_check.txt`.
+- **What changed between instruction versions:** `Output/CHANGELOG.md`.
 

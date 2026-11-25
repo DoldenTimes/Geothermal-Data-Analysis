@@ -1,0 +1,4 @@
+line,through_wells,reason,start_label,start_x,start_y,end_label,end_x,end_y,length_m,max_offset_m,wells_projected,vertical_exaggeration_T
+A,WELL-10; WELL-2,through the two hottest wells by Tmax (CLAUDE.md default),A,2817815.2,6327487.5,A',2820583.4,6340434.9,13240.0,500.0,WELL-8 (+61 m); WELL-10 (+0 m); WELL-2 (+0 m),2.1
+B,WELL-10; WELL-1,from the hottest well towards the conductive margin (eastward decline of temperature),B,2813030.9,6336340.7,B',2827963.6,6332962.8,15310.0,500.0,WELL-10 (+0 m); WELL-3 (-273 m); WELL-5 (-109 m); WELL-1 (+0 m),2.4
+C,WELL-10; WELL-7,from the hottest well to the southernmost outflow well,C,2824284.5,6327376.5,C',2815751.6,6340519.5,15670.0,500.0,WELL-7 (-0 m); WELL-3 (-372 m); WELL-10 (-0 m); WELL-2 (-430 m),2.5

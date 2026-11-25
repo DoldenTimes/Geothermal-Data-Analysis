@@ -1,0 +1,76 @@
+IF97 check: Tsat(1.01325 bar) = 99.974 degC (reference 99.97)
+IF97 check: Tsat(100 bar) = 310.999 degC (reference 311.0)
+IF97 Region 1 and Region 4 pass the verification tables (Tsat error < 1e-4 K)
+wrote Output/Additional_Output/input_inventory.csv (20 rows)
+inventory: 75 files under Baseline, 20 inventory rows; empty directories: ['Teaching_Model_3D/Data/Make_up_json/', 'Teaching_Model_3D/Models/TE14515/NaturalState/Reports/', 'Teaching_Model_3D/Models/TE14515/Production/Reports/', 'Teaching_Model_3D/Parameters/FutureScenarios/']
+wells (well_groups order): ['WELL-1', 'WELL-2', 'WELL-3', 'WELL-4', 'WELL-5', 'WELL-6', 'WELL-7', 'WELL-8', 'WELL-9', 'WELL-10']
+grid: 385 vertices, 398 columns, 69 layers, 398 surface entries; grid top 1000.0 mRL
+columns without a surface entry (grid top used): 0
+mapping: faults ['Fault 1', 'Fault 2', 'Fault 3'] water bodies ['Lake Tarawera', 'Tarawera River', 'river']
+wrote Output/Additional_Output/dat_json_crosscheck.csv (38 rows)
+dat reference date: 2014-01-01 ; irregular names: ['Wel10_-250.0_transient_pressure.dat -> WELL-10 (AUT2 name WEL10)', 'Wel10_downhole_pressure.dat -> WELL-10 (AUT2 name WEL10)', 'Wel10_downhole_temperature.dat -> WELL-10 (AUT2 name WEL10)', 'Wel10_production_mass_flow.dat -> WELL-10 (AUT2 name WEL10)', 'Wel10_transient_enthalpy.dat -> WELL-10 (AUT2 name WEL10)']
+wrote Output/Additional_Output/integrity_checks.csv (106 rows)
+INTEGRITY ISSUE WELL-4: deepest liner bottom at track TD: design bottom -3251 mRL; track TD -750.0 mRL
+first production anywhere in the field: 2014-01-01 (wells: 2014-01-01, field totals: 2014-01-01)
+injectate: median enthalpy 335.0 kJ/kg -> T = 80.0 degC (IF97 Region 1 inverse at 1.01325 bar)
+feed-zone quality tags and weight_P factors: {'HIGH': 1.0, 'LOW': 0.5, 'MEDIUM': 0.8, 'Synthetic': 0.5}
+verified-trend: P = 32.756 + -0.08767 z (bar, mRL) from 5 feed zones of ['WELL-2', 'WELL-3']; RMS 0.696 bar; tolerance 3.00 bar
+NS verdict WELL-1: possibly disturbed / low -- feed-zone pressures off the verified trend by up to 3.32 bar (tolerance 3.00 bar)
+NS verdict WELL-2: natural state / high -- survey P at the gauge (-750 mRL) 98.20 bar vs first gauge reading 98.3 bar on 2014-01-01 (difference -0.10 bar, within the 0.1 bar reading precision); the reading is not later than the first field production (2014-01-01)
+NS verdict WELL-3: natural state / high -- survey P at the gauge (-550 mRL) 80.70 bar vs first gauge reading 80.8 bar on 2014-01-01 (difference -0.10 bar, within the 0.1 bar reading precision); the reading is not later than the first field production (2014-01-01)
+NS verdict WELL-4: probably natural state / medium -- no pre-production gauge reading (no gauge); feed-zone pressures lie within 1.52 bar of the verified trend (tolerance 3.00 bar); injector whose feed zones (up to 27.3 degC) are colder than the injectate (80.0 degC) with no isothermal section near it, which is evidence against an injection-affected survey
+NS verdict WELL-5: probably natural state at best / low -- injector since 2014-01-01; feed-zone temperatures (up to 147.3 degC) are hotter than the injectate (80.0 degC), so injection cooling could be hidden; feed-zone pressures lie within 0.82 bar of the verified trend (tolerance 3.00 bar)
+NS verdict WELL-6: probably natural state / medium -- no pre-production gauge reading (no gauge); feed-zone pressures lie within 0.90 bar of the verified trend (tolerance 3.00 bar)
+NS verdict WELL-7: probably natural state / medium -- no pre-production gauge reading (no gauge); feed-zone pressures lie within 1.99 bar of the verified trend (tolerance 3.00 bar)
+NS verdict WELL-8: probably natural state / medium -- no pre-production gauge reading (no gauge); feed-zone pressures lie within 0.61 bar of the verified trend (tolerance 3.00 bar); injector whose feed zones (up to 63.9 degC) are colder than the injectate (80.0 degC) with no isothermal section near it, which is evidence against an injection-affected survey
+NS verdict WELL-9: probably natural state / medium -- gauge test misses: survey P at -675 mRL is 91.25 bar vs first reading 89.2 bar (difference +2.05 bar, more than the 0.1 bar precision; recorded as a data question); feed-zone pressures lie within 0.98 bar of the verified trend (tolerance 3.00 bar)
+NS verdict WELL-10: probably natural state / medium -- no pre-production gauge reading (gauge series starts 2020-01-01, after first field production (2014-01-01)); feed-zone pressures lie within 1.93 bar of the verified trend (tolerance 3.00 bar)
+wrote Output/Additional_Output/pressure_consistency_check.csv (10 rows)
+wrote Output/Calibration_Input/NS_calibration_targets.csv (266 rows)
+wrote Output/Calibration_Input/feedzones.csv (18 rows)
+wrote Output/Calibration_Input/well_summary.csv (10 rows)
+wrote Output/Calibration_Input/T_P_at_layer_centres.csv (232 rows)
+wrote Output/Additional_Output/hydrostatic_check.csv (27 rows)
+wrote Output/Additional_Output/hydrostatic_summary.csv (21 rows)
+cold-well component (median ratio) by band: {'cased': 1.0419, 'open': 0.9944}
+wrote Output/Additional_Output/well_geometry_check.csv (10 rows)
+wrote Output/Additional_Output/T_P_at_elevation_bands.csv (56 rows)
+wrote Output/Additional_Output/T_P_at_common_elevations.csv (65 rows)
+wrote Output/Additional_Output/provenance_fields.csv (48 rows)
+analysis tables done
+section A: {'line': 'A', 'through_wells': 'WELL-10; WELL-2', 'reason': 'through the two hottest wells by Tmax (CLAUDE.md default)', 'start_label': 'A', 'start_x': np.float64(2817815.2), 'start_y': np.float64(6327487.5), 'end_label': "A'", 'end_x': np.float64(2820583.4), 'end_y': np.float64(6340434.9), 'length_m': 13240.0, 'max_offset_m': 500.0, 'wells_projected': 'WELL-8 (+61 m); WELL-10 (+0 m); WELL-2 (+0 m)'}
+section B: {'line': 'B', 'through_wells': 'WELL-10; WELL-1', 'reason': 'from the hottest well towards the conductive margin (eastward decline of temperature)', 'start_label': 'B', 'start_x': np.float64(2813030.9), 'start_y': np.float64(6336340.7), 'end_label': "B'", 'end_x': np.float64(2827963.6), 'end_y': np.float64(6332962.8), 'length_m': 15310.0, 'max_offset_m': 500.0, 'wells_projected': 'WELL-10 (+0 m); WELL-3 (-273 m); WELL-5 (-109 m); WELL-1 (+0 m)'}
+section C: {'line': 'C', 'through_wells': 'WELL-10; WELL-7', 'reason': 'from the hottest well to the southernmost outflow well', 'start_label': 'C', 'start_x': np.float64(2824284.5), 'start_y': np.float64(6327376.5), 'end_label': "C'", 'end_x': np.float64(2815751.6), 'end_y': np.float64(6340519.5), 'length_m': 15670.0, 'max_offset_m': 500.0, 'wells_projected': 'WELL-7 (-0 m); WELL-3 (-372 m); WELL-10 (-0 m); WELL-2 (-430 m)'}
+figure Output/Calibration_Input/figures/well_map.png
+figure Output/Calibration_Input/figures/profile_WELL-1.png
+figure Output/Calibration_Input/figures/profile_WELL-2.png
+figure Output/Calibration_Input/figures/profile_WELL-3.png
+figure Output/Calibration_Input/figures/profile_WELL-4.png
+figure Output/Calibration_Input/figures/profile_WELL-5.png
+figure Output/Calibration_Input/figures/profile_WELL-6.png
+figure Output/Calibration_Input/figures/profile_WELL-7.png
+figure Output/Calibration_Input/figures/profile_WELL-8.png
+figure Output/Calibration_Input/figures/profile_WELL-9.png
+figure Output/Calibration_Input/figures/profile_WELL-10.png
+figure Output/Calibration_Input/figures/profile_panels_All.png
+figure Output/Calibration_Input/figures/maps_temperature_bands.png
+figure Output/Calibration_Input/figures/maps_pressure_bands.png
+figure Output/Calibration_Input/figures/section_A.png
+figure Output/Calibration_Input/figures/section_A_P.png
+figure Output/Calibration_Input/figures/section_B.png
+figure Output/Calibration_Input/figures/section_B_P.png
+figure Output/Calibration_Input/figures/section_C.png
+figure Output/Calibration_Input/figures/section_C_P.png
+wrote Output/Additional_Output/section_lines.csv (3 rows)
+figure Output/Calibration_Input/figures/PT_state.png
+figure Output/Calibration_Input/figures/gauge_check.png
+standard figures F1-F5 and F7 done
+fault intersections: [('Fault 1', 'Fault 3', 2819778.5, 6335556.5), ('Fault 2', 'Fault 3', 2821188.8, 6336858.3)]
+wrote Output/Additional_Output/pressure_connections.csv (7 rows)
+wrote Output/Additional_Output/conceptual_model_elements.csv (14 rows)
+figure Output/Calibration_Input/figures/conceptual_model.png
+wrote Output/Calibration_Input/figures_index.csv (23 rows)
+wrote Output/Additional_Output/parameters_used.csv (42 rows)
+wrote Output/Additional_Output/parameters_used.csv (49 rows)
+wrote Output/Calibration_Input/NS_data_interpretation.md
+run complete

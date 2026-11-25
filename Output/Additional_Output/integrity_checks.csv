@@ -1,0 +1,107 @@
+well,check,status,detail
+WELL-1,survey within track,OK,survey 15.0 to -1672.0 mRL; track 15.0 to -1672.0 mRL
+WELL-1,survey T and P at same elevations,OK,19 points
+WELL-1,T and P survey dates equal,OK,2015-07-29
+WELL-1,feed zone 1 within track,OK,-1320.0 to -1355.0 mRL
+WELL-1,feed zone 1 within slotted interval,OK,"slotted [(-950, -1672)]"
+WELL-1,feed zone 2 within track,OK,-1440.0 to -1490.0 mRL
+WELL-1,feed zone 2 within slotted interval,OK,"slotted [(-950, -1672)]"
+WELL-1,casing top at wellhead,OK,top of design 15 mRL; wellhead 15.0 mRL
+WELL-1,deepest liner bottom at track TD,OK,design bottom -1672 mRL; track TD -1672.0 mRL
+WELL-1,liner overlaps production casing shoe,OK,"shoe -1000 mRL; liners [(-950, -1672)]"
+WELL-1,wellhead = first block-file interval top,OK,block file top 15.0 mRL
+WELL-2,survey within track,OK,survey 225.0 to -2348.0 mRL; track 225.0 to -2348.0 mRL
+WELL-2,survey T and P at same elevations,OK,33 points
+WELL-2,T and P survey dates equal,OK,2015-07-29
+WELL-2,feed zone 1 within track,OK,-250.0 to -270.0 mRL
+WELL-2,feed zone 1 within slotted interval,OK,"slotted [(-50, -2348)]"
+WELL-2,feed zone 2 within track,OK,-720.0 to -770.0 mRL
+WELL-2,feed zone 2 within slotted interval,OK,"slotted [(-50, -2348)]"
+WELL-2,feed zone 3 within track,OK,-1900.0 to -1920.0 mRL
+WELL-2,feed zone 3 within slotted interval,OK,"slotted [(-50, -2348)]"
+WELL-2,casing top at wellhead,OK,top of design 225 mRL; wellhead 225.0 mRL
+WELL-2,deepest liner bottom at track TD,OK,design bottom -2348 mRL; track TD -2348.0 mRL
+WELL-2,liner overlaps production casing shoe,OK,"shoe -100 mRL; liners [(-50, -2348)]"
+WELL-2,wellhead = first block-file interval top,OK,block file top 225.0 mRL
+WELL-3,survey within track,OK,survey 164.0 to -2887.0 mRL; track 164.0 to -2887.0 mRL
+WELL-3,survey T and P at same elevations,OK,30 points
+WELL-3,T and P survey dates equal,OK,2015-07-29
+WELL-3,feed zone 1 within track,OK,-310.0 to -360.0 mRL
+WELL-3,feed zone 1 within slotted interval,OK,"slotted [(-200, -2887)]"
+WELL-3,feed zone 2 within track,OK,-820.0 to -870.0 mRL
+WELL-3,feed zone 2 within slotted interval,OK,"slotted [(-200, -2887)]"
+WELL-3,casing top at wellhead,OK,top of design 164 mRL; wellhead 164.0 mRL
+WELL-3,deepest liner bottom at track TD,OK,design bottom -2887 mRL; track TD -2887.0 mRL
+WELL-3,liner overlaps production casing shoe,OK,"shoe -250 mRL; liners [(-200, -2887)]"
+WELL-3,wellhead = first block-file interval top,OK,block file top 164.0 mRL
+WELL-4,survey within track,OK,survey 230.0 to -750.0 mRL; track 340.0 to -750.0 mRL
+WELL-4,survey T and P at same elevations,OK,22 points
+WELL-4,T and P survey dates equal,OK,2015-07-29
+WELL-4,feed zone 1 within track,OK,-630.0 to -680.0 mRL
+WELL-4,feed zone 1 within slotted interval,OK,"slotted [(-450, -3251)]"
+WELL-4,casing top at wellhead,OK,top of design 340 mRL; wellhead 340.0 mRL
+WELL-4,deepest liner bottom at track TD,ISSUE,design bottom -3251 mRL; track TD -750.0 mRL
+WELL-4,liner overlaps production casing shoe,OK,"shoe -500 mRL; liners [(-450, -3251)]"
+WELL-4,wellhead = first block-file interval top,OK,block file top 340.0 mRL
+WELL-5,survey within track,OK,survey 93.0 to -2595.0 mRL; track 93.0 to -2595.0 mRL
+WELL-5,survey T and P at same elevations,OK,26 points
+WELL-5,T and P survey dates equal,OK,2015-07-29
+WELL-5,feed zone 1 within track,OK,-1300.0 to -1350.0 mRL
+WELL-5,feed zone 1 within slotted interval,OK,"slotted [(-950, -2595)]"
+WELL-5,feed zone 2 within track,OK,-1500.0 to -1550.0 mRL
+WELL-5,feed zone 2 within slotted interval,OK,"slotted [(-950, -2595)]"
+WELL-5,casing top at wellhead,OK,top of design 93 mRL; wellhead 93.0 mRL
+WELL-5,deepest liner bottom at track TD,OK,design bottom -2595 mRL; track TD -2595.0 mRL
+WELL-5,liner overlaps production casing shoe,OK,"shoe -1000 mRL; liners [(-950, -2595)]"
+WELL-5,wellhead = first block-file interval top,OK,block file top 93.0 mRL
+WELL-6,survey within track,OK,survey 147.0 to -2359.0 mRL; track 147.0 to -2359.0 mRL
+WELL-6,survey T and P at same elevations,OK,28 points
+WELL-6,T and P survey dates equal,OK,2015-07-29
+WELL-6,feed zone 1 within track,OK,-460.0 to -490.0 mRL
+WELL-6,feed zone 1 within slotted interval,OK,"slotted [(-390, -2359)]"
+WELL-6,feed zone 2 within track,OK,-1100.0 to -1150.0 mRL
+WELL-6,feed zone 2 within slotted interval,OK,"slotted [(-390, -2359)]"
+WELL-6,casing top at wellhead,OK,top of design 147 mRL; wellhead 147.0 mRL
+WELL-6,deepest liner bottom at track TD,OK,design bottom -2359 mRL; track TD -2359.0 mRL
+WELL-6,liner overlaps production casing shoe,OK,"shoe -440 mRL; liners [(-390, -2359)]"
+WELL-6,wellhead = first block-file interval top,OK,block file top 147.0 mRL
+WELL-7,survey within track,OK,survey 190.0 to -2762.0 mRL; track 190.0 to -2762.0 mRL
+WELL-7,survey T and P at same elevations,OK,32 points
+WELL-7,T and P survey dates equal,OK,2015-07-29
+WELL-7,feed zone 1 within track,OK,-610.0 to -650.0 mRL
+WELL-7,feed zone 1 within slotted interval,OK,"slotted [(-390, -2762)]"
+WELL-7,feed zone 2 within track,OK,-1300.0 to -1350.0 mRL
+WELL-7,feed zone 2 within slotted interval,OK,"slotted [(-390, -2762)]"
+WELL-7,casing top at wellhead,OK,top of design 190 mRL; wellhead 190.0 mRL
+WELL-7,deepest liner bottom at track TD,OK,design bottom -2762 mRL; track TD -2762.0 mRL
+WELL-7,liner overlaps production casing shoe,OK,"shoe -440 mRL; liners [(-390, -2762)]"
+WELL-7,wellhead = first block-file interval top,OK,block file top 190.0 mRL
+WELL-8,survey within track,OK,survey 176.0 to -2716.1 mRL; track 176.0 to -2716.1 mRL
+WELL-8,survey T and P at same elevations,OK,29 points
+WELL-8,T and P survey dates equal,OK,2015-07-29
+WELL-8,feed zone 1 within track,OK,-1100.0 to -1150.0 mRL
+WELL-8,feed zone 1 within slotted interval,OK,"slotted [(-650, -2716.1)]"
+WELL-8,casing top at wellhead,OK,top of design 176 mRL; wellhead 176.0 mRL
+WELL-8,deepest liner bottom at track TD,OK,design bottom -2716.1 mRL; track TD -2716.1 mRL
+WELL-8,liner overlaps production casing shoe,OK,"shoe -700.0 mRL; liners [(-650, -2716.1)]"
+WELL-8,wellhead = first block-file interval top,OK,block file top 176.0 mRL
+WELL-9,survey within track,OK,survey 174.0 to -2427.1 mRL; track 174.0 to -2427.1 mRL
+WELL-9,survey T and P at same elevations,OK,30 points
+WELL-9,T and P survey dates equal,OK,2015-07-29
+WELL-9,feed zone 1 within track,OK,-520.0 to -550.0 mRL
+WELL-9,feed zone 1 within slotted interval,OK,"slotted [(-350, -2427.1)]"
+WELL-9,feed zone 2 within track,OK,-830.0 to -845.0 mRL
+WELL-9,feed zone 2 within slotted interval,OK,"slotted [(-350, -2427.1)]"
+WELL-9,casing top at wellhead,OK,top of design 174 mRL; wellhead 174.0 mRL
+WELL-9,deepest liner bottom at track TD,OK,design bottom -2427.1 mRL; track TD -2427.1 mRL
+WELL-9,liner overlaps production casing shoe,OK,"shoe -400.0 mRL; liners [(-350, -2427.1)]"
+WELL-9,wellhead = first block-file interval top,OK,block file top 174.0 mRL
+WELL-10,survey within track,OK,survey 210.0 to -350.0 mRL; track 260.0 to -350.0 mRL
+WELL-10,survey T and P at same elevations,OK,17 points
+WELL-10,T and P survey dates equal,OK,2015-07-29
+WELL-10,feed zone 1 within track,OK,-250.0 to -275.0 mRL
+WELL-10,feed zone 1 within slotted interval,OK,"slotted [(-175, -350)]"
+WELL-10,casing top at wellhead,OK,top of design 260 mRL; wellhead 260.0 mRL
+WELL-10,deepest liner bottom at track TD,OK,design bottom -350 mRL; track TD -350.0 mRL
+WELL-10,liner overlaps production casing shoe,OK,"shoe -200 mRL; liners [(-175, -350)]"
+WELL-10,wellhead = first block-file interval top,OK,block file top 260.0 mRL

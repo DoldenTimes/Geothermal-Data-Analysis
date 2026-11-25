@@ -1,0 +1,21 @@
+role,path,note
+well_data_json,Baseline/Teaching_Model_3D/Data/Data_json,"Per-well JSON: track, casing/liner design, feed zones, downhole T and P surveys, transient pressure, production/injection flow and enthalpy. Primary data source"
+well_data_json,Baseline/Teaching_Model_3D/Data/Area_data.json,Field-total steam flow and power output (production record). Read only for the date of first field production (4.1 timing test)
+well_data_dat,Baseline/Teaching_Model_3D/Data/Data_dat,Plain-column copies of the well data; cross-check only. Irregular file prefix 'Wel10' for WELL-10
+well_groups,Baseline/Teaching_Model_3D/Data/Groups_data.json,Well list and grouping (one group 'All'); defines well order
+mapping,Baseline/Teaching_Model_3D/Data/Mapping,"Faults (polylines), lake (filled polygon) and rivers (ragged multi-segment)"
+reference_other,Baseline/Teaching_Model_3D/Data/Plotting,Plotting configuration with hard-coded paths from another machine; not read
+out_of_scope,Baseline/Teaching_Model_3D/Data/Make_up_json,Empty directory
+geometry_dat,Baseline/Teaching_Model_3D/Models/TE14515/gTE14515.dat,"MULgraph grid: VERTICES, GRID, LAYERS, SURFA, WELLS sections used (geometry only)"
+well_blocks_json,Baseline/Teaching_Model_3D/Models/TE14515/gTE14515_wells.json,"Well-to-block intersections, feed-zone blocks and interpolation weights; authority for block assignment"
+reference_bc,Baseline/Teaching_Model_3D/Models/TE14515/gTE14515_boundary_conditions.json,"Reference model boundary conditions (atmosphere, rain, basal heat flux, lake columns); reference only"
+reference_rock,Baseline/Teaching_Model_3D/Models/TE14515/gTE14515_dict_rocktype.json,"Reference model rock-type legend (lithology, faults, zones); reference only"
+reference_other,Baseline/Teaching_Model_3D/Models/TE14515/gTE14515.auxjson,Viewer scene file with hard-coded source paths; not read
+reference_other,Baseline/Teaching_Model_3D/Models/TE14515/currentGeomSetup.json,Model set-up and plotting configuration; not read
+reference_other,Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/TE14515_NS_000.dat,"Reference natural-state simulator input (rocks, generators, parameters); reference only, not evidence"
+reference_results,Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/TE14515_NS_000.incon,"Reference model initial conditions; reference only, not read"
+reference_other,Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/currentNSSetup.json,Natural-state run configuration; not read
+out_of_scope,Baseline/Teaching_Model_3D/Models/TE14515/NaturalState/Reports,Empty directory
+out_of_scope,Baseline/Teaching_Model_3D/Models/TE14515/Production,Production model set-up; out of scope
+out_of_scope,Baseline/Teaching_Model_3D/Models/TE14515/FutureScenarios,Future-scenario set-up; out of scope
+out_of_scope,Baseline/Teaching_Model_3D/Parameters/ProductionHistory,"Production, reinjection and monitoring spreadsheets for the production model; not read"

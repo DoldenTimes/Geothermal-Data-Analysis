@@ -1,0 +1,49 @@
+well,item,Source,Comment,StableFlag
+WELL-1,Downhole_Temperature,,,True
+WELL-1,Downhole_Pressure,,,True
+WELL-1,Well_Design,Synthetic data,,
+WELL-2,Downhole_Temperature,,,True
+WELL-2,Downhole_Pressure,,,True
+WELL-2,Well_Design,Synthetic data,,
+WELL-2,Transient_Pressure -750.0,,,
+WELL-2,Production_Mass_Flow,,,
+WELL-2,Transient_Enthalpy,,,
+WELL-3,Downhole_Temperature,,,True
+WELL-3,Downhole_Pressure,,,True
+WELL-3,Well_Design,Synthetic data,,
+WELL-3,Transient_Pressure -550.0,,,
+WELL-3,Production_Mass_Flow,,,
+WELL-3,Transient_Enthalpy,,,
+WELL-4,Downhole_Temperature,,,True
+WELL-4,Downhole_Pressure,,,True
+WELL-4,Well_Design,Synthetic data,,
+WELL-4,Injection_Mass_Flow,,,
+WELL-4,Injection_Enthalpy,,,
+WELL-5,Downhole_Temperature,,,True
+WELL-5,Downhole_Pressure,,,True
+WELL-5,Well_Design,Synthetic data,,
+WELL-5,Injection_Mass_Flow,,,
+WELL-5,Injection_Enthalpy,,,
+WELL-6,Downhole_Temperature,,,True
+WELL-6,Downhole_Pressure,,,True
+WELL-6,Well_Design,Synthetic data,,
+WELL-7,Downhole_Temperature,,,True
+WELL-7,Downhole_Pressure,,,True
+WELL-7,Well_Design,Synthetic data,,
+WELL-8,Downhole_Temperature,,,True
+WELL-8,Downhole_Pressure,,,True
+WELL-8,Well_Design,Synthetic data,,
+WELL-8,Injection_Mass_Flow,,,
+WELL-8,Injection_Enthalpy,,,
+WELL-9,Downhole_Temperature,,,True
+WELL-9,Downhole_Pressure,,,True
+WELL-9,Well_Design,Synthetic data,,
+WELL-9,Transient_Pressure -675.0,,,
+WELL-9,Production_Mass_Flow,,,
+WELL-9,Transient_Enthalpy,,,
+WELL-10,Downhole_Temperature,,,True
+WELL-10,Downhole_Pressure,,,True
+WELL-10,Well_Design,Synthetic data,,
+WELL-10,Transient_Pressure -250.0,,,
+WELL-10,Production_Mass_Flow,,,
+WELL-10,Transient_Enthalpy,,,

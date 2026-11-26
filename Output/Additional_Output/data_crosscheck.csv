@@ -1,0 +1,39 @@
+file,well,series,n_points,status,max_abs_diff
+Data/Data_dat/Wel10_-250.0_transient_pressure.dat,WELL-10,transient P at -250 mRL,6,match,0.0
+Data/Data_dat/Wel10_downhole_pressure.dat,WELL-10,survey P,17,match,0.0
+Data/Data_dat/Wel10_downhole_temperature.dat,WELL-10,survey T,17,match,0.0
+Data/Data_dat/Wel10_production_mass_flow.dat,WELL-10,production_mass_flow,62,not checked (flow or enthalpy series; not part of 4.1 step 1),
+Data/Data_dat/Wel10_transient_enthalpy.dat,WELL-10,transient_enthalpy,11,not checked (flow or enthalpy series; not part of 4.1 step 1),
+Data/Data_dat/Well1_downhole_pressure.dat,WELL-1,survey P,19,match,0.0
+Data/Data_dat/Well1_downhole_temperature.dat,WELL-1,survey T,19,match,0.0
+Data/Data_dat/Well2_-750.0_transient_pressure.dat,WELL-2,transient P at -750 mRL,12,match,0.0
+Data/Data_dat/Well2_downhole_pressure.dat,WELL-2,survey P,33,match,0.0
+Data/Data_dat/Well2_downhole_temperature.dat,WELL-2,survey T,33,match,0.0
+Data/Data_dat/Well2_production_mass_flow.dat,WELL-2,production_mass_flow,133,not checked (flow or enthalpy series; not part of 4.1 step 1),
+Data/Data_dat/Well2_transient_enthalpy.dat,WELL-2,transient_enthalpy,23,not checked (flow or enthalpy series; not part of 4.1 step 1),
+Data/Data_dat/Well3_-550.0_transient_pressure.dat,WELL-3,transient P at -550 mRL,12,match,0.0
+Data/Data_dat/Well3_downhole_pressure.dat,WELL-3,survey P,30,match,0.0
+Data/Data_dat/Well3_downhole_temperature.dat,WELL-3,survey T,30,match,0.0
+Data/Data_dat/Well3_production_mass_flow.dat,WELL-3,production_mass_flow,133,not checked (flow or enthalpy series; not part of 4.1 step 1),
+Data/Data_dat/Well3_transient_enthalpy.dat,WELL-3,transient_enthalpy,23,not checked (flow or enthalpy series; not part of 4.1 step 1),
+Data/Data_dat/Well4_downhole_pressure.dat,WELL-4,survey P,22,match,0.0
+Data/Data_dat/Well4_downhole_temperature.dat,WELL-4,survey T,22,match,0.0
+Data/Data_dat/Well4_injection_enthalpy.dat,WELL-4,injection_enthalpy,133,not checked (flow or enthalpy series; not part of 4.1 step 1),
+Data/Data_dat/Well4_injection_mass_flow.dat,WELL-4,injection_mass_flow,133,not checked (flow or enthalpy series; not part of 4.1 step 1),
+Data/Data_dat/Well5_downhole_pressure.dat,WELL-5,survey P,26,match,0.0
+Data/Data_dat/Well5_downhole_temperature.dat,WELL-5,survey T,26,match,0.0
+Data/Data_dat/Well5_injection_enthalpy.dat,WELL-5,injection_enthalpy,133,not checked (flow or enthalpy series; not part of 4.1 step 1),
+Data/Data_dat/Well5_injection_mass_flow.dat,WELL-5,injection_mass_flow,133,not checked (flow or enthalpy series; not part of 4.1 step 1),
+Data/Data_dat/Well6_downhole_pressure.dat,WELL-6,survey P,28,match,0.0
+Data/Data_dat/Well6_downhole_temperature.dat,WELL-6,survey T,28,match,0.0
+Data/Data_dat/Well7_downhole_pressure.dat,WELL-7,survey P,32,match,0.0
+Data/Data_dat/Well7_downhole_temperature.dat,WELL-7,survey T,32,match,0.0
+Data/Data_dat/Well8_downhole_pressure.dat,WELL-8,survey P,29,match,0.0
+Data/Data_dat/Well8_downhole_temperature.dat,WELL-8,survey T,29,match,0.0
+Data/Data_dat/Well8_injection_enthalpy.dat,WELL-8,injection_enthalpy,133,not checked (flow or enthalpy series; not part of 4.1 step 1),
+Data/Data_dat/Well8_injection_mass_flow.dat,WELL-8,injection_mass_flow,133,not checked (flow or enthalpy series; not part of 4.1 step 1),
+Data/Data_dat/Well9_-675.0_transient_pressure.dat,WELL-9,transient P at -675 mRL,12,match,0.0
+Data/Data_dat/Well9_downhole_pressure.dat,WELL-9,survey P,30,match,0.0
+Data/Data_dat/Well9_downhole_temperature.dat,WELL-9,survey T,30,match,0.0
+Data/Data_dat/Well9_production_mass_flow.dat,WELL-9,production_mass_flow,133,not checked (flow or enthalpy series; not part of 4.1 step 1),
+Data/Data_dat/Well9_transient_enthalpy.dat,WELL-9,transient_enthalpy,23,not checked (flow or enthalpy series; not part of 4.1 step 1),

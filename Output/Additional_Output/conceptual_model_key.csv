@@ -1,0 +1,13 @@
+element_no,element,well_or_location,observation,claim_type,drawing
+1,Deep hot upflow (upward arrow),WELL-10,"Tmax 268.7 degC at -250 mRL, no inversion; minimum boiling margin 2.6 degC",interp,dashed (inferred from the highest temperature)
+2,Lateral outflow at inversion depth (solid arrow in plan),WELL-2,inversion 30.9 degC between -550 and -1500 mRL,obs,solid (measured inversion); path to the upflow dashed
+3,Lateral outflow at inversion depth (solid arrow in plan),WELL-3,inversion 86.9 degC between -450 and -1700 mRL,obs,solid (measured inversion); path to the upflow dashed
+4,Lateral outflow at inversion depth (solid arrow in plan),WELL-5,inversion 13.3 degC between -650 and -1700 mRL,obs,solid (measured inversion); path to the upflow dashed
+5,Lateral outflow at inversion depth (solid arrow in plan),WELL-6,inversion 98.1 degC between -550 and -1900 mRL,obs,solid (measured inversion); path to the upflow dashed
+6,Lateral outflow at inversion depth (solid arrow in plan),WELL-7,inversion 46.0 degC between -650 and -1700 mRL,obs,solid (measured inversion); path to the upflow dashed
+7,Lateral outflow at inversion depth (solid arrow in plan),WELL-9,inversion 57.7 degC between -750 and -2250 mRL,obs,solid (measured inversion); path to the upflow dashed
+8,Cold recharge or downflow (blue arrow),WELL-4,Tmax 29.0 degC; regime recharge/downflow,obs,dashed (direction inferred from cold profile)
+9,Cold recharge or downflow (blue arrow),WELL-8,Tmax 93.1 degC; regime recharge/downflow,obs,dashed (direction inferred from cold profile)
+10,Pressure connection between wells (thin dashed line),WELL-2-WELL-3,pressure difference 3.40 bar at -25 mRL (common elevation),obs,dashed (connection inferred from pressures)
+11,Two-phase or near-boiling zone (stipple),WELL-10,minimum boiling margin 2.6 degC,obs,stipple (measured margin)
+12,"Cap (low-permeability, conductive gradient)",none,not resolved by the survey data; no cap band drawn,interp,absent; see report

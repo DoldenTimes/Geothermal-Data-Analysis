@@ -1,0 +1,43 @@
+parameter,value,unit,source
+gravity,9.80665,m/s2,CLAUDE 4.3
+atmospheric pressure (water-level reference),1.01325,bar,CLAUDE 4.4
+critical pressure (IF97),220.64,bar,CLAUDE 4.3
+critical temperature (IF97),373.946,degC,IF97
+minimum hydrostatic window length,300.0,m,CLAUDE 4.3
+isothermal section range,5.0,degC,CLAUDE 4.2
+isothermal section span,300.0,m,CLAUDE 4.2
+single-phase test boiling margin,10.0,degC,CLAUDE 4.3
+single-phase test pressure,1.5,bar,CLAUDE 4.3
+boiling-margin flag (near boiling),5.0,degC,"CLAUDE 4.3, 5.1"
+two-phase threshold,1.0,degC,CLAUDE 4.4
+inversion threshold,3.0,degC,CLAUDE 4.4
+outflow threshold,10.0,degC,CLAUDE 4.4
+shallow gradient window,300.0,m,CLAUDE 4.4
+deep gradient minimum span,300.0,m,CLAUDE 4.4
+cold-well threshold (Tmax),100.0,degC,CLAUDE 4.3
+well-head weight distance,30.0,m,CLAUDE 5.5
+gauge reading precision,0.1,bar,assumption: one unit of the 0.1 bar record
+trend tolerance floor,3.0,bar,CLAUDE 4.1
+"trend tolerance, multiple of RMS",2.0,-,CLAUDE 4.1
+well distance from section line,500.0,m,CLAUDE 8.2 F4
+elevation band thickness,500.0,m,CLAUDE 8.2 F3
+wells needed to bound the band range,3.0,wells,CLAUDE 8.2 F3
+pressure for injectate enthalpy-to-temperature,10.0,bar,"assumption: subcooled liquid, IF97 Region 1"
+weight: wellhead / top block,0.3,-,CLAUDE 5.5
+weight: feed zone,1.0,-,CLAUDE 5.5
+weight: behind casing,0.5,-,CLAUDE 5.5
+weight: open hole,0.8,-,CLAUDE 5.5
+"weight: open hole, isothermal section",0.5,-,CLAUDE 5.5
+confidence factor high,1.0,-,CLAUDE 5.5
+confidence factor medium,0.75,-,CLAUDE 5.5
+confidence factor low,0.5,-,CLAUDE 5.5
+temperature colour step,10.0,degC,CLAUDE 8.1
+pressure-deviation colour step,1.0,bar,CLAUDE 8.1
+isotherm spacing,50.0,degC,CLAUDE 8.1
+isotherm heavy levels,100.0,degC,CLAUDE 8.1
+isotherm heavy levels,200.0,degC,CLAUDE 8.1
+elevation axis rounding,100.0,m,CLAUDE 8.1
+verified trend intercept a (P = a + b x depth),32.75588,bar,fit to gauge-verified feed zones (§4.1)
+verified trend slope b,0.087673,bar/m,fit to gauge-verified feed zones (§4.1)
+verified trend RMS residual,0.696447,bar,gauge-verified feed zones about the trend
+verified trend tolerance applied,3.0,bar,"max(3, 2 x RMS) (§4.1)"

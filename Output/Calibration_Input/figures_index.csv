@@ -1,0 +1,20 @@
+figure_id,file,shows,wells,elevation_or_line,data_sources,claim_type
+F1,Output/Calibration_Input/figures/well_map.png,"wells, faults, water bodies, grid, section line A-A'","WELL-1,WELL-2,WELL-3,WELL-4,WELL-5,WELL-6,WELL-7,WELL-8,WELL-9,WELL-10",map,"Baseline mapping, geometry, well tracks",obs
+F2,Output/Calibration_Input/figures/profile_WELL-1.png,"T and P profiles, shoe, feed zones, Tsat, verdict for WELL-1",WELL-1,0-2350 mRL span shown on fixed axis,"survey T and P, well JSON",obs
+F2,Output/Calibration_Input/figures/profile_WELL-2.png,"T and P profiles, shoe, feed zones, Tsat, verdict for WELL-2",WELL-2,0-2350 mRL span shown on fixed axis,"survey T and P, well JSON",obs
+F2,Output/Calibration_Input/figures/profile_WELL-3.png,"T and P profiles, shoe, feed zones, Tsat, verdict for WELL-3",WELL-3,0-2350 mRL span shown on fixed axis,"survey T and P, well JSON",obs
+F2,Output/Calibration_Input/figures/profile_WELL-4.png,"T and P profiles, shoe, feed zones, Tsat, verdict for WELL-4",WELL-4,0-2350 mRL span shown on fixed axis,"survey T and P, well JSON",obs
+F2,Output/Calibration_Input/figures/profile_WELL-5.png,"T and P profiles, shoe, feed zones, Tsat, verdict for WELL-5",WELL-5,0-2350 mRL span shown on fixed axis,"survey T and P, well JSON",obs
+F2,Output/Calibration_Input/figures/profile_WELL-6.png,"T and P profiles, shoe, feed zones, Tsat, verdict for WELL-6",WELL-6,0-2350 mRL span shown on fixed axis,"survey T and P, well JSON",obs
+F2,Output/Calibration_Input/figures/profile_WELL-7.png,"T and P profiles, shoe, feed zones, Tsat, verdict for WELL-7",WELL-7,0-2350 mRL span shown on fixed axis,"survey T and P, well JSON",obs
+F2,Output/Calibration_Input/figures/profile_WELL-8.png,"T and P profiles, shoe, feed zones, Tsat, verdict for WELL-8",WELL-8,0-2350 mRL span shown on fixed axis,"survey T and P, well JSON",obs
+F2,Output/Calibration_Input/figures/profile_WELL-9.png,"T and P profiles, shoe, feed zones, Tsat, verdict for WELL-9",WELL-9,0-2350 mRL span shown on fixed axis,"survey T and P, well JSON",obs
+F2,Output/Calibration_Input/figures/profile_WELL-10.png,"T and P profiles, shoe, feed zones, Tsat, verdict for WELL-10",WELL-10,0-2350 mRL span shown on fixed axis,"survey T and P, well JSON",obs
+F2,Output/Calibration_Input/figures/profile_panels_All.png,temperature profiles of group All on common axes,"WELL-1,WELL-2,WELL-3,WELL-4,WELL-5,WELL-6,WELL-7,WELL-8,WELL-9,WELL-10",elevation,survey T,obs
+F3,Output/Calibration_Input/figures/maps_temperature_bands.png,temperature minus field median in 500 m bands,"WELL-1,WELL-2,WELL-3,WELL-4,WELL-5,WELL-6,WELL-7,WELL-8,WELL-9,WELL-10",elevation bands,T_P_at_elevation_bands.csv,obs
+F3,Output/Calibration_Input/figures/maps_pressure_bands.png,pressure minus gauge-verified trend in 500 m bands,"WELL-1,WELL-2,WELL-3,WELL-4,WELL-5,WELL-6,WELL-7,WELL-8,WELL-9,WELL-10",elevation bands,T_P_at_elevation_bands.csv,obs
+F4,Output/Calibration_Input/figures/section_A.png,temperature section through the two hottest wells; data envelope; no-data hatched,"WELL-10,WELL-2,WELL-8",section A-A' (end points listed in the report),NS_calibration_targets.csv,mixed
+F4,Output/Calibration_Input/figures/section_A_P.png,"pressure deviation from trend, same section and envelope","WELL-10,WELL-2,WELL-8",section A-A',NS_calibration_targets.csv,mixed
+F5,Output/Calibration_Input/figures/PT_state.png,P-T state of survey points with the IF97 saturation curve,"WELL-1,WELL-2,WELL-3,WELL-4,WELL-5,WELL-6,WELL-7,WELL-8,WELL-9,WELL-10",all survey points,"NS_calibration_targets.csv, feedzones.csv",obs
+F6,Output/Calibration_Input/figures/conceptual_model.png,conceptual model on F1 (plan) and F4 (section),"WELL-1,WELL-2,WELL-3,WELL-4,WELL-5,WELL-6,WELL-7,WELL-8,WELL-9,WELL-10",plan and section A-A',"well_summary.csv, feedzones.csv, F1, F4",mixed
+F7,Output/Calibration_Input/figures/gauge_check.png,"transient gauge against survey pressure, production timing","WELL-2,WELL-3,WELL-9,WELL-10",gauge elevations as given in the report,"transient records, flow records, survey",obs

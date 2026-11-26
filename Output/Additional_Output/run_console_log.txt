@@ -1,0 +1,4 @@
+IF97 Region 4 check passed; max error vs IF97 verification and iapws = 3.91e-07 K
+Grid: 385 vertices, 398 column polygons, 69 layers, 398 surface entries
+Cross-check: 38 plain-column series compared with JSON; 0 not matching
+Wrote 266 targets, 18 feed zones, 237 layer rows, 10 wells

@@ -1,4 +1,3 @@
-IF97 Region 4 check passed; max error vs IF97 verification and iapws = 3.91e-07 K
-Grid: 385 vertices, 398 column polygons, 69 layers, 398 surface entries
-Cross-check: 38 plain-column series compared with JSON; 0 not matching
-Wrote 266 targets, 18 feed zones, 237 layer rows, 10 wells
+IF97 validation: max Region 4 error = 4.30e-03 K; max Region 1 relative error = 2.81e-09
+wells: 10; survey points: 266; feed zones: 18; figures indexed: 21
+verdicts: WELL-1=possibly disturbed/low; WELL-2=natural state/high; WELL-3=natural state/high; WELL-4=probably natural state/medium; WELL-5=probably natural state at best/low; WELL-6=probably natural state/medium; WELL-7=probably natural state/medium; WELL-8=probably natural state/medium; WELL-9=probably natural state/medium; WELL-10=probably natural state/medium

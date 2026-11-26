@@ -1,0 +1,83 @@
+quantity,value
+gauge precision,0.1
+Tmax h1,268.7
+Tmax elev h1,-250
+Tmax h2,266.9
+Tmax elev h2,-550
+dist W2 fault3,125
+dist W10 fault3,226
+outflow min,-750
+outflow max,-450
+max inv,98.1
+gap min,336
+gap max,692
+z200 max,46
+z200 min,-496
+flux min,0.7
+flux max,1.4
+Tmax WELL-4,29.0
+Tmax WELL-8,93.1
+W4 fault,50
+W8 river,235
+trend a,32.76
+trend b,-0.0877
+tolerance,3.0
+rms,0.70
+max cased ratio,1.55
+W10 minbm,2.65
+W10 minbm z,-150
+nb span,188
+wmin,0.29
+wmax,0.66
+checks ok,87
+checks all,105
+tol again,3.0
+inj h,335.0
+Tinj WELL-4,78.3
+Tinj WELL-5,77.0
+Tinj WELL-8,77.5
+drawdown W2,9
+W1 dev,3.3
+tol W1,3.0
+max below,105
+d2,125
+d10,226
+d6,113
+W10 TD,-350
+W10 TD T,268.5
+maxoffA,1000
+maxoffB,600
+max ratio unc,0.003
+cold cased,1.034
+cold open,1.008
+max rho,1341
+open med,1.020
+rounding,0.003
+dPWELL-8WELL-6,7.0
+dPWELL-6WELL-3,2.0
+dPWELL-3WELL-10,-1.7
+dPWELL-10WELL-2,1.7
+W4 f3,50
+W1 river,96
+W1 grad,73
+W1 wh,105
+inv base min,-2250
+inv base max,-1300
+n targets,266
+n fz,18
+n lc,232
+upflow T,269
+n extrap,6
+W9 diff,2.05
+W1 wh2,15
+W1 below,105
+W1 Ptop,10.8
+W1 wl,113
+W1 dev2,3.3
+max cased2,1.55
+cold cased2,1.034
+W4 liner,-3251
+W4 track,-750
+W4 top,230
+W4 wh,340
+max extrap,98

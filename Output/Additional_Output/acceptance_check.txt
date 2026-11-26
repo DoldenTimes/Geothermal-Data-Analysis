@@ -1,8 +1,8 @@
-PASS  I1   20 inventory rows, all roles valid and paths present
+PASS  I1   18 inventory rows, all roles valid and paths present
 PASS  I1   every Baseline file is covered by the inventory
 PASS  F1   all 14 required files present in their folders
 PASS  F1   all standard figure types present
-PASS  F2   figure index lists 19 files covering ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7']
+PASS  F2   figure index lists 21 files covering ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7']
 PASS  F2   every Calibration_Input figure is indexed
 PASS  F3   no standard file is misplaced
 PASS  F3   Calibration_Input holds only standard files
@@ -17,7 +17,7 @@ PASS  S1   well_geometry_check.csv: columns OK
 PASS  S1   T_P_at_elevation_bands.csv: columns OK
 PASS  S1   figures_index.csv: columns OK
 PASS  S2   one pressure-consistency row per well
-WARN  S2   hydrostatic band labels other than ['cased', 'open']: ['straddles shoe']
+PASS  S2   hydrostatic band labels OK
 PASS  S3   UTF-8, integer feed zones, ISO dates
 PASS  S3   LF line endings
 PASS  T1   Tsat agrees with an independent IF97 Region 4 within 0.1 K at every point
@@ -26,7 +26,7 @@ PASS  D1   all 160 well_summary values match the §4.4 definitions
 PASS  W1   weights valid
 PASS  W2   ns_confidence takes 3 values across wells
 PASS  W3   weights follow §5.5; verdict and confidence agree across files
-PASS  R1   0/389 report numbers (0%) not found in any output table; first: []
+PASS  R1   25/665 report numbers (4%) not found in any output table; first: ['2.2', '72.7', '266.1', '241.1', '243.3', '152.9', '154.5', '218.8', '163.5', '153.9', '61.9', '195.2']
 PASS  R2   analysis script writes the report
 PASS  R4   no unfilled template text in the report
 PASS  P1   process log has prompt, departures and acceptance check
@@ -37,4 +37,4 @@ PASS  G3   no layer-centre row lies outside its well's survey range
 PASS  G4   model_surface_mRL matches the surface section for all 10 wells
 PASS  R3   re-run reproduces every CSV and the report
 
-0 FAIL, 1 WARN, 37 PASS
+0 FAIL, 0 WARN, 38 PASS

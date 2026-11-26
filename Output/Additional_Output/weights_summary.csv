@@ -1,6 +1,6 @@
-weight_reason,n_points,weight_min,weight_max
-within 30 m of wellhead or top block of column,22,0.15,0.3
-behind casing,131,0.25,0.5
-open hole,54,0.4,0.8
-feed zone,32,0.5,1.0
-open hole in isothermal section (possible internal flow),27,0.25,0.5
+category,n_points,mean_weight,max_weight
+behind casing,131,0.373,0.5
+feed zone,32,0.781,1.0
+open hole,56,0.636,0.8
+open hole within an isothermal section (possible internal flow),28,0.406,0.5
+within 30 m of the wellhead,19,0.221,0.3

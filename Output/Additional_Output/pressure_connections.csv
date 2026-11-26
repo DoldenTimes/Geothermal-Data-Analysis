@@ -1,0 +1,5 @@
+well_a,well_b,elevation_mRL,P_a_bar,P_b_bar,dP_a_minus_b_bar,dev_a_from_trend_bar,dev_b_from_trend_bar,T_a_degC,T_b_degC
+WELL-8,WELL-6,-2000,218.4,211.4,7.0,10.3,3.3,73.1,122.8
+WELL-6,WELL-3,-2000,211.4,209.4,2.0,3.3,1.3,122.8,175.1
+WELL-3,WELL-10,-250,55.0,56.7,-1.7,0.3,2.0,254.7,268.7
+WELL-10,WELL-2,-250,56.7,55.0,1.7,2.0,0.3,268.7,238.2

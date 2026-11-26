@@ -1,39 +1,39 @@
-well,quantity,dat_file,n_json,n_dat,n_matched,max_abs_diff,note
-WELL-10,downhole_pressure,Wel10_downhole_pressure.dat,17,17,17,0.0,value elevation_mRL columns
-WELL-10,downhole_temperature,Wel10_downhole_temperature.dat,17,17,17,0.0,value elevation_mRL columns
-WELL-1,downhole_pressure,Well1_downhole_pressure.dat,19,19,19,0.0,value elevation_mRL columns
-WELL-1,downhole_temperature,Well1_downhole_temperature.dat,19,19,19,0.0,value elevation_mRL columns
-WELL-2,downhole_pressure,Well2_downhole_pressure.dat,33,33,33,0.0,value elevation_mRL columns
-WELL-2,downhole_temperature,Well2_downhole_temperature.dat,33,33,33,0.0,value elevation_mRL columns
-WELL-3,downhole_pressure,Well3_downhole_pressure.dat,30,30,30,0.0,value elevation_mRL columns
-WELL-3,downhole_temperature,Well3_downhole_temperature.dat,30,30,30,0.0,value elevation_mRL columns
-WELL-4,downhole_pressure,Well4_downhole_pressure.dat,22,22,22,0.0,value elevation_mRL columns
-WELL-4,downhole_temperature,Well4_downhole_temperature.dat,22,22,22,0.0,value elevation_mRL columns
-WELL-5,downhole_pressure,Well5_downhole_pressure.dat,26,26,26,0.0,value elevation_mRL columns
-WELL-5,downhole_temperature,Well5_downhole_temperature.dat,26,26,26,0.0,value elevation_mRL columns
-WELL-6,downhole_pressure,Well6_downhole_pressure.dat,28,28,28,0.0,value elevation_mRL columns
-WELL-6,downhole_temperature,Well6_downhole_temperature.dat,28,28,28,0.0,value elevation_mRL columns
-WELL-7,downhole_pressure,Well7_downhole_pressure.dat,32,32,32,0.0,value elevation_mRL columns
-WELL-7,downhole_temperature,Well7_downhole_temperature.dat,32,32,32,0.0,value elevation_mRL columns
-WELL-8,downhole_pressure,Well8_downhole_pressure.dat,29,29,29,0.0,value elevation_mRL columns
-WELL-8,downhole_temperature,Well8_downhole_temperature.dat,29,29,29,0.0,value elevation_mRL columns
-WELL-9,downhole_pressure,Well9_downhole_pressure.dat,30,30,30,0.0,value elevation_mRL columns
-WELL-9,downhole_temperature,Well9_downhole_temperature.dat,30,30,30,0.0,value elevation_mRL columns
-WELL-10,-250.0_transient_pressure,Wel10_-250.0_transient_pressure.dat,6,6,6,0.0,time = years (365.25 d) since 2014-01-01
-WELL-10,production_mass_flow,Wel10_production_mass_flow.dat,62,62,62,0.0,time = years (365.25 d) since 2014-01-01; dat values are the negative of the JSON (generation sign convention)
-WELL-10,transient_enthalpy,Wel10_transient_enthalpy.dat,11,11,11,0.0,time = years (365.25 d) since 2014-01-01
-WELL-2,-750.0_transient_pressure,Well2_-750.0_transient_pressure.dat,12,12,12,0.0,time = years (365.25 d) since 2014-01-01
-WELL-2,production_mass_flow,Well2_production_mass_flow.dat,133,133,133,0.0,time = years (365.25 d) since 2014-01-01; dat values are the negative of the JSON (generation sign convention)
-WELL-2,transient_enthalpy,Well2_transient_enthalpy.dat,23,23,23,0.0,time = years (365.25 d) since 2014-01-01
-WELL-3,-550.0_transient_pressure,Well3_-550.0_transient_pressure.dat,12,12,12,0.0,time = years (365.25 d) since 2014-01-01
-WELL-3,production_mass_flow,Well3_production_mass_flow.dat,133,133,133,0.0,time = years (365.25 d) since 2014-01-01; dat values are the negative of the JSON (generation sign convention)
-WELL-3,transient_enthalpy,Well3_transient_enthalpy.dat,23,23,23,0.0,time = years (365.25 d) since 2014-01-01
-WELL-4,injection_enthalpy,Well4_injection_enthalpy.dat,133,133,133,0.0,time = years (365.25 d) since 2014-01-01
-WELL-4,injection_mass_flow,Well4_injection_mass_flow.dat,133,133,133,0.0,time = years (365.25 d) since 2014-01-01
-WELL-5,injection_enthalpy,Well5_injection_enthalpy.dat,133,133,133,0.0,time = years (365.25 d) since 2014-01-01
-WELL-5,injection_mass_flow,Well5_injection_mass_flow.dat,133,133,133,0.0,time = years (365.25 d) since 2014-01-01
-WELL-8,injection_enthalpy,Well8_injection_enthalpy.dat,133,133,133,0.0,time = years (365.25 d) since 2014-01-01
-WELL-8,injection_mass_flow,Well8_injection_mass_flow.dat,133,133,133,0.0,time = years (365.25 d) since 2014-01-01
-WELL-9,-675.0_transient_pressure,Well9_-675.0_transient_pressure.dat,12,12,12,0.0,time = years (365.25 d) since 2014-01-01
-WELL-9,production_mass_flow,Well9_production_mass_flow.dat,133,133,133,0.0,time = years (365.25 d) since 2014-01-01; dat values are the negative of the JSON (generation sign convention)
-WELL-9,transient_enthalpy,Well9_transient_enthalpy.dat,23,23,23,0.0,time = years (365.25 d) since 2014-01-01
+file,well,kind,n_dat,n_json,max_value_diff,max_time_diff_yr,status
+Baseline/Teaching_Model_3D/Data/Data_dat/Wel10_-250.0_transient_pressure.dat,WELL-10,transient_pressure,6,6,0.0,0.001,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Wel10_downhole_pressure.dat,WELL-10,downhole_pressure,17,17,0.0,,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Wel10_downhole_temperature.dat,WELL-10,downhole_temperature,17,17,0.0,,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Wel10_production_mass_flow.dat,WELL-10,production_mass_flow,62,62,0.0,0.004,"match; production stored as negative in .dat, positive in JSON"
+Baseline/Teaching_Model_3D/Data/Data_dat/Wel10_transient_enthalpy.dat,WELL-10,transient_enthalpy,11,11,0.0,0.002,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well1_downhole_pressure.dat,WELL-1,downhole_pressure,19,19,0.0,,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well1_downhole_temperature.dat,WELL-1,downhole_temperature,19,19,0.0,,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well2_-750.0_transient_pressure.dat,WELL-2,transient_pressure,12,12,0.0,0.001,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well2_downhole_pressure.dat,WELL-2,downhole_pressure,33,33,0.0,,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well2_downhole_temperature.dat,WELL-2,downhole_temperature,33,33,0.0,,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well2_production_mass_flow.dat,WELL-2,production_mass_flow,133,133,0.0,0.004,"match; production stored as negative in .dat, positive in JSON"
+Baseline/Teaching_Model_3D/Data/Data_dat/Well2_transient_enthalpy.dat,WELL-2,transient_enthalpy,23,23,0.0,0.002,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well3_-550.0_transient_pressure.dat,WELL-3,transient_pressure,12,12,0.0,0.001,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well3_downhole_pressure.dat,WELL-3,downhole_pressure,30,30,0.0,,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well3_downhole_temperature.dat,WELL-3,downhole_temperature,30,30,0.0,,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well3_production_mass_flow.dat,WELL-3,production_mass_flow,133,133,0.0,0.004,"match; production stored as negative in .dat, positive in JSON"
+Baseline/Teaching_Model_3D/Data/Data_dat/Well3_transient_enthalpy.dat,WELL-3,transient_enthalpy,23,23,0.0,0.002,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well4_downhole_pressure.dat,WELL-4,downhole_pressure,22,22,0.0,,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well4_downhole_temperature.dat,WELL-4,downhole_temperature,22,22,0.0,,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well4_injection_enthalpy.dat,WELL-4,injection_enthalpy,133,133,0.0,0.004,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well4_injection_mass_flow.dat,WELL-4,injection_mass_flow,133,133,0.0,0.004,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well5_downhole_pressure.dat,WELL-5,downhole_pressure,26,26,0.0,,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well5_downhole_temperature.dat,WELL-5,downhole_temperature,26,26,0.0,,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well5_injection_enthalpy.dat,WELL-5,injection_enthalpy,133,133,0.0,0.004,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well5_injection_mass_flow.dat,WELL-5,injection_mass_flow,133,133,0.0,0.004,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well6_downhole_pressure.dat,WELL-6,downhole_pressure,28,28,0.0,,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well6_downhole_temperature.dat,WELL-6,downhole_temperature,28,28,0.0,,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well7_downhole_pressure.dat,WELL-7,downhole_pressure,32,32,0.0,,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well7_downhole_temperature.dat,WELL-7,downhole_temperature,32,32,0.0,,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well8_downhole_pressure.dat,WELL-8,downhole_pressure,29,29,0.0,,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well8_downhole_temperature.dat,WELL-8,downhole_temperature,29,29,0.0,,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well8_injection_enthalpy.dat,WELL-8,injection_enthalpy,133,133,0.0,0.004,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well8_injection_mass_flow.dat,WELL-8,injection_mass_flow,133,133,0.0,0.004,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well9_-675.0_transient_pressure.dat,WELL-9,transient_pressure,12,12,0.0,0.001,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well9_downhole_pressure.dat,WELL-9,downhole_pressure,30,30,0.0,,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well9_downhole_temperature.dat,WELL-9,downhole_temperature,30,30,0.0,,match
+Baseline/Teaching_Model_3D/Data/Data_dat/Well9_production_mass_flow.dat,WELL-9,production_mass_flow,133,133,0.0,0.004,"match; production stored as negative in .dat, positive in JSON"
+Baseline/Teaching_Model_3D/Data/Data_dat/Well9_transient_enthalpy.dat,WELL-9,transient_enthalpy,23,23,0.0,0.002,match

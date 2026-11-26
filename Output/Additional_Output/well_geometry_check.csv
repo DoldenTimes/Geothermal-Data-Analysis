@@ -1,11 +1,11 @@
-well,wellhead_mRL,model_surface_mRL,wellhead_minus_surface_m,max_horizontal_deviation_m,nearest_fault,dist_nearest_fault_m,nearest_water_body,dist_nearest_water_body_m,dist_Fault_1_m,dist_Fault_2_m,dist_Fault_3_m,dist_Lake_Tarawera_m,dist_Tarawera_River_m,dist_river_m,wellhead_column,top_block_in_block_file,column_top_layer,column_at_wellhead_xy,wellhead_in_grid_WELLS_section_mRL
-WELL-1,15.0,120.0,-105.0,0.0,Fault 2,2141.2,river,95.8,3583.2,2141.2,3544.5,7892.0,116.3,95.8,arg,arg50,45,arg,15.0
-WELL-2,225.0,260.0,-35.0,0.0,Fault 3,124.7,Tarawera River,1905.6,250.2,1661.8,124.7,6494.8,1905.6,2458.7,ajf,ajf39,38,ajf,225.0
-WELL-3,164.0,180.0,-16.0,0.0,Fault 1,377.6,Tarawera River,827.6,377.6,1055.8,1050.6,5892.3,827.6,1356.0,asd,asd42,42,asd,164.0
-WELL-4,340.0,340.0,0.0,0.0,Fault 3,50.3,river,3125.5,3289.9,1354.0,50.3,9815.1,3800.9,3125.5,aop,aop34,34,aop,340.0
-WELL-5,93.0,140.0,-47.0,0.0,Fault 2,855.2,river,345.0,2293.8,855.2,2540.7,6978.4,800.0,345.0,arc,arc46,44,arc,93.0
-WELL-6,147.0,160.0,-13.0,0.0,Fault 1,112.6,Tarawera River,423.9,112.6,1347.8,1790.8,4701.3,423.9,1626.0,aph,aph43,43,aph,147.0
-WELL-7,190.0,240.0,-50.0,0.0,Fault 2,348.8,Tarawera River,858.2,1121.8,348.8,2832.2,5092.1,858.2,1243.0,apk,apk41,39,apk,190.0
-WELL-8,176.0,260.0,-84.0,999.7,Fault 1,950.3,Tarawera River,234.9,950.3,2431.8,1784.5,3247.4,234.9,2644.7,ana,ana42,38,ana,176.0
-WELL-9,174.0,220.0,-46.0,867.6,Fault 2,268.8,river,1488.2,1144.9,268.8,684.2,7347.7,1901.4,1488.2,ajj,ajj42,40,ajj,174.0
-WELL-10,260.0,260.0,0.0,0.0,Fault 3,225.7,Tarawera River,1336.5,364.6,1788.8,225.7,5904.4,1336.5,2213.0,arz,arz38,38,arz,260.0
+well,wellhead_mRL,model_surface_mRL,wellhead_minus_surface_m,max_horizontal_deviation_m,nearest_fault,dist_nearest_fault_m,nearest_water_body,dist_nearest_water_body_m,dist_Fault_1_m,dist_Fault_2_m,dist_Fault_3_m,dist_Lake_Tarawera_m,dist_Tarawera_River_m,dist_river_m,wellhead_column,wellhead_block,point_in_polygon_column,column_agrees,first_track_point_mRL,geometry_file_wellhead_mRL,shoe_mRL,TD_mRL,first_survey_mRL
+WELL-1,15.0,120.0,-105.0,0.0,Fault 2,2141.0,river,96.0,3583.0,2141.0,3545.0,7892.0,116.0,96.0,arg,arg50,arg,True,15.0,15.0,-1000.0,-1672.0,15.0
+WELL-2,225.0,260.0,-35.0,0.0,Fault 3,125.0,Tarawera River,1906.0,250.0,1662.0,125.0,6495.0,1906.0,2459.0,ajf,ajf39,ajf,True,225.0,225.0,-100.0,-2348.0,225.0
+WELL-3,164.0,180.0,-16.0,0.0,Fault 1,378.0,Tarawera River,828.0,378.0,1056.0,1051.0,5892.0,828.0,1356.0,asd,asd42,asd,True,164.0,164.0,-250.0,-2887.0,164.0
+WELL-4,340.0,340.0,0.0,0.0,Fault 3,50.0,river,3125.0,3290.0,1354.0,50.0,9815.0,3801.0,3125.0,aop,aop34,aop,True,340.0,340.0,-500.0,-750.0,230.0
+WELL-5,93.0,140.0,-47.0,0.0,Fault 2,855.0,river,345.0,2294.0,855.0,2541.0,6978.0,800.0,345.0,arc,arc46,arc,True,93.0,93.0,-1000.0,-2595.0,93.0
+WELL-6,147.0,160.0,-13.0,0.0,Fault 1,113.0,Tarawera River,424.0,113.0,1348.0,1791.0,4701.0,424.0,1626.0,aph,aph43,aph,True,147.0,147.0,-440.0,-2359.0,147.0
+WELL-7,190.0,240.0,-50.0,0.0,Fault 2,349.0,Tarawera River,858.0,1122.0,349.0,2832.0,5092.0,858.0,1243.0,apk,apk41,apk,True,190.0,190.0,-440.0,-2762.0,190.0
+WELL-8,176.0,260.0,-84.0,999.7,Fault 1,950.0,Tarawera River,235.0,950.0,2432.0,1785.0,3247.0,235.0,2645.0,ana,ana42,ana,True,176.0,176.0,-700.0,-2716.1,176.0
+WELL-9,174.0,220.0,-46.0,867.6,Fault 2,269.0,river,1488.0,1145.0,269.0,684.0,7348.0,1901.0,1488.0,ajj,ajj42,ajj,True,174.0,174.0,-400.0,-2427.1,174.0
+WELL-10,260.0,260.0,0.0,0.0,Fault 3,226.0,Tarawera River,1337.0,365.0,1789.0,226.0,5904.0,1337.0,2213.0,arz,arz38,arz,True,260.0,260.0,-200.0,-350.0,210.0

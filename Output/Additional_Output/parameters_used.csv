@@ -1,50 +1,58 @@
-parameter,value,source
-IF97 Tsat at 1.01325 bar (degC),99.97,validation
-IF97 Tsat at 100 bar (degC),311.0,validation
-reference Tsat 1.01325 bar (degC),99.97,CLAUDE.md
-reference Tsat 100 bar (degC),311.0,CLAUDE.md
-critical pressure (bar),220.64,IF97
-critical temperature (degC),373.946,IF97
-atmospheric pressure (bar),1.01325,definition
-g (m/s2),9.80665,CLAUDE.md
-hydrostatic window minimum length (m),300,CLAUDE.md 4.3
-isothermal section minimum span (m),300,CLAUDE.md 4.2
-isothermal section T range (degC),5,CLAUDE.md 4.2
-near-wellhead distance (m),30,CLAUDE.md 5.5
-elevation band thickness (m),500,CLAUDE.md 8.2
-section maximum offset (m),500,CLAUDE.md 8.2
-verified-trend tolerance floor (bar),3.0,CLAUDE.md 4.1
-verified trend intercept (bar),32.756,feed zones of gauge-verified wells
-"verified trend slope (bar/m, P increasing downward)",0.08767,feed zones of gauge-verified wells
-verified trend implied density (kg/m3),894.0,slope / g
-verified trend RMS residual (bar),0.696,feed zones of gauge-verified wells
-tolerance used (bar),3.0,"max(3 bar, 2 x RMS)"
-gauge reading precision (bar),0.1,decimals of gauge readings
-"injectate enthalpy, median (kJ/kg)",335.0,Injection_Enthalpy records
-injectate temperature (degC),80.0,IF97 Region 1 inverse at 1.01325 bar
-"cold-well component, cased (ratio)",1.0419,median of cold-well windows
-"cold-well component, open (ratio)",0.9944,median of cold-well windows
-cap-base gradient threshold (degC/km),50,this analysis [assumption]
-pressure-connection elevation (mRL),-1300.0,this analysis
-liquid enthalpy at hottest-well Tmax (kJ/kg),1178.2,IF97 Region 1 at WELL-10 Tmax
-figure elevation axis top (mRL),400,CLAUDE.md 8.1
-figure elevation axis bottom (mRL),-2900,CLAUDE.md 8.1
-temperature colour-scale maximum (degC),300,CLAUDE.md 8.1
-first field production,2014-01-01,production records
-dat-file time reference date,2014-01-01,matched against JSON
-[reference model] heat_flux_default_Wm2,0.1,reference_bc
-[reference model] rain_default_mm_per_yr,1000.0,reference_bc
-[reference model] infiltration_fraction_default,0.1,reference_bc
-[reference model] atmosphere_T_default_degC,12.3,reference_bc
-[reference model] n_rain_columns,393,reference_bc
-[reference model] n_lake_columns,5,reference_bc
-Fault 1/Fault 3 intersection easting (m),2819778.5,mapping
-Fault 1/Fault 3 intersection northing (m),6335556.5,mapping
-distance from intersection to upflow-well centre (m),478.0,mapping; wells
-WELL-2 gauge drop first to second reading (bar),9.1,transient pressure
-WELL-3 gauge drop first to second reading (bar),8.2,transient pressure
-WELL-9 gauge drop first to second reading (bar),11.5,transient pressure
-WELL-2 survey elevation at first gauge pressure (mRL),-751.2,survey P interpolated
-WELL-3 survey elevation at first gauge pressure (mRL),-551.2,survey P interpolated
-WELL-9 survey elevation at first gauge pressure (mRL),-651.2,survey P interpolated
-WELL-10 survey elevation at first gauge pressure (mRL),-171.6,survey P interpolated
+parameter,value,unit,source
+P_atm,1.01325,bar,CLAUDE.md 4.4 water level
+P_critical,220.64,bar,IF97
+g,9.80665,m/s2,CLAUDE.md 4.3
+liquid_P_min,1.5,bar,CLAUDE.md 4.3/4.4
+hydrostatic_boiling_margin_min,10.0,degC,CLAUDE.md 4.3
+hydrostatic_window,300.0,m,CLAUDE.md 4.3
+isothermal_span,300.0,m,CLAUDE.md 4.2
+isothermal_range,5.0,degC,CLAUDE.md 4.2
+near_boiling_margin,5.0,degC,CLAUDE.md 4.3
+inversion_min,3.0,degC,CLAUDE.md 4.4
+outflow_inversion,10.0,degC,CLAUDE.md 4.4
+cold_Tmax,100.0,degC,CLAUDE.md 4.3/4.4
+upflow_Tmax,200.0,degC,CLAUDE.md 4.4
+shallow_fit_span,300.0,m,CLAUDE.md 4.4
+deep_fit_span,300.0,m,CLAUDE.md 4.4
+wellhead_zone,30.0,m,CLAUDE.md 5.5
+gauge_precision,0.1,bar,reading precision of the data
+tolerance_min,3.0,bar,CLAUDE.md 4.1
+tolerance_used,3.0,bar,"max(3 bar, 2 x RMS)"
+trend_A,32.76,bar,"P = A + B z, gauge-verified feed zones"
+trend_B,-0.08767,bar/m,P = A + B z
+trend_rms,0.7,bar,RMS residual
+trend_2xrms,1.39,bar,2 x RMS
+trend_implied_density,894.0,kg/m3,-B/g
+trend_n_feedzones,5.0,-,gauge-verified feed zones
+trend_z_top,-260.0,mRL,shallowest verified feed zone
+trend_z_bottom,-1910.0,mRL,deepest verified feed zone
+band_thickness,500.0,m,CLAUDE.md 8.2 F3
+section_half_width,500.0,m,CLAUDE.md 8.2 F4
+section_view_margin,2000.0,m,view crop around the wells
+injectate_pressure_assumed,10.0,bar,[assumption] for T(h) of the injectate
+injectate_near_threshold,10.0,degC,isothermal section 'near' the injectate temperature
+cap_base_fraction_of_Tmax,0.9,-,cap base = first crossing of 0.9 x Tmax
+upflow_TD_fraction_of_field_Tmax,0.9,-,upflow well if T at TD >= 0.9 x field Tmax
+field_Tmax,268.7,degC,well_summary
+T_scale_top,300.0,degC,figure colour scale
+elevation_axis_top,400.0,mRL,figures
+elevation_axis_bottom,-2900.0,mRL,figures
+P_deviation_scale,21.0,bar,figure colour scale
+IF97_max_validation_error,0.0043,K,validation
+Tsat_1.01325bar,99.97,degC,validation
+Tsat_100bar,311.0,degC,validation
+Tsat_ref_1,99.97,degC,CLAUDE.md 4.3
+Tsat_ref_2,311.0,degC,CLAUDE.md 4.3
+conf_factor_high,1.0,-,CLAUDE.md 5.5
+conf_factor_medium,0.75,-,CLAUDE.md 5.5
+conf_factor_low,0.5,-,CLAUDE.md 5.5
+n_survey_points,266.0,-,targets
+n_isothermal_points,38.0,-,targets
+n_feed_zones,18.0,-,feedzones
+n_hydrostatic_windows,26.0,-,hydrostatic_check
+n_layers,69.0,-,geometry
+n_columns,398.0,-,geometry
+grid_top,1000.0,mRL,geometry
+grid_bottom,-3500.0,mRL,geometry
+cold_median_ratio_open,1.0083,-,hydrostatic
+cold_median_ratio_all,1.02,-,hydrostatic

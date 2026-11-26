@@ -1,4 +1,4 @@
-PASS  I1   20 inventory rows, all roles valid and paths present
+PASS  I1   18 inventory rows, all roles valid and paths present
 PASS  I1   every Baseline file is covered by the inventory
 PASS  F1   all 14 required files present in their folders
 PASS  F1   all standard figure types present
@@ -26,7 +26,7 @@ PASS  D1   all 160 well_summary values match the §4.4 definitions
 PASS  W1   weights valid
 PASS  W2   ns_confidence takes 3 values across wells
 PASS  W3   weights follow §5.5; verdict and confidence agree across files
-PASS  R1   1/781 report numbers (0%) not found in any output table; first: ['2.2']
+PASS  R1   0/566 report numbers (0%) not found in any output table; first: []
 PASS  R2   analysis script writes the report
 PASS  R4   no unfilled template text in the report
 PASS  P1   process log has prompt, departures and acceptance check

@@ -196,7 +196,7 @@ Put only these files here, so that the folder stays short enough to read in one 
 | `hydrostatic_check.csv` | `well, z_top_mRL, z_bottom_mRL, length_m, band, dP_measured_bar, dP_IF97_bar, ratio_measured_to_IF97, rho_implied_kgm3` |
 | `well_geometry_check.csv` | `well, wellhead_mRL, model_surface_mRL, wellhead_minus_surface_m, max_horizontal_deviation_m, nearest_fault, dist_nearest_fault_m, nearest_water_body, dist_nearest_water_body_m`. Add one `dist_<feature>_m` column per mapped feature after these |
 | `T_P_at_elevation_bands.csv` | `well, band_top_mRL, band_bottom_mRL, n_points, T_mean_degC, T_field_median_degC, T_minus_field_median_degC, P_mean_bar, P_minus_trend_bar`. Data for figure F3; one row per well per band in which the well has survey points |
-| `figures/` | Any extra figures, including the optional reference-model companion (§8.3) |
+| `figures/` | The interpolated companion figures (§8.4, required), plus any extra figures, including the optional reference-model companion (§8.3) |
 | `run_console_log.txt` | Console output from the final run |
 | `acceptance_check.txt` | Written by `Scripts/check_deliverables.py` |
 | `process_log.md` | Prompt, steps and acceptance-check output (§1) |
@@ -309,7 +309,7 @@ Every run produces the same figure set, with the same layout, in `Output/Calibra
 - **Fixed elevation axis.** All profile and section panels share one elevation range: the highest wellhead to the deepest survey point, rounded outward to 100 m.
 - **Fixed isotherms:** 50 °C apart, with 100 °C and 200 °C drawn heavier (they match `z_100C_mRL` and `z_200C_mRL`).
 - **Data are points; derived curves are lines.** Survey points are markers. Tsat(P), fits and isotherms are lines. Never draw a line through measured points without also showing the points.
-- **No data, no colour.** Never contour, shade or colour outside the data envelope (§8.2, F4). Leave areas without data blank or hatched grey, and label them "no data".
+- **No data, no colour; data envelope fully coloured.** Never contour, shade or colour outside the data envelope (§8.2, F4). Inside it, every section fills the envelope with colour on the fixed scale (temperature: 10 °C steps; pressure deviation: diverging, 1 bar steps, centred on zero), with contour lines drawn on top. Contour lines alone are not enough. Hatch all areas without data light grey and label them "no data" (in the legend or on the panel). Leave the air above the model surface white, not hatched. The only exception is the interpolated companion set (§8.4), which lives in `Additional_Output/figures/` and is labelled as interpolation.
 - **Interpretation looks different from observation.** Draw interpretive elements, such as arrows and inferred boundaries, dashed or outlined, and key them to the conceptual-model table (§6). Reference-model content appears only in separate figures in `Additional_Output/figures/` whose title starts with "[reference model]".
 - **Layout.** Legends sit outside the data area. Labels sit on their wells and do not overlap. Use at least 150 dpi. Every title gives what is shown, the elevation or section line, and the units.
 
@@ -360,13 +360,16 @@ The pressure version uses `P_minus_trend_bar`, the deviation from the hydrostati
 - the model surface along the line;
 - each projected well track, labelled at its bottom, with casing shoe and feed zones marked;
 - the survey points coloured by temperature, on the fixed scale;
-- isotherms at the fixed levels, contoured only inside the data envelope: between neighbouring wells that both have data at that elevation, never below either well's deepest point and never above its shallowest;
+- the data envelope: between neighbouring wells that both have data at that elevation, never below either well's deepest point and never above its shallowest. Fill it with colour interpolated linearly between the two wells, on the fixed temperature scale (§8.1), and outline it with a thin dotted line;
+- isotherms at the fixed levels, contoured on top of the fill, only inside the data envelope;
+- everything outside the envelope (and below the model surface) hatched light grey, labelled "no data";
 - intervals with boiling margin < 5 °C, stippled;
 - faults and water bodies that cross the line, as labelled ticks along the top edge where they cross.
 
-State the vertical exaggeration. The pressure version (`section_<line>_P.png`) is drawn the same way, showing the deviation from the hydrostatic trend.
+State the vertical exaggeration. The pressure version (`section_<line>_P.png`) is drawn the same way, filled and contoured with the deviation from the hydrostatic trend on the diverging scale.
 *Check:*
-- nothing is coloured outside the envelope;
+- the whole envelope is colour-filled, not only contoured;
+- nothing is coloured outside the envelope, and the no-data area is hatched and labelled;
 - offsets are printed;
 - surface features are labelled where they cross the line.
 
@@ -377,7 +380,7 @@ State the vertical exaggeration. The pressure version (`section_<line>_P.png`) i
 
 **F6. Conceptual model.** Two panels:
 1. a plan view on the base layer;
-2. a section on the same line as F4, with F4's isotherms as the background.
+2. a section on the same line as F4, with F4's colour-filled envelope, isotherms and no-data hatching as the background.
 
 Use this fixed symbology, and show its legend even for elements that are absent:
 
@@ -411,3 +414,26 @@ Print the verdict and confidence in each panel title.
 ### 8.3 Optional reference-model companion
 
 If useful to the engineer, draw the reference model's temperatures on the F4 line, with the same scale and axes, as `Additional_Output/figures/section_<line>_reference.png`. Title it "[reference model]" and mark the data envelope from F4 on it. It shows where the data and the starting model differ. It is never evidence.
+
+### 8.4 Interpolated companion figures (required)
+
+The standard figures colour only the data envelope. To give the engineer a whole-field picture as well, every run also produces an interpolated companion set in `Output/Additional_Output/figures/`. It is never placed in `Calibration_Input/`, never listed in `figures_index.csv`, and never used as a target or as the only support for a conclusion.
+
+| File | Content |
+|---|---|
+| `section_<line>_interpolated.png` | One per F4 line: temperature on that line |
+| `section_<line>_P_interpolated.png` | One per F4 line: deviation from the hydrostatic trend on that line |
+| `maps_temperature_interpolated.png`, `maps_pressure_interpolated.png` | Plan views, one panel per F3 elevation band, of the F3 quantities `T_minus_field_median_degC` and `P_minus_trend_bar` |
+
+Fixed method, so that runs can be compared:
+- **Interpolation:** linear, on a Delaunay triangulation of the data. In sections, triangulate every survey point by its distance along the line and its elevation. In plan views, triangulate the wells' band values at their track positions at mid-band (as in F3). A band panel with fewer than three wells shows symbols only.
+- **No extrapolation:** colour only inside the convex hull of the data. Hatch everything outside it light grey and label it "no data". Leave the air above the model surface white.
+- **Same scales and layout** as the matching standard figure: the same colour scales, elevation axis, base layer, isotherms (on the temperature sections), labels and section-line ends.
+- **Show the data:** overlay every survey point (sections) or well symbol (plan views) as markers, and outline the F4 data envelope with a dashed line, so that interpolation across long gaps is visible.
+- **Label it as interpolation:** each title starts with "[interpolated, not data]". The legend states the method and that colours outside the dashed envelope are not constrained by neighbouring wells.
+
+In the report, show these figures in sections 3 and 4 as links to `../Additional_Output/figures/`, with a caption tagged `[interp]`, and list them in the output file index. Do not quote any value read from them.
+*Check:*
+- nothing is coloured outside the convex hull of the data;
+- the F4 envelope is outlined and the data are shown;
+- every title starts with "[interpolated, not data]".

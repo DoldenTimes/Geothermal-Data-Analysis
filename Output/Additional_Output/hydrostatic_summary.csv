@@ -1,6 +1,0 @@
-group,band,n_windows,ratio_median,ratio_min,ratio_max
-all wells,cased,9,1.1745,1.0204,1.5507
-cold wells (Tmax < 100 degC),cased,2,1.0343,1.0204,1.0483
-all wells,open,17,1.0196,0.9959,1.1197
-cold wells (Tmax < 100 degC),open,2,1.0078,0.9959,1.0196
-all wells,all,26,1.0387,0.9959,1.5507
